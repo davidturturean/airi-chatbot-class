@@ -33,11 +33,19 @@ def create_app(config=None):
     # Create Flask app
     app = Flask(__name__)
     
-    # Enable CORS with production settings
+    # Enable CORS with production settings + Webflow integration
     CORS(app, 
-         origins=["*"],  # Allow all origins for testing
+         origins=[
+             "*",  # Allow all origins for testing
+             "https://futuretech.mit.edu",  # Production Webflow site
+             "https://futuretech.webflow.io",  # Webflow staging
+             "https://*.webflow.io",  # Webflow preview domains
+             "https://davidturturean.github.io",  # GitHub Pages hosting
+             "https://*.github.io"  # Any GitHub Pages domain
+         ],
          methods=["GET", "POST", "OPTIONS"],
-         allow_headers=["Content-Type", "Authorization"])
+         allow_headers=["Content-Type", "Authorization"],
+         supports_credentials=True)
     
     # Apply configuration
     if config:
