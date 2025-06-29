@@ -43,7 +43,7 @@
 </head>
 <body>
     <!-- This will be the container for Webflow -->
-    <div id="airi-chatbot-root" class="airi-chatbot-embedded">
+    <div id="root" class="airi-chatbot-embedded">
         <div class="airi-loading" id="airi-loading">
             🤖 Loading AIRI Chatbot...
         </div>
@@ -55,7 +55,7 @@
         window.AIRI_CONFIG = window.AIRI_CONFIG || {
             apiBaseUrl: 'https://airi-chatbot-class-production.up.railway.app',
             embeddedMode: true,
-            containerId: 'airi-chatbot-root'
+            containerId: 'root'
         };
         
         console.log('🚀 AIRI Webflow Integration Starting...', window.AIRI_CONFIG);
