@@ -1,0 +1,7 @@
+{
+  "bundleName": "airi-chatbot-webflow",
+  "version": "20250628-211120",
+  "apiBackend": "https://airi-chatbot-class-production.up.railway.app",
+  "deployedAt": "2025-06-29T01:11:20Z",
+  "githubUrl": "https://davidturturean.github.io/airi-chatbot-class/"
+}
