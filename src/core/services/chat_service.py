@@ -265,7 +265,7 @@ class ChatService:
             return [f"Use case 1 for {domain}", f"Use case 2 for {domain}", f"Use case 3 for {domain}"]
 
         try:
-            prompt = f"Generate 3 diverse and specific use cases for AI in the '{domain}' domain. Return the use cases as a comma-separated list."
+            prompt = f"Given the domain of {domain}, generate three concise and relevant use cases for an AI Risk Repository chatbot. The use cases should be short, to the point, and should be phrased as questions that a user might ask the chatbot. For example, for the domain 'finance', a good use case would be 'What are the risks of using AI in credit scoring?'. The use cases should be returned as a JSON object with a single key 'use_cases' which is a list of strings. For example: {{\"use_cases\": [\"What are the risks of using AI in credit scoring?\", \"How can I mitigate the risks of using AI in algorithmic trading?\", \"What are the best practices for using AI in fraud detection?\"]}}"
             response = self.gemini_model.generate(prompt, history=[])
             use_cases = [uc.strip() for uc in response.split(',')]
             return use_cases

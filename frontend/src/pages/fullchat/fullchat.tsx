@@ -121,7 +121,7 @@ export function FullChat() {
       setSuggestedUseCases(data.use_cases || []);
     } catch (error) {
       console.error('Error fetching use cases:', error);
-      setSuggestedUseCases(['Error fetching use cases.']);
+      setSuggestedUseCases(['Error fetching use cases. Please try again.']);
     }
   };
 
