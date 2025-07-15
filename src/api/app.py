@@ -285,37 +285,7 @@ def _get_snippet_page(snippet_id):
     
     if snippet_path.exists():
         try:
-            with open(snippet_path, 'rb') as f:
-                content = f.read()
-                
-            # Simple HTML formatting for the snippet content
-            import base64
-            encoded_content = base64.b64encode(content).decode('utf-8')
-            
-            html = f"""<!DOCTYPE html>
-<html>
-<head>
-    <title>Document Source</title>
-    <style>
-        body {{ font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; max-width: 800px; margin: 0 auto; }}
-        h1 {{ color: #333; }}
-        .snippet {{ background-color: #f8f9fa; padding: 15px; border-radius: 5px; border: 1px solid #ddd; }}
-        .metadata {{ font-weight: bold; color: #555; }}
-        .content {{ margin-top: 20px; white-space: pre-wrap; }}
-        .back-button {{ display: inline-block; margin-top: 20px; padding: 10px 15px; background-color: #4285f4; color: white; text-decoration: none; border-radius: 4px; }}
-    </style>
-</head>
-<body>
-    <h1>Document Source Reference</h1>
-    <div class="snippet">
-        <object data="data:application/octet-stream;base64,{encoded_content}" type="application/octet-stream" width="100%" height="500px">
-            <p>It appears you don't have a plugin to view this content. You can <a href="data:application/octet-stream;base64,{encoded_content}">download the file instead</a>.</p>
-        </object>
-    </div>
-    <a href="javascript:history.back()" class="back-button">Go Back</a>
-</body>
-</html>"""
-            return html
+            return send_file(snippet_path, as_attachment=True)
         except Exception as e:
             return f"Error reading snippet: {str(e)}", 500
     else:

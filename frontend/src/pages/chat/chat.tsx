@@ -47,7 +47,13 @@ export function Chat({ previousMessages, currentMessage, handleSubmit, isLoading
             <div className={`px-4 py-2 rounded-2xl max-w-xl whitespace-pre-wrap shadow-sm text-sm ${
               msg.role === "user" ? "bg-blue-100 text-black" : "bg-gray-100 text-black"
             }`}>
-              <ReactMarkdown>{msg.content}</ReactMarkdown>
+              <ReactMarkdown
+                components={{
+                  a: ({ node, ...props }) => <a {...props} target="_blank" rel="noopener noreferrer" />,
+                }}
+              >
+                {msg.content}
+              </ReactMarkdown>
             </div>
           </div>
         ))}
