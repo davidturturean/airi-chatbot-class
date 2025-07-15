@@ -195,30 +195,42 @@ export function FullChat() {
               </button>
             </div>
 
-            {/* Use Cases */}
+            {/* Suggested Domains */}
             <div className="space-y-2">
-              <h4 className="text-sm text-gray-600 font-semibold">Suggested Use Cases</h4>
+              <h4 className="text-sm text-gray-600 font-semibold">Suggested Domains</h4>
               <div className="flex flex-wrap gap-2">
                 {defaultUseCases.map((uc) => (
                   <button
                     key={uc}
-                    onClick={() => handleSubmit(uc)}
+                    onClick={() => {
+                      setDomain(uc);
+                      handleDomainSubmit();
+                    }}
                     className="bg-red-100 text-red-700 text-sm px-3 py-1 rounded-full hover:bg-red-200 transition"
-                  >
-                    {uc}
-                  </button>
-                ))}
-                {suggestedUseCases.map((uc, i) => (
-                  <button
-                    key={`suggested-${i}`}
-                    onClick={() => handleSubmit(uc)}
-                    className="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full hover:bg-gray-200 transition"
                   >
                     {uc}
                   </button>
                 ))}
               </div>
             </div>
+
+            {/* Suggested Use Cases */}
+            {suggestedUseCases.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="text-sm text-gray-600 font-semibold">Suggested Use Cases</h4>
+                <div className="flex flex-wrap gap-2">
+                  {suggestedUseCases.map((uc, i) => (
+                    <button
+                      key={`suggested-${i}`}
+                      onClick={() => handleSubmit(uc)}
+                      className="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full hover:bg-gray-200 transition"
+                    >
+                      {uc}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="bg-white border rounded-xl p-4 shadow-sm">
