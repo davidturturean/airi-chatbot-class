@@ -1,6 +1,7 @@
 """
 Chat service that orchestrates the entire conversation flow.
 """
+import json
 from typing import List, Dict, Any, Tuple, Optional
 from langchain.docstore.document import Document
 
@@ -267,7 +268,10 @@ class ChatService:
         try:
             prompt = f"Given the domain of {domain}, generate three concise and relevant use cases for an AI Risk Repository chatbot. The use cases should be short, to the point, and should be phrased as questions that a user might ask the chatbot. For example, for the domain 'finance', a good use case would be 'What are the risks of using AI in credit scoring?'. The use cases should be returned as a JSON object with a single key 'use_cases' which is a list of strings. For example: {{\"use_cases\": [\"What are the risks of using AI in credit scoring?\", \"How can I mitigate the risks of using AI in algorithmic trading?\", \"What are the best practices for using AI in fraud detection?\"]}}"
             response = self.gemini_model.generate(prompt, history=[])
-            use_cases = [uc.strip() for uc in response.split(',')]
+            # The response is a string that looks like a dictionary, so we need to parse it
+            # The response may contain markdown, so we need to remove it
+            response = response.replace("```json", "").replace("```", "")
+            use_cases = json.loads(response)['use_cases']
             return use_cases
         except Exception as e:
             logger.error(f"Error generating use cases: {str(e)}")
