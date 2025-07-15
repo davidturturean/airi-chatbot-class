@@ -28,21 +28,17 @@ def get_snippet(doc_id):
         
         # Check if this is a RID format (RID-#####)
         if doc_id.startswith('RID-') and len(doc_id) == 9:
-            content = chat_service.citation_service.get_snippet_by_rid(doc_id)
+            snippet = chat_service.citation_service.get_snippet_by_rid(doc_id, include_metadata=True)
         else:
             # Legacy format support
-            content = chat_service.citation_service.get_snippet_content(doc_id)
+            snippet = chat_service.citation_service.get_snippet_content(doc_id, include_metadata=True)
         
-        if content == "Snippet not found" or "not found" in content.lower():
+        if not snippet or "not found" in str(snippet).lower():
             return jsonify({"error": "Snippet not found"}), 404
-        elif content.startswith("Error"):
-            return jsonify({"error": content}), 500
+        elif isinstance(snippet, str) and snippet.startswith("Error"):
+            return jsonify({"error": snippet}), 500
         else:
-            return jsonify({
-                "content": content,
-                "snippet_id": doc_id,
-                "type": "RID" if doc_id.startswith('RID-') else "legacy"
-            })
+            return jsonify(snippet)
         
     except Exception as e:
         logger.error(f"Error retrieving snippet {doc_id}: {str(e)}")

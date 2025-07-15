@@ -163,14 +163,23 @@ class CitationService:
         except Exception as e:
             logger.error(f"Error saving RID snippet for {rid}: {str(e)}")
     
-    def get_snippet_by_rid(self, rid: str) -> str:
+    def get_snippet_by_rid(self, rid: str, include_metadata: bool = False) -> str:
         """Get snippet content by RID."""
         snippet_path = self.snippets_dir / f"{rid}.txt"
         
         if snippet_path.exists():
             try:
                 with open(snippet_path, 'r', encoding='utf-8') as f:
-                    return f.read()
+                    content = f.read()
+                    if include_metadata:
+                        # This is a simplified implementation. A more robust implementation
+                        # would parse the file content and return a JSON object.
+                        return {
+                            "content": content,
+                            "file_type": "text"
+                        }
+                    else:
+                        return content
             except Exception as e:
                 logger.error(f"Error reading RID snippet {rid}: {str(e)}")
                 return f"Error reading snippet {rid}: {str(e)}"
@@ -258,14 +267,23 @@ class CitationService:
         # Truncate to reasonable length
         return clean[:max_length]
     
-    def get_snippet_content(self, snippet_id: str) -> str:
+    def get_snippet_content(self, snippet_id: str, include_metadata: bool = False) -> str:
         """Get snippet content by ID."""
         snippet_path = self.snippets_dir / f"doc_{snippet_id}.txt"
         
         if snippet_path.exists():
             try:
                 with open(snippet_path, 'r') as f:
-                    return f.read()
+                    content = f.read()
+                    if include_metadata:
+                        # This is a simplified implementation. A more robust implementation
+                        # would parse the file content and return a JSON object.
+                        return {
+                            "content": content,
+                            "file_type": "text"
+                        }
+                    else:
+                        return content
             except Exception as e:
                 logger.error(f"Error reading snippet: {str(e)}")
                 return f"Error reading snippet: {str(e)}"

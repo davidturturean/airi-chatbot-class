@@ -141,51 +141,60 @@ def _initialize_services(logger):
         return ChatService()
 
 def _validate_system_readiness(chat_service) -> Dict[str, str]:
-    """Validate system component readiness and log status."""
+    """
+    Validate system component readiness with deep checks and log status.
+    This function now performs actual service calls to confirm components are operational.
+    """
     status = {
         "vector_store": "✗ Unavailable",
-        "gemini_model": "✗ Unavailable", 
+        "gemini_model": "✗ Unavailable",
         "query_monitor": "✗ Unavailable",
         "overall": "Degraded"
     }
-    
-    # Check vector store
-    if chat_service.vector_store:
+
+    # Deep check for vector store
+    if hasattr(chat_service, 'vector_store') and chat_service.vector_store:
         try:
-            # Test with a simple query
+            # A simple query to test responsiveness and data presence
             test_docs = chat_service.vector_store.get_relevant_documents("test", k=1)
-            status["vector_store"] = f"✓ Ready ({len(test_docs)} test docs)"
+            if test_docs:
+                status["vector_store"] = f"✓ Ready ({len(test_docs)} test docs found)"
+            else:
+                status["vector_store"] = "✓ Ready (No test docs, but responsive)"
         except Exception as e:
-            status["vector_store"] = f"✗ Error: {str(e)[:50]}"
-    
-    # Check Gemini model
-    if chat_service.gemini_model:
+            status["vector_store"] = f"✗ Error: {str(e)[:100]}"
+
+    # Deep check for Gemini model
+    if hasattr(chat_service, 'gemini_model') and chat_service.gemini_model:
         try:
-            # Test generation
+            # Test content generation to confirm API and model access
             test_response = chat_service.gemini_model.generate("Test")
-            status["gemini_model"] = "✓ Ready" if test_response else "✗ No response"
+            status["gemini_model"] = "✓ Ready" if test_response else "✗ No response from model"
         except Exception as e:
-            status["gemini_model"] = f"✗ Error: {str(e)[:50]}"
-    
-    # Check query monitor
-    if chat_service.query_processor.query_monitor:
+            status["gemini_model"] = f"✗ Error: {str(e)[:100]}"
+
+    # Deep check for query monitor
+    if (hasattr(chat_service, 'query_processor') and
+            hasattr(chat_service.query_processor, 'query_monitor') and
+            chat_service.query_processor.query_monitor):
         try:
+            # Test inquiry type determination
             test_analysis = chat_service.query_processor.query_monitor.determine_inquiry_type("test")
-            status["query_monitor"] = "✓ Ready" if test_analysis else "✗ No response"
+            status["query_monitor"] = "✓ Ready" if test_analysis else "✗ No response from monitor"
         except Exception as e:
-            status["query_monitor"] = f"✗ Error: {str(e)[:50]}"
-    
-    # Determine overall status
+            status["query_monitor"] = f"✗ Error: {str(e)[:100]}"
+
+    # Determine overall status based on deep checks
     ready_count = sum(1 for s in status.values() if s.startswith("✓"))
     total_components = 3
-    
+
     if ready_count == total_components:
         status["overall"] = "Fully Operational"
-    elif ready_count >= 1:
+    elif ready_count > 0:
         status["overall"] = f"Partially Operational ({ready_count}/{total_components})"
     else:
-        status["overall"] = "Degraded Mode"
-    
+        status["overall"] = "Degraded - All components failed checks"
+
     return status
 
 def _log_system_configuration(logger, chat_service):
@@ -276,34 +285,7 @@ def _get_snippet_page(snippet_id):
     
     if snippet_path.exists():
         try:
-            with open(snippet_path, 'r') as f:
-                content = f.read()
-                
-            # Simple HTML formatting for the snippet content
-            formatted_content = content.replace('\\n', '<br>')
-            
-            html = f"""<!DOCTYPE html>
-<html>
-<head>
-    <title>Document Source</title>
-    <style>
-        body {{ font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px; max-width: 800px; margin: 0 auto; }}
-        h1 {{ color: #333; }}
-        .snippet {{ background-color: #f8f9fa; padding: 15px; border-radius: 5px; border: 1px solid #ddd; }}
-        .metadata {{ font-weight: bold; color: #555; }}
-        .content {{ margin-top: 20px; white-space: pre-wrap; }}
-        .back-button {{ display: inline-block; margin-top: 20px; padding: 10px 15px; background-color: #4285f4; color: white; text-decoration: none; border-radius: 4px; }}
-    </style>
-</head>
-<body>
-    <h1>Document Source Reference</h1>
-    <div class="snippet">
-        <div class="content">{formatted_content}</div>
-    </div>
-    <a href="javascript:history.back()" class="back-button">Go Back</a>
-</body>
-</html>"""
-            return html
+            return send_file(snippet_path, as_attachment=True)
         except Exception as e:
             return f"Error reading snippet: {str(e)}", 500
     else:
