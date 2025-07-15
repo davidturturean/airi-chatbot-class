@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { Chat } from '../chat/chat';
 import { Header } from '../../components/header';
+import { Modal } from '../../components/modal';
 import { message } from '../../interfaces/interfaces';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -21,6 +22,30 @@ export function FullChat() {
   const [domain, setDomain] = useState('');
   const [suggestedUseCases, setSuggestedUseCases] = useState<string[]>([]);
   const [relatedDocuments, setRelatedDocuments] = useState<{ title: string; url: string }[]>([]);
+  const [modalContent, setModalContent] = useState<string>('');
+  const [modalTitle, setModalTitle] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const handleFileClick = async (url: string, title: string) => {
+    if (url.startsWith('local-file://')) {
+      const filePath = url.replace('local-file://', '');
+      try {
+        const response = await fetch(`${API_URL}/api/file-content?path=${encodeURIComponent(filePath)}`);
+        if (response.ok) {
+          const content = await response.text();
+          setModalContent(content);
+          setModalTitle(title);
+          setIsModalOpen(true);
+        } else {
+          console.error('Failed to fetch file content');
+        }
+      } catch (error) {
+        console.error('Error fetching file content:', error);
+      }
+    } else {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  };
 
   const cleanupMessageHandler = () => {
     if (messageHandlerRef.current) {
@@ -162,9 +187,9 @@ export function FullChat() {
               {relatedDocuments.length > 0 ? (
                 relatedDocuments.map((doc, index) => (
                   <li key={index}>
-                    <a href={doc.url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                    <button onClick={() => handleFileClick(doc.url, doc.title)} className="text-blue-600 underline">
                       {doc.title}
-                    </a>
+                    </button>
                   </li>
                 ))
               ) : (
@@ -248,6 +273,9 @@ export function FullChat() {
           </div>
         </aside>
       </main>
+    <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalTitle}>
+        {modalContent}
+    </Modal>
     </div>
   );
 }

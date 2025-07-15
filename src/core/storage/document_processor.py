@@ -81,7 +81,31 @@ class DocumentProcessor:
         # Enhance with SCQA taxonomy structure
         enhanced_document = scqa_manager.enhance_document_with_scqa(document)
         
+        # Add URL to metadata
+        self._add_url(enhanced_document)
+
         return rid
+
+    def _add_url(self, document: Document) -> None:
+        """Add a URL to the document metadata."""
+        metadata = document.metadata
+        file_path = metadata.get("source")
+
+        if file_path:
+            # For Excel files, the URL is the file path
+            if file_path.endswith(".xlsx") or file_path.endswith(".xls"):
+                metadata["url"] = file_path
+            # For text files, check for a URL in the content
+            elif file_path.endswith(".txt"):
+                with open(file_path, "r") as f:
+                    content = f.read()
+                    # A simple regex to find a URL
+                    import re
+                    match = re.search(r"https?://[^\s]+", content)
+                    if match:
+                        metadata["url"] = match.group(0)
+                    else:
+                        metadata["url"] = file_path
     
     def _add_search_metadata(self, document: Document) -> None:
         """Add searchable metadata fields for field-aware boosting."""

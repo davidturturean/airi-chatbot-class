@@ -3,6 +3,7 @@ Chat routes for the AIRI chatbot API.
 """
 import json
 import time
+import os
 from flask import Blueprint, request, jsonify, Response, stream_with_context
 
 from ...core.services.chat_service import ChatService
@@ -140,7 +141,12 @@ def stream_message():
                         
                         # Send the related documents
                         if docs:
-                            related_docs = [{"title": doc.metadata.get("title", "Unknown Title"), "url": doc.metadata.get("url", "#")} for doc in docs]
+                            related_docs = []
+                            for doc in docs:
+                                url = doc.metadata.get("url", "#")
+                                if os.path.exists(url):
+                                    url = f"local-file://{url}"
+                                related_docs.append({"title": doc.metadata.get("title", "Unknown Title"), "url": url})
                             yield json.dumps({"related_documents": related_docs}) + '\n'
 
                         # Update conversation history
