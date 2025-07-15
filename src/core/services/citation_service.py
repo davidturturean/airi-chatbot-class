@@ -115,6 +115,7 @@ class CitationService:
         """Format a citation using the document's RID."""
         rid = doc.metadata.get('rid', 'RID-UNKNOWN')
         file_type = doc.metadata.get('file_type', '')
+        source = doc.metadata.get('source', 'Unknown Source')
         
         # Create human-readable citation text based on document type
         if 'ai_risk_entry' in file_type:
@@ -136,14 +137,13 @@ class CitationService:
                 citation_text = f"MIT AI Repository, {sheet}"
         else:
             # Generic citation
-            source = doc.metadata.get('source', 'Unknown Source')
             filename = os.path.basename(source)
             if 'AI_Risk' in filename:
                 citation_text = "AI Risk Repository Document"
             else:
                 citation_text = filename.replace('_', ' ').replace('-', ' ')[:30]
         
-        return f"[{citation_text}](/snippet/{rid})"
+        return f"[{citation_text}](/snippet/{os.path.basename(source)})"
     
     def _save_rid_snippet(self, doc: Document, rid: str) -> None:
         """Save document snippet using RID for easy retrieval."""
