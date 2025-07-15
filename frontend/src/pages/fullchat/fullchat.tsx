@@ -23,7 +23,8 @@ export function FullChat() {
   const [relatedDocuments, setRelatedDocuments] = useState<{ title: string; url: string }[]>([]);
 
   const handleFileClick = async (url: string) => {
-    window.open(url, '_blank', 'noopener,noreferrer');
+    const snippetId = url.split('/').pop();
+    window.open(`/snippet/${snippetId}`, '_blank', 'noopener,noreferrer');
   };
 
   const cleanupMessageHandler = () => {
