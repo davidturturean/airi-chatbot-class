@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { Chat } from '../chat/chat';
 import { Header } from '../../components/header';
-import { Modal } from '../../components/modal';
 import { message } from '../../interfaces/interfaces';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -22,7 +21,6 @@ export function FullChat() {
   const [domain, setDomain] = useState('');
   const [suggestedUseCases, setSuggestedUseCases] = useState<string[]>([]);
   const [relatedDocuments, setRelatedDocuments] = useState<{ title: string; url: string }[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleFileClick = async (url: string) => {
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -168,7 +166,7 @@ export function FullChat() {
               {relatedDocuments.length > 0 ? (
                 relatedDocuments.map((doc, index) => (
                   <li key={index}>
-                    <button onClick={() => handleFileClick(doc.url, doc.title)} className="text-blue-600 underline">
+                    <button onClick={() => handleFileClick(doc.url)} className="text-blue-600 underline">
                       {doc.title}
                     </button>
                   </li>
@@ -254,9 +252,6 @@ export function FullChat() {
           </div>
         </aside>
       </main>
-    <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title={modalTitle}>
-        {modalContent}
-    </Modal>
     </div>
   );
 }
