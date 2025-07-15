@@ -27,24 +27,7 @@ export function FullChat() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleFileClick = async (url: string, title: string) => {
-    if (url.startsWith('local-file://')) {
-      const filePath = url.replace('local-file://', '');
-      try {
-        const response = await fetch(`${API_URL}/api/file-content?path=${encodeURIComponent(filePath)}`);
-        if (response.ok) {
-          const content = await response.text();
-          setModalContent(content);
-          setModalTitle(title);
-          setIsModalOpen(true);
-        } else {
-          console.error('Failed to fetch file content');
-        }
-      } catch (error) {
-        console.error('Error fetching file content:', error);
-      }
-    } else {
-      window.open(url, '_blank', 'noopener,noreferrer');
-    }
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const cleanupMessageHandler = () => {
