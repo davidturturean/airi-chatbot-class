@@ -22,11 +22,9 @@ export function FullChat() {
   const [domain, setDomain] = useState('');
   const [suggestedUseCases, setSuggestedUseCases] = useState<string[]>([]);
   const [relatedDocuments, setRelatedDocuments] = useState<{ title: string; url: string }[]>([]);
-  const [modalContent, setModalContent] = useState<string>('');
-  const [modalTitle, setModalTitle] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const handleFileClick = async (url: string, title: string) => {
+  const handleFileClick = async (url: string) => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
