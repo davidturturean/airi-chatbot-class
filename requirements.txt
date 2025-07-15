@@ -5,6 +5,7 @@ google-generativeai>=0.3.2
 langchain
 langchain-community
 langchain-google-genai
+langchain-chroma
 chromadb==0.4.22
 tiktoken==0.5.2
 rank-bm25==0.2.2

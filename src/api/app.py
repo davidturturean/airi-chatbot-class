@@ -285,11 +285,12 @@ def _get_snippet_page(snippet_id):
     
     if snippet_path.exists():
         try:
-            with open(snippet_path, 'r') as f:
+            with open(snippet_path, 'rb') as f:
                 content = f.read()
                 
             # Simple HTML formatting for the snippet content
-            formatted_content = content.replace('\\n', '<br>')
+            import base64
+            encoded_content = base64.b64encode(content).decode('utf-8')
             
             html = f"""<!DOCTYPE html>
 <html>
@@ -307,7 +308,9 @@ def _get_snippet_page(snippet_id):
 <body>
     <h1>Document Source Reference</h1>
     <div class="snippet">
-        <div class="content">{formatted_content}</div>
+        <object data="data:application/octet-stream;base64,{encoded_content}" type="application/octet-stream" width="100%" height="500px">
+            <p>It appears you don't have a plugin to view this content. You can <a href="data:application/octet-stream;base64,{encoded_content}">download the file instead</a>.</p>
+        </object>
     </div>
     <a href="javascript:history.back()" class="back-button">Go Back</a>
 </body>
