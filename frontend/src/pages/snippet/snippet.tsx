@@ -1,52 +1,43 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-const API_URL = '';
-
-interface Snippet {
-  content: string;
-  file_type: string;
-}
-
 import { SnippetRenderer } from '../../components/snippet-renderer';
 
-export function SnippetViewer() {
-  const { snippetId } = useParams<{ snippetId: string }>();
-  const [snippet, setSnippet] = useState<Snippet | null>(null);
+export function SnippetPage() {
+  const { fileName } = useParams<{ fileName: string }>();
+  const [snippet, setSnippet] = useState<{ content: string; file_type: string; search_terms: string[] } | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSnippet = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/snippet/${snippetId}`);
-        if (response.ok) {
-          const data = await response.json();
-          setSnippet(data);
-        } else {
-          setError('Failed to fetch snippet');
+        const response = await fetch(`/api/snippet/${fileName}`);
+        if (!response.ok) {
+          throw new Error('Snippet not found');
         }
+        const data = await response.json();
+        setSnippet(data);
       } catch (error) {
-        setError('Error fetching snippet');
+        setError((error as Error).message);
       }
     };
 
-    fetchSnippet();
-  }, [snippetId]);
+    if (fileName) {
+      fetchSnippet();
+    }
+  }, [fileName]);
 
   if (error) {
-    return <div>{error}</div>;
+    return <div>Error: {error}</div>;
   }
 
   if (!snippet) {
     return <div>Loading...</div>;
   }
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const searchTerms = urlParams.get('q')?.split(' ') || [];
-
   return (
     <div>
-      <h1>Snippet Viewer</h1>
-      <SnippetRenderer snippet={{...snippet, search_terms: searchTerms}} />
+      <h1>{fileName}</h1>
+      <SnippetRenderer snippet={snippet} />
     </div>
   );
 }

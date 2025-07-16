@@ -3,7 +3,7 @@ import { Home } from './pages/home/home';
 import { FullChat } from './pages/fullchat/fullchat';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { SnippetViewer } from './pages/snippet/snippet';
+import { SnippetPage } from './pages/snippet/snippet';
 
 function App() {
   return (
@@ -12,7 +12,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path='/chat' element={<FullChat/>}/>
-            <Route path="/snippet/:snippetId" element={<SnippetViewer />} />
+            <Route path="/snippet/:fileName" element={<SnippetPage />} />
           </Routes>
         </div>
       </Router>

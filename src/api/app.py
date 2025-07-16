@@ -8,8 +8,9 @@ from flask import Flask, send_from_directory, jsonify
 from flask_cors import CORS
 
 from .routes.chat import chat_bp, init_chat_routes
-from .routes.health import health_bp, init_health_routes  
+from .routes.health import health_bp, init_health_routes
 from .routes.snippets import snippets_bp, init_snippet_routes
+from .routes.get_file_content import file_content_bp
 from ..core.services.chat_service import ChatService
 from ..core.models.gemini import GeminiModel
 from ..core.storage.vector_store import VectorStore
@@ -63,6 +64,7 @@ def create_app(config=None):
     app.register_blueprint(chat_bp)
     app.register_blueprint(health_bp)
     app.register_blueprint(snippets_bp)
+    app.register_blueprint(file_content_bp)
     
     # Add frontend routes
     _add_frontend_routes(app, logger)

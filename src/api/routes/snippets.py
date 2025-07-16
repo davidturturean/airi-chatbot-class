@@ -1,7 +1,7 @@
 """
 Document snippet routes for the AIRI chatbot API.
 """
-from flask import Blueprint, jsonify, request, send_file
+from flask import Blueprint, jsonify, request, send_file, redirect, url_for
 import os
 
 from ...config.logging import get_logger
@@ -25,6 +25,10 @@ def get_snippet(doc_id):
     try:
         if not chat_service or not chat_service.citation_service:
             return jsonify({"error": "Citation service not available"}), 503
+
+        # Check if this is a file request
+        if '.' in doc_id:
+            return redirect(url_for('file_content.get_file_content', path=doc_id))
 
         # Check if this is a RID format (RID-#####)
         if doc_id.startswith('RID-') and len(doc_id) == 9:
@@ -64,19 +68,3 @@ def get_snippet_raw(rid):
     except Exception as e:
         logger.error(f"Error retrieving raw snippet {rid}: {str(e)}")
         return "Internal server error", 500
-
-@snippets_bp.route('/api/file-content', methods=['GET'])
-def get_file_content():
-    """Retrieve the content of a file."""
-    file_path = request.args.get('path')
-    if not file_path:
-        return jsonify({"error": "File path is required"}), 400
-
-    # Security check to prevent directory traversal
-    if not os.path.abspath(file_path).startswith(os.getcwd()):
-        return jsonify({"error": "Invalid file path"}), 400
-
-    if not os.path.exists(file_path):
-        return jsonify({"error": "File not found"}), 404
-
-    return send_file(file_path)
