@@ -48,13 +48,15 @@ export function Chat({ previousMessages, currentMessage, handleSubmit, isLoading
               msg.role === "user" ? "bg-blue-100 text-black" : "bg-gray-100 text-black"
             }`}>
               <ReactMarkdown
-                transformLinkUri={(uri) =>
-                  uri.startsWith('/api/snippet/')
-                    ? `/snippet/${uri.substring('/api/snippet/'.length)}`
-                    : uri
-                }
                 components={{
-                  a: ({ node, ...props }) => <a {...props} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline" />,
+                  a: ({ node, ...props }) => {
+                    const href = props.href || '';
+                    if (href.startsWith('/api/snippet/')) {
+                      const fileName = href.substring('/api/snippet/'.length);
+                      return <a {...props} href={`/snippet/${fileName}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline" />;
+                    }
+                    return <a {...props} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline" />;
+                  },
                 }}
               >
                 {msg.content}
