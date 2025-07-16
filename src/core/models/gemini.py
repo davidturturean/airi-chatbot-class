@@ -75,11 +75,15 @@ class GeminiModel(BaseModel):
                 else:
                     response = model.generate_content(prompt)
                 
-                return response.text if hasattr(response, 'text') else str(response)
+                if hasattr(response, 'text'):
+                    return response.text
+                else:
+                    logger.warning(f"No text in response. Full response: {response}")
+                    return ""
                 
             except Exception as e:
                 logger.error(f"Error generating response: {str(e)}")
-                return f"I encountered an error while generating a response: {str(e)}"
+                return ""
     
     def generate_stream(self, prompt: str, history: Optional[List[Dict[str, Any]]] = None) -> Iterator[str]:
         """
@@ -112,7 +116,7 @@ class GeminiModel(BaseModel):
                         
             except Exception as e:
                 logger.error(f"Error generating streaming response: {str(e)}")
-                yield f"I encountered an error while generating a response: {str(e)}"
+                yield ""
     
     def generate_response(self, prompt: str, stream: bool = False, history: Optional[List[Dict[str, Any]]] = None):
         """
