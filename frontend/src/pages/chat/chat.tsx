@@ -3,7 +3,6 @@ import { useScrollToBottom } from '../../components/use-scroll-to-bottom';
 import { useState } from "react";
 import { message } from "../../interfaces/interfaces";
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 
 const QUESTIONS = ["Find AI risk papers related to “Pre-deployment” timing",
        "What are the main risk categories in the AI Risk Database v3?"];
@@ -52,7 +51,6 @@ export function Chat({ previousMessages, currentMessage, handleSubmit, isLoading
                 components={{
                   a: ({ node, ...props }) => <a {...props} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline" />,
                 }}
-                remarkPlugins={[remarkGfm]}
               >
                 {msg.content}
               </ReactMarkdown>
