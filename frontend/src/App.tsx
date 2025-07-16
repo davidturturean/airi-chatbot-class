@@ -1,7 +1,6 @@
 import './App.css'
 import { Home } from './pages/home/home';
 import { FullChat } from './pages/fullchat/fullchat';
-import { TestPage } from './pages/test/test';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { SnippetViewer } from './pages/snippet/snippet';
@@ -14,7 +13,6 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path='/chat' element={<FullChat/>}/>
             <Route path="/snippet/:snippetId" element={<SnippetViewer />} />
-            <Route path="/test" element={<TestPage />} />
           </Routes>
         </div>
       </Router>
