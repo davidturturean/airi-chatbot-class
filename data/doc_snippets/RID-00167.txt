@@ -23,6 +23,7 @@ specific_domain: 7.3 > Lack of capability or robustness
 subdomain: 7.3 > Lack of capability or robustness
 timing: 2 - Post-deployment
 title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 
 Content:
 Title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: Domain-specific AI - Effects on humans and other living beings: Non-existential risks\nRisk Subcategory: Safety\nDescription: "Are AI safe with respect to human life and property? Will their use create unintended or intended safety issues?"\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 2 - Post-deployment
