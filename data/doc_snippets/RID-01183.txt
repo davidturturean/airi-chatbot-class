@@ -1,0 +1,29 @@
+Repository ID: RID-01183
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+risk_category: Legal challenges
+scqa_confidence: 1.0
+search_medium_priority: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information
+scqa_content_type: risk_description
+row: 1160
+rid: RID-01183
+scqa_complication: erring sensitive information\nRisk Category: Legal challenges\nDescription: "Since the release of ChatGPT, significant discourse has emerged regarding the
+search_all_fields: Regulating under Uncertainty: Governance Options for Generative AI 2. Privacy & Security Legal challenges 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information AI Risk Database v3 ai_risk_entry
+specific_domain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information
+subdomain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information
+timing: 3 - Other
+scqa_question: What are the implications of this risk?
+file_type: ai_risk_entry
+entity: 3 - Other
+search_high_priority: Regulating under Uncertainty: Governance Options for Generative AI 2. Privacy & Security Legal challenges
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+title: Regulating under Uncertainty: Governance Options for Generative AI
+sheet: AI Risk Database v3
+content_preview: Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 2. Privacy & Security\nSub-domain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information\nRisk Category: Legal challenges\nDescription: "Since the release of ChatGPT, significant discours...
+scqa_answer: "\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 3 - Other
+intent: 3 - Other
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_situation: Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 2
+domain: 2. Privacy & Security
+
+Content:
+Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 2. Privacy & Security\nSub-domain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information\nRisk Category: Legal challenges\nDescription: "Since the release of ChatGPT, significant discourse has emerged regarding the unprecedented legal challenges posed by generative AI systems. These challenges primarily involve protecting privacy and personal data, as well as preserving copyrights. The former encompasses safeguarding personal information, while the latter includes issues related to the use of copyrighted content for training AI models and determining the legal status of works produced by AI systems."\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 3 - Other

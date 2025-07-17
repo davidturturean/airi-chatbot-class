@@ -1,0 +1,29 @@
+Repository ID: RID-01526
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+domain: Unspecified
+file_type: ai_risk_entry
+scqa_confidence: 1.0
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_question: What are the implications of this risk?
+rid: RID-01526
+scqa_situation: Title: Future Risks of Frontier AI\nSub-domain: X
+search_medium_priority: X.1 > Excluded X.1 > Excluded
+search_high_priority: Future Risks of Frontier AI Unspecified Impacts resulting from interactions with external societal, political, and economic systems
+risk_category: Impacts resulting from interactions with external societal, political, and economic systems
+timing: 3 - Other
+row: 1503
+specific_domain: X.1 > Excluded
+sheet: AI Risk Database v3
+title: Future Risks of Frontier AI
+search_all_fields: Future Risks of Frontier AI Unspecified Impacts resulting from interactions with external societal, political, and economic systems X.1 > Excluded X.1 > Excluded AI Risk Database v3 ai_risk_entry
+scqa_complication: Title: Future Risks of Frontier AI\nSub-domain: X.1 > Excluded\nRisk Category: Impacts resulting from interactions with external societal,
+scqa_answer: ing from interactions with external societal, political, and economic systems\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 3 - Other
+subdomain: X.1 > Excluded
+content_preview: Title: Future Risks of Frontier AI\nSub-domain: X.1 > Excluded\nRisk Category: Impacts resulting from interactions with external societal, political, and economic systems\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 3 - Other
+search_low_priority: AI Risk Database v3 ai_risk_entry
+entity: 3 - Other
+scqa_content_type: impact_analysis
+intent: 3 - Other
+
+Content:
+Title: Future Risks of Frontier AI\nSub-domain: X.1 > Excluded\nRisk Category: Impacts resulting from interactions with external societal, political, and economic systems\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 3 - Other

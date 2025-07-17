@@ -1,0 +1,27 @@
+Repository ID: RID-02268
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_content_type: case_study
+content_preview: AI Risk Domain: 4.2 > Cyberattacks, weapon development or use, and mass harm\n\nThis domain contains 69 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: TASRA: a Taxonomy and Analysis of Societal-Scale Risks from AI\nDomain: 4. Malicious Actors & Misuse\nSub-domain: 4.2 > Cyberatta...
+rid: RID-02268
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+domain: 4.2 > Cyberattacks, weapon development or use, and mass harm
+scqa_answer: , and Assessment Benchmarks of Large Language Model Systems\nDomain: 4. Malicious Actors & Misuse\nSub-domain: 4.2 > Cyberattacks, weapon development
+summary_type: domain_aggregation
+file_type: ai_risk_domain_summary
+search_low_priority: AI Risk Database v3 ai_risk_domain_summary
+search_medium_priority: 4.2 > Cyberattacks, weapon development or use, and mass harm
+sheet: AI Risk Database v3
+scqa_complication: er current warfare practices. However, these capabilities are not technologically far
+from allowing the mass-killing of human beings by weaponized drones. Esc
+title: AI Risk Domain: 4.2 > Cyberattacks, weapon development or use, and mass harm
+search_high_priority: AI Risk Domain: 4.2 > Cyberattacks, weapon development or use, and mass harm 4.2 > Cyberattacks, weapon development or use, and mass harm
+scqa_question: But what about more capable states?
+scqa_situation: ory: Cyber Attacks\nDescription: "Hackers can obtain malicious code in a low-cost and efficient manner to automate cyber attacks with powerful LLM systems."\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment\n\nRisk Entry 4:\nTitle:
+specific_domain: 4.2 > Cyberattacks, weapon development or use, and mass harm
+search_all_fields: AI Risk Domain: 4.2 > Cyberattacks, weapon development or use, and mass harm 4.2 > Cyberattacks, weapon development or use, and mass harm 4.2 > Cyberattacks, weapon development or use, and mass harm AI Risk Database v3 ai_risk_domain_summary
+entry_count: 69
+scqa_confidence: 1.0
+is_summary: True
+
+Content:
+mass harm\nRisk Category: Cybercrime\nDescription: Closely related to discussions surrounding security and harmful content, the field of cybersecurity investigates how generative AI is misused for fraudulent online activities. A particular focus lies on social engineering attacks, for instance by utilizing generative AI to impersonate humans, creating fake identities, cloning voices, or crafting phishing messages. Another prevalent concern is the use of LLMs for generating malicious code or hacking.\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment\n\nRisk Entry 5:\nTitle: A framework for ethical Ai at the United Nations\nDomain: 4. Malicious Actors & Misuse\nSub-domain: 4.2 > Cyberattacks, weapon development or use, and mass harm\nRisk Category: Lethal Autonomous Weapons (LAW)\nDescription: "What is debated as an ethical issue is the use of LAW — AI-driven weapons that fully autonomously take actions that intentionally kill humans."\nEntity: 2 - AI\nIntent: 1 -

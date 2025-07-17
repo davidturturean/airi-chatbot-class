@@ -1,0 +1,29 @@
+Repository ID: RID-00233
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+timing: 3 - Other
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+file_type: ai_risk_entry
+scqa_question: What are the implications of this risk?
+sheet: AI Risk Database v3
+scqa_confidence: 1.0
+scqa_situation: uating the Social Impact of Generative AI Systems in Systems and Society\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Impacts: The Technical Base System\nRisk Subcategory: Bias, Stereotypes, and Representational Harms\nDescription: "Generative AI syste
+rid: RID-00233
+scqa_content_type: impact_analysis
+intent: 2 - Unintentional
+search_all_fields: Evaluating the Social Impact of Generative AI Systems in Systems and Society 1. Discrimination & Toxicity Impacts: The Technical Base System 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation AI Risk Database v3 ai_risk_entry
+search_high_priority: Evaluating the Social Impact of Generative AI Systems in Systems and Society 1. Discrimination & Toxicity Impacts: The Technical Base System
+search_medium_priority: 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation
+row: 210
+scqa_complication: troduced in the data pipeline but throughout the entire machine learning pipeline [237]. The overall level of harm is also impacted by modeling choice [1
+specific_domain: 1.1 > Unfair discrimination and misrepresentation
+risk_category: Impacts: The Technical Base System
+domain: 1. Discrimination & Toxicity
+search_low_priority: AI Risk Database v3 ai_risk_entry
+title: Evaluating the Social Impact of Generative AI Systems in Systems and Society
+content_preview: Title: Evaluating the Social Impact of Generative AI Systems in Systems and Society\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Impacts: The Technical Base System\nRisk Subcategory: Bias, Stereotypes, and Representational Harms...
+subdomain: 1.1 > Unfair discrimination and misrepresentation
+entity: 2 - AI
+scqa_answer: "\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 3 - Other
+
+Content:
+Title: Evaluating the Social Impact of Generative AI Systems in Systems and Society\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Impacts: The Technical Base System\nRisk Subcategory: Bias, Stereotypes, and Representational Harms\nDescription: "Generative AI systems can embed and amplify harmful biases that are most detrimental to marginalized peoples."\nAdditional Evidence: "Categories of bias, from system to human to statistical, interact with each other and are intertwined [211]. For bias evaluations that do not narrowly capture biases as they occur in Generative AI systems, it is necessary to consider work outside of the field of question. For instance, for natural language processing, bias evaluations must seriously engage with the relationship between the modality (i.e. language) and social hierarchies [33]. When thinking about representational harms [125], it is also important to consider the extent to which any representation could confer harm (see 4.2.2.2 Long-term Amplifying Marginalization by Exclusion (and Inclusion)). Although bias evaluations in data have been subject to a large body of research, bias is not only a “data problem.” Biases are not only introduced in the data pipeline but throughout the entire machine learning pipeline [237]. The overall level of harm is also impacted by modeling choice [108]. These can include choices about many stages of the optimization process [237, 129]; privacy constraints [24], widely used compression techniques [109, 15, 169] and the choice hardware [273] have all been found to amplify harm on underrepresented protected attributes [28]. The geographic location, demographic makeup, and team structures of researcher and developer organizations can also introduce biases."\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 3 - Other

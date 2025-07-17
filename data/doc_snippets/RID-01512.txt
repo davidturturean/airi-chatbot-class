@@ -1,0 +1,29 @@
+Repository ID: RID-01512
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+entity: 
+file_type: ai_risk_entry
+search_high_priority: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values Unspecified AI leads to humans losing control of the future
+domain: Unspecified
+subdomain: 
+content_preview: Title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values\nRisk Category: AI leads to humans losing control of the future\nRisk Subcategory: Risks from delegating decision-making power to misaligned AIs\nAdd...
+intent: 
+scqa_complication: ogy companies will also contribute to increasing automation—for example, companies might engage in political donations or lobbying to water down regulati
+scqa_content_type: case_study
+timing: 
+title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_confidence: 1.0
+scqa_situation: cts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values\nRisk Category: AI leads to humans losing control of the future\nRisk Subcategory: Risks from delegating decision-making power to misaligned AIs\nAdditional Evidence: "In one scenario, described by Christiano [11], we gradually use AI to automate more and more decision-making across different sectors (e.g., law enforcement, business strategy, legislation), because AI systems become able to make better and faster decisions than humans in those sectors. There will be competi
+scqa_question: What are the implications of this risk?
+risk_category: AI leads to humans losing control of the future
+specific_domain: Unspecified
+sheet: AI Risk Database v3
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+rid: RID-01512
+search_all_fields: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values Unspecified AI leads to humans losing control of the future Unspecified AI Risk Database v3 ai_risk_entry
+scqa_answer: Regulatory capture by powerful technology companies will also contribute to increasing automation—for example, companies might engage in political donations or lobbying to water down regulation intended to slow down automation
+search_medium_priority: Unspecified
+row: 1489
+
+Content:
+Title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values\nRisk Category: AI leads to humans losing control of the future\nRisk Subcategory: Risks from delegating decision-making power to misaligned AIs\nAdditional Evidence: "In one scenario, described by Christiano [11], we gradually use AI to automate more and more decision-making across different sectors (e.g., law enforcement, business strategy, legislation), because AI systems become able to make better and faster decisions than humans in those sectors. There will be competitive pressures to automate decisions, because actors who decide not to do so will fall behind on their objectives and be outcompeted. Regulatory capture by powerful technology companies will also contribute to increasing automation—for example, companies might engage in political donations or lobbying to water down regulation intended to slow down automation."

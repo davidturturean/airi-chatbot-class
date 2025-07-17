@@ -1,0 +1,29 @@
+Repository ID: RID-01188
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+content_preview: Title: Regulating under Uncertainty: Governance Options for Generative AI\nSub-domain: X.1 > Excluded\nRisk Category: Legal challenges\nRisk Subcategory: Copyright challenges (uncertain intellectual property status of AI-generated content)\nDescription: "The question of who owns the intellectual pro...
+specific_domain: X.1 > Excluded
+scqa_content_type: risk_description
+title: Regulating under Uncertainty: Governance Options for Generative AI
+subdomain: X.1 > Excluded
+scqa_complication: ere is sufficient human contribution."\nEntity: 4 - Not coded\nIntent: 4 - Not coded\nTiming: 4 - Not coded
+search_medium_priority: X.1 > Excluded X.1 > Excluded
+entity: 4 - Not coded
+scqa_answer: ing output—provided that there is sufficient human contribution."\nEntity: 4 - Not coded\nIntent: 4 - Not coded\nTiming: 4 - Not coded
+risk_category: Legal challenges
+scqa_confidence: 1.0
+rid: RID-01188
+scqa_question: What are the implications of this risk?
+intent: 4 - Not coded
+file_type: ai_risk_entry
+domain: Unspecified
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_situation: s\nRisk Subcategory: Copyright challenges (uncertain intellectual property status of AI-generated content)\nDescription: "The question of who owns the intellectual property rights associated with the output of an AI model remains unresolved in most legal systems. For now, it could be considered that the individual writing the prompt owns the resulting output—p
+search_low_priority: AI Risk Database v3 ai_risk_entry
+timing: 4 - Not coded
+sheet: AI Risk Database v3
+search_high_priority: Regulating under Uncertainty: Governance Options for Generative AI Unspecified Legal challenges
+row: 1165
+search_all_fields: Regulating under Uncertainty: Governance Options for Generative AI Unspecified Legal challenges X.1 > Excluded X.1 > Excluded AI Risk Database v3 ai_risk_entry
+
+Content:
+Title: Regulating under Uncertainty: Governance Options for Generative AI\nSub-domain: X.1 > Excluded\nRisk Category: Legal challenges\nRisk Subcategory: Copyright challenges (uncertain intellectual property status of AI-generated content)\nDescription: "The question of who owns the intellectual property rights associated with the output of an AI model remains unresolved in most legal systems. For now, it could be considered that the individual writing the prompt owns the resulting output—provided that there is sufficient human contribution."\nEntity: 4 - Not coded\nIntent: 4 - Not coded\nTiming: 4 - Not coded

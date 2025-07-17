@@ -56,10 +56,11 @@ class QueryProcessor:
         
         # Enhanced domain-based detection using generic classifier
         if not domain or domain == "other":
-            domain = self.domain_classifier.classify_domain(message)
-            if domain != "other":
-                query_type = domain
-                logger.info(f"Enhanced detection found {domain} related query")
+            detected_domain = self.domain_classifier.classify_domain(message)
+            if detected_domain != "other":
+                domain = detected_domain  # Update domain variable
+                query_type = detected_domain  # Update query type
+                logger.info(f"Enhanced detection found {detected_domain} related query")
         
         return query_type, domain
     
@@ -157,6 +158,13 @@ class QueryProcessor:
                 rid = doc.metadata.get('rid')
                 if rid and rid not in available_rids:
                     available_rids.append(rid)
+        
+        # Debug logging for prompt generation
+        logger.info(f"=== PROMPT GENERATION DEBUG ===")
+        logger.info(f"Final domain passed to prompt manager: {domain}")
+        logger.info(f"Final query_type: {query_type}")
+        logger.info(f"Context available: {'Yes' if context else 'No'}")
+        logger.info(f"=== END PROMPT GENERATION DEBUG ===")
         
         # Use the new prompt manager for advanced, context-aware prompts
         return self.prompt_manager.get_prompt(

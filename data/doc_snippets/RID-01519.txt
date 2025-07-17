@@ -1,0 +1,29 @@
+Repository ID: RID-01519
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+intent: 2 - Unintentional
+file_type: ai_risk_entry
+search_high_priority: Future Risks of Frontier AI 1. Discrimination & Toxicity Harmful responses
+content_preview: Title: Future Risks of Frontier AI\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to toxic content\nRisk Category: Harmful responses\nDescription: "Current Frontier AI mdoels amplify existing biases within their training data and can be manipulated into providing potentially harmf...
+title: Future Risks of Frontier AI
+scqa_answer: "\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 1 - Pre-deployment
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+sheet: AI Risk Database v3
+scqa_question: What are the implications of this risk?
+scqa_complication: ot limited to text generation but can be seen across all modalities of generative AI93. Training on large swathes of UK and US English internet content c
+rid: RID-01519
+scqa_situation: Title: Future Risks of Frontier AI\nDomain: 1
+entity: 1 - Human
+risk_category: Harmful responses
+scqa_content_type: case_study
+search_low_priority: AI Risk Database v3 ai_risk_entry
+search_all_fields: Future Risks of Frontier AI 1. Discrimination & Toxicity Harmful responses 1.2 > Exposure to toxic content 1.2 > Exposure to toxic content AI Risk Database v3 ai_risk_entry
+specific_domain: 1.2 > Exposure to toxic content
+domain: 1. Discrimination & Toxicity
+row: 1496
+search_medium_priority: 1.2 > Exposure to toxic content 1.2 > Exposure to toxic content
+scqa_confidence: 1.0
+subdomain: 1.2 > Exposure to toxic content
+timing: 1 - Pre-deployment
+
+Content:
+Title: Future Risks of Frontier AI\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to toxic content\nRisk Category: Harmful responses\nDescription: "Current Frontier AI mdoels amplify existing biases within their training data and can be manipulated into providing potentially harmful responses, for example abusive language or discriminatory responses91,92. This is not limited to text generation but can be seen across all modalities of generative AI93. Training on large swathes of UK and US English internet content can mean that misogynistic, ageist, and white supremacist content is overrepresented in the training data94."\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 1 - Pre-deployment

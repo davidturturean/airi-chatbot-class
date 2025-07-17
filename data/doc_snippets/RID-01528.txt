@@ -1,0 +1,29 @@
+Repository ID: RID-01528
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+rid: RID-01528
+specific_domain: 5.1 > Overreliance and unsafe use
+intent: 2 - Unintentional
+sheet: AI Risk Database v3
+scqa_complication: Title: Future Risks of Frontier AI\nDomain: 5. Human-Computer Interaction\nSub-domain: 5.1 > Overreliance and unsafe use\nRisk Category: O
+search_all_fields: Future Risks of Frontier AI 5. Human-Computer Interaction Overreliance on AI systems, which cannot be subsequently unpicked 5.1 > Overreliance and unsafe use 5.1 > Overreliance and unsafe use AI Risk Database v3 ai_risk_entry
+file_type: ai_risk_entry
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+entity: 1 - Human
+search_low_priority: AI Risk Database v3 ai_risk_entry
+content_preview: Title: Future Risks of Frontier AI\nDomain: 5. Human-Computer Interaction\nSub-domain: 5.1 > Overreliance and unsafe use\nRisk Category: Overreliance on AI systems, which cannot be subsequently unpicked\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 3 - Other
+row: 1505
+scqa_situation: Title: Future Risks of Frontier AI\nDomain: 5
+risk_category: Overreliance on AI systems, which cannot be subsequently unpicked
+title: Future Risks of Frontier AI
+scqa_confidence: 1.0
+scqa_content_type: risk_description
+scqa_answer: 1 > Overreliance and unsafe use\nRisk Category: Overreliance on AI systems, which cannot be subsequently unpicked\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 3 - Other
+domain: 5. Human-Computer Interaction
+timing: 3 - Other
+search_medium_priority: 5.1 > Overreliance and unsafe use 5.1 > Overreliance and unsafe use
+scqa_question: What are the implications of this risk?
+search_high_priority: Future Risks of Frontier AI 5. Human-Computer Interaction Overreliance on AI systems, which cannot be subsequently unpicked
+subdomain: 5.1 > Overreliance and unsafe use
+
+Content:
+Title: Future Risks of Frontier AI\nDomain: 5. Human-Computer Interaction\nSub-domain: 5.1 > Overreliance and unsafe use\nRisk Category: Overreliance on AI systems, which cannot be subsequently unpicked\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 3 - Other

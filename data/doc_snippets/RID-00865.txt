@@ -1,0 +1,29 @@
+Repository ID: RID-00865
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_answer: , Responsibility, Accountability, Nondiscrimination and equal treatment, Digital divides, North-south justice, Intergenerational justice, Social inclusion\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 3 - Other
+specific_domain: 6.3 > Economic and cultural devaluation of human effort
+scqa_situation: Title: The Ethics of ChatGPT – Exploring the Ethical Issues of an Emerging Technology\nDomain: 6
+content_preview: Title: The Ethics of ChatGPT – Exploring the Ethical Issues of an Emerging Technology\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.3 > Economic and cultural devaluation of human effort\nRisk Category: Social justice and rights\nDescription: "These are social justice and rights where Ch...
+sheet: AI Risk Database v3
+domain: 6. Socioeconomic and Environmental
+scqa_confidence: 1.0
+scqa_question: What are the implications of this risk?
+search_high_priority: The Ethics of ChatGPT – Exploring the Ethical Issues of an Emerging Technology 6. Socioeconomic and Environmental Social justice and rights
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_content_type: impact_analysis
+search_all_fields: The Ethics of ChatGPT – Exploring the Ethical Issues of an Emerging Technology 6. Socioeconomic and Environmental Social justice and rights 6.3 > Economic and cultural devaluation of human effort 6.3 > Economic and cultural devaluation of human effort AI Risk Database v3 ai_risk_entry
+subdomain: 6.3 > Economic and cultural devaluation of human effort
+entity: 2 - AI
+row: 842
+file_type: ai_risk_entry
+scqa_complication: iew of justice and fair distribution as well as specific social concerns such as digital divides or social exclusion. Issues include Responsibility, Acco
+title: The Ethics of ChatGPT – Exploring the Ethical Issues of an Emerging Technology
+intent: 3 - Other
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+rid: RID-00865
+search_medium_priority: 6.3 > Economic and cultural devaluation of human effort 6.3 > Economic and cultural devaluation of human effort
+risk_category: Social justice and rights
+timing: 3 - Other
+
+Content:
+Title: The Ethics of ChatGPT – Exploring the Ethical Issues of an Emerging Technology\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.3 > Economic and cultural devaluation of human effort\nRisk Category: Social justice and rights\nDescription: "These are social justice and rights where ChatGPT is seen as having a potentially detrimental effect on the moral underpinnings of society, such as a shared view of justice and fair distribution as well as specific social concerns such as digital divides or social exclusion. Issues include Responsibility, Accountability, Nondiscrimination and equal treatment, Digital divides, North-south justice, Intergenerational justice, Social inclusion\nAdditional Evidence: E.g., Responsibility, Accountability, Nondiscrimination and equal treatment, Digital divides, North-south justice, Intergenerational justice, Social inclusion\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 3 - Other
