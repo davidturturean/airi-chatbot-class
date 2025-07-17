@@ -222,6 +222,13 @@ class ChatService:
             
             # Generate response
             response = self.gemini_model.generate(prompt, history)
+            
+            # DEBUG: Log the raw response from Gemini
+            logger.info(f"=== GEMINI RESPONSE DEBUG ===")
+            logger.info(f"Raw response length: {len(response)}")
+            logger.info(f"Response preview (first 200 chars): {response[:200]}...")
+            logger.info(f"=== END GEMINI RESPONSE DEBUG ===")
+            
             return response
             
         except Exception as e:
