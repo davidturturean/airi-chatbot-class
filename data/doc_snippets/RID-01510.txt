@@ -1,0 +1,29 @@
+Repository ID: RID-01510
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+content_preview: Title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values\nRisk Category: AI leads to humans losing control of the future\nRisk Subcategory: Risks from AIs developing goals and values that are different from...
+domain: Unspecified
+entity: 
+file_type: ai_risk_entry
+intent: 
+rid: RID-01510
+risk_category: AI leads to humans losing control of the future
+row: 1487
+scqa_answer: ) collude with auditors valuing the company's output, fool the company’s directors, and eventually ensure no actor who might reduce the company's revenue can interfere
+scqa_complication: Power, Epistemics and Values\nRisk Category: AI leads to humans losing control of the future\nRisk Subcategory: Risks from AIs developing goals and values
+scqa_confidence: 1.0
+scqa_content_type: impact_analysis
+scqa_question: What are the implications of this risk?
+scqa_situation: cts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values\nRisk Category: AI leads to humans losing control of the future\nRisk Subcategory: Risks from AIs developing goals and values that are different from humans\nAdditional Evidence: "The system could learn the objective “maximise the contents of the memory cell where the score is stored” whic
+search_all_fields: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values Unspecified AI leads to humans losing control of the future Unspecified AI Risk Database v3 ai_risk_entry
+search_high_priority: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values Unspecified AI leads to humans losing control of the future
+search_low_priority: AI Risk Database v3 ai_risk_entry
+search_medium_priority: Unspecified
+sheet: AI Risk Database v3
+specific_domain: Unspecified
+subdomain: 
+timing: 
+title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+
+Content:
+Title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values\nRisk Category: AI leads to humans losing control of the future\nRisk Subcategory: Risks from AIs developing goals and values that are different from humans\nAdditional Evidence: "The system could learn the objective “maximise the contents of the memory cell where the score is stored” which, over the long run, will lead it to fool the humans scoring its behaviour into thinking that it is doing what they intended, and eventually seize control over that memory cell, and eliminate actors who might try to interfere with this. When the intended task requiresperforming complex actions in the real world, this alternative strategy would probably allow the system to get much higher scores, much more easily, than successfully performing the task as intended. • Suppose that some system is being trained to further some company’s objective. This system could learn the objective “maximise quarterly revenue” which, over the long run, would lead it to (e.g.) collude with auditors valuing the company's output, fool the company’s directors, and eventually ensure no actor who might reduce the company's revenue can interfere."
