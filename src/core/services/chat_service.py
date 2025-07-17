@@ -211,6 +211,15 @@ class ChatService:
             # Generate enhanced prompt with session awareness and RID information
             prompt = self.query_processor.generate_prompt(message, query_type, context, conversation_id, docs)
             
+            # DEBUG: Log the actual prompt being sent to Gemini
+            logger.info(f"=== GEMINI PROMPT DEBUG ===")
+            logger.info(f"Query: {message}")
+            logger.info(f"Query Type: {query_type}")
+            logger.info(f"Context length: {len(context) if context else 0}")
+            logger.info(f"Documents count: {len(docs) if docs else 0}")
+            logger.info(f"Prompt preview (first 500 chars): {prompt[:500]}...")
+            logger.info(f"=== END GEMINI PROMPT DEBUG ===")
+            
             # Generate response
             response = self.gemini_model.generate(prompt, history)
             return response
