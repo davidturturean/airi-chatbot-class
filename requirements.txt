@@ -6,7 +6,7 @@ langchain
 langchain-community
 langchain-google-genai
 langchain-chroma
-chromadb==0.4.22
+chromadb>=1.0.0
 tiktoken==0.5.2
 rank-bm25==0.2.2
 pandas==2.2.2
