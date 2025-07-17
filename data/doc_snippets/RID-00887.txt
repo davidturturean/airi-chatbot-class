@@ -1,0 +1,29 @@
+Repository ID: RID-00887
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+content_preview: Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.2 > Increased inequality and decline in employment quality\nRisk Category: Challenges associated with the economy:\nRisk Subcategory: Labor market\nDescri...
+domain: 6. Socioeconomic and Environmental
+entity: 1 - Human
+file_type: ai_risk_entry
+intent: 1 - Intentional
+rid: RID-00887
+risk_category: Challenges associated with the economy:
+row: 864
+scqa_answer: "\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment
+scqa_complication: ecline in employment quality\nRisk Category: Challenges associated with the economy:\nRisk Subcategory: Labor market\nDescription: "The labor market can f
+scqa_confidence: 1.0
+scqa_content_type: risk_description
+scqa_question: What are the implications of this risk?
+scqa_situation: ub-domain: 6.2 > Increased inequality and decline in employment quality\nRisk Category: Challenges associated with the economy:\nRisk Subcategory: Labor market\nDescription: "The labor market can face challenges from generative AI. As mentioned earlier, generative AI could be applied in a wide range of applications in many industries, such as education, healthcare, and advertising. In addition to increasing produ
+search_all_fields: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 6. Socioeconomic and Environmental Challenges associated with the economy: 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality AI Risk Database v3 ai_risk_entry
+search_high_priority: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 6. Socioeconomic and Environmental Challenges associated with the economy:
+search_low_priority: AI Risk Database v3 ai_risk_entry
+search_medium_priority: 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality
+sheet: AI Risk Database v3
+specific_domain: 6.2 > Increased inequality and decline in employment quality
+subdomain: 6.2 > Increased inequality and decline in employment quality
+timing: 2 - Post-deployment
+title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+
+Content:
+Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.2 > Increased inequality and decline in employment quality\nRisk Category: Challenges associated with the economy:\nRisk Subcategory: Labor market\nDescription: "The labor market can face challenges from generative AI. As mentioned earlier, generative AI could be applied in a wide range of applications in many industries, such as education, healthcare, and advertising. In addition to increasing productivity, generative AI can create job displacement in the labor market (Zarifhonarvar, 2023). A new division of labor between humans and algorithms is likely to reshape the labor market in the coming years. Some jobs that are originally carried out by humans may become redundant, and hence, workers may lose their jobs and be replaced by algorithms (Pavlik, 2023). On the other hand, applying generative AI can create new jobs in various industries (Dwivedi et al., 2023). To stay competitive in the labor market, reskilling is needed to work with and collaborate with AI and develop irreplaceable advantages (Zarifhonarvar, 2023)."\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment
