@@ -70,6 +70,7 @@ export function FullChat() {
         for (const line of lines) {
           if (line.trim()) {
             try {
+              
               const parsed = JSON.parse(line);
               if (parsed.related_documents) {
                 setRelatedDocuments(parsed.related_documents);
