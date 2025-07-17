@@ -26,7 +26,7 @@ class Settings:
     # API Configuration
     DEFAULT_PORT = 8090
     ALLOWED_PORTS = [8090, 8080, 8000, 3000]
-    DEBUG = True
+    DEBUG = os.environ.get('DEBUG', 'true').lower() == 'true'
     
     # Model Configuration
     GEMINI_API_KEY: str = os.environ.get('GEMINI_API_KEY', 'AIzaSyAVrH9JPSqSivrbfUWMS3XZA52zZ5DEkhk')
