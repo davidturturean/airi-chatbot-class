@@ -165,9 +165,10 @@ export function FullChat() {
           <section className="space-y-2">
             <h2 className="text-2xl font-bold text-gray-800">AI Risk Assistant</h2>
             <p className="text-sm text-gray-600 leading-relaxed max-w-2xl">
-              This assistant helps you explore and assess AI risk factors, drawing from resources like the IBM Risk Atlas. You can
+              This assistant helps you explore and assess AI risk factors, drawing from the AI Risk Index. You can
               ask about governance frameworks, benchmarks, mitigations, and more.
             </p>
+            <p>We are currently collecting message histories to improve user experience. Please be advised that your conversations will be stored in our database.</p>
           </section>
 
           {/* Chat Component */}
