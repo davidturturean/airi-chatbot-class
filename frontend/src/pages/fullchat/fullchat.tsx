@@ -71,7 +71,28 @@ export function FullChat() {
           if (line.trim()) {
             try {
               
+              
               const parsed = JSON.parse(line);
+
+               const isStatusMessage =
+                typeof parsed === "string" &&
+                (
+                  parsed.startsWith("Processing") ||
+                  parsed.startsWith("Analyzing") ||
+                  parsed.startsWith("Searching") ||
+                  parsed.startsWith("Generating") ||
+                  parsed.startsWith("Found") ||
+                  parsed.startsWith("No specific documents") ||
+                  parsed.startsWith("Using general knowledge")
+                );
+
+              if (isStatusMessage) {
+                // Optionally show this briefly in the UI via some loading bar/spinner
+                  const currMess: message = { content: parsed, role: 'assistant', id: uuidv4() };
+                  setCurrentMessage(currMess);
+                  continue
+               }
+
               if (parsed.related_documents) {
                 setRelatedDocuments(parsed.related_documents);
               } else {
