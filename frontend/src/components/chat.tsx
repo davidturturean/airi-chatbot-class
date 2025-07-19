@@ -1,7 +1,7 @@
-import { ChatInput } from "../../components/chatinput";
-import { useScrollToBottom } from '../../components/use-scroll-to-bottom';
+import { ChatInput } from "./chatinput";
+import { useScrollToBottom } from './use-scroll-to-bottom';
 import { useState } from "react";
-import { message } from "../../interfaces/interfaces";
+import { message } from "../interfaces/interfaces";
 import ReactMarkdown from "react-markdown";
 
 const QUESTIONS = ["Find AI risk papers related to “Pre-deployment” timing",

@@ -1,156 +1,18 @@
-import { useState, useRef } from 'react';
-import { Chat } from '../chat/chat';
+import { Chat } from '../../components/chat';
 import { Header } from '../../components/header';
-import { message } from '../../interfaces/interfaces';
-import { v4 as uuidv4 } from 'uuid';
-
-const API_URL = '';
-
-const WELCOME: message = {
-  content: "Hi! I'm your AI assistant to help you navigate the AI Risk repository. How can I help you today?",
-  role: 'assistant',
-  id: uuidv4(),
-};
+import { useSidebar } from '@/context/SidebarContext';
+import { useChat } from '@/context/ChatContext';
 
 export function FullChat() {
-  const [previousMessages, setPreviousMessages] = useState<message[]>([WELCOME]);
-  const [currentMessage, setCurrentMessage] = useState<message | null>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const messageHandlerRef = useRef<((event: MessageEvent) => void) | null>(null);
 
-  const [domain, setDomain] = useState('');
-  const [suggestedUseCases, setSuggestedUseCases] = useState<string[]>([]);
-  const [relatedDocuments, setRelatedDocuments] = useState<{ title: string; url: string }[]>([]);
+  const { previousMessages, currentMessage, handleSubmit, isLoading } = useChat();
+  const { domain, setDomain, relatedDocuments, suggestedUseCases, handleDomainSubmit } = useSidebar();
 
   const handleFileClick = async (url: string) => {
     const snippetId = url.split('/').pop();
     window.open(`/snippet/${snippetId}`, '_blank', 'noopener,noreferrer');
   };
 
-  const cleanupMessageHandler = () => {
-    if (messageHandlerRef.current) {
-      messageHandlerRef.current = null;
-    }
-  };
-
-  async function handleSubmit(text?: string) {
-    if (isLoading) return;
-    const messageText = text;
-    if (!messageText || !messageText.trim()) return;
-
-    const userMessage: message = { content: messageText, role: 'user', id: uuidv4() };
-    setPreviousMessages((prev) => [...prev, userMessage]);
-
-    const loadingMessage: message = { content: 'Loading...', role: 'assistant', id: 'loading' };
-    setCurrentMessage(loadingMessage);
-
-    try {
-      const stream = await fetch(`${API_URL}api/v1/stream`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: messageText }),
-      });
-
-      if (!stream.body) throw new Error('Failed!!');
-
-      const reader = stream.body.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-      let buffer = '';
-      let accumulatedText = '';
-
-      while (!done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-        buffer += decoder.decode(value, { stream: !done });
-
-        const lines = buffer.split('\n');
-        buffer = lines.pop() ?? '';
-
-        for (const line of lines) {
-          if (line.trim()) {
-            try {
-              
-              
-              const parsed = JSON.parse(line);
-
-               const isStatusMessage =
-                typeof parsed === "string" &&
-                (
-                  parsed.startsWith("Processing") ||
-                  parsed.startsWith("Analyzing") ||
-                  parsed.startsWith("Searching") ||
-                  parsed.startsWith("Generating") ||
-                  parsed.startsWith("Found") ||
-                  parsed.startsWith("No specific documents") ||
-                  parsed.startsWith("Using general knowledge")
-                );
-
-              if (isStatusMessage) {
-                // Optionally show this briefly in the UI via some loading bar/spinner
-                  const currMess: message = { content: parsed, role: 'assistant', id: uuidv4() };
-                  setCurrentMessage(currMess);
-                  continue
-               }
-
-              if (parsed.related_documents) {
-                setRelatedDocuments(parsed.related_documents);
-              } else {
-                accumulatedText += parsed;
-                const currMess: message = { content: accumulatedText, role: 'assistant', id: uuidv4() };
-                setCurrentMessage(currMess);
-              }
-            } catch (err) {
-              console.error('Error parsing line:', line, err);
-            }
-          }
-        }
-      }
-
-      const botMessage: message = {
-        content: accumulatedText,
-        role: 'assistant',
-        id: uuidv4(),
-      };
-
-      setPreviousMessages((prev) => [...prev, botMessage]);
-      setCurrentMessage(null);
-    } catch (error) {
-      console.error('Error sending message:', error);
-      const errorMessage: message = {
-        content: 'Error talking to server.',
-        role: 'assistant',
-        id: uuidv4(),
-      };
-      setPreviousMessages((prev) => [...prev, errorMessage]);
-      setCurrentMessage(null);
-    } finally {
-      setIsLoading(false);
-      cleanupMessageHandler();
-    }
-  }
-
-  const handleDomainSubmit = async () => {
-    if (!domain.trim()) return;
-
-    try {
-      const response = await fetch(`${API_URL}api/v1/use_cases`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ domain }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch use cases');
-      }
-
-      const data = await response.json();
-      setSuggestedUseCases(data.use_cases || []);
-    } catch (error) {
-      console.error('Error fetching use cases:', error);
-      setSuggestedUseCases(['Error fetching use cases. Please try again.']);
-    }
-  };
 
   const defaultUseCases = ['Medical chatbot', 'Customer service agent', 'Model risk review'];
 
@@ -177,12 +39,7 @@ export function FullChat() {
 
           {/* Chat Component */}
           <div className="bg-white rounded-xl shadow border p-4 h-[80vh] overflow-y-auto">
-            <Chat
-              previousMessages={previousMessages}
-              currentMessage={currentMessage}
-              handleSubmit={handleSubmit}
-              isLoading={isLoading}
-            />
+            <Chat previousMessages={previousMessages} currentMessage={currentMessage} handleSubmit={handleSubmit} isLoading={isLoading} />
           </div>
         </div>
 
