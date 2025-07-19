@@ -36,73 +36,50 @@ class CitationService:
         """
         if not docs:
             return response
-        
+
         # Build RID citation mapping
         self.rid_citation_map = {}
         for doc in docs:
-            rid = doc.metadata.get('rid', None)
+            rid = doc.metadata.get('rid')
             if rid:
-                citation = self._format_rid_citation(doc)
+                citation = self._format_rid_citation(doc, bold=True)  # NEW: bold=True
                 self.rid_citation_map[rid] = citation
-                
-                # Save snippet for the RID
                 self._save_rid_snippet(doc, rid)
-        
-        # Replace RID placeholders and legacy patterns
+
         enhanced_response = self._replace_rid_citations(response, docs)
-        
-        # Add inline highlighting for supported claims
         enhanced_response = self._add_inline_highlighting(enhanced_response, docs)
-        
+
         logger.info(f"RID citation enhancement complete. RIDs processed: {len(self.rid_citation_map)}")
         return enhanced_response
-    
+
     def _replace_rid_citations(self, response: str, docs: List[Document]) -> str:
-        """Replace RID placeholders and legacy section references with proper citations."""
-        enhanced_response = response
-        
-        # First, replace any RID-##### patterns with proper citations
         import re
+        enhanced_response = response
         rid_pattern = r'RID-(\d{5})'
-        
+
         def replace_rid(match):
             rid = match.group(0)
-            return self.rid_citation_map.get(rid, rid)  # Keep original if not found
-        
+            return self.rid_citation_map.get(rid, rid)
+
         enhanced_response = re.sub(rid_pattern, replace_rid, enhanced_response)
-        
-        # Handle legacy patterns (SECTION X, Document X) for backward compatibility
+
         for i, doc in enumerate(docs, 1):
             rid = doc.metadata.get('rid')
             if not rid:
                 continue
-                
-            citation = self.rid_citation_map.get(rid, f"[Source {i}]")
-            
-            # Replace various legacy patterns
-            patterns = [
-                f"SECTION {i}",
-                f"Source {i}",
-                f"Document {i}",
-                f"Entry {i}"
-            ]
-            
-            for pattern in patterns:
+            citation = self.rid_citation_map.get(rid, f"**[Source {i}]**")
+            for pattern in [f"SECTION {i}", f"Source {i}", f"Document {i}", f"Entry {i}"]:
                 if pattern in enhanced_response:
                     enhanced_response = enhanced_response.replace(pattern, citation)
                     logger.info(f"✓ Replaced legacy pattern '{pattern}' with RID citation")
-        
-        # If no citations were added through pattern replacement, append them
+
         if self.rid_citation_map and not any(rid in enhanced_response for rid in self.rid_citation_map.keys()):
             logger.info("No citation patterns found - appending citations to response")
-            citations_list = []
-            for rid, citation in self.rid_citation_map.items():
-                citations_list.append(f"{rid}: {citation}")
-            
-            if citations_list:
-                enhanced_response += "\n\n**Sources:**\n" + "\n".join(f"• {cite}" for cite in citations_list)
-                logger.info(f"✓ Appended {len(citations_list)} citations to response")
-        
+            citations_list = [f"- **{rid}**: {citation.replace('*', '')}" for rid, citation in self.rid_citation_map.items()]
+            enhanced_response += "\n\n**Sources:**\n\n" + "\n\n".join(citations_list)
+            logger.info(f"✓ Appended {citations_list}")
+            logger.info(f"✓ Appended {len(citations_list)} citations to response")
+
         return enhanced_response
     
     def _add_inline_highlighting(self, response: str, docs: List[Document]) -> str:
@@ -111,39 +88,36 @@ class CitationService:
         # Future enhancement: use fuzzy matching to find exact phrases from sources
         return response  # Placeholder for inline highlighting feature
     
-    def _format_rid_citation(self, doc: Document) -> str:
-        """Format a citation using the document's RID."""
+    def _format_rid_citation(self, doc: Document, bold: bool = False) -> str:
         rid = doc.metadata.get('rid', 'RID-UNKNOWN')
         file_type = doc.metadata.get('file_type', '')
-        
-        # Create human-readable citation text based on document type
+
         if 'ai_risk_entry' in file_type:
             title = doc.metadata.get('title', 'AI Risk Entry')
             domain = doc.metadata.get('domain', '')
-            if domain and domain != 'Unspecified':
-                citation_text = f"{title} (Domain: {domain})"
-            else:
-                citation_text = title
+            label = f"{title}, Domain: {domain}" if domain and domain != 'Unspecified' else title
+
         elif 'domain_summary' in file_type:
             domain = doc.metadata.get('domain', 'Unknown Domain')
-            citation_text = f"AI Risk Domain: {domain}"
+            label = f"AI Risk Domain: {domain}"
+
         elif 'excel' in file_type:
             sheet = doc.metadata.get('sheet', 'Unknown Sheet')
             row = doc.metadata.get('row', '')
-            if row:
-                citation_text = f"MIT AI Repository, {sheet}, Row {row}"
-            else:
-                citation_text = f"MIT AI Repository, {sheet}"
+            label = f"MIT AI Repository, {sheet}, Row {row}" if row else f"MIT AI Repository, {sheet}"
+
         else:
-            # Generic citation
             source = doc.metadata.get('source', 'Unknown Source')
             filename = os.path.basename(source)
-            if 'AI_Risk' in filename:
-                citation_text = "AI Risk Repository Document"
-            else:
-                citation_text = filename.replace('_', ' ').replace('-', ' ')[:30]
-        
-        return f"[{citation_text}](/snippet/{rid})"
+            label = (
+                "AI Risk Repository Document" if "AI_Risk" in filename
+                else filename.replace("_", " ").replace("-", " ")[:30]
+            )
+
+        display_text = f"**{label}**" if bold else label
+        link = f"/snippet/{rid}"
+        return f"[{display_text}]({link})"
+
     
     def _save_rid_snippet(self, doc: Document, rid: str) -> None:
         """Save document snippet using RID for easy retrieval."""

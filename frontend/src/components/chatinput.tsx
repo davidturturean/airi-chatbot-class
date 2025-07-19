@@ -20,24 +20,26 @@ export const ChatInput = ({ question, setQuestion, onSubmit, isLoading }: ChatIn
         onChange={(e) => setQuestion(e.target.value)}
         //press enter --> goes to backend
         onKeyDown={(event) => {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
+    if (event.key === 'Enter') {
+        event.preventDefault();
 
-                if (isLoading) {
-                    toast.error('Please wait for the model to finish its response!');
-                } else {
-                    // setShowSuggestions(false);
-                    onSubmit();
-                }
-            }
-        }}
+        if (isLoading) {
+            toast.error('Please wait for the model to finish its response!');
+        } else {
+            onSubmit(question); // Make sure this matches the expected input
+            setQuestion("");
+        }
+    }
+}}
         rows={3}
         autoFocus
         />
 
         <button 
             className="rounded-full p-1.5 h-fit absolute bottom-2 right-2 m-0.5 border dark:border-zinc-600"
-            onClick={() => onSubmit(question)}
+            onClick={() => {onSubmit(question)
+                setQuestion("")
+            }}
             disabled={question.length === 0}
         >
             <ArrowUpIcon size={14} />

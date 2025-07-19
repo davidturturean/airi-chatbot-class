@@ -1,6 +1,12 @@
 # Virtual Environment
-venv/
+.venv/*
+.venv/bin/
+.venv/lib/
+venv/*
+venv/bin/
 env/
+
+.env
 ENV/
 
 # Python cache files
@@ -59,5 +65,7 @@ Thumbs.db
 *.swo
 
 # Node modules
-node_modules/
+*node_modules/
 frontend/node_modules/
+
+data/doc_snippets/

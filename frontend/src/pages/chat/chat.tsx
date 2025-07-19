@@ -18,6 +18,7 @@ export function Chat({ previousMessages, currentMessage, handleSubmit, isLoading
   const [messagesContainerRef, messagesEndRef] = useScrollToBottom<HTMLDivElement>();
   const [question, setQuestion] = useState<string>("");
 
+  
   return (
     <div className="relative h-full w-full bg-white rounded-xl flex flex-col">
 
