@@ -13,8 +13,8 @@ const WELCOME: message = {
 };
 
 export function FullChat() {
-  const [previousMessages, setPreviousMessages] = useState<message[]>([]);
-  const [currentMessage, setCurrentMessage] = useState<message | null>(WELCOME);
+  const [previousMessages, setPreviousMessages] = useState<message[]>([WELCOME]);
+  const [currentMessage, setCurrentMessage] = useState<message | null>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const messageHandlerRef = useRef<((event: MessageEvent) => void) | null>(null);
 
