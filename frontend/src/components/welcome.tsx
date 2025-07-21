@@ -3,7 +3,7 @@ import { BotIcon, XIcon } from "lucide-react";
 import { Header } from "./header";
 import { Chat } from "./chat";
 import { useChat } from "@/context/ChatContext";
-
+import { Link } from 'react-router-dom';
 
 export function Welcome() {
   const { previousMessages, currentMessage, handleSubmit, isLoading } = useChat();
@@ -37,13 +37,13 @@ export function Welcome() {
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
-            <button
-              onClick={handleOpen}
-              className="px-6 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition shadow-md"
-            >
-              Open Chat
-            </button>
-      
+         
+              <Link
+                to="/chat"
+                className="px-6 py-3 bg-red-500 text-white rounded-full hover:bg-red-600 transition shadow-md"
+              >
+                Go to chat
+              </Link>
           </div>
         </div>
       </section>
