@@ -1,0 +1,26 @@
+Repository ID: RID-02278
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_high_priority: AI Risk Domain: 6.6 > Environmental harm 6.6 > Environmental harm
+domain: 6.6 > Environmental harm
+specific_domain: 6.6 > Environmental harm
+summary_type: domain_aggregation
+file_type: ai_risk_domain_summary
+search_medium_priority: 6.6 > Environmental harm
+is_summary: True
+scqa_situation: d utilization of these resources frequently occur in unsustainable ways. Consequently, papers highlight the urgency of mitigating environmental costs for instance by adopting renewable energy sources and utilizing energy-efficient hardware in the operation and training of generative AI systems.\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 3 - Other\n\nRisk Entry 3:\nTitle: Social Impa
+sheet: AI Risk Database v3
+search_all_fields: AI Risk Domain: 6.6 > Environmental harm 6.6 > Environmental harm 6.6 > Environmental harm AI Risk Database v3 ai_risk_domain_summary
+rid: RID-02278
+title: AI Risk Domain: 6.6 > Environmental harm
+content_preview: AI Risk Domain: 6.6 > Environmental harm\n\nThis domain contains 52 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Navigating the Landscape of AI Ethics and Responsibility\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.6 > Environmental harm\nRisk Category: Environmen...
+scqa_confidence: 1.0
+scqa_complication: ut the manufacturing process. However, recent estimates suggest that the manufacturing process have substantial environmental costs [96]. Overall, information
+scqa_answer: papers highlight the urgency of mitigating environmental costs for instance by adopting renewable energy sources and utilizing energy-efficient hardw
+search_low_priority: AI Risk Database v3 ai_risk_domain_summary
+entry_count: 52
+scqa_question: What are the implications of this risk?
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_content_type: case_study
+
+Content:
+Costs\nDescription: "The computing power used in training, testing, and deploying generative AI systems, especially large scale systems, uses substantial energy resources and thereby contributes to the global climate crisis by emitting greenhouse gasses."\nAdditional Evidence: "While the environmental costs of compute has become an area of active research, with workshops dedicated to the question, the environmental costs of manufacturing hardware remains under-explored. One potential reason for this discrepancy may be that estimating compute and energy costs, while complex, is a comparably transparent task compared to tracing the emissions of the of emissions throughout the manufacturing process. However, recent estimates suggest that the manufacturing process have substantial environmental costs [96]. Overall, information about emissions is scarce and there is no consensus for what constitutes the total carbon footprint of AI systems."\nEntity: 1 - Human\nIntent: 2 -

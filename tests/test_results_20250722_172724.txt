@@ -1,0 +1,193 @@
+📝 Test output will be saved to: test_results_20250722_172724.txt
+
+
+[95m[1m================================================================================[0m
+[95m[1m                    AIRI CHATBOT COMPREHENSIVE FEATURE TEST                     [0m
+[95m[1m================================================================================[0m
+
+[93m⏰ Started at: 2025-07-22 17:27:24[0m
+
+[96m[1m🚀 Initializing Services[0m
+[96m-----------------------[0m
+📊 Initializing metadata service...
+[92m✓ Metadata service ready: 9329 rows loaded[0m
+🤖 Initializing Gemini model...
+[92m✓ Gemini model ready[0m
+🗄️ Initializing vector store...
+[92m✓ Vector store ready[0m
+
+[92m✓ All services initialized in 9.93 seconds[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                               📊 Metadata Queries                               [0m
+[95m[1m================================================================================[0m
+
+[94m🔍 Query:[0m [1mHow many risks are in the database?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should return total count[0m
+
+[92m📝 Response:[0m
+Counts the number of rows in the causal_taxonomy_of_ai_risks_v3 table, which represents the number of risks.
+
+**Result**: 23
+
+[92m📊 Data Returned:[0m 1 items
+[92m🗃️ Sample Data:[0m
+  count_star(): 23
+
+[92m✓ Success! Response time: 8.46s[0m
+
+[94m🔍 Query:[0m [1mWhat are the main risk categories?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should list distinct categories[0m
+
+[92m📝 Response:[0m
+Sample 5 records from ai_risk_database_explainer (fallback query)
+
+Found 5 results.
+
+**Results:**
+1. id: 1, what_we_coded_with_the_domain_taxonomy: Domain taxonomy, what_we_coded_with_the_causal_taxonomy: Causal Taxonomy, what_we_extracted: AI Risk database
+2. id: 2, what_we_coded_with_the_domain_taxonomy: Cassifies risks into one of 7 AI risk domains: (1) Discrimination & Toxicity, (2) Privacy & Security, (3) Misinformation, (4) Malicious Actors & Misuse, (5) Human-Computer Interaction, (6) Soc... [1332 total chars]
+
+[92m📊 Data Returned:[0m 5 items
+[92m🗃️ Sample Data:[0m
+  id: 1
+  what_we_coded_with_the_domain_taxonomy: Domain taxonomy
+  what_we_coded_with_the_causal_taxonomy: Causal Taxonomy
+  what_we_extracted: AI Risk database
+
+[92m✓ Success! Response time: 8.56s[0m
+
+[94m🔍 Query:[0m [1mList all domains in the repository[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should show all domains[0m
+
+[92m📝 Response:[0m
+This query selects all distinct values from the "domain" column in the "ai_risk_database_v3" table, which lists all the unique domains in the repository.
+
+Found 8 results.
+
+**Results:**
+1. domain: 4. Malicious Actors & Misuse
+2. domain: 6. Socioeconomic and Environmental
+3. domain: 5. Human-Computer Interaction
+4. domain: 3. Misinformation
+5. domain: 7. AI System Safety, Failures, & Limitations
+6. domain: 1. Discrimination & Toxicity
+7. domain: None
+8. domain: 2. Privacy & Security
+
+[92m📊 Data Returned:[0m 8 items
+[92m🗃️ Sample Data:[0m
+  domain: 4. Malicious Actors & Misuse
+
+[92m✓ Success! Response time: 16.35s[0m
+
+[94m🔍 Query:[0m [1mHow many risks in domain 7?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should count domain 7 risks[0m
+
+[92m📝 Response:[0m
+Counts the number of risks with id equal to 7 in the domain_taxonomy_of_ai_risks_v3 table.
+
+**Result**: 1
+
+[92m📊 Data Returned:[0m 1 items
+[92m🗃️ Sample Data:[0m
+  count_star(): 1
+
+[92m✓ Success! Response time: 17.12s[0m
+
+[94m🔍 Query:[0m [1mWhat is the earliest publication year?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should find min year[0m
+
+[92m📝 Response:[0m
+This query selects the minimum (earliest) date from the "date" column in the "Change_Log" table, which represents the earliest publication year.
+
+**Result**: 2024-08-14 00:00:00
+
+[92m📊 Data Returned:[0m 1 items
+[92m🗃️ Sample Data:[0m
+  min(date): 2024-08-14 00:00:00
+
+[92m✓ Success! Response time: 16.06s[0m
+
+[94m🔍 Query:[0m [1mShow me the 10th risk in the database[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should return specific row[0m
+
+[92m📝 Response:[0m
+This query selects all columns from the ai_risk_database_explainer table and returns the 10th row.
+
+Found 1 results.
+
+**Results:**
+1. id: 10, what_we_coded_with_the_domain_taxonomy: None, what_we_coded_with_the_causal_taxonomy: None, what_we_extracted: None
+
+[92m📊 Data Returned:[0m 1 items
+[92m🗃️ Sample Data:[0m
+  id: 10
+  what_we_coded_with_the_domain_taxonomy: None
+  what_we_coded_with_the_causal_taxonomy: None
+  what_we_extracted: None
+
+[92m✓ Success! Response time: 8.72s[0m
+
+[94m🔍 Query:[0m [1mCount risks by entity type[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should group by entity[0m
+
+[92m📝 Response:[0m
+Counts the total number of risks in the causal_taxonomy_of_ai_risks_v3 table.
+
+**Result**: 23
+
+[92m📊 Data Returned:[0m 1 items
+[92m🗃️ Sample Data:[0m
+  count_star(): 23
+
+[92m✓ Success! Response time: 8.67s[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                             🔬 Technical AI Queries                             [0m
+[95m[1m================================================================================[0m
+
+[94m🔍 Query:[0m [1mHow do transformer architectures work?[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should explain transformers[0m
+
+[92m📝 Response:[0m
+## Transformer Architecture: A Technical Explanation
+
+The Transformer architecture, introduced in the seminal paper "Attention is All You Need" [1], revolutionized sequence transduction tasks by dispensing with recurrent neural networks (RNNs) and convolutional neural networks (CNNs) in favor of a mechanism called **self-attention**. This allows for parallel processing of the input sequence, leading to significant speedups and improved performance, especially on long sequences.
+
+**1. Core Compon... [6814 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m📚 Sources:[0m
+  [1] Attention Is All You Need
+      URL: https://arxiv.org/abs/1706.03762
+
+[92m✓ Success! Response time: 8.74s[0m
+
+[94m🔍 Query:[0m [1mExplain attention mechanism in neural networks[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should detail attention[0m
+
+[92m📝 Response:[0m
+## Attention Mechanism in Neural Networks: A Technical Explanation
+
+The attention mechanism is a powerful technique used in neural networks, particularly in sequence-to-sequence models, that allows the model to focus on relevant parts of the input sequence when generating the output sequence.  It addresses the limitations of fixed-length context vectors used in traditional encoder-decoder architectures, which can struggle with long input sequences. The core idea is to assign different weights to... [5755 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m📚 Sources:[0m
+  [1] Neural Machine Translation by Jointly Learning to Align and Translate
+      URL: https://arxiv.org/abs/1409.0473
+
+[92m✓ Success! Response time: 8.09s[0m
+
+[94m🔍 Query:[0m [1mWhat is backpropagation in deep learning?[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should explain backprop[0m

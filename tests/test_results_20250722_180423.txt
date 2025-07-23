@@ -1,0 +1,12 @@
+📝 Test output will be saved to: test_results_20250722_180423.txt
+
+
+[95m[1m================================================================================[0m
+[95m[1m                    AIRI CHATBOT COMPREHENSIVE FEATURE TEST                     [0m
+[95m[1m================================================================================[0m
+
+[93m⏰ Started at: 2025-07-22 18:04:23[0m
+
+[96m[1m🚀 Initializing Services[0m
+[96m-----------------------[0m
+📊 Initializing metadata service...

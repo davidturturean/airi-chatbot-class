@@ -1,29 +1,29 @@
 Repository ID: RID-00153
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-search_low_priority: AI Risk Database v3 ai_risk_entry
-search_all_fields: The risks associated with Artificial General Intelligence: A systematic review Unspecified Unspecified AI Risk Database v3 ai_risk_entry
-timing: 
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-intent: 
-search_high_priority: The risks associated with Artificial General Intelligence: A systematic review Unspecified
-scqa_question: What are the implications of this risk?
-scqa_answer: Title: The risks associated with Artificial General Intelligence: A systematic review
-specific_domain: Unspecified
-scqa_content_type: risk_description
-entity: 
 scqa_situation: Title: The risks associated with Artificial General Intelligence: A systematic review
-title: The risks associated with Artificial General Intelligence: A systematic review
-scqa_complication: Title: The risks associated with Artificial General Intelligence: A systematic review
-search_medium_priority: Unspecified
-subdomain: 
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_question: What are the implications of this risk?
 sheet: AI Risk Database v3
-content_preview: Title: The risks associated with Artificial General Intelligence: A systematic review
-risk_category: 
-row: 130
-file_type: ai_risk_entry
+intent: 
+scqa_content_type: risk_description
 domain: Unspecified
+risk_category: 
+timing: 
+subdomain: 
+scqa_answer: Title: The risks associated with Artificial General Intelligence: A systematic review
+entity: 
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+title: The risks associated with Artificial General Intelligence: A systematic review
 rid: RID-00153
+specific_domain: Unspecified
+scqa_complication: Title: The risks associated with Artificial General Intelligence: A systematic review
+row: 130
+search_all_fields: The risks associated with Artificial General Intelligence: A systematic review Unspecified Unspecified AI Risk Database v3 ai_risk_entry
+search_high_priority: The risks associated with Artificial General Intelligence: A systematic review Unspecified
 scqa_confidence: 1.0
+search_medium_priority: Unspecified
+file_type: ai_risk_entry
+content_preview: Title: The risks associated with Artificial General Intelligence: A systematic review
 
 Content:
 Title: The risks associated with Artificial General Intelligence: A systematic review

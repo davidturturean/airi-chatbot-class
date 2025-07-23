@@ -1,0 +1,29 @@
+Repository ID: RID-00522
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_low_priority: AI Risk Database v3 ai_risk_entry
+subdomain: 
+content_preview: Title: Towards risk-aware artificial intelligence and machine learning systems: An overview\nRisk Category: Model-level risk\nRisk Subcategory: Model misspecification\nAdditional Evidence: Variable inclusion error "There are two types of variable inclusion error: (1) Significant variables that shoul...
+title: Towards risk-aware artificial intelligence and machine learning systems: An overview
+intent: 
+domain: Unspecified
+scqa_question: What are the implications of this risk?
+timing: 
+rid: RID-00522
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+row: 499
+specific_domain: Unspecified
+sheet: AI Risk Database v3
+file_type: ai_risk_entry
+search_medium_priority: Unspecified
+search_high_priority: Towards risk-aware artificial intelligence and machine learning systems: An overview Unspecified Model-level risk
+risk_category: Model-level risk
+scqa_situation: Title: Towards risk-aware artificial intelligence and machine learning systems: An overview\nRisk Category: Model-level risk\nRisk Subcategory: Model misspecification\nAdditional Evidence: Variable inclusion error "There are two types of variable inclusion error: (1) Significant variables that should be included in the model are omitted, resulting in the model's inability to characterize the underlying data-generation process and leading to omitted-variable bias
+scqa_content_type: risk_description
+scqa_answer: ing in the model's inability to characterize the underlying data-generation process and leading to omitted-variable bias. (2) Irrelevant variables are
+search_all_fields: Towards risk-aware artificial intelligence and machine learning systems: An overview Unspecified Model-level risk Unspecified AI Risk Database v3 ai_risk_entry
+scqa_complication: Title: Towards risk-aware artificial intelligence and machine learning systems: An overview\nRisk Category: Model-level risk\nRisk Subcateg
+scqa_confidence: 1.0
+entity: 
+
+Content:
+Title: Towards risk-aware artificial intelligence and machine learning systems: An overview\nRisk Category: Model-level risk\nRisk Subcategory: Model misspecification\nAdditional Evidence: Variable inclusion error "There are two types of variable inclusion error: (1) Significant variables that should be included in the model are omitted, resulting in the model's inability to characterize the underlying data-generation process and leading to omitted-variable bias. (2) Irrelevant variables are included in the model, which may lead to model overfitting."

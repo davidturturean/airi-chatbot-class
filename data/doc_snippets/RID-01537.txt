@@ -1,0 +1,29 @@
+Repository ID: RID-01537
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+content_preview: Title: Future Risks of Frontier AI\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.2 > AI possessing dangerous capabilities\nRisk Category: Capabilities that increase the likelihood of existential risk\nRisk Subcategory: The ability to evade shut down or human oversight, includi...
+risk_category: Capabilities that increase the likelihood of existential risk
+rid: RID-01537
+domain: 7. AI System Safety, Failures, & Limitations
+intent: 1 - Intentional
+scqa_situation: Title: Future Risks of Frontier AI\nDomain: 7
+title: Future Risks of Frontier AI
+scqa_answer: \nDescription: -\nEntity: 2 - AI\nIntent: 1 - Intentional\nTiming: 3 - Other
+scqa_content_type: risk_description
+scqa_complication: Title: Future Risks of Frontier AI\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.2 > AI possessing dangerous capabi
+search_all_fields: Future Risks of Frontier AI 7. AI System Safety, Failures, & Limitations Capabilities that increase the likelihood of existential risk 7.2 > AI possessing dangerous capabilities 7.2 > AI possessing dangerous capabilities AI Risk Database v3 ai_risk_entry
+search_medium_priority: 7.2 > AI possessing dangerous capabilities 7.2 > AI possessing dangerous capabilities
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+timing: 3 - Other
+search_low_priority: AI Risk Database v3 ai_risk_entry
+specific_domain: 7.2 > AI possessing dangerous capabilities
+scqa_confidence: 1.0
+row: 1514
+entity: 2 - AI
+subdomain: 7.2 > AI possessing dangerous capabilities
+scqa_question: What are the implications of this risk?
+search_high_priority: Future Risks of Frontier AI 7. AI System Safety, Failures, & Limitations Capabilities that increase the likelihood of existential risk
+file_type: ai_risk_entry
+sheet: AI Risk Database v3
+
+Content:
+Title: Future Risks of Frontier AI\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.2 > AI possessing dangerous capabilities\nRisk Category: Capabilities that increase the likelihood of existential risk\nRisk Subcategory: The ability to evade shut down or human oversight, including self-replication and ability to move its own code between digital locations.\nDescription: -\nEntity: 2 - AI\nIntent: 1 - Intentional\nTiming: 3 - Other

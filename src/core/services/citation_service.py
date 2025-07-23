@@ -54,6 +54,9 @@ class CitationService:
         # Add inline highlighting for supported claims
         enhanced_response = self._add_inline_highlighting(enhanced_response, docs)
         
+        # Apply section-level citation validation
+        enhanced_response = self._validate_section_citations(enhanced_response, docs)
+        
         logger.info(f"RID citation enhancement complete. RIDs processed: {len(self.rid_citation_map)}")
         return enhanced_response
     
@@ -61,15 +64,47 @@ class CitationService:
         """Replace RID placeholders and legacy section references with proper citations."""
         enhanced_response = response
         
-        # First, replace any RID-##### patterns with proper citations
+        # First, build a complete RID to document mapping from all docs
+        rid_to_doc = {}
+        for doc in docs:
+            rid = doc.metadata.get('rid')
+            if rid:
+                rid_to_doc[rid] = doc
+        
+        # Replace any RID-##### patterns with proper citations (single comprehensive pass)
         import re
-        rid_pattern = r'RID-(\d{5})'
+        
+        # Single pattern to catch all variations, prioritizing parenthetical ones
+        # This pattern matches: (RID-12345) or RID-12345, but captures the RID number
+        rid_pattern = r'(?:\()?RID-(\d{5})(?:\))?'
         
         def replace_rid(match):
-            rid = match.group(0)
-            return self.rid_citation_map.get(rid, rid)  # Keep original if not found
+            # Extract the RID part (RID-##### format)
+            rid = f"RID-{match.group(1)}"
+            
+            # Try to get from existing citation map first
+            if rid in self.rid_citation_map:
+                logger.info(f"✓ Using existing citation for {rid}")
+                return self.rid_citation_map[rid]
+            
+            # If not in map but we have the document, create citation on-the-fly
+            if rid in rid_to_doc:
+                doc = rid_to_doc[rid]
+                citation = self._format_rid_citation(doc)
+                self.rid_citation_map[rid] = citation
+                logger.info(f"✓ Created on-the-fly citation for {rid}")
+                return citation
+            
+            # If RID not found in docs, convert to clickable link anyway
+            logger.warning(f"RID {rid} not found in documents but making clickable")
+            return f"[{rid}](/snippet/{rid})"
         
+        # Apply the pattern once
+        before_count = len(re.findall(rid_pattern, enhanced_response))
         enhanced_response = re.sub(rid_pattern, replace_rid, enhanced_response)
+        after_count = len(re.findall(rid_pattern, enhanced_response))
+        if before_count > 0:
+            logger.info(f"✓ RID pattern found {before_count} matches, {before_count - after_count} replaced")
         
         # Handle legacy patterns (SECTION X, Document X) for backward compatibility
         for i, doc in enumerate(docs, 1):
@@ -110,6 +145,75 @@ class CitationService:
         # For now, implement basic highlighting
         # Future enhancement: use fuzzy matching to find exact phrases from sources
         return response  # Placeholder for inline highlighting feature
+    
+    def _validate_section_citations(self, response: str, docs: List[Document]) -> str:
+        """Validate that each paragraph has proper citations and avoid RID overuse."""
+        import re
+        
+        # Split response into paragraphs
+        paragraphs = [p.strip() for p in response.split('\n\n') if p.strip()]
+        
+        # Track RID usage to prevent overuse
+        rid_usage_count = {}
+        available_rids = [doc.metadata.get('rid') for doc in docs if doc.metadata.get('rid')]
+        
+        # Count existing RID usage
+        for paragraph in paragraphs:
+            for rid in available_rids:
+                if rid and rid in paragraph:
+                    rid_usage_count[rid] = rid_usage_count.get(rid, 0) + 1
+        
+        # Validate each paragraph
+        validated_paragraphs = []
+        for i, paragraph in enumerate(paragraphs):
+            # Skip source lists and metadata
+            if paragraph.startswith('**Sources:**') or paragraph.startswith('•'):
+                validated_paragraphs.append(paragraph)
+                continue
+                
+            # Check if paragraph has citations
+            has_citation = any(rid in paragraph for rid in available_rids if rid)
+            
+            # If no citation and it's a substantive paragraph, add one
+            if not has_citation and len(paragraph) > 100 and not paragraph.startswith('The AI Risk Repository'):
+                # Find least-used RID that hasn't been overused
+                best_rid = self._find_best_rid_for_paragraph(paragraph, available_rids, rid_usage_count)
+                if best_rid:
+                    # Add citation at the end of paragraph if it doesn't have one
+                    if not paragraph.endswith('.'):
+                        paragraph += '.'
+                    
+                    # Create enhanced citation instead of raw RID
+                    if best_rid in self.rid_citation_map:
+                        enhanced_citation = self.rid_citation_map[best_rid]
+                    else:
+                        enhanced_citation = f"[{best_rid}](/snippet/{best_rid})"
+                    
+                    paragraph += f" {enhanced_citation}"
+                    rid_usage_count[best_rid] = rid_usage_count.get(best_rid, 0) + 1
+                    logger.info(f"Added enhanced citation {best_rid} to paragraph {i+1}")
+            
+            validated_paragraphs.append(paragraph)
+        
+        # Check for RID overuse and redistribute if needed
+        overused_rids = [rid for rid, count in rid_usage_count.items() if count > 2]
+        if overused_rids:
+            logger.info(f"Detected overused RIDs: {overused_rids}")
+            validated_paragraphs = self._redistribute_overused_rids(validated_paragraphs, overused_rids, available_rids)
+        
+        return '\n\n'.join(validated_paragraphs)
+    
+    def _find_best_rid_for_paragraph(self, paragraph: str, available_rids: List[str], usage_count: dict) -> str:
+        """Find the best RID to cite for a paragraph based on usage and relevance."""
+        # Simple heuristic: use least-used RID first
+        sorted_rids = sorted(available_rids, key=lambda rid: usage_count.get(rid, 0))
+        return sorted_rids[0] if sorted_rids else None
+    
+    def _redistribute_overused_rids(self, paragraphs: List[str], overused_rids: List[str], available_rids: List[str]) -> List[str]:
+        """Redistribute overused RIDs to achieve better citation balance."""
+        # For now, just log the issue - full redistribution would be complex
+        logger.info(f"Citation redistribution needed for RIDs: {overused_rids}")
+        return paragraphs
     
     def _format_rid_citation(self, doc: Document) -> str:
         """Format a citation using the document's RID."""

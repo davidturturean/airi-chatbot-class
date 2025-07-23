@@ -1,26 +1,26 @@
 Repository ID: RID-02281
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-summary_type: domain_aggregation
+scqa_answer: in human labor becoming more expensive or less effective than artificial labor, leading to redundancies or extinction of the human labor force."\nEnt
+domain: 6.2 > Increased inequality and decline in employment quality
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+title: AI Risk Domain: 6.2 > Increased inequality and decline in employment quality
+sheet: AI Risk Database v3
 search_medium_priority: 6.2 > Increased inequality and decline in employment quality
+is_summary: True
+search_high_priority: AI Risk Domain: 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality
+entry_count: 45
+summary_type: domain_aggregation
+scqa_situation: sk Domain: 6.2 > Increased inequality and decline in employment quality\n\nThis domain contains 45 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.2 > Increased inequality and decline in employment quality\nRisk Category: Labor displacement - Economic impact\nDescription: The literature frequently highlights concerns that generative AI systems could adversely impact the economy, potentially even leading to mass unemployment. This pertains to
+rid: RID-02281
+scqa_complication: ing induced by generative AI, but also productivity gains contingent upon outsourcing mundane or repetitive tasks to generative AI systems.\nEntity: 2 -
+file_type: ai_risk_domain_summary
+specific_domain: 6.2 > Increased inequality and decline in employment quality
+search_low_priority: AI Risk Database v3 ai_risk_domain_summary
 scqa_question: What are the implications of this risk?
+search_all_fields: AI Risk Domain: 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality AI Risk Database v3 ai_risk_domain_summary
+scqa_content_type: case_study
 content_preview: AI Risk Domain: 6.2 > Increased inequality and decline in employment quality\n\nThis domain contains 45 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.2 ...
 scqa_confidence: 1.0
-scqa_complication: ing induced by generative AI, but also productivity gains contingent upon outsourcing mundane or repetitive tasks to generative AI systems.\nEntity: 2 -
-scqa_answer: in human labor becoming more expensive or less effective than artificial labor, leading to redundancies or extinction of the human labor force."\nEnt
-sheet: AI Risk Database v3
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-scqa_content_type: case_study
-rid: RID-02281
-entry_count: 45
-search_all_fields: AI Risk Domain: 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality AI Risk Database v3 ai_risk_domain_summary
-scqa_situation: sk Domain: 6.2 > Increased inequality and decline in employment quality\n\nThis domain contains 45 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.2 > Increased inequality and decline in employment quality\nRisk Category: Labor displacement - Economic impact\nDescription: The literature frequently highlights concerns that generative AI systems could adversely impact the economy, potentially even leading to mass unemployment. This pertains to
-search_high_priority: AI Risk Domain: 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality
-search_low_priority: AI Risk Database v3 ai_risk_domain_summary
-specific_domain: 6.2 > Increased inequality and decline in employment quality
-is_summary: True
-title: AI Risk Domain: 6.2 > Increased inequality and decline in employment quality
-file_type: ai_risk_domain_summary
-domain: 6.2 > Increased inequality and decline in employment quality
 
 Content:
-an artificially intelligent agent will be able to harness greater power than a single human actor, this may create inequalities of wealth"\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment\n\nRisk Entry 3:\nTitle: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.2 > Increased inequality and decline in employment quality\nRisk Category: AGI - Effects on humans and other living beings: Existential risks\nRisk Subcategory: Direct competition with humans\nDescription: "One or more artificial agent(s) could have the capacity to directly outcompete humans, for example through capacity to perform work faster, better adaptation to change, vaster knowledge base to draw from, etc. This may result in human labor becoming more expensive or less effective than artificial labor, leading to redundancies or extinction of the human labor force."\nEntity: 2 -
+the number of highly-paid “frontier” jobs (e.g. technology devel- opment) is relatively low, compared to the number of “last-mile” low-income jobs (e.g. moderating content in a LM application) [10]. In this scenario, LMs may exacerbate income inequality and as- sociated harms, such as political polarisation, even if they do not significantly affect overall unemployment rates [86, 127]."\nEntity: 1 - Human\nIntent: 3 - Other\nTiming: 2 - Post-deployment\n\nRisk Entry 8:\nTitle: Ethical and social risks of harm from language models\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.2 > Increased inequality and decline in employment quality\nRisk Category: Automation, Access and Environmental Harms\nRisk Subcategory: Increasing inequality and negative effects on job quality\nDescription: "Advances in LMs, and the language technologies based on them, could lead to the automation of tasks that are currently done by paid human workers, such as responding to customer-service queries,

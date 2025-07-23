@@ -10,6 +10,8 @@ from ..storage.vector_store import VectorStore
 from ..query.processor import QueryProcessor
 from .citation_service import CitationService
 from ..validation.response_validator import validation_chain
+from ..metadata import metadata_service
+from ..query.technical_handler import get_technical_handler
 from ...config.logging import get_logger
 from ...config.settings import settings
 
@@ -38,7 +40,7 @@ class ChatService:
         # Conversation storage (in production, use a proper database)
         self.conversations: Dict[str, List[Dict[str, str]]] = {}
     
-    def process_query(self, message: str, conversation_id: str) -> Tuple[str, List[Document]]:
+    def process_query(self, message: str, conversation_id: str) -> Tuple[str, List[Any]]:
         """
         Process a user query with intent classification and pre-filtering.
         
@@ -51,11 +53,54 @@ class ChatService:
         """
         try:
             # 1. Intent classification (Phase 2.1) - Using working version from copy folder
-            from ...core.query.intent_classifier import intent_classifier
+            from ...core.query.intent_classifier import intent_classifier, IntentCategory
             intent_result = intent_classifier.classify_intent(message)
             
-            # 2. Handle non-repository queries immediately
-            if not intent_result.should_process:
+            # 2. Route based on intent category
+            if intent_result.category == IntentCategory.METADATA_QUERY:
+                logger.info(f"Processing metadata query (confidence: {intent_result.confidence:.2f})")
+                
+                # Initialize metadata service if needed
+                if not metadata_service._initialized:
+                    metadata_service.initialize()
+                
+                # Execute metadata query
+                response, raw_results = metadata_service.query(message)
+                
+                # Update conversation history
+                self._update_conversation_history(conversation_id, message, response)
+                return response, raw_results
+            
+            elif intent_result.category == IntentCategory.TECHNICAL_AI_QUERY:
+                logger.info(f"Processing technical AI query (confidence: {intent_result.confidence:.2f})")
+                
+                # Get technical handler
+                technical_handler = get_technical_handler()
+                
+                # Set up Gemini model
+                if self.gemini_model:
+                    technical_handler.gemini_model = self.gemini_model
+                
+                # Execute technical query
+                response, sources = technical_handler.handle_technical_query(message)
+                
+                # Update conversation history
+                self._update_conversation_history(conversation_id, message, response)
+                return response, sources
+            
+            elif intent_result.category == IntentCategory.CROSS_DB_QUERY:
+                logger.info(f"Processing cross-database query (confidence: {intent_result.confidence:.2f})")
+                
+                # For now, route to metadata service which can handle joins
+                if not metadata_service._initialized:
+                    metadata_service.initialize()
+                
+                response, raw_results = metadata_service.query(message)
+                self._update_conversation_history(conversation_id, message, response)
+                return response, raw_results
+            
+            # 3. Handle non-repository queries
+            elif not intent_result.should_process:
                 logger.info(f"Query filtered by intent classifier: {intent_result.category.value} (confidence: {intent_result.confidence:.2f})")
                 
                 if intent_result.suggested_response:
@@ -67,7 +112,7 @@ class ChatService:
                 self._update_conversation_history(conversation_id, message, response)
                 return response, []
             
-            # 3. Process repository-related queries
+            # 4. Process repository-related queries
             logger.info(f"Processing repository query (intent confidence: {intent_result.confidence:.2f})")
             
             # 4. Query refinement check (Phase 2.2) - handle over-broad queries
@@ -98,7 +143,7 @@ class ChatService:
             query_type, domain = self.query_processor.analyze_query(message)
             
             # 7. Retrieve relevant documents
-            docs = self._retrieve_documents(message, query_type)
+            docs = self._retrieve_documents(message, query_type, domain)
             
             # 8. Format context
             context = self._format_context(docs, query_type)
@@ -134,32 +179,54 @@ class ChatService:
             error_response = f"I encountered an error while processing your question: {str(e)}"
             return error_response, []
     
-    def _retrieve_documents(self, message: str, query_type: str) -> List[Document]:
+    def _retrieve_documents(self, message: str, query_type: str, domain: str = None) -> List[Document]:
         """Retrieve relevant documents with relevance threshold filtering."""
         if not self.vector_store:
             logger.warning("No vector store available")
             return []
         
         try:
-            # Detect domain for threshold-based filtering
-            from ...config.domains import domain_classifier
-            domain = domain_classifier.classify_domain(message)
+            # Use the domain already determined by query_processor (don't override with rule-based)
+            # The domain was already correctly classified by LLM in analyze_query()
+            if not domain:
+                # Only use rule-based as fallback if no domain was determined
+                from ...config.domains import domain_classifier
+                domain = domain_classifier.classify_domain(message)
+                logger.info(f"Using fallback rule-based domain classification: {domain}")
+            else:
+                logger.info(f"Using LLM domain classification: {domain}")
             
-            if query_type in ["employment", "socioeconomic"]:
-                # Enhanced search for employment/socioeconomic queries
-                enhanced_query = self.query_processor.enhance_query(message, query_type)
+            # Check if domain supports enhanced search
+            from ...config.domains import domain_classifier
+            domain_config = domain_classifier.get_domain_config(domain)
+            
+            if domain_config and domain_config.enhanced_search:
+                # Enhanced search for domains that support it
+                if domain == "socioeconomic":
+                    # Use existing employment-specific enhancement
+                    enhanced_query = self.query_processor.enhance_query(message, query_type)
+                else:
+                    # For other domains, use domain-specific search queries
+                    enhanced_queries = domain_classifier.get_domain_queries(domain)
+                    if enhanced_queries:
+                        # Choose the best enhanced query based on the original message
+                        enhanced_query = self._select_best_enhanced_query(message, enhanced_queries)
+                        logger.info(f"Using enhanced search query for {domain}: {enhanced_query}")
+                    else:
+                        enhanced_query = message
+                
                 docs = self.vector_store.get_relevant_documents(
                     enhanced_query, 
                     k=settings.DOMAIN_DOCS_RETRIEVED, 
-                    domain="socioeconomic"
+                    domain=domain
                 )
                 
-                # Filter and prioritize employment-related documents
+                # Filter and prioritize domain-specific documents
                 docs = self.query_processor.filter_documents_by_relevance(docs, query_type)
                 
                 logger.info(f"Retrieved {len(docs)} documents using enhanced {domain} search")
             else:
-                # Standard retrieval with relevance threshold
+                # Standard retrieval for domains without enhanced search
                 docs = self.vector_store.get_relevant_documents(
                     message, 
                     k=settings.DEFAULT_DOCS_RETRIEVED, 
@@ -258,6 +325,52 @@ class ChatService:
                 model_history.append({"role": "model", "parts": [{"text": msg['content']}]})
         
         return model_history
+    
+    def _select_best_enhanced_query(self, original_message: str, enhanced_queries: List[str]) -> str:
+        """Select the best enhanced query based on keyword matching with original message."""
+        original_lower = original_message.lower()
+        
+        # Define keyword mappings for better query selection
+        keyword_mappings = {
+            'cybersecurity': ['security threats', 'cyber attacks', 'security vulnerabilities'],
+            'cyber': ['security threats', 'cyber attacks', 'security vulnerabilities'],
+            'security': ['security threats', 'security vulnerabilities'],
+            'attack': ['cyber attacks', 'security threats'],
+            'vulnerability': ['security vulnerabilities'],
+            'privacy': ['privacy risks', 'data protection'],
+            'bias': ['bias and discrimination', 'fairness and equity'],
+            'discrimination': ['bias and discrimination', 'fairness and equity'],
+            'governance': ['governance and policy', 'regulatory approaches'],
+            'policy': ['governance and policy', 'regulatory approaches'],
+            'regulation': ['regulatory approaches', 'governance and policy']
+        }
+        
+        # Score each enhanced query based on keyword matches
+        best_query = enhanced_queries[0]  # Default to first query
+        best_score = 0
+        
+        for query in enhanced_queries:
+            score = 0
+            query_lower = query.lower()
+            
+            # Check direct keyword matches
+            for word in original_lower.split():
+                if word in query_lower:
+                    score += 2
+            
+            # Check mapped keyword matches
+            for keyword, mapped_terms in keyword_mappings.items():
+                if keyword in original_lower:
+                    for term in mapped_terms:
+                        if term in query_lower:
+                            score += 3
+                            break
+            
+            if score > best_score:
+                best_score = score
+                best_query = query
+        
+        return best_query
     
     def _update_conversation_history(self, conversation_id: str, message: str, response: str) -> None:
         """Update conversation history."""

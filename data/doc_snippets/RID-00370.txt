@@ -1,0 +1,29 @@
+Repository ID: RID-00370
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_content_type: risk_description
+scqa_confidence: 1.0
+specific_domain: Unspecified
+rid: RID-00370
+content_preview: Title: Ethical and social risks of harm from language models
+search_medium_priority: Unspecified
+timing: 
+file_type: ai_risk_entry
+scqa_complication: Title: Ethical and social risks of harm from language models
+domain: Unspecified
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+intent: 
+search_all_fields: Ethical and social risks of harm from language models Unspecified Unspecified AI Risk Database v3 ai_risk_entry
+subdomain: 
+sheet: AI Risk Database v3
+search_high_priority: Ethical and social risks of harm from language models Unspecified
+risk_category: 
+entity: 
+scqa_answer: Title: Ethical and social risks of harm from language models
+scqa_question: What are the implications of this risk?
+title: Ethical and social risks of harm from language models
+row: 347
+scqa_situation: Title: Ethical and social risks of harm from language models
+
+Content:
+Title: Ethical and social risks of harm from language models

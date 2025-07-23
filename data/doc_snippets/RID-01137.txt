@@ -1,0 +1,29 @@
+Repository ID: RID-01137
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+content_preview: Title: GenAI against humanity: nefarious applications of generative artificial intelligence and large language models\nRisk Category: Information Manipulation\nRisk Subcategory: Propaganda - Influence campaigns\nDescription: "AI-driven fake news campaigns to influence public opinion could be represe...
+domain: Unspecified
+intent: 
+scqa_complication: ce and large language models\nRisk Category: Information Manipulation\nRisk Subcategory: Propaganda - Influence campaigns\nDescription: "AI-driven fake ne
+scqa_confidence: 1.0
+specific_domain: Unspecified
+scqa_content_type: risk_description
+search_all_fields: GenAI against humanity: nefarious applications of generative artificial intelligence and large language models Unspecified Information Manipulation Unspecified AI Risk Database v3 ai_risk_entry
+scqa_answer: Title: GenAI against humanity: nefarious applications of generative artificial intelligence and large language models\nRisk Category: Information Manipulation\nRisk Subcategory: Propaganda - Influence campaigns\nDescription: "AI-driven fake news campaigns to influence public opinion could be represented at the crossroads of “Information Manipulation” and “Propaganda
+risk_category: Information Manipulation
+scqa_question: What are the implications of this risk?
+row: 1114
+timing: 
+search_low_priority: AI Risk Database v3 ai_risk_entry
+sheet: AI Risk Database v3
+subdomain: 
+entity: 
+rid: RID-01137
+file_type: ai_risk_entry
+search_medium_priority: Unspecified
+scqa_situation: Title: GenAI against humanity: nefarious applications of generative artificial intelligence and large language models\nRisk Category: Information Manipulation\nRisk Subcategory: Propaganda - Influence campaigns\nDescription: "AI-driven fake news campaigns to influence public opinion could be represented at the crossroads of “Information Manipulation” and “Propaganda
+search_high_priority: GenAI against humanity: nefarious applications of generative artificial intelligence and large language models Unspecified Information Manipulation
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+title: GenAI against humanity: nefarious applications of generative artificial intelligence and large language models
+
+Content:
+Title: GenAI against humanity: nefarious applications of generative artificial intelligence and large language models\nRisk Category: Information Manipulation\nRisk Subcategory: Propaganda - Influence campaigns\nDescription: "AI-driven fake news campaigns to influence public opinion could be represented at the crossroads of “Information Manipulation” and “Propaganda.”"

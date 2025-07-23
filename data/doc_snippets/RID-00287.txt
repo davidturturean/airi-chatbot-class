@@ -1,0 +1,29 @@
+Repository ID: RID-00287
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_low_priority: AI Risk Database v3 ai_risk_entry
+rid: RID-00287
+entity: 
+intent: 
+domain: Unspecified
+risk_category: First-Order Risks
+search_high_priority: The Risks of Machine Learning Systems Unspecified First-Order Risks
+subdomain: 
+timing: 
+search_all_fields: The Risks of Machine Learning Systems Unspecified First-Order Risks Unspecified AI Risk Database v3 ai_risk_entry
+row: 264
+search_medium_priority: Unspecified
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+sheet: AI Risk Database v3
+file_type: ai_risk_entry
+title: The Risks of Machine Learning Systems
+content_preview: Title: The Risks of Machine Learning Systems\nRisk Category: First-Order Risks\nRisk Subcategory: Algorithm\nAdditional Evidence: "Beyond efficacy, it is also important to consider the reliability and resource intensiveness of the chosen ML algorithm, model architecture, and optimization technique c...
+scqa_confidence: 1.0
+scqa_question: What are the implications of this risk?
+scqa_content_type: risk_description
+specific_domain: Unspecified
+scqa_answer: From an operational standpoint, a highly accurate system that is computationally intensive or failure-prone may be less desirable than a slightly less accurate one without those flaws
+scqa_complication: Title: The Risks of Machine Learning Systems\nRisk Category: First-Order Risks\nRisk Subcategory: Algorithm\nAdditional Evidence: "Beyo
+scqa_situation: hitecture, and optimization technique combination in production scenarios. From an operational standpoint, a highly accurate system that is computationally intensive or failure-prone may be less desirable than a slightly less accur
+
+Content:
+Title: The Risks of Machine Learning Systems\nRisk Category: First-Order Risks\nRisk Subcategory: Algorithm\nAdditional Evidence: "Beyond efficacy, it is also important to consider the reliability and resource intensiveness of the chosen ML algorithm, model architecture, and optimization technique combination in production scenarios. From an operational standpoint, a highly accurate system that is computationally intensive or failure-prone may be less desirable than a slightly less accurate one without those flaws."

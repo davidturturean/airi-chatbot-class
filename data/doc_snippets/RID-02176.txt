@@ -1,0 +1,29 @@
+Repository ID: RID-02176
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_situation: Title: AI Risk Atlas\nRisk Category: Inference risks (Accuracy)\nRisk Subcategory: Poor model accuracy\nAdditional Evidence: "Inadequate model performance can adversely affect end users and downstream systems that are relying on correct output
+specific_domain: Unspecified
+risk_category: Inference risks (Accuracy)
+search_all_fields: AI Risk Atlas Unspecified Inference risks (Accuracy) Unspecified AI Risk Database v3 ai_risk_entry
+subdomain: 
+timing: 
+domain: Unspecified
+row: 2153
+scqa_complication: Title: AI Risk Atlas\nRisk Category: Inference risks (Accuracy)\nRisk Subcategory: Poor model accuracy\nAdditional Evidence: "Inadequa
+file_type: ai_risk_entry
+content_preview: Title: AI Risk Atlas\nRisk Category: Inference risks (Accuracy)\nRisk Subcategory: Poor model accuracy\nAdditional Evidence: "Inadequate model performance can adversely affect end users and downstream systems that are relying on correct output. In cases where model output is consequential, this migh...
+sheet: AI Risk Database v3
+search_high_priority: AI Risk Atlas Unspecified Inference risks (Accuracy)
+entity: 
+scqa_content_type: risk_description
+scqa_confidence: 1.0
+search_medium_priority: Unspecified
+rid: RID-02176
+search_low_priority: AI Risk Database v3 ai_risk_entry
+intent: 
+scqa_answer: in societal, reputational, or financial harm."
+scqa_question: What are the implications of this risk?
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+title: AI Risk Atlas
+
+Content:
+Title: AI Risk Atlas\nRisk Category: Inference risks (Accuracy)\nRisk Subcategory: Poor model accuracy\nAdditional Evidence: "Inadequate model performance can adversely affect end users and downstream systems that are relying on correct output. In cases where model output is consequential, this might result in societal, reputational, or financial harm."

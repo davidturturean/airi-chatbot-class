@@ -1,0 +1,29 @@
+Repository ID: RID-01113
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+timing: 2 - Post-deployment
+search_low_priority: AI Risk Database v3 ai_risk_entry
+search_high_priority: AI Safety Governance Framework 3. Misinformation Safety risks in AI Applications
+scqa_situation: sleading information\nRisk Category: Safety risks in AI Applications\nRisk Subcategory: Cyberspace risks (Risks of confusing facts, misleading users, and bypassing authentication)\nDescription: "AI systems and their outputs, if not clearly labeled, can make it difficult for users to discern whether they
+file_type: ai_risk_entry
+scqa_answer: "\nEntity: 3 - Other\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment
+scqa_content_type: impact_analysis
+rid: RID-01113
+content_preview: Title: AI Safety Governance Framework\nDomain: 3. Misinformation\nSub-domain: 3.1 > False or misleading information\nRisk Category: Safety risks in AI Applications\nRisk Subcategory: Cyberspace risks (Risks of confusing facts, misleading users, and bypassing authentication)\nDescription: "AI systems...
+scqa_complication: se or misleading information\nRisk Category: Safety risks in AI Applications\nRisk Subcategory: Cyberspace risks (Risks of confusing facts, misleading use
+intent: 1 - Intentional
+search_all_fields: AI Safety Governance Framework 3. Misinformation Safety risks in AI Applications 3.1 > False or misleading information 3.1 > False or misleading information AI Risk Database v3 ai_risk_entry
+subdomain: 3.1 > False or misleading information
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+row: 1090
+title: AI Safety Governance Framework
+search_medium_priority: 3.1 > False or misleading information 3.1 > False or misleading information
+sheet: AI Risk Database v3
+specific_domain: 3.1 > False or misleading information
+entity: 3 - Other
+risk_category: Safety risks in AI Applications
+scqa_confidence: 1.0
+scqa_question: 1 > False or misleading information\nRisk Category: Safety risks in AI Applications\nRisk Subcategory: Cyberspace risks (Risks of confusing facts, misleading users, and bypassing authentication)\nDescription: "AI systems and their outputs, if not clearly labeled, can make it difficult for users to discern whether they are interacting with AI and to identify the source of generated content?
+domain: 3. Misinformation
+
+Content:
+Title: AI Safety Governance Framework\nDomain: 3. Misinformation\nSub-domain: 3.1 > False or misleading information\nRisk Category: Safety risks in AI Applications\nRisk Subcategory: Cyberspace risks (Risks of confusing facts, misleading users, and bypassing authentication)\nDescription: "AI systems and their outputs, if not clearly labeled, can make it difficult for users to discern whether they are interacting with AI and to identify the source of generated content. This can impede users' ability to determine the authenticity of information, leading to misjudgment and misunderstanding. Additionally, AI-generated highly realistic images, audio, and videos may circumvent existing identity verification mechanisms, such as facial recognition and voice recognition, rendering these authentication processes ineffective."\nEntity: 3 - Other\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment

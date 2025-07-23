@@ -1,0 +1,29 @@
+Repository ID: RID-00147
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+sheet: AI Risk Database v3
+scqa_confidence: 1.0
+subdomain: 6.1 > Power centralization and unfair distribution of benefits
+scqa_content_type: risk_description
+search_high_priority: A framework for ethical Ai at the United Nations 6. Socioeconomic and Environmental Exclusion
+search_all_fields: A framework for ethical Ai at the United Nations 6. Socioeconomic and Environmental Exclusion 6.1 > Power centralization and unfair distribution of benefits 6.1 > Power centralization and unfair distribution of benefits AI Risk Database v3 ai_risk_entry
+risk_category: Exclusion
+search_medium_priority: 6.1 > Power centralization and unfair distribution of benefits 6.1 > Power centralization and unfair distribution of benefits
+content_preview: Title: A framework for ethical Ai at the United Nations\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.1 > Power centralization and unfair distribution of benefits\nRisk Category: Exclusion\nDescription: "The best AI techniques requires a large amount resources: data, computational power...
+scqa_situation: Title: A framework for ethical Ai at the United Nations\nDomain: 6
+specific_domain: 6.1 > Power centralization and unfair distribution of benefits
+scqa_complication: ntralization and unfair distribution of benefits\nRisk Category: Exclusion\nDescription: "The best AI techniques requires a large amount resources: data,
+file_type: ai_risk_entry
+row: 124
+scqa_question: What are the implications of this risk?
+rid: RID-00147
+intent: 1 - Intentional
+timing: 2 - Post-deployment
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+domain: 6. Socioeconomic and Environmental
+title: A framework for ethical Ai at the United Nations
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_answer: "\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment
+entity: 1 - Human
+
+Content:
+Title: A framework for ethical Ai at the United Nations\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.1 > Power centralization and unfair distribution of benefits\nRisk Category: Exclusion\nDescription: "The best AI techniques requires a large amount resources: data, computational power and human AI experts. There is a risk that AI will end up in the hands of a few players, and most will lose out on its benefits."\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment

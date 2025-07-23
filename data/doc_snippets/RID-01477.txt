@@ -1,0 +1,29 @@
+Repository ID: RID-01477
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+content_preview: Title: Ten Hard Problems in Artificial Intelligence We Must Get Right\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: Harm caused by incompetent systems\nDescription: "While HP#1 concerns mean or best-case performance, HP#2 co...
+rid: RID-01477
+file_type: ai_risk_entry
+scqa_answer: of regulatory and safety reasons [471]. Clearly, unsafe systems can result in loss of life, economic damage, and social unrest [407, 10]. Most concer
+timing: 2 - Post-deployment
+search_high_priority: Ten Hard Problems in Artificial Intelligence We Must Get Right 7. AI System Safety, Failures, & Limitations Harm caused by incompetent systems
+search_all_fields: Ten Hard Problems in Artificial Intelligence We Must Get Right 7. AI System Safety, Failures, & Limitations Harm caused by incompetent systems 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness AI Risk Database v3 ai_risk_entry
+entity: 2 - AI
+scqa_situation: Title: Ten Hard Problems in Artificial Intelligence We Must Get Right\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category:
+subdomain: 7.3 > Lack of capability or robustness
+domain: 7. AI System Safety, Failures, & Limitations
+sheet: AI Risk Database v3
+scqa_complication: e systems have been developed but have remained undeployed or been rolled back as a result of regulatory and safety reasons [471]. Clearly, unsafe system
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_confidence: 1.0
+risk_category: Harm caused by incompetent systems
+title: Ten Hard Problems in Artificial Intelligence We Must Get Right
+scqa_question: Lack of capability or robustness\nRisk Category: Harm caused by incompetent systems\nDescription: "While HP#1 concerns mean or best-case performance, HP#2 concerns worst-case performance: how can we ensure that AI systems will perform safely, and how can we prove this?
+scqa_content_type: risk_description
+row: 1454
+specific_domain: 7.3 > Lack of capability or robustness
+search_medium_priority: 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness
+search_low_priority: AI Risk Database v3 ai_risk_entry
+intent: 2 - Unintentional
+
+Content:
+Title: Ten Hard Problems in Artificial Intelligence We Must Get Right\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: Harm caused by incompetent systems\nDescription: "While HP#1 concerns mean or best-case performance, HP#2 concerns worst-case performance: how can we ensure that AI systems will perform safely, and how can we prove this? ML systems have been implemented in high-stakes, safety-critical domains such as driving [182], medicine [113], and warfare [298]. Many more systems have been developed but have remained undeployed or been rolled back as a result of regulatory and safety reasons [471]. Clearly, unsafe systems can result in loss of life, economic damage, and social unrest [407, 10]. Most concerningly, AI systems may be susceptible to so-called “normal accidents” [63], creating cascading errors that are dicult to prevent merely by maintaining a nominal “human in the loop” [122]. Most advanced ML models perform far below the reliability level customary in engineering elds [359]—and because we do not fully understand how cutting-edge systems achieve their results, we cannot yet detect and prevent dangerous modes of operation [285]"\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 2 - Post-deployment

@@ -1,29 +1,29 @@
 Repository ID: RID-00878
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-scqa_confidence: 1.0
-scqa_content_type: risk_description
-row: 855
-scqa_question: What are the implications of this risk?
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-sheet: AI Risk Database v3
-scqa_situation: allucination is, in general, dangerous in certain contexts, such as in seeking advice for medical treatments without any consultation or thorough evaluation
-content_preview: Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 3. Misinformation\nSub-domain: 3.1 > False or misleading information\nRisk Category: Technology concerns\nRisk Subcategory: Hallucination\nDescription: "Hallucination is a widely recognized limitation of ...
+domain: 3. Misinformation
 scqa_complication: se or misleading information\nRisk Category: Technology concerns\nRisk Subcategory: Hallucination\nDescription: "Hallucination is a widely recognized limi
+scqa_situation: allucination is, in general, dangerous in certain contexts, such as in seeking advice for medical treatments without any consultation or thorough evaluation
+row: 855
+risk_category: Technology concerns
+search_all_fields: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 3. Misinformation Technology concerns 3.1 > False or misleading information 3.1 > False or misleading information AI Risk Database v3 ai_risk_entry
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+timing: 2 - Post-deployment
 intent: 2 - Unintentional
+sheet: AI Risk Database v3
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_content_type: risk_description
+specific_domain: 3.1 > False or misleading information
+scqa_confidence: 1.0
+rid: RID-00878
+entity: 2 - AI
+content_preview: Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 3. Misinformation\nSub-domain: 3.1 > False or misleading information\nRisk Category: Technology concerns\nRisk Subcategory: Hallucination\nDescription: "Hallucination is a widely recognized limitation of ...
+scqa_answer: of hallucination. Generative AI models may respond with fictitious information, fake photos or information with factual errors (Dwivedi et al., 2023)
+scqa_question: What are the implications of this risk?
+search_high_priority: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 3. Misinformation Technology concerns
 file_type: ai_risk_entry
 search_medium_priority: 3.1 > False or misleading information 3.1 > False or misleading information
-rid: RID-00878
-title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration
-domain: 3. Misinformation
-search_all_fields: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 3. Misinformation Technology concerns 3.1 > False or misleading information 3.1 > False or misleading information AI Risk Database v3 ai_risk_entry
-risk_category: Technology concerns
-scqa_answer: of hallucination. Generative AI models may respond with fictitious information, fake photos or information with factual errors (Dwivedi et al., 2023)
-search_high_priority: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 3. Misinformation Technology concerns
-timing: 2 - Post-deployment
-specific_domain: 3.1 > False or misleading information
-entity: 2 - AI
 subdomain: 3.1 > False or misleading information
-search_low_priority: AI Risk Database v3 ai_risk_entry
+title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration
 
 Content:
 Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 3. Misinformation\nSub-domain: 3.1 > False or misleading information\nRisk Category: Technology concerns\nRisk Subcategory: Hallucination\nDescription: "Hallucination is a widely recognized limitation of generative AI and it can include textual, auditory, visual or other types of hallucination (Alkaissi & McFarlane, 2023). Hallucination refers to the phenomenon in which the contents generated are nonsensical or unfaithful to the given source input (Ji et al., 2023). Azamfirei et al. (2023) indicated that "fabricating information" or fabrication is a better term to describe the hallucination phenomenon. Generative AI can generate seemingly correct responses yet make no sense. Misinformation is an outcome of hallucination. Generative AI models may respond with fictitious information, fake photos or information with factual errors (Dwivedi et al., 2023). Susarla et al. (2023) regarded hallucination as a serious challenge in the use of generative AI for scholarly activities. When asked to provide literature relevant to a specific topic, ChatGPT could generate inaccurate or even nonexistent literature. Current state-of-the-art AI models can only mimic human-like responses without understanding the underlying meaning (Shubhendu & Vijay, 2013). Hallucination is, in general, dangerous in certain contexts, such as in seeking advice for medical treatments without any consultation or thorough evaluation by experts, i.e., medical doctors (Sallam, 2023)."\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 2 - Post-deployment

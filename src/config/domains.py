@@ -2,7 +2,7 @@
 Generic domain configuration and classification system.
 Replaces hardcoded employment-specific logic with flexible domain definitions.
 """
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -12,6 +12,7 @@ class InquiryType(Enum):
     SPECIFIC_RISK = "specific_risk"
     EMPLOYMENT_RISK = "employment"  # Renamed for consistency
     RECOMMENDATION = "recommendation"
+    GOVERNANCE = "governance"  # Added for governance/control/oversight queries
     OUT_OF_SCOPE = "out_of_scope"
 
 @dataclass
@@ -48,13 +49,17 @@ class DomainConfig:
         ),
         'safety': DomainDefinition(
             name='safety',
-            keywords=['safety', 'security', 'risk', 'harm', 'danger', 'threat', 'hazard', 'misuse', 'accident', 'injury', 'physical'],
+            keywords=['safety', 'security', 'risk', 'harm', 'danger', 'threat', 'hazard', 'misuse', 'accident', 'injury', 'physical', 'cybersecurity', 'cyber', 'attack', 'cyberattack', 'vulnerability', 'vulnerabilities', 'malicious', 'hacking', 'weaponization', 'malicious actors'],
             search_queries=[
                 "AI safety risks and mitigation",
                 "security threats from AI systems", 
                 "potential AI hazards and dangers",
                 "physical harm from AI systems",
-                "AI safety measures and protocols"
+                "AI safety measures and protocols",
+                "cybersecurity risks from AI systems",
+                "AI cyber attacks and threats",
+                "AI system security vulnerabilities",
+                "malicious use of AI systems"
             ],
             enhanced_search=True,
             document_limit=3,
@@ -73,7 +78,7 @@ class DomainConfig:
         ),
         'bias': DomainDefinition(
             name='bias',
-            keywords=['bias', 'discrimination', 'unfair', 'prejudice', 'inequality', 'fairness', 'equity', 'representation', 'exclusion'],
+            keywords=['bias', 'discrimination', 'unfair', 'prejudice', 'inequality', 'fairness', 'equity', 'representation', 'exclusion', 'racial', 'gender', 'race', 'ethnicity', 'demographic', 'stereotyping', 'algorithmic bias', 'minorities', 'biased'],
             search_queries=[
                 "AI bias and discrimination issues",
                 "fairness and equity in AI systems",
@@ -96,7 +101,7 @@ class DomainConfig:
         ),
         'technical': DomainDefinition(
             name='technical',
-            keywords=['algorithm', 'model', 'technical', 'performance', 'accuracy', 'robustness', 'reliability', 'system'],
+            keywords=['algorithm', 'model', 'technical', 'performance', 'accuracy', 'robustness', 'reliability', 'system', 'network', 'networks', 'neural', 'input', 'inputs', 'training', 'machine learning', 'deep learning'],
             search_queries=[
                 "technical AI system performance",
                 "algorithm reliability and robustness",
@@ -129,23 +134,63 @@ class DomainClassifier:
     
     def classify_domain(self, query: str) -> str:
         """Classify the domain of a query based on keywords."""
+        # Keep backward compatibility - return only the top domain
+        domain_distribution = self.classify_domain_with_confidence(query)
+        return domain_distribution[0][0] if domain_distribution else 'other'
+    
+    def classify_domain_with_confidence(self, query: str) -> List[Tuple[str, float]]:
+        """Classify domain with confidence scores, returning top-2 distribution."""
         query_lower = query.lower()
         
         # Count matches for each enabled domain
         domain_scores = {}
+        total_keywords = 0
+        
         for domain_name, domain_def in self.config.domains.items():
             if not domain_def.enabled:
                 continue
                 
-            score = sum(1 for keyword in domain_def.keywords if keyword in query_lower)
-            if score > 0:
-                # Apply search weight to score
-                domain_scores[domain_name] = score * domain_def.search_weight
+            # Count keyword matches using word boundaries to prevent substring false positives
+            import re
+            matches = sum(1 for keyword in domain_def.keywords 
+                         if re.search(r'\b' + re.escape(keyword) + r'\b', query_lower))
+            total_keywords += len(domain_def.keywords)
+            
+            if matches > 0:
+                # Apply search weight and normalize by domain size
+                raw_score = matches * domain_def.search_weight
+                normalized_score = raw_score / len(domain_def.keywords)  # Normalize by domain size
+                
+                # Special boost for explicit bias-related terms
+                if domain_name == 'bias':
+                    explicit_bias_terms = ['bias', 'discrimination', 'racial', 'gender', 'race', 'ethnicity', 'prejudice', 'stereotyping', 'biased', 'minorities']
+                    explicit_matches = sum(1 for term in explicit_bias_terms 
+                                         if re.search(r'\b' + re.escape(term) + r'\b', query_lower))
+                    if explicit_matches > 0:
+                        normalized_score *= 1.5  # Boost bias domain when explicit terms present
+                
+                domain_scores[domain_name] = normalized_score
         
-        # Return the domain with the highest score, or 'other' if no matches
-        if domain_scores:
-            return max(domain_scores, key=domain_scores.get)
-        return 'other'
+        # Convert to confidence scores (0.0 to 1.0)
+        if not domain_scores:
+            return [('other', 1.0)]
+        
+        # Sort by score and get top-2
+        sorted_domains = sorted(domain_scores.items(), key=lambda x: x[1], reverse=True)
+        
+        # Calculate confidence scores
+        max_score = sorted_domains[0][1]
+        confidence_scores = []
+        
+        for domain, score in sorted_domains[:2]:  # Top-2 domains
+            confidence = min(score / max_score, 1.0) if max_score > 0 else 0.0
+            confidence_scores.append((domain, confidence))
+        
+        # If only one domain or second domain has very low confidence, return single domain
+        if len(confidence_scores) == 1 or confidence_scores[1][1] < 0.3:
+            return [confidence_scores[0]]
+        
+        return confidence_scores
     
     def get_domain_queries(self, domain: str) -> List[str]:
         """Get search queries for any domain - generic method."""
@@ -180,13 +225,27 @@ class DomainClassifier:
         if not isinstance(result, dict):
             return False
         
-        required_fields = ['query_type', 'domain', 'confidence']
-        if not all(field in result for field in required_fields):
+        # Check for both old and new field names for backward compatibility
+        has_query_type = 'query_type' in result or 'inquiry_type' in result
+        has_domain = 'domain' in result or 'primary_domain' in result
+        has_confidence = 'confidence' in result
+        
+        if not (has_query_type and has_domain and has_confidence):
             return False
             
-        # Validate inquiry type
-        if result.get('query_type') not in self.config.inquiry_types:
-            return False
+        # Validate inquiry type (check both field names)
+        inquiry_type = result.get('query_type') or result.get('inquiry_type')
+        if inquiry_type:
+            # Ensure inquiry_type is a string before calling .lower()
+            if not isinstance(inquiry_type, str):
+                return False
+            
+            # Check both enum values and enum names for flexibility
+            valid_values = [t.lower() for t in self.config.inquiry_types]
+            valid_names = [e.name.lower() for e in InquiryType]
+            
+            if inquiry_type.lower() not in valid_values and inquiry_type.lower() not in valid_names:
+                return False
             
         return True
     

@@ -3,6 +3,9 @@ Query processing and enhancement for domain-specific searches.
 """
 from typing import List, Dict, Any, Tuple, Optional
 from langchain.docstore.document import Document
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+from sentence_transformers import SentenceTransformer
 
 from ...config.logging import get_logger
 
@@ -19,19 +22,32 @@ class QueryProcessor:
         from ...config.prompts import prompt_manager
         self.domain_classifier = domain_classifier
         self.prompt_manager = prompt_manager
+        
+        # Initialize session tracking for reset guard
+        self.session_queries = {}  # session_id -> last_query
+        self.sentence_transformer = None  # Lazy initialization
     
-    def analyze_query(self, message: str) -> Tuple[str, Optional[str]]:
+    def analyze_query(self, message: str, session_id: str = "default") -> Tuple[str, Optional[str]]:
         """
-        Analyze query to determine type and domain.
+        Analyze query to determine type and domain with confidence weighting.
         
         Args:
             message: User query
+            session_id: Session identifier for reset guard
             
         Returns:
             Tuple of (query_type, domain)
         """
         query_type = "general"
         domain = None
+        
+        # Session reset guard - check if query is significantly different from previous
+        should_reset_session = self._should_reset_session(message, session_id)
+        if should_reset_session:
+            logger.info(f"Session reset triggered for session {session_id}")
+        
+        # Update session tracking
+        self.session_queries[session_id] = message
         
         # Try advanced analysis first
         if self.query_monitor:
@@ -41,12 +57,42 @@ class QueryProcessor:
                     query_type = query_analysis.get('query_type', 'general')
                 elif hasattr(self.query_monitor, 'determine_inquiry_type'):
                     inquiry_result = self.query_monitor.determine_inquiry_type(message)
-                    query_type = inquiry_result.get('inquiry_type', 'GENERAL').lower()
-                    domain = inquiry_result.get('primary_domain', 'OTHER').lower()
+                    
+                    # Safe type conversion with fallbacks
+                    query_type = str(inquiry_result.get('inquiry_type', 'GENERAL')).lower()
+                    domain = str(inquiry_result.get('primary_domain', 'OTHER')).lower()
+                    
+                    # Handle confidence - could be string or numeric
+                    confidence_raw = inquiry_result.get('confidence', 'MEDIUM')
+                    if isinstance(confidence_raw, str):
+                        confidence = confidence_raw.lower()
+                    else:
+                        # Convert numeric confidence to string
+                        if isinstance(confidence_raw, (int, float)):
+                            if confidence_raw >= 0.8:
+                                confidence = 'high'
+                            elif confidence_raw >= 0.5:
+                                confidence = 'medium'
+                            else:
+                                confidence = 'low'
+                        else:
+                            confidence = 'medium'  # fallback
+                    
+                    reasoning = inquiry_result.get('reasoning', '')
                     
                     # Map inquiry types to our internal types
                     if query_type == "employment_risk":
                         query_type = "employment"
+                    
+                    # Enhanced logging with confidence and reasoning
+                    logger.info(f"LLM classification - Domain: {domain}, Confidence: {confidence}")
+                    if reasoning:
+                        logger.info(f"LLM reasoning: {reasoning}")
+                    
+                    # Smart fallback: if LLM confidence is LOW, try keyword fallback
+                    if confidence == 'low' and domain not in ['bias', 'socioeconomic', 'safety', 'privacy', 'governance', 'technical']:
+                        logger.info(f"LLM confidence is LOW, attempting keyword fallback...")
+                        domain = None  # This will trigger keyword classification below
                 
                 logger.info(f"Query type detected: {query_type}")
                 if domain:
@@ -54,15 +100,62 @@ class QueryProcessor:
             except Exception as e:
                 logger.error(f"Error analyzing query: {str(e)}")
         
-        # Enhanced domain-based detection using generic classifier
-        if not domain or domain == "other":
-            detected_domain = self.domain_classifier.classify_domain(message)
-            if detected_domain != "other":
-                domain = detected_domain  # Update domain variable
-                query_type = detected_domain  # Update query type
-                logger.info(f"Enhanced detection found {detected_domain} related query")
+        # Enhanced domain-based detection using confidence weighting
+        # Only use rule-based fallback if LLM completely failed (domain is None)
+        if domain is None:
+            # Get confidence-weighted domain distribution
+            domain_distribution = self.domain_classifier.classify_domain_with_confidence(message)
+            
+            if domain_distribution and domain_distribution[0][0] != "other":
+                # Use weighted combination of top domains
+                primary_domain, primary_confidence = domain_distribution[0]
+                
+                # If we have a secondary domain with reasonable confidence, log it
+                if len(domain_distribution) > 1:
+                    secondary_domain, secondary_confidence = domain_distribution[1]
+                    logger.info(f"Domain distribution: {primary_domain} ({primary_confidence:.2f}), {secondary_domain} ({secondary_confidence:.2f})")
+                else:
+                    logger.info(f"Domain detected: {primary_domain} (confidence: {primary_confidence:.2f})")
+                
+                domain = primary_domain
+                query_type = primary_domain
+                logger.info(f"Enhanced detection found {primary_domain} related query")
+            else:
+                # If rule-based also returns "other", keep it
+                domain = "other"
+                logger.info(f"Both LLM and rule-based classification returned 'other' domain")
         
         return query_type, domain
+    
+    def _should_reset_session(self, current_query: str, session_id: str) -> bool:
+        """Determine if session should be reset based on query similarity."""
+        if session_id not in self.session_queries:
+            return False
+        
+        previous_query = self.session_queries[session_id]
+        
+        try:
+            # Lazy initialization of sentence transformer
+            if self.sentence_transformer is None:
+                try:
+                    self.sentence_transformer = SentenceTransformer('all-MiniLM-L6-v2')
+                except Exception as e:
+                    logger.warning(f"Could not load sentence transformer: {e}")
+                    return False
+            
+            # Calculate semantic similarity
+            embeddings = self.sentence_transformer.encode([previous_query, current_query])
+            similarity = cosine_similarity([embeddings[0]], [embeddings[1]])[0][0]
+            
+            # Reset if similarity < 0.2 (very different queries)
+            should_reset = similarity < 0.2
+            logger.info(f"Query similarity: {similarity:.3f}, reset: {should_reset}")
+            
+            return should_reset
+            
+        except Exception as e:
+            logger.error(f"Error calculating query similarity: {e}")
+            return False
     
     def enhance_query(self, message: str, query_type: str) -> str:
         """

@@ -1,0 +1,29 @@
+Repository ID: RID-01440
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+title: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals
+file_type: ai_risk_entry
+search_all_fields: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals 7. AI System Safety, Failures, & Limitations Alignment failures in existing ML systems 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values AI Risk Database v3 ai_risk_entry
+timing: 3 - Other
+entity: 2 - AI
+search_low_priority: AI Risk Database v3 ai_risk_entry
+content_preview: Title: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: Alignment failures in existing ML systems\nDescription: -\...
+row: 1417
+intent: 2 - Unintentional
+risk_category: Alignment failures in existing ML systems
+scqa_content_type: risk_description
+scqa_confidence: 1.0
+scqa_question: What are the implications of this risk?
+subdomain: 7.1 > AI pursuing its own goals in conflict with human goals or values
+domain: 7. AI System Safety, Failures, & Limitations
+search_medium_priority: 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values
+specific_domain: 7.1 > AI pursuing its own goals in conflict with human goals or values
+scqa_answer: 1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: Alignment failures in existing ML systems\nDescription: -\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 3 - Other
+rid: RID-01440
+scqa_situation: ions\nSub-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: Alignment failures in existing ML systems\nDescription: -\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 3 - Other
+sheet: AI Risk Database v3
+scqa_complication: t with human goals or values\nRisk Category: Alignment failures in existing ML systems\nDescription: -\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming:
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_high_priority: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals 7. AI System Safety, Failures, & Limitations Alignment failures in existing ML systems
+
+Content:
+Title: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: Alignment failures in existing ML systems\nDescription: -\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 3 - Other

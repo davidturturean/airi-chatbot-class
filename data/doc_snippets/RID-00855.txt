@@ -1,0 +1,29 @@
+Repository ID: RID-00855
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_content_type: impact_analysis
+entity: 
+row: 832
+content_preview: Title: Generating Harms - Generative AI's impact and paths forwards\nRisk Category: Impact on Intellectual Property Rights\nAdditional Evidence: "The entities using the datasets to create a generative AI system rarely, if ever, have permission or license from the creators and owners of artistic work...
+scqa_confidence: 1.0
+scqa_answer: The extent to which fair use may apply to generative AI is still unsettled law
+scqa_situation: reators and owners of artistic works to use them. In fact, many artists have openly stated that they do not want their work going into systems that may make them obsolete. There is serious and ongoing debate over whether generative AI tools s
+scqa_question: There is serious and ongoing debate over whether generative AI tools should be permitted to use protected works without a license?
+rid: RID-00855
+intent: 
+specific_domain: Unspecified
+search_medium_priority: Unspecified
+risk_category: Impact on Intellectual Property Rights
+domain: Unspecified
+timing: 
+scqa_complication: 's impact and paths forwards\nRisk Category: Impact on Intellectual Property Rights\nAdditional Evidence: "The entities using the datasets to create a gen
+search_high_priority: Generating Harms - Generative AI's impact and paths forwards Unspecified Impact on Intellectual Property Rights
+title: Generating Harms - Generative AI's impact and paths forwards
+search_low_priority: AI Risk Database v3 ai_risk_entry
+sheet: AI Risk Database v3
+search_all_fields: Generating Harms - Generative AI's impact and paths forwards Unspecified Impact on Intellectual Property Rights Unspecified AI Risk Database v3 ai_risk_entry
+file_type: ai_risk_entry
+subdomain: 
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+
+Content:
+Title: Generating Harms - Generative AI's impact and paths forwards\nRisk Category: Impact on Intellectual Property Rights\nAdditional Evidence: "The entities using the datasets to create a generative AI system rarely, if ever, have permission or license from the creators and owners of artistic works to use them. In fact, many artists have openly stated that they do not want their work going into systems that may make them obsolete. There is serious and ongoing debate over whether generative AI tools should be permitted to use protected works without a license. Some argue that such use constitutes fair use, an exception to some copyright protections with a very limited scope of application. Fair use often depends on the use of copyrighted material. For instance, a research or non-profit group using the content may have a better fair use claim than a company intending to sell the work generated using the original work. The extent to which fair use may apply to generative AI is still unsettled law."

@@ -1,0 +1,353 @@
+📝 Test output will be saved to: test_results_20250722_161214.txt
+
+
+[95m[1m================================================================================[0m
+[95m[1m                    AIRI CHATBOT COMPREHENSIVE FEATURE TEST                     [0m
+[95m[1m================================================================================[0m
+
+[93m⏰ Started at: 2025-07-22 16:12:14[0m
+
+[96m[1m🚀 Initializing Services[0m
+[96m-----------------------[0m
+📊 Initializing metadata service...
+[92m✓ Metadata service ready: 0 rows loaded[0m
+🤖 Initializing Gemini model...
+[92m✓ Gemini model ready[0m
+🗄️ Initializing vector store...
+[92m✓ Vector store ready[0m
+
+[92m✓ All services initialized in 1.42 seconds[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                               📊 Metadata Queries                               [0m
+[95m[1m================================================================================[0m
+
+[94m🔍 Query:[0m [1mHow many risks are in the database?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should return total count[0m
+
+[92m📝 Response:[0m
+This query counts the total number of rows in the risks table, which represents the total number of risks in the database.
+
+**Result**: 0
+
+(META-DB:ai_risks)
+
+[92m📊 Data Returned:[0m 1 items
+[92m🗃️ Sample Data:[0m
+  count_star(): 0
+
+[92m✓ Success! Response time: 0.75s[0m
+
+[94m🔍 Query:[0m [1mWhat are the main risk categories?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should list distinct categories[0m
+
+[92m📝 Response:[0m
+This SQL query selects all the distinct values in the risk_category column from the risks table. This will return a list of the main risk categories.
+
+No results found for your query.
+
+(META-DB:ai_risks)
+
+[92m✓ Success! Response time: 0.78s[0m
+
+[94m🔍 Query:[0m [1mList all domains in the repository[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should show all domains[0m
+
+[92m📝 Response:[0m
+This SQL query selects all distinct values from the 'domain' column in the 'risks' table. This will list all the unique domains present in the repository.
+
+No results found for your query.
+
+(META-DB:ai_risks)
+
+[92m✓ Success! Response time: 0.85s[0m
+
+[94m🔍 Query:[0m [1mHow many risks in domain 7?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should count domain 7 risks[0m
+
+[92m📝 Response:[0m
+Counts the number of risks where the domain is '7'.
+
+**Result**: 0
+
+(META-DB:ai_risks)
+
+[92m📊 Data Returned:[0m 1 items
+[92m🗃️ Sample Data:[0m
+  count_star(): 0
+
+[92m✓ Success! Response time: 8.89s[0m
+
+[94m🔍 Query:[0m [1mWhat is the earliest publication year?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should find min year[0m
+
+[92m📝 Response:[0m
+This SQL query selects the minimum value from the 'year' column in the 'risks' table, which represents the earliest publication year.
+
+**Result**: nan
+
+(META-DB:ai_risks)
+
+[92m📊 Data Returned:[0m 1 items
+[92m🗃️ Sample Data:[0m
+  min("year"): nan
+
+[92m✓ Success! Response time: 0.94s[0m
+
+[94m🔍 Query:[0m [1mShow me the 10th risk in the database[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should return specific row[0m
+
+[92m📝 Response:[0m
+This SQL query selects all columns from the 'risks' table and returns only the 10th row (OFFSET 9 means skip the first 9 rows).
+
+No results found for your query.
+
+(META-DB:ai_risks)
+
+[92m✓ Success! Response time: 1.06s[0m
+
+[94m🔍 Query:[0m [1mCount risks by entity type[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should group by entity[0m
+
+[92m📝 Response:[0m
+This query counts the number of risks for each entity type by grouping the risks table by the entity column and then counting the number of rows in each group.
+
+No results found for your query.
+
+(META-DB:ai_risks)
+
+[92m✓ Success! Response time: 0.98s[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                             🔬 Technical AI Queries                             [0m
+[95m[1m================================================================================[0m
+
+[94m🔍 Query:[0m [1mHow do transformer architectures work?[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should explain transformers[0m
+
+[92m📝 Response:[0m
+## Transformer Architecture: A Technical Explanation
+
+The Transformer architecture, introduced in the seminal paper "Attention is All You Need" [1], revolutionized sequence-to-sequence modeling by dispensing with recurrent neural networks (RNNs) and convolutional neural networks (CNNs) entirely, relying instead on **self-attention mechanisms**. This allows for parallelization and significantly improved performance, especially on long sequences.
+
+**1. Core Concepts:**
+
+*   **Attention Mechanism:*... [6444 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m📚 Sources:[0m
+  [1] Attention Is All You Need
+      URL: https://arxiv.org/abs/1706.03762
+
+[92m✓ Success! Response time: 8.62s[0m
+
+[94m🔍 Query:[0m [1mExplain attention mechanism in neural networks[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should detail attention[0m
+
+[92m📝 Response:[0m
+## Attention Mechanism in Neural Networks: A Technical Explanation
+
+The attention mechanism is a powerful technique used in neural networks, particularly in sequence-to-sequence models, that allows the model to focus on relevant parts of the input sequence when generating the output sequence.  It addresses the limitations of fixed-length context vectors used in traditional encoder-decoder architectures, which can struggle with long sequences.  The core idea is to assign weights to different part... [6102 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m📚 Sources:[0m
+  [1] Neural Machine Translation by Jointly Learning to Align and Translate
+      URL: https://arxiv.org/abs/1409.0473
+
+[92m✓ Success! Response time: 9.20s[0m
+
+[94m🔍 Query:[0m [1mWhat is backpropagation in deep learning?[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should explain backprop[0m
+
+[92m📝 Response:[0m
+### Backpropagation in Deep Learning: A Technical Explanation
+
+Backpropagation, short for "backward propagation of errors," is a supervised learning algorithm used to train artificial neural networks (ANNs), particularly deep neural networks. It's a specific application of the chain rule of calculus to efficiently compute the gradient of a loss function with respect to the weights and biases in the network. This gradient is then used to update the weights and biases via optimization algorithms l... [7023 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m📚 Sources:[0m
+  [1] Automatic Differentiation in Machine Learning: a Survey
+      URL: https://arxiv.org/abs/1502.05767
+
+[92m✓ Success! Response time: 9.43s[0m
+
+[94m🔍 Query:[0m [1mHow does BERT handle bidirectional context?[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should explain BERT[0m
+
+[92m📝 Response:[0m
+## BERT's Handling of Bidirectional Context: A Technical Explanation
+
+BERT (Bidirectional Encoder Representations from Transformers) achieves its powerful language understanding capabilities through a novel approach to handling bidirectional context during pre-training. Unlike previous models that used unidirectional or shallow bidirectional approaches, BERT is designed to learn deep bidirectional representations by jointly conditioning on both left and right context in *all* layers of the Trans... [6736 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m📚 Sources:[0m
+  [1] BERT: Pre-training of Deep Bidirectional Transformers
+      URL: https://arxiv.org/abs/1810.04805
+
+[92m✓ Success! Response time: 10.92s[0m
+
+[94m🔍 Query:[0m [1mExplain vision transformers (ViT)[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should cover ViT[0m
+
+[92m📝 Response:[0m
+## Vision Transformers (ViT): A Technical Explanation
+
+Vision Transformers (ViT) represent a significant advancement in image recognition by adapting the Transformer architecture, originally designed for natural language processing (NLP), to the domain of computer vision.  This approach, detailed in "[2] An Image is Worth 16x16 Words: Transformers for Image Recognition," moves away from traditional convolutional neural networks (CNNs) and leverages self-attention mechanisms for image classificat... [6395 total chars]
+
+[92m📊 Data Returned:[0m 2 items
+[92m📚 Sources:[0m
+  [1] Attention Is All You Need
+      URL: https://arxiv.org/abs/1706.03762
+  [2] An Image is Worth 16x16 Words: Transformers for Image Recognition
+      URL: https://arxiv.org/abs/2010.11929
+
+[92m✓ Success! Response time: 8.43s[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                         🗃️ Repository Content Queries                          [0m
+[95m[1m================================================================================[0m
+
+[94m🔍 Query:[0m [1mWhat are the privacy risks of AI?[0m
+[94m📁 Expected Type:[0m repository
+[93m📋 Test Goal: Should find privacy risks[0m
+
+[92m📝 Response:[0m
+AI systems present several privacy risks, primarily concerning the potential compromise of sensitive personal information [AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks (Domain: 2. Privacy & Security)](/snippet/RID-01647), [Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks (Domain: 2. Privacy & Security)](/snippet/RID-00955).
+
+DEFINITION: Privacy risks in AI involve the potential for unauthorized access, misuse, or l... [2721 total chars]
+
+[92m📊 Data Returned:[0m 5 items
+
+[92m✓ Success! Response time: 3.70s[0m
+
+[94m🔍 Query:[0m [1mTell me about bias in AI systems[0m
+[94m📁 Expected Type:[0m repository
+[93m📋 Test Goal: Should find bias content[0m
+
+[92m📝 Response:[0m
+AI systems can perpetuate and amplify existing societal biases, leading to unfair or discriminatory outcomes. These biases can manifest in various ways, impacting sensitive areas like hiring, lending, and law enforcement [AI Risk Domain: 1.1 > Unfair discrimination and misrepresentation](/snippet/RID-02270).
+
+**EVIDENCE:**
+
+*   AI systems are only as good as the data they are trained on; if the data contains biases, the AI will reflect those biases [Ethical Issues in the Development of Artificia... [2117 total chars]
+
+[92m📊 Data Returned:[0m 5 items
+
+[92m✓ Success! Response time: 5.26s[0m
+
+[94m🔍 Query:[0m [1mWhat are socioeconomic impacts of AI?[0m
+[94m📁 Expected Type:[0m repository
+[93m📋 Test Goal: Should find impacts[0m
+
+[92m📝 Response:[0m
+The AI Risk Repository documents several socioeconomic impacts of AI systems.
+
+EVIDENCE: AI can negatively impact marginalized groups [Ten Hard Problems in Artificial Intelligence We Must Get Right (Domain: 6. Socioeconomic and Environmental)](/snippet/RID-01472). The repository highlights the issue of under-recognized work in AI development, specifically data labeling [Ten Hard Problems in Artificial Intelligence We Must Get Right](/snippet/RID-01471). Much of the data used to train machine lea... [1197 total chars]
+
+[92m📊 Data Returned:[0m 3 items
+
+[92m✓ Success! Response time: 2.22s[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                               🚫 Rejected Queries                               [0m
+[95m[1m================================================================================[0m
+
+[94m🔍 Query:[0m [1mWhat's the weather today?[0m
+[94m📁 Expected Type:[0m rejected
+[93m📋 Test Goal: Should politely reject[0m
+
+[92m📝 Response:[0m
+Hello! I'm here to help you understand AI risks. What would you like to know about AI safety, employment impacts, privacy concerns, or bias issues?
+
+[92m✓ Success! Response time: 0.22s[0m
+
+[94m🔍 Query:[0m [1mHow do I bake chocolate cookies?[0m
+[94m📁 Expected Type:[0m rejected
+[93m📋 Test Goal: Should redirect to AI risks[0m
+
+[92m📝 Response:[0m
+I am sorry, but the query about baking chocolate cookies falls outside the scope of the MIT AI Risk Repository. The repository focuses on documented AI risks, and does not contain recipes. For an example of the repository's contents, see [Safety Assessment of Chinese Large Language Models (Domain: 3. Misinformation)](/snippet/RID-00752), which describes how a Chinese Large Language Model generated a risky response about mental health, potentially negatively affecting users.
+
+[92m📊 Data Returned:[0m 3 items
+
+[92m✓ Success! Response time: 1.54s[0m
+
+[94m🔍 Query:[0m [1mTell me a joke[0m
+[94m📁 Expected Type:[0m rejected
+[93m📋 Test Goal: Should suggest AI topics[0m
+
+[92m📝 Response:[0m
+Hello! I'm here to help you understand AI risks. What would you like to know about AI safety, employment impacts, privacy concerns, or bias issues?
+
+[92m✓ Success! Response time: 0.22s[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                            🔀 Cross-Database Queries                            [0m
+[95m[1m================================================================================[0m
+
+[94m🔍 Query:[0m [1mShow all bias risks with high confidence[0m
+[94m📁 Expected Type:[0m cross-db
+[93m📋 Test Goal: Should filter by domain and confidence[0m
+
+[92m📝 Response:[0m
+This query selects all rows from the `risks` table where the `risk_category` column contains the word "Bias". The LIMIT clause restricts the output to a maximum of 100 rows.
+
+No results found for your query.
+
+(META-DB:ai_risks)
+
+[92m✓ Success! Response time: 1.31s[0m
+
+[94m🔍 Query:[0m [1mList risks from 2024[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should filter by year[0m
+
+[92m📝 Response:[0m
+This query selects all columns from the risks table where the year is 2024, limiting the results to 100 rows.
+
+No results found for your query.
+
+(META-DB:ai_risks)
+
+[92m✓ Success! Response time: 1.16s[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                             📈 TEST RESULTS SUMMARY                             [0m
+[95m[1m================================================================================[0m
+
+[1mQuery Statistics:[0m
+  Total Queries: 20
+  [92mSuccessful: 20[0m
+  [91mFailed: 0[0m
+  Success Rate: 100.0%
+
+[1mPerformance Metrics:[0m
+  Average Response Time: 3.82s
+  Fastest Response: 0.22s
+  Slowest Response: 10.92s
+
+[1mService Status:[0m
+  Metadata Service: [92m✓ Active[0m
+  Vector Store: [92m✓ Active[0m
+  Gemini Model: [92m✓ Active[0m
+
+[1mMetadata Statistics:[0m
+  ai_risks: 0 rows
+
+[93m⏰ Completed at: 2025-07-22 16:13:42[0m
+
+[92m[1m🎉 ALL TESTS PASSED! The system is production ready![0m
+
+📁 Test results saved to: test_results_20250722_161214.txt

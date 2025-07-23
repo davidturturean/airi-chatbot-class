@@ -1,0 +1,29 @@
+Repository ID: RID-02028
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+domain: Unspecified
+search_low_priority: AI Risk Database v3 ai_risk_entry
+search_all_fields: Multi-Agent Risks from Advanced AI Unspecified Network Effects Unspecified AI Risk Database v3 ai_risk_entry
+content_preview: Title: Multi-Agent Risks from Advanced AI\nRisk Category: Network Effects\nRisk Subcategory: Network rewiring\nAdditional Evidence: "Other risks from rewiring include ‘phase transitions’, where a gradual change in individual connections or network structure triggers a sudden and dramatic shift in th...
+scqa_complication: Title: Multi-Agent Risks from Advanced AI\nRisk Category: Network Effects\nRisk Subcategory: Network rewiring\nAdditional Evidence: "Other risk
+risk_category: Network Effects
+row: 2005
+scqa_confidence: 1.0
+title: Multi-Agent Risks from Advanced AI
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+entity: 
+search_medium_priority: Unspecified
+timing: 
+file_type: ai_risk_entry
+scqa_content_type: impact_analysis
+intent: 
+scqa_situation: clude ‘phase transitions’, where a gradual change in individual connections or network structure triggers a sudden and dramatic shift in the behaviour of the entire network (Newman, 2003, see also Section 3.4). Such changes might occur naturally (e.g., in global trade networks as the transition from expensive human-human interactions to cheaper AI-AI interactions leads to many new connections between sellers and buyers) or artificially (e.g., if a model developer makes an update that inadvertently connects or disconnects a vast number of downstream agents and applications). While such problems are already present in existing systems (Gao et al., 2016; Vi ́e & Morales, 2021), the increased size, speed, and density of AI-based netwo
+scqa_answer: , 2016; Vi ́e & Morales, 2021), the increased size, speed, and density of AI-based networks – as well as the fact the changes in these networks may be less transparent – means that instabilities could be harder to diagnose and mitigate
+sheet: AI Risk Database v3
+specific_domain: Unspecified
+subdomain: 
+rid: RID-02028
+scqa_question: What are the implications of this risk?
+search_high_priority: Multi-Agent Risks from Advanced AI Unspecified Network Effects
+
+Content:
+Title: Multi-Agent Risks from Advanced AI\nRisk Category: Network Effects\nRisk Subcategory: Network rewiring\nAdditional Evidence: "Other risks from rewiring include ‘phase transitions’, where a gradual change in individual connections or network structure triggers a sudden and dramatic shift in the behaviour of the entire network (Newman, 2003, see also Section 3.4). Such changes might occur naturally (e.g., in global trade networks as the transition from expensive human-human interactions to cheaper AI-AI interactions leads to many new connections between sellers and buyers) or artificially (e.g., if a model developer makes an update that inadvertently connects or disconnects a vast number of downstream agents and applications). While such problems are already present in existing systems (Gao et al., 2016; Vi ́e & Morales, 2021), the increased size, speed, and density of AI-based networks – as well as the fact the changes in these networks may be less transparent – means that instabilities could be harder to diagnose and mitigate."

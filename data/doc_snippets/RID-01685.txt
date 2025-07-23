@@ -1,0 +1,29 @@
+Repository ID: RID-01685
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+subdomain: 
+row: 1662
+search_medium_priority: Unspecified
+sheet: AI Risk Database v3
+rid: RID-01685
+title: International AI Safety Report 2025
+specific_domain: Unspecified
+risk_category: Risks from malicious use
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_complication: tional AI Safety Report 2025\nRisk Category: Risks from malicious use\nRisk Subcategory: Cyber offence\nAdditional Evidence: "Offensive cyber operations t
+scqa_content_type: case_study
+scqa_situation: software (malware) and exploiting vulnerabilities in software and hardware systems, leading to severe security breaches. A standard attack chain begins with reconnaissance of the tar
+intent: 
+scqa_answer: ing in widespread disruption and significant damage. At the same time, general- purpose AI could also be used defensively, for example to find and fix
+scqa_confidence: 1.0
+search_all_fields: International AI Safety Report 2025 Unspecified Risks from malicious use Unspecified AI Risk Database v3 ai_risk_entry
+domain: Unspecified
+scqa_question: What are the implications of this risk?
+search_high_priority: International AI Safety Report 2025 Unspecified Risks from malicious use
+entity: 
+file_type: ai_risk_entry
+timing: 
+search_low_priority: AI Risk Database v3 ai_risk_entry
+content_preview: Title: International AI Safety Report 2025\nRisk Category: Risks from malicious use\nRisk Subcategory: Cyber offence\nAdditional Evidence: "Offensive cyber operations typically involve designing and deploying malicious software (malware) and exploiting vulnerabilities in software and hardware system...
+
+Content:
+Title: International AI Safety Report 2025\nRisk Category: Risks from malicious use\nRisk Subcategory: Cyber offence\nAdditional Evidence: "Offensive cyber operations typically involve designing and deploying malicious software (malware) and exploiting vulnerabilities in software and hardware systems, leading to severe security breaches. A standard attack chain begins with reconnaissance of the target system, followed by iterative discovery, exploitation of vulnerabilities, and additional information gathering. These actions demand careful planning and strategic execution to achieve the adversary's objectives while avoiding detection. Some experts are concerned that general- purpose AI could enhance these operations by automating vulnerability detection, optimising attack strategies, and improving evasion techniques (348, 349). These advanced capabilities would benefit all attackers. For instance, state actors could leverage them to target critical national infrastructure (CNI), resulting in widespread disruption and significant damage. At the same time, general- purpose AI could also be used defensively, for example to find and fix vulnerabilities."

@@ -1,0 +1,29 @@
+Repository ID: RID-00071
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+subdomain: 1.1 > Unfair discrimination and misrepresentation
+scqa_question: What are the implications of this risk?
+content_preview: Title: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Toxicity and Bias Tendencies\nDescription: "Extensive data collection in LLMs brings toxic ...
+domain: 1. Discrimination & Toxicity
+search_high_priority: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems 1. Discrimination & Toxicity Toxicity and Bias Tendencies
+scqa_complication: Title: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\n
+scqa_answer: , and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepr
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+file_type: ai_risk_entry
+search_medium_priority: 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation
+search_all_fields: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems 1. Discrimination & Toxicity Toxicity and Bias Tendencies 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation AI Risk Database v3 ai_risk_entry
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_situation: Title: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1
+risk_category: Toxicity and Bias Tendencies
+scqa_content_type: mitigation_strategy
+specific_domain: 1.1 > Unfair discrimination and misrepresentation
+scqa_confidence: 1.0
+timing: 1 - Pre-deployment
+rid: RID-00071
+intent: 2 - Unintentional
+entity: 1 - Human
+sheet: AI Risk Database v3
+title: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems
+row: 48
+
+Content:
+Title: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Toxicity and Bias Tendencies\nDescription: "Extensive data collection in LLMs brings toxic content and stereotypical bias into the training data."\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 1 - Pre-deployment

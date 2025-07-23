@@ -23,8 +23,24 @@ export function FullChat() {
   const [relatedDocuments, setRelatedDocuments] = useState<{ title: string; url: string }[]>([]);
 
   const handleFileClick = async (url: string) => {
-    const snippetId = url.split('/').pop();
-    window.open(`/snippet/${snippetId}`, '_blank', 'noopener,noreferrer');
+    // Handle different types of document URLs
+    if (url.startsWith('metadata://')) {
+      // For metadata results, we could potentially show a modal or detail view
+      // For now, just alert the user
+      alert('This is a metadata query result. Details view coming soon!');
+    } else if (url.startsWith('http://') || url.startsWith('https://')) {
+      // External URLs - open in new tab
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } else if (url.startsWith('local-file://')) {
+      // Local file references - extract snippet ID
+      const path = url.replace('local-file://', '');
+      const snippetId = path.split('/').pop();
+      window.open(`/snippet/${snippetId}`, '_blank', 'noopener,noreferrer');
+    } else {
+      // Default behavior - assume it's a snippet ID
+      const snippetId = url.split('/').pop();
+      window.open(`/snippet/${snippetId}`, '_blank', 'noopener,noreferrer');
+    }
   };
 
   const cleanupMessageHandler = () => {

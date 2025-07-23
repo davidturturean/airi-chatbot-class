@@ -1,0 +1,29 @@
+Repository ID: RID-01212
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+specific_domain: Unspecified
+row: 1189
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+entity: 
+subdomain: 
+file_type: ai_risk_entry
+rid: RID-01212
+content_preview: Title: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile\nRisk Category: Environmental Impacts\nAdditional Evidence: "Current estimates suggest that training a single transformer LLM can emit as much carbon as 300 round- trip flights between San Francisco ...
+search_high_priority: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile Unspecified Environmental Impacts
+search_medium_priority: Unspecified
+sheet: AI Risk Database v3
+scqa_question: What are the implications of this risk?
+timing: 
+scqa_complication: itle: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile\nRisk Category: Environmental Impacts\nAdditional Evid
+scqa_confidence: 1.0
+risk_category: Environmental Impacts
+search_low_priority: AI Risk Database v3 ai_risk_entry
+title: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile
+search_all_fields: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile Unspecified Environmental Impacts Unspecified AI Risk Database v3 ai_risk_entry
+intent: 
+domain: Unspecified
+scqa_content_type: impact_analysis
+scqa_situation: Title: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile\nRisk Category: Environmental Impacts\nAdditional Evidence: "Current estimates suggest that training a single transformer LLM can emit as much carbon as 300 round- trip flights between San Francisco and New York
+scqa_answer: , text classification"
+
+Content:
+Title: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile\nRisk Category: Environmental Impacts\nAdditional Evidence: "Current estimates suggest that training a single transformer LLM can emit as much carbon as 300 round- trip flights between San Francisco and New York. In a study comparing energy consumption and carbon emissions for LLM inference, generative tasks (e.g., text summarization) were found to be more energy- and carbon-i ntensive than discriminative or non-generative tasks (e.g., text classification"

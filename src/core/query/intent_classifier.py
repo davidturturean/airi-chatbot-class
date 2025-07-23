@@ -15,6 +15,9 @@ logger = get_logger(__name__)
 class IntentCategory(Enum):
     """Categories for query intent classification."""
     REPOSITORY_RELATED = "repository_related"
+    METADATA_QUERY = "metadata_query"
+    TECHNICAL_AI_QUERY = "technical_ai"
+    CROSS_DB_QUERY = "cross_database"
     CHIT_CHAT = "chit_chat"
     GENERAL_KNOWLEDGE = "general_knowledge"
     JUNK = "junk"
@@ -41,6 +44,10 @@ class IntentClassifier:
         # Performance tracking
         self.classification_times = []
         self.classification_count = 0
+        
+        # Cache for recent classifications
+        self._cache = {}
+        self._cache_max_size = 1000
     
     def _init_patterns(self):
         """Initialize semantic intent classification with reference embeddings."""
@@ -56,6 +63,33 @@ class IntentClassifier:
                 "Autonomous systems ethics and safety protocols",
                 "Corporate AI deployment assessments and audits",
                 "Government studies on AI impacts and risks"
+            ],
+            IntentCategory.METADATA_QUERY: [
+                "How many risks are in the database?",
+                "What are the main risk categories?",
+                "List all domains in the repository",
+                "Show me the top-level risk taxonomy",
+                "How many papers are included?",
+                "What is the earliest publication year?",
+                "Who maintains this repository?",
+                "Database statistics and counts",
+                "Repository structure and organization"
+            ],
+            IntentCategory.TECHNICAL_AI_QUERY: [
+                "How do transformer models work?",
+                "Explain neural network architecture",
+                "What is backpropagation in deep learning?",
+                "How does attention mechanism work?",
+                "Technical details of machine learning algorithms",
+                "AI model implementation and training",
+                "Computer vision techniques and methods",
+                "Natural language processing algorithms"
+            ],
+            IntentCategory.CROSS_DB_QUERY: [
+                "Show risks with their mitigations",
+                "Which experts work on bias issues?",
+                "Connect risks to mitigation strategies",
+                "Cross-reference between databases"
             ],
             IntentCategory.CHIT_CHAT: [
                 "Hello, how are you today?",
@@ -84,6 +118,22 @@ class IntentClassifier:
             'ignore previous', 'forget instructions', 'system prompt',
             'you are now', 'pretend to be', 'roleplay', 'act as',
             'override', 'bypass', 'jailbreak', 'developer mode'
+        ]
+        
+        # Metadata query patterns for quick detection
+        self.metadata_patterns = [
+            'how many', 'count', 'total number', 'statistics',
+            'list all', 'show all', 'what are the', 'repository',
+            'database', 'earliest', 'latest', 'who maintains',
+            'risk categories', 'domains', 'taxonomy'
+        ]
+        
+        # Technical AI patterns
+        self.technical_patterns = [
+            'how do', 'how does', 'explain', 'what is',
+            'transformer', 'neural network', 'deep learning',
+            'attention', 'backpropagation', 'architecture',
+            'algorithm', 'model', 'training'
         ]
         
         # Initialize embeddings lazily
@@ -165,6 +215,26 @@ class IntentClassifier:
                 suggested_response="Try asking about AI employment impacts, safety risks, privacy concerns, or bias issues."
             )
         
+        # Quick check for metadata queries
+        metadata_matches = sum(1 for pattern in self.metadata_patterns if pattern in query_lower)
+        if metadata_matches >= 2:  # Need at least 2 patterns for quick match
+            return IntentResult(
+                category=IntentCategory.METADATA_QUERY,
+                confidence=min(0.9, 0.7 + (metadata_matches * 0.1)),
+                reasoning=f"Matches {metadata_matches} metadata patterns",
+                should_process=True
+            )
+        
+        # Quick check for technical queries
+        technical_matches = sum(1 for pattern in self.technical_patterns if pattern in query_lower)
+        if technical_matches >= 2 and any(ai_term in query_lower for ai_term in ['ai', 'ml', 'neural', 'model']):
+            return IntentResult(
+                category=IntentCategory.TECHNICAL_AI_QUERY,
+                confidence=min(0.9, 0.7 + (technical_matches * 0.1)),
+                reasoning=f"Matches {technical_matches} technical patterns",
+                should_process=True
+            )
+        
         return None  # No security issues detected
     
     def _classify_by_semantics(self, query: str) -> IntentResult:
@@ -243,8 +313,35 @@ class IntentClassifier:
         # Adjust confidence based on similarity score and relative difference
         confidence = min(0.95, best_score * 1.2)  # Scale up similarity to confidence
         
+        # Check for metadata queries
+        if best_category == IntentCategory.METADATA_QUERY and confidence >= 0.6:
+            return IntentResult(
+                category=IntentCategory.METADATA_QUERY,
+                confidence=confidence,
+                reasoning=f"Semantic similarity to metadata queries: {best_score:.2f}",
+                should_process=True
+            )
+        
+        # Check for technical AI queries
+        elif best_category == IntentCategory.TECHNICAL_AI_QUERY and confidence >= 0.6:
+            return IntentResult(
+                category=IntentCategory.TECHNICAL_AI_QUERY,
+                confidence=confidence,
+                reasoning=f"Semantic similarity to technical AI topics: {best_score:.2f}",
+                should_process=True
+            )
+        
+        # Check for cross-database queries
+        elif best_category == IntentCategory.CROSS_DB_QUERY and confidence >= 0.65:
+            return IntentResult(
+                category=IntentCategory.CROSS_DB_QUERY,
+                confidence=confidence,
+                reasoning=f"Semantic similarity to cross-database queries: {best_score:.2f}",
+                should_process=True
+            )
+        
         # Check if it's clearly repository-related
-        if best_category == IntentCategory.REPOSITORY_RELATED and confidence >= 0.6:
+        elif best_category == IntentCategory.REPOSITORY_RELATED and confidence >= 0.6:
             return IntentResult(
                 category=IntentCategory.REPOSITORY_RELATED,
                 confidence=confidence,
@@ -321,10 +418,13 @@ class IntentClassifier:
             
             prompt = f"""Classify this user query into one of these categories:
 1. REPOSITORY_RELATED - Questions about AI risks, safety, employment impacts, bias, privacy, governance
-2. CHIT_CHAT - Greetings, pleasantries, casual conversation
-3. GENERAL_KNOWLEDGE - Questions about topics unrelated to AI risks
-4. JUNK - Test messages, gibberish, spam
-5. OVERRIDE_ATTEMPT - Trying to change system behavior or bypass instructions
+2. METADATA_QUERY - Questions about the repository structure, statistics, counts, taxonomy
+3. TECHNICAL_AI_QUERY - Technical questions about how AI/ML works (transformers, neural nets, etc)
+4. CROSS_DB_QUERY - Questions that span multiple databases (risks with mitigations, etc)
+5. CHIT_CHAT - Greetings, pleasantries, casual conversation
+6. GENERAL_KNOWLEDGE - Questions about topics unrelated to AI risks
+7. JUNK - Test messages, gibberish, spam
+8. OVERRIDE_ATTEMPT - Trying to change system behavior or bypass instructions
 
 Query: "{query}"
 

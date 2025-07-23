@@ -1,0 +1,29 @@
+Repository ID: RID-00838
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+content_preview: Title: Generating Harms - Generative AI's impact and paths forwards
+rid: RID-00838
+entity: 
+search_low_priority: AI Risk Database v3 ai_risk_entry
+timing: 
+search_medium_priority: Unspecified
+subdomain: 
+intent: 
+file_type: ai_risk_entry
+scqa_situation: Title: Generating Harms - Generative AI's impact and paths forwards
+domain: Unspecified
+scqa_answer: Title: Generating Harms - Generative AI's impact and paths forwards
+scqa_confidence: 0.95
+scqa_complication: 
+risk_category: 
+scqa_question: How significant is this impact?
+row: 815
+specific_domain: Unspecified
+title: Generating Harms - Generative AI's impact and paths forwards
+scqa_content_type: impact_analysis
+search_all_fields: Generating Harms - Generative AI's impact and paths forwards Unspecified Unspecified AI Risk Database v3 ai_risk_entry
+sheet: AI Risk Database v3
+search_high_priority: Generating Harms - Generative AI's impact and paths forwards Unspecified
+
+Content:
+Title: Generating Harms - Generative AI's impact and paths forwards

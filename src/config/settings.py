@@ -29,13 +29,13 @@ class Settings:
     DEBUG = os.environ.get('DEBUG', 'true').lower() == 'true'
     
     # Model Configuration
-    GEMINI_API_KEY: str = os.environ.get('GEMINI_API_KEY', 'AIzaSyAVrH9JPSqSivrbfUWMS3XZA52zZ5DEkhk')
+    GEMINI_API_KEY: str = os.environ.get('GEMINI_API_KEY', '')
     
     # Multi-model fallback configuration
     GEMINI_MODEL_CHAIN = [
         "gemini-2.0-flash",
         "gemini-2.5-flash", 
-        "gemini-2.5-flash-lite-06-17"
+        "gemini-2.5-flash-lite-preview-06-17"
     ]
     
     # Primary model (for backward compatibility)
@@ -58,7 +58,7 @@ class Settings:
             "max_tokens": 8192,
             "temperature": 0.1
         },
-        "gemini-2.5-flash-lite-06-17": {
+        "gemini-2.5-flash-lite-preview-06-17": {
             "supports_thinking": False,
             "max_tokens": 4096,
             "temperature": 0.1

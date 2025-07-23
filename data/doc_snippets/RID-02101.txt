@@ -1,0 +1,29 @@
+Repository ID: RID-02101
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+domain: 2. Privacy & Security
+entity: 1 - Human
+row: 2078
+scqa_situation: Title: Generative AI Misuse: A Taxonomy of Tactics and Insights from Real-World Data\nDomain: 2
+risk_category: Misuse tactics to compromise GenAI systems (Model integrity)
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+subdomain: 2.2 > AI system security vulnerabilities and attacks
+search_high_priority: Generative AI Misuse: A Taxonomy of Tactics and Insights from Real-World Data 2. Privacy & Security Misuse tactics to compromise GenAI systems (Model integrity)
+rid: RID-02101
+search_medium_priority: 2.2 > AI system security vulnerabilities and attacks 2.2 > AI system security vulnerabilities and attacks
+scqa_question: What are the implications of this risk?
+file_type: ai_risk_entry
+scqa_complication: vulnerabilities and attacks\nRisk Category: Misuse tactics to compromise GenAI systems (Model integrity)\nRisk Subcategory: Model extraction\nDescription
+scqa_content_type: risk_description
+search_all_fields: Generative AI Misuse: A Taxonomy of Tactics and Insights from Real-World Data 2. Privacy & Security Misuse tactics to compromise GenAI systems (Model integrity) 2.2 > AI system security vulnerabilities and attacks 2.2 > AI system security vulnerabilities and attacks AI Risk Database v3 ai_risk_entry
+sheet: AI Risk Database v3
+content_preview: Title: Generative AI Misuse: A Taxonomy of Tactics and Insights from Real-World Data\nDomain: 2. Privacy & Security\nSub-domain: 2.2 > AI system security vulnerabilities and attacks\nRisk Category: Misuse tactics to compromise GenAI systems (Model integrity)\nRisk Subcategory: Model extraction\nDesc...
+scqa_confidence: 1.0
+title: Generative AI Misuse: A Taxonomy of Tactics and Insights from Real-World Data
+intent: 1 - Intentional
+search_low_priority: AI Risk Database v3 ai_risk_entry
+specific_domain: 2.2 > AI system security vulnerabilities and attacks
+timing: 2 - Post-deployment
+scqa_answer: "\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment
+
+Content:
+Title: Generative AI Misuse: A Taxonomy of Tactics and Insights from Real-World Data\nDomain: 2. Privacy & Security\nSub-domain: 2.2 > AI system security vulnerabilities and attacks\nRisk Category: Misuse tactics to compromise GenAI systems (Model integrity)\nRisk Subcategory: Model extraction\nDescription: "Data Exfiltration goes beyond revealing private information, and involves illicitly obtaining the training data used to build a model that may be sensitive or proprietary. Model Extraction is the same attack, only directed at the model instead of the training data — it involves obtaining the architecture, parameters, or hyper-parameters of a proprietary model (Carlini et al., 2024)."\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment

@@ -1,26 +1,26 @@
 Repository ID: RID-02275
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-entry_count: 98
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-specific_domain: 2.2 > AI system security vulnerabilities and attacks
-scqa_content_type: mitigation_strategy
-search_low_priority: AI Risk Database v3 ai_risk_domain_summary
-file_type: ai_risk_domain_summary
-sheet: AI Risk Database v3
-is_summary: True
-search_all_fields: AI Risk Domain: 2.2 > AI system security vulnerabilities and attacks 2.2 > AI system security vulnerabilities and attacks 2.2 > AI system security vulnerabilities and attacks AI Risk Database v3 ai_risk_domain_summary
-scqa_situation: iption: "Pre-processing tools play a crucial role in the context of LLMs. These tools, which are often involved in computer vision (CV) tasks, are susceptible to attac
-summary_type: domain_aggregation
-scqa_confidence: 1.0
-content_preview: AI Risk Domain: 2.2 > AI system security vulnerabilities and attacks\n\nThis domain contains 98 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 2. Privacy & Security\nSub-domain: 2.2 > AI...
-title: AI Risk Domain: 2.2 > AI system security vulnerabilities and attacks
-search_high_priority: AI Risk Domain: 2.2 > AI system security vulnerabilities and attacks 2.2 > AI system security vulnerabilities and attacks
-domain: 2.2 > AI system security vulnerabilities and attacks
-search_medium_priority: 2.2 > AI system security vulnerabilities and attacks
-scqa_question: What are the implications of this risk?
-scqa_answer: , and Assessment Benchmarks of Large Language Model Systems\nDomain: 2. Privacy & Security\nSub-domain: 2.2 > AI system security vulnerabilities and a
 rid: RID-02275
+entry_count: 98
+domain: 2.2 > AI system security vulnerabilities and attacks
+title: AI Risk Domain: 2.2 > AI system security vulnerabilities and attacks
+specific_domain: 2.2 > AI system security vulnerabilities and attacks
+scqa_question: What are the implications of this risk?
+sheet: AI Risk Database v3
+search_all_fields: AI Risk Domain: 2.2 > AI system security vulnerabilities and attacks 2.2 > AI system security vulnerabilities and attacks 2.2 > AI system security vulnerabilities and attacks AI Risk Database v3 ai_risk_domain_summary
+scqa_confidence: 1.0
+is_summary: True
 scqa_complication: of LLMs often relies on distributed network systems [171], [172]. During the transmission of gradients through the links between GPU server nodes, signif
+summary_type: domain_aggregation
+content_preview: AI Risk Domain: 2.2 > AI system security vulnerabilities and attacks\n\nThis domain contains 98 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 2. Privacy & Security\nSub-domain: 2.2 > AI...
+search_medium_priority: 2.2 > AI system security vulnerabilities and attacks
+scqa_situation: iption: "Pre-processing tools play a crucial role in the context of LLMs. These tools, which are often involved in computer vision (CV) tasks, are susceptible to attac
+scqa_content_type: mitigation_strategy
+search_high_priority: AI Risk Domain: 2.2 > AI system security vulnerabilities and attacks 2.2 > AI system security vulnerabilities and attacks
+file_type: ai_risk_domain_summary
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_low_priority: AI Risk Database v3 ai_risk_domain_summary
+scqa_answer: , and Assessment Benchmarks of Large Language Model Systems\nDomain: 2. Privacy & Security\nSub-domain: 2.2 > AI system security vulnerabilities and a
 
 Content:
 to attacks that exploit vulnerabilities in tools such as OpenCV."\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 1 - Pre-deployment\n\nRisk Entry 7:\nTitle: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 2. Privacy & Security\nSub-domain: 2.2 > AI system security vulnerabilities and attacks\nRisk Category: Hardware Vulnerabilities\nDescription: "The vulnerabilities of hardware systems for training and inferencing brings issues to LLM-based applications."\nEntity: 3 - Other\nIntent: 2 - Unintentional\nTiming: 3 - Other\n\nRisk Entry 8:\nTitle: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 2. Privacy & Security\nSub-domain: 2.2 > AI system security vulnerabilities and attacks\nRisk Category: Hardware Vulnerabilities\nRisk Subcategory: Network Devices\nDescription: "The training of LLMs often relies on distributed network systems [171], [172]. During the transmission of gradients through

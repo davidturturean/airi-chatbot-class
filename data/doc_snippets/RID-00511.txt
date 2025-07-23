@@ -1,0 +1,29 @@
+Repository ID: RID-00511
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+sheet: AI Risk Database v3
+subdomain: 
+scqa_complication: ability distribution [40,41]. However, this common assumption is usually violated in many real-world applications [42], especially in dynamic environments."
+scqa_answer: However, this common assumption is usually violated in many real-world applications [42], especially in dynamic environments
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_question: What are the implications of this risk?
+title: Towards risk-aware artificial intelligence and machine learning systems: An overview
+scqa_confidence: 1.0
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_high_priority: Towards risk-aware artificial intelligence and machine learning systems: An overview Unspecified Data-level risk
+row: 488
+content_preview: Title: Towards risk-aware artificial intelligence and machine learning systems: An overview\nRisk Category: Data-level risk\nRisk Subcategory: Dataset shift\nAdditional Evidence: "Covariate shift: when training AI/ML models, people typically assume that the training data and the testing data follow ...
+entity: 
+specific_domain: Unspecified
+search_all_fields: Towards risk-aware artificial intelligence and machine learning systems: An overview Unspecified Data-level risk Unspecified AI Risk Database v3 ai_risk_entry
+timing: 
+search_medium_priority: Unspecified
+domain: Unspecified
+intent: 
+scqa_situation: wever, this common assumption is usually violated in many real-world applications [42], especially in dynamic environments."
+rid: RID-00511
+scqa_content_type: risk_description
+risk_category: Data-level risk
+file_type: ai_risk_entry
+
+Content:
+Title: Towards risk-aware artificial intelligence and machine learning systems: An overview\nRisk Category: Data-level risk\nRisk Subcategory: Dataset shift\nAdditional Evidence: "Covariate shift: when training AI/ML models, people typically assume that the training data and the testing data follow the same probability distribution [40,41]. However, this common assumption is usually violated in many real-world applications [42], especially in dynamic environments."

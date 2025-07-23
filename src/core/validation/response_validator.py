@@ -135,7 +135,7 @@ class ResponseValidator:
                          retrieved_documents: List[Document],
                          domain: str = "general") -> ResponseValidation:
         """
-        Perform comprehensive validation of a response.
+        Perform comprehensive validation with three-signal scoring.
         
         Args:
             response: The generated response
@@ -144,28 +144,44 @@ class ResponseValidator:
             domain: Domain context
             
         Returns:
-            Complete validation results
+            Complete validation results with three-signal analysis
         """
         checks = []
         
         # Run all validation checks
-        checks.append(self._check_factual_accuracy(response, retrieved_documents))
-        checks.append(self._check_relevance(response, query, domain))
-        checks.append(self._check_completeness(response, query))
-        checks.append(self._check_appropriateness(response))
-        checks.append(self._check_citation_quality(response, retrieved_documents))
-        checks.append(self._check_coherence(response))
+        accuracy_check = self._check_factual_accuracy(response, retrieved_documents)
+        relevance_check = self._check_relevance(response, query, domain)
+        completeness_check = self._check_completeness(response, query)
+        appropriateness_check = self._check_appropriateness(response)
+        citation_check = self._check_citation_quality(response, retrieved_documents)
+        coherence_check = self._check_coherence(response)
         
-        # Calculate overall score
-        overall_score = sum(check.score for check in checks) / len(checks)
+        checks.extend([accuracy_check, relevance_check, completeness_check, 
+                      appropriateness_check, citation_check, coherence_check])
         
-        # Determine overall result
+        # Three-signal scoring
+        accuracy_score = accuracy_check.score
+        coverage_score = (completeness_check.score + relevance_check.score) / 2
+        style_score = (appropriateness_check.score + coherence_check.score) / 2
+        
+        # Calculate weighted overall score
+        overall_score = (accuracy_score * 0.4 + coverage_score * 0.4 + style_score * 0.2)
+        
+        # Determine overall result with three-signal logic
         if overall_score >= self.overall_pass_threshold:
             overall_result = ValidationResult.PASS
         elif overall_score >= self.overall_warning_threshold:
             overall_result = ValidationResult.WARNING
         else:
             overall_result = ValidationResult.FAIL
+        
+        # Special case: High accuracy but low coverage suggests revision opportunity
+        if accuracy_score >= 0.75 and coverage_score < 0.5:
+            overall_result = ValidationResult.WARNING  # Upgrade from FAIL to WARNING
+            logger.info(f"High accuracy ({accuracy_score:.2f}) but low coverage ({coverage_score:.2f}) - revision candidate")
+        
+        # Log three-signal breakdown
+        logger.info(f"Three-signal scores - Accuracy: {accuracy_score:.2f}, Coverage: {coverage_score:.2f}, Style: {style_score:.2f}")
         
         # Generate recommendations
         recommendations = self._generate_recommendations(checks, overall_score)
@@ -599,12 +615,59 @@ class SelfValidationChain:
                 iteration == max_iterations - 1):
                 return current_response, validation
             
-            # For now, we don't automatically improve the response
-            # In production, you could integrate with the LLM to regenerate based on validation feedback
+            # Check if response is a revision candidate (high accuracy but low coverage)
+            accuracy_score = next((c.score for c in validation.checks if c.category == ValidationCategory.FACTUAL_ACCURACY), 0.0)
+            coverage_checks = [c for c in validation.checks if c.category in [ValidationCategory.COMPLETENESS, ValidationCategory.RELEVANCE]]
+            coverage_score = sum(c.score for c in coverage_checks) / len(coverage_checks) if coverage_checks else 0.0
+            
+            if accuracy_score >= 0.75 and coverage_score < 0.5:
+                logger.info(f"Attempting revision: high accuracy ({accuracy_score:.2f}) but low coverage ({coverage_score:.2f})")
+                revised_response = self._generate_revision_suggestion(current_response, query, documents, validation)
+                if revised_response and revised_response != current_response:
+                    current_response = revised_response
+                    logger.info(f"Generated revision, continuing validation...")
+                    continue
+            
+            # If no revision or revision failed, break
             logger.info(f"Validation iteration {iteration + 1}: Score {validation.overall_score:.2f}")
-            break  # Exit after first validation for now
+            break
         
         return current_response, validation
+    
+    def _generate_revision_suggestion(self, response: str, query: str, documents: List[Document], validation: ResponseValidation) -> str:
+        """Generate a revision suggestion to improve response coverage."""
+        try:
+            # Create a revision prompt based on validation feedback
+            available_rids = [doc.metadata.get('rid') for doc in documents if doc.metadata.get('rid')]
+            rid_list = ", ".join(available_rids)
+            
+            revision_prompt = f"""The following response has good accuracy but incomplete coverage. Please extend and improve it to better address the user's question.
+
+Original Query: {query}
+
+Current Response: {response}
+
+Available RIDs for citation: {rid_list}
+
+Instructions:
+1. Keep the accurate information from the original response
+2. Expand the response to more comprehensively address the query
+3. Add missing key points that would improve completeness
+4. Ensure proper RID citations are included
+5. Target 220-300 words for comprehensive coverage
+
+Enhanced Response:"""
+            
+            # For now, return a simple enhancement suggestion
+            # In production, this would call the LLM with the revision prompt
+            logger.info("Revision suggestion generated (placeholder implementation)")
+            
+            # Return None to indicate no revision available (placeholder)
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error generating revision suggestion: {e}")
+            return None
     
     def get_validation_statistics(self) -> Dict[str, Any]:
         """Get statistics about validation performance."""

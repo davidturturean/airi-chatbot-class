@@ -1,0 +1,29 @@
+Repository ID: RID-00856
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_confidence: 1.0
+risk_category: Impact on Intellectual Property Rights
+search_all_fields: Generating Harms - Generative AI's impact and paths forwards Unspecified Impact on Intellectual Property Rights Unspecified AI Risk Database v3 ai_risk_entry
+title: Generating Harms - Generative AI's impact and paths forwards
+file_type: ai_risk_entry
+search_low_priority: AI Risk Database v3 ai_risk_entry
+content_preview: Title: Generating Harms - Generative AI's impact and paths forwards\nRisk Category: Impact on Intellectual Property Rights\nAdditional Evidence: "End-users of generative AI have already attempted to claim ownership over the outputs of generative AI tools, including several who have attempted to file...
+rid: RID-00856
+scqa_situation: Title: Generating Harms - Generative AI's impact and paths forwards\nRisk Category: Impact on Intellectual Property Rights\nAdditional Evidence: "End-users of generative AI have already attempted to claim ownership over the outputs of generative AI tools, including several who have attempted to file for copyrights with the United States Copyright Office
+sheet: AI Risk Database v3
+intent: 
+scqa_complication: s it contains “creative contribution from a human actor,” noting that copyright may only protect material that is “the product of human creativity.” Whil
+scqa_question: What are the implications of this risk?
+specific_domain: Unspecified
+search_medium_priority: Unspecified
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+entity: 
+scqa_answer: in IP protections for the resulting work, the Copyright Office disagrees, comparing a prompt to “instructions to a commissioned artist—they identify
+domain: Unspecified
+timing: 
+subdomain: 
+row: 833
+search_high_priority: Generating Harms - Generative AI's impact and paths forwards Unspecified Impact on Intellectual Property Rights
+scqa_content_type: impact_analysis
+
+Content:
+Title: Generating Harms - Generative AI's impact and paths forwards\nRisk Category: Impact on Intellectual Property Rights\nAdditional Evidence: "End-users of generative AI have already attempted to claim ownership over the outputs of generative AI tools, including several who have attempted to file for copyrights with the United States Copyright Office. The rising use of generative AI to create creative works and subsequent copyright filing attempts has been significant enough to prompt the Copyright Office to launch a new AI initiative. Statements from the U.S. Copyright Office so far have mandated that a work cannot receive copyright protections unless it contains “creative contribution from a human actor,” noting that copyright may only protect material that is “the product of human creativity.” While some have argued that the prompt constitutes sufficient “human creativity” to result in IP protections for the resulting work, the Copyright Office disagrees, comparing a prompt to “instructions to a commissioned artist—they identify what the prompter wishes to have depicted, but the machine determines how these instructions are implemented in its output.” This distinction becomes more complex when a portion of the work is AI-generated and a portion is human-generated. Copyright may be applied to work that contains or builds off AI-generated work, but the copyright will apply solely to the human-authored aspects.

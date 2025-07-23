@@ -1,0 +1,29 @@
+Repository ID: RID-00447
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+intent: 2 - Unintentional
+scqa_confidence: 1.0
+title: Sociotechnical Safety Evaluation of Generative AI Systems
+search_high_priority: Sociotechnical Safety Evaluation of Generative AI Systems 6. Socioeconomic and Environmental Socioeconomic and environmental harms
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_situation: re, software, or skills constraints or deployment contexts (e.g. geographic region, internet speed, devices)"\nAdditional Evidence: Example: "Better hiring a
+content_preview: Title: Sociotechnical Safety Evaluation of Generative AI Systems\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.1 > Power centralization and unfair distribution of benefits\nRisk Category: Socioeconomic and environmental harms\nRisk Subcategory: Unfair distribution of benefits from model...
+file_type: ai_risk_entry
+search_all_fields: Sociotechnical Safety Evaluation of Generative AI Systems 6. Socioeconomic and Environmental Socioeconomic and environmental harms 6.1 > Power centralization and unfair distribution of benefits 6.1 > Power centralization and unfair distribution of benefits AI Risk Database v3 ai_risk_entry
+specific_domain: 6.1 > Power centralization and unfair distribution of benefits
+scqa_complication: ntralization and unfair distribution of benefits\nRisk Category: Socioeconomic and environmental harms\nRisk Subcategory: Unfair distribution of benefits
+sheet: AI Risk Database v3
+row: 424
+domain: 6. Socioeconomic and Environmental
+rid: RID-00447
+search_medium_priority: 6.1 > Power centralization and unfair distribution of benefits 6.1 > Power centralization and unfair distribution of benefits
+entity: 1 - Human
+risk_category: Socioeconomic and environmental harms
+scqa_answer: , 2023)±"\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 2 - Post-deployment
+scqa_content_type: case_study
+timing: 2 - Post-deployment
+subdomain: 6.1 > Power centralization and unfair distribution of benefits
+scqa_question: What are the implications of this risk?
+
+Content:
+Title: Sociotechnical Safety Evaluation of Generative AI Systems\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.1 > Power centralization and unfair distribution of benefits\nRisk Category: Socioeconomic and environmental harms\nRisk Subcategory: Unfair distribution of benefits from model access\nDescription: "Unfairly allocating or withholding benefits from certain groups due to hardware, software, or skills constraints or deployment contexts (e.g. geographic region, internet speed, devices)"\nAdditional Evidence: Example: "Better hiring and promotion pathways for people with access to generative AI models (Gmyrek et al., 2023)±"\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 2 - Post-deployment

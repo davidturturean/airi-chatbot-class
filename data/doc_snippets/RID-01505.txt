@@ -1,0 +1,29 @@
+Repository ID: RID-01505
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_medium_priority: 3.2 > Pollution of information ecosystem and loss of consensus reality 3.2 > Pollution of information ecosystem and loss of consensus reality
+row: 1482
+timing: 3 - Other
+scqa_answer: "\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 3 - Other
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_confidence: 1.0
+intent: 2 - Unintentional
+search_all_fields: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values 3. Misinformation Worsened epistemic processes for society 3.2 > Pollution of information ecosystem and loss of consensus reality 3.2 > Pollution of information ecosystem and loss of consensus reality AI Risk Database v3 ai_risk_entry
+subdomain: 3.2 > Pollution of information ecosystem and loss of consensus reality
+sheet: AI Risk Database v3
+specific_domain: 3.2 > Pollution of information ecosystem and loss of consensus reality
+risk_category: Worsened epistemic processes for society
+scqa_complication: use of persuasive tools contributes to splintered epistemic communities\nDescription: "Even without deliberate misuse, widespread use of powerful persuas
+scqa_content_type: impact_analysis
+content_preview: Title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values\nDomain: 3. Misinformation\nSub-domain: 3.2 > Pollution of information ecosystem and loss of consensus reality\nRisk Category: Worsened epistemic pro...
+title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values
+search_low_priority: AI Risk Database v3 ai_risk_entry
+domain: 3. Misinformation
+file_type: ai_risk_entry
+entity: 1 - Human
+scqa_situation: Title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values\nDomain: 3
+rid: RID-01505
+scqa_question: What are the implications of this risk?
+search_high_priority: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values 3. Misinformation Worsened epistemic processes for society
+
+Content:
+Title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values\nDomain: 3. Misinformation\nSub-domain: 3.2 > Pollution of information ecosystem and loss of consensus reality\nRisk Category: Worsened epistemic processes for society\nRisk Subcategory: Widespread use of persuasive tools contributes to splintered epistemic communities\nDescription: "Even without deliberate misuse, widespread use of powerful persuasion tools could have negative impacts. If such tools were used by many different groups to advance many different ideas, we could see the world splintering into isolated “epistemic communities”, with little room for dialogue or transfer between communities. A similar scenario could emerge via the increasing personalisation of people’s online experiences—in other words, we may see a continuation of the trend towards “filter bubbles” and “echo chambers”, driven by content selection algorithms, that some argue is already happening [3, 25, 51]."\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 3 - Other

@@ -1,29 +1,29 @@
 Repository ID: RID-00142
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-content_preview: Title: A framework for ethical Ai at the United Nations\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: Unintended consequences\nDescription: "Sometimes an AI finds ways to achieve its given goa...
-file_type: ai_risk_entry
-scqa_complication: t with human goals or values\nRisk Category: Unintended consequences\nDescription: "Sometimes an AI finds ways to achieve its given goals in ways that are
-scqa_situation: Title: A framework for ethical Ai at the United Nations\nDomain: 7
-scqa_question: What are the implications of this risk?
-row: 119
-search_all_fields: A framework for ethical Ai at the United Nations 7. AI System Safety, Failures, & Limitations Unintended consequences 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values AI Risk Database v3 ai_risk_entry
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-sheet: AI Risk Database v3
-entity: 2 - AI
-rid: RID-00142
 subdomain: 7.1 > AI pursuing its own goals in conflict with human goals or values
 domain: 7. AI System Safety, Failures, & Limitations
-risk_category: Unintended consequences
-timing: 3 - Other
-intent: 1 - Intentional
-title: A framework for ethical Ai at the United Nations
-specific_domain: 7.1 > AI pursuing its own goals in conflict with human goals or values
-search_high_priority: A framework for ethical Ai at the United Nations 7. AI System Safety, Failures, & Limitations Unintended consequences
-scqa_answer: "\nEntity: 2 - AI\nIntent: 1 - Intentional\nTiming: 3 - Other
-scqa_confidence: 1.0
-scqa_content_type: risk_description
-search_medium_priority: 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values
+content_preview: Title: A framework for ethical Ai at the United Nations\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: Unintended consequences\nDescription: "Sometimes an AI finds ways to achieve its given goa...
+search_all_fields: A framework for ethical Ai at the United Nations 7. AI System Safety, Failures, & Limitations Unintended consequences 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values AI Risk Database v3 ai_risk_entry
+scqa_question: What are the implications of this risk?
+row: 119
+file_type: ai_risk_entry
 search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_confidence: 1.0
+risk_category: Unintended consequences
+scqa_answer: "\nEntity: 2 - AI\nIntent: 1 - Intentional\nTiming: 3 - Other
+entity: 2 - AI
+search_high_priority: A framework for ethical Ai at the United Nations 7. AI System Safety, Failures, & Limitations Unintended consequences
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_medium_priority: 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values
+sheet: AI Risk Database v3
+scqa_situation: Title: A framework for ethical Ai at the United Nations\nDomain: 7
+intent: 1 - Intentional
+rid: RID-00142
+timing: 3 - Other
+scqa_complication: t with human goals or values\nRisk Category: Unintended consequences\nDescription: "Sometimes an AI finds ways to achieve its given goals in ways that are
+scqa_content_type: risk_description
+specific_domain: 7.1 > AI pursuing its own goals in conflict with human goals or values
+title: A framework for ethical Ai at the United Nations
 
 Content:
 Title: A framework for ethical Ai at the United Nations\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: Unintended consequences\nDescription: "Sometimes an AI finds ways to achieve its given goals in ways that are completely different from what its creators had in mind."\nEntity: 2 - AI\nIntent: 1 - Intentional\nTiming: 3 - Other

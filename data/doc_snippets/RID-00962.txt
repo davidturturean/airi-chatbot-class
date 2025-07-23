@@ -1,0 +1,29 @@
+Repository ID: RID-00962
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_low_priority: AI Risk Database v3 ai_risk_entry
+search_medium_priority: 6.6 > Environmental harm 6.6 > Environmental harm
+scqa_content_type: risk_description
+title: A Survey of Artificial Intelligence Challenges: Analyzing the Definitions, Relationships, and Evolutions
+specific_domain: 6.6 > Environmental harm
+scqa_situation: Title: A Survey of Artificial Intelligence Challenges: Analyzing the Definitions, Relationships, and Evolutions\nDomain: 6
+entity: 2 - AI
+rid: RID-00962
+scqa_confidence: 1.0
+subdomain: 6.6 > Environmental harm
+sheet: AI Risk Database v3
+scqa_question: What are the implications of this risk?
+scqa_answer: s in high energy consumption.\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 1 - Pre-deployment
+row: 939
+scqa_complication: in: 6.6 > Environmental harm\nRisk Category: Energy Consumption\nDescription: Some learning algorithms, including deep learning, utilize iterative learnin
+search_high_priority: A Survey of Artificial Intelligence Challenges: Analyzing the Definitions, Relationships, and Evolutions 6. Socioeconomic and Environmental Energy Consumption
+search_all_fields: A Survey of Artificial Intelligence Challenges: Analyzing the Definitions, Relationships, and Evolutions 6. Socioeconomic and Environmental Energy Consumption 6.6 > Environmental harm 6.6 > Environmental harm AI Risk Database v3 ai_risk_entry
+risk_category: Energy Consumption
+domain: 6. Socioeconomic and Environmental
+intent: 2 - Unintentional
+content_preview: Title: A Survey of Artificial Intelligence Challenges: Analyzing the Definitions, Relationships, and Evolutions\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.6 > Environmental harm\nRisk Category: Energy Consumption\nDescription: Some learning algorithms, including deep learning, utiliz...
+timing: 1 - Pre-deployment
+file_type: ai_risk_entry
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+
+Content:
+Title: A Survey of Artificial Intelligence Challenges: Analyzing the Definitions, Relationships, and Evolutions\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.6 > Environmental harm\nRisk Category: Energy Consumption\nDescription: Some learning algorithms, including deep learning, utilize iterative learning processes [23]. This approach results in high energy consumption.\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 1 - Pre-deployment

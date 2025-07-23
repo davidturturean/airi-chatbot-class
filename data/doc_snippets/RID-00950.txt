@@ -1,0 +1,29 @@
+Repository ID: RID-00950
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_content_type: risk_description
+scqa_question: What are the implications of this risk?
+subdomain: 
+domain: Unspecified
+scqa_situation: reflects on the concept of the responsibility gap in AI, where an AI agent's actions that cause harm can lack clear responsibility. Saunders and Locke (2020) draw parallels between ancient practices of casting lots and AI in business decisionmaking and how, in both cases, control and moral responsibility are relinquished. Johnson (2015) discusses the potential emergence of a responsibility gap autonomous artificial agents of the future, emphasizing that responsibility allocation depends on human choices more than technological complexity. Awad et al. (2019) explore moral dilemmas in self-driving cars and propose that addressing these dilemmas requires collective discussions and agreements on ethical AI principles. Other scholars address responsibility gaps in AI systems, such as Santoni de Sio and Mecacci (2021), who identify interconnected responsibility gaps in AI a
+search_medium_priority: Unspecified
+title: What Ethics Can Say on Artificial Intelligence: Insights from a Systematic Literature Review
+timing: 
+rid: RID-00950
+scqa_answer: (2019) examine unexpected differences in the language used in policy documents and discussions about responsibility for highly automated vehicles
+entity: 
+search_high_priority: What Ethics Can Say on Artificial Intelligence: Insights from a Systematic Literature Review Unspecified Human-AI interaction
+intent: 
+scqa_confidence: 1.0
+scqa_complication: ction\nRisk Subcategory: Attributing the responsibility for AI's failures\nAdditional Evidence: "Responsibility gap (2.7%). This research reflects on the
+risk_category: Human-AI interaction
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+file_type: ai_risk_entry
+search_all_fields: What Ethics Can Say on Artificial Intelligence: Insights from a Systematic Literature Review Unspecified Human-AI interaction Unspecified AI Risk Database v3 ai_risk_entry
+specific_domain: Unspecified
+content_preview: Title: What Ethics Can Say on Artificial Intelligence: Insights from a Systematic Literature Review\nRisk Category: Human-AI interaction\nRisk Subcategory: Attributing the responsibility for AI's failures\nAdditional Evidence: "Responsibility gap (2.7%). This research reflects on the concept of the ...
+sheet: AI Risk Database v3
+row: 927
+
+Content:
+Title: What Ethics Can Say on Artificial Intelligence: Insights from a Systematic Literature Review\nRisk Category: Human-AI interaction\nRisk Subcategory: Attributing the responsibility for AI's failures\nAdditional Evidence: "Responsibility gap (2.7%). This research reflects on the concept of the responsibility gap in AI, where an AI agent's actions that cause harm can lack clear responsibility. Saunders and Locke (2020) draw parallels between ancient practices of casting lots and AI in business decisionmaking and how, in both cases, control and moral responsibility are relinquished. Johnson (2015) discusses the potential emergence of a responsibility gap autonomous artificial agents of the future, emphasizing that responsibility allocation depends on human choices more than technological complexity. Awad et al. (2019) explore moral dilemmas in self-driving cars and propose that addressing these dilemmas requires collective discussions and agreements on ethical AI principles. Other scholars address responsibility gaps in AI systems, such as Santoni de Sio and Mecacci (2021), who identify interconnected responsibility gaps in AI and propose designing socio-technical systems for “meaningful human control” to comprehensively address these gaps. Schuelke-Leech et al. (2019) examine unexpected differences in the language used in policy documents and discussions about responsibility for highly automated vehicles."

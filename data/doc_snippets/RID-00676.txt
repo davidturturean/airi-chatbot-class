@@ -1,0 +1,29 @@
+Repository ID: RID-00676
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+title: The Ethics of Advanced AI Assistants
+content_preview: Title: The Ethics of Advanced AI Assistants\nDomain: 5. Human-Computer Interaction\nSub-domain: 5.1 > Overreliance and unsafe use\nRisk Category: Risk of Harm through Anthropomorphic AI Assistant Design\nDescription: "Although unlikely to cause harm in isolation, anthropomorphic perceptions of advan...
+scqa_situation: Title: The Ethics of Advanced AI Assistants\nDomain: 5
+scqa_confidence: 1.0
+file_type: ai_risk_entry
+intent: 3 - Other
+scqa_question: What are the implications of this risk?
+scqa_complication: Overreliance and unsafe use\nRisk Category: Risk of Harm through Anthropomorphic AI Assistant Design\nDescription: "Although unlikely to cause harm in is
+scqa_answer: "\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 2 - Post-deployment
+entity: 3 - Other
+risk_category: Risk of Harm through Anthropomorphic AI Assistant Design
+domain: 5. Human-Computer Interaction
+search_medium_priority: 5.1 > Overreliance and unsafe use 5.1 > Overreliance and unsafe use
+specific_domain: 5.1 > Overreliance and unsafe use
+rid: RID-00676
+timing: 2 - Post-deployment
+scqa_content_type: risk_description
+search_all_fields: The Ethics of Advanced AI Assistants 5. Human-Computer Interaction Risk of Harm through Anthropomorphic AI Assistant Design 5.1 > Overreliance and unsafe use 5.1 > Overreliance and unsafe use AI Risk Database v3 ai_risk_entry
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+subdomain: 5.1 > Overreliance and unsafe use
+sheet: AI Risk Database v3
+search_low_priority: AI Risk Database v3 ai_risk_entry
+search_high_priority: The Ethics of Advanced AI Assistants 5. Human-Computer Interaction Risk of Harm through Anthropomorphic AI Assistant Design
+row: 653
+
+Content:
+Title: The Ethics of Advanced AI Assistants\nDomain: 5. Human-Computer Interaction\nSub-domain: 5.1 > Overreliance and unsafe use\nRisk Category: Risk of Harm through Anthropomorphic AI Assistant Design\nDescription: "Although unlikely to cause harm in isolation, anthropomorphic perceptions of advanced AI assistants may pave the way for downstream harms on individual and societal levels. We document observed or likely individual level harms of interacting with highly anthropomorphic AI assistants, as well as the potential larger-scale, societal implications of allowing such technologies to proliferate without restriction. "\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 2 - Post-deployment

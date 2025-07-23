@@ -1,0 +1,29 @@
+Repository ID: RID-01678
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_confidence: 1.0
+scqa_content_type: case_study
+scqa_situation: Title: International AI Safety Report 2025\nRisk Category: Risks from malicious use\nRisk Subcategory: Harm to individuals through fake content\nAdditional Evidence: "Malicious actors can misuse AI- generated fake content to extort, scam, psychologically manipulate, or sabotage targeted individuals or organisations (see Table 2
+scqa_complication: tional AI Safety Report 2025\nRisk Category: Risks from malicious use\nRisk Subcategory: Harm to individuals through fake content\nAdditional Evidence: "M
+search_all_fields: International AI Safety Report 2025 Unspecified Risks from malicious use Unspecified AI Risk Database v3 ai_risk_entry
+title: International AI Safety Report 2025
+subdomain: 
+sheet: AI Risk Database v3
+row: 1655
+specific_domain: Unspecified
+search_low_priority: AI Risk Database v3 ai_risk_entry
+search_medium_priority: Unspecified
+search_high_priority: International AI Safety Report 2025 Unspecified Risks from malicious use
+entity: 
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+intent: 
+domain: Unspecified
+scqa_question: What are the implications of this risk?
+timing: 
+rid: RID-01678
+file_type: ai_risk_entry
+risk_category: Risks from malicious use
+content_preview: Title: International AI Safety Report 2025\nRisk Category: Risks from malicious use\nRisk Subcategory: Harm to individuals through fake content\nAdditional Evidence: "Malicious actors can misuse AI- generated fake content to extort, scam, psychologically manipulate, or sabotage targeted individuals ...
+scqa_answer: Manipulation of public opinion
+
+Content:
+Title: International AI Safety Report 2025\nRisk Category: Risks from malicious use\nRisk Subcategory: Harm to individuals through fake content\nAdditional Evidence: "Malicious actors can misuse AI- generated fake content to extort, scam, psychologically manipulate, or sabotage targeted individuals or organisations (see Table 2.1) (271). This threatens universal human rights, for example the right against attacks upon one’s honour and reputation (272). This section focuses on harms caused to individuals through AI- generated fake content. Potential impacts of AI- generated and - mediated influence campaigns on the societal level are covered in 2.1.2. Manipulation of public opinion."

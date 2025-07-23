@@ -1,0 +1,29 @@
+Repository ID: RID-00767
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_confidence: 0.95
+search_low_priority: AI Risk Database v3 ai_risk_entry
+row: 744
+title: SafetyBench: Evaluating the Safety of Large Language Models with Multiple Choice Questions
+entity: 
+domain: Unspecified
+specific_domain: Unspecified
+timing: 
+scqa_situation: Title: SafetyBench: Evaluating the Safety of Large Language Models with Multiple Choice Questions
+risk_category: 
+search_medium_priority: Unspecified
+rid: RID-00767
+content_preview: Title: SafetyBench: Evaluating the Safety of Large Language Models with Multiple Choice Questions
+search_high_priority: SafetyBench: Evaluating the Safety of Large Language Models with Multiple Choice Questions Unspecified
+subdomain: 
+search_all_fields: SafetyBench: Evaluating the Safety of Large Language Models with Multiple Choice Questions Unspecified Unspecified AI Risk Database v3 ai_risk_entry
+file_type: ai_risk_entry
+scqa_complication: 
+scqa_question: What should be done about this?
+sheet: AI Risk Database v3
+scqa_answer: Title: SafetyBench: Evaluating the Safety of Large Language Models with Multiple Choice Questions
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_content_type: risk_description
+intent: 
+
+Content:
+Title: SafetyBench: Evaluating the Safety of Large Language Models with Multiple Choice Questions

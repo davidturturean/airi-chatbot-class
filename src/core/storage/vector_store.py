@@ -587,10 +587,19 @@ class VectorStore:
                     if len(filtered_docs) >= settings.MAX_DOCS_ABOVE_THRESHOLD * 2:  # Get more for MMR
                         break
             
-            # If no docs pass threshold, return empty for out-of-scope handling
+            # Dual-threshold system: ensure recall floor (at least 1 doc per top-2 domains)
             if not filtered_docs:
-                logger.info(f"No documents above threshold {threshold:.3f} for query: {query[:50]}...")
-                return []
+                logger.info(f"No documents above threshold {threshold:.3f}, applying recall floor...")
+                # Expand search and lower threshold to ensure minimum documents
+                expanded_docs_with_scores = self._expand_search_for_recall(query, k * 3, threshold)
+                if expanded_docs_with_scores:
+                    # Take at least 1 document even if below threshold
+                    filtered_docs = [doc for doc, score in expanded_docs_with_scores[:2]]
+                    filtered_scores = [score for doc, score in expanded_docs_with_scores[:2]]
+                    logger.info(f"Recall floor applied: retrieved {len(filtered_docs)} documents with lower threshold")
+                else:
+                    logger.info(f"No documents found even with expanded search for query: {query[:50]}...")
+                    return []
             
             # Apply advanced retrieval techniques (MMR deduplication + cross-encoder re-ranking)
             final_docs = advanced_retriever.retrieve_and_rerank(
@@ -600,6 +609,7 @@ class VectorStore:
                 max_documents=min(settings.MAX_DOCS_ABOVE_THRESHOLD, len(filtered_docs))
             )
             
+            # Log the core retrieval results first
             logger.info(f"Retrieved {len(final_docs)} documents above threshold {threshold:.3f}")
             
             # Add domain-specific documents if enhanced search is enabled
@@ -607,6 +617,7 @@ class VectorStore:
                 domain_docs = self._get_domain_specific_docs(domain)
                 final_docs.extend(domain_docs)
                 logger.info(f"Added {len(domain_docs)} domain-specific documents for {domain}")
+                logger.info(f"Total documents after domain enhancement: {len(final_docs)}")
             
             # Cache the results
             self.query_cache[cache_key] = (time.time(), final_docs)
@@ -615,6 +626,37 @@ class VectorStore:
             
         except Exception as e:
             logger.error(f"Error retrieving documents: {str(e)}")
+            return []
+    
+    def _expand_search_for_recall(self, query: str, k: int, original_threshold: float) -> List[Tuple[Document, float]]:
+        """Expand search with lower threshold to ensure minimum document recall."""
+        try:
+            # Lower the threshold by 50% for recall search
+            recall_threshold = original_threshold * 0.5
+            
+            # Get more documents with expanded search
+            if self.use_hybrid_search and self.hybrid_retriever:
+                if isinstance(self.hybrid_retriever, FieldAwareHybridRetriever):
+                    docs_with_scores = self._get_docs_with_scores_field_aware_hybrid(query, k)
+                elif self.hybrid_retriever == "basic":
+                    docs_with_scores = self._get_docs_with_scores_basic_hybrid(query, k)
+                else:
+                    docs_with_scores = self._get_docs_with_scores_vector(query, k)
+            else:
+                docs_with_scores = self._get_docs_with_scores_vector(query, k)
+            
+            # Filter with lower threshold
+            recall_docs = []
+            for doc, score in docs_with_scores:
+                if score >= recall_threshold:
+                    recall_docs.append((doc, score))
+                    if len(recall_docs) >= 3:  # Limit recall expansion
+                        break
+            
+            return recall_docs
+            
+        except Exception as e:
+            logger.error(f"Error in expand search for recall: {str(e)}")
             return []
     
     def _get_docs_with_scores_vector(self, query: str, k: int) -> List[Tuple[Document, float]]:
@@ -753,12 +795,16 @@ class VectorStore:
         return self._get_domain_specific_docs('socioeconomic')
     
     def format_context_from_docs(self, docs: List[Document]) -> str:
-        """Format documents into context string using configurable templates."""
+        """Format documents into context string with evidence budget and direct quotes."""
         if not docs:
             return ""
         
         context = settings.CONTEXT_TEMPLATE_HEADER
-        for i, doc in enumerate(docs, 1):
+        
+        # Alternate document order by domain to prevent single-domain dominance
+        domain_balanced_docs = self._balance_docs_by_domain(docs)
+        
+        for i, doc in enumerate(domain_balanced_docs, 1):
             # Add document metadata if available
             title = doc.metadata.get('title', f'Document {i}')
             domain = doc.metadata.get('domain', '')
@@ -766,9 +812,81 @@ class VectorStore:
             section_header = settings.CONTEXT_SECTION_TEMPLATE.format(section_number=i)
             if domain and domain != 'Unspecified':
                 section_header += settings.CONTEXT_DOMAIN_TEMPLATE.format(domain=domain)
-            context += section_header + settings.CONTEXT_SECTION_SEPARATOR.format(content=doc.page_content)
+            
+            # Apply evidence budget (800 chars) with direct quote insertion
+            formatted_content = self._format_content_with_evidence_budget(doc.page_content, 800)
+            
+            context += section_header + settings.CONTEXT_SECTION_SEPARATOR.format(content=formatted_content)
         
         return context
+    
+    def _balance_docs_by_domain(self, docs: List[Document]) -> List[Document]:
+        """Balance document order by domain to prevent single-domain dominance."""
+        # Group documents by domain
+        domain_groups = {}
+        for doc in docs:
+            domain = doc.metadata.get('domain', 'other')
+            if domain not in domain_groups:
+                domain_groups[domain] = []
+            domain_groups[domain].append(doc)
+        
+        # Interleave documents from different domains
+        balanced_docs = []
+        max_per_domain = max(len(group) for group in domain_groups.values())
+        
+        for i in range(max_per_domain):
+            for domain, group in domain_groups.items():
+                if i < len(group):
+                    balanced_docs.append(group[i])
+        
+        return balanced_docs
+    
+    def _format_content_with_evidence_budget(self, content: str, max_chars: int) -> str:
+        """Format content with evidence budget and include direct quotes."""
+        if len(content) <= max_chars:
+            return content
+        
+        # Truncate content but try to preserve complete sentences
+        truncated = content[:max_chars]
+        
+        # Find the last complete sentence within budget
+        import re
+        sentences = re.split(r'(?<=[.!?])\s+', truncated)
+        if len(sentences) > 1:
+            # Remove the last incomplete sentence
+            truncated = '. '.join(sentences[:-1]) + '.'
+        
+        # Try to extract a direct quote (≤140 chars) to add grounding
+        quote = self._extract_direct_quote(content, 140)
+        if quote and quote not in truncated:
+            # Add the quote as highlighted text
+            truncated += f'\n\n► "{quote}"'
+        
+        return truncated
+    
+    def _extract_direct_quote(self, content: str, max_chars: int) -> str:
+        """Extract a meaningful direct quote from content."""
+        import re
+        
+        # Look for text in quotes first
+        quote_patterns = [
+            r'"([^"]{20,})"',  # Text in double quotes
+            r"'([^']{20,})'",  # Text in single quotes
+        ]
+        
+        for pattern in quote_patterns:
+            matches = re.findall(pattern, content)
+            for match in matches:
+                if len(match) <= max_chars:
+                    return match
+        
+        # If no quotes found, extract a meaningful sentence
+        sentences = re.split(r'(?<=[.!?])\s+', content)
+        for sentence in sentences:
+            if 20 <= len(sentence) <= max_chars and ('risk' in sentence.lower() or 'AI' in sentence):
+                return sentence
+        
+        return None
     
     def get_scqa_enhanced_documents(self, 
                                    query: str, 

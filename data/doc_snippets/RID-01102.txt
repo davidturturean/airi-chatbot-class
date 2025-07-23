@@ -1,28 +1,28 @@
 Repository ID: RID-01102
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 domain: 3. Misinformation
-search_all_fields: AI Safety Governance Framework 3. Misinformation AI's inherent safety risks 3.1 > False or misleading information 3.1 > False or misleading information AI Risk Database v3 ai_risk_entry
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 risk_category: AI's inherent safety risks
-row: 1079
-scqa_confidence: 1.0
-file_type: ai_risk_entry
+scqa_content_type: risk_description
+specific_domain: 3.1 > False or misleading information
 search_medium_priority: 3.1 > False or misleading information 3.1 > False or misleading information
-timing: 2 - Post-deployment
-scqa_question: What are the implications of this risk?
-search_low_priority: AI Risk Database v3 ai_risk_entry
-title: AI Safety Governance Framework
+subdomain: 3.1 > False or misleading information
 scqa_answer: "\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 2 - Post-deployment
 content_preview: Title: AI Safety Governance Framework\nDomain: 3. Misinformation\nSub-domain: 3.1 > False or misleading information\nRisk Category: AI's inherent safety risks\nRisk Subcategory: Risks from models and algorithms (Risks of unreliable output)\nDescription: "Generative AI can cause hallucinations, meani...
-scqa_complication: thful or unreasonable content but presents it as if it were a fact, leading to biased and misleading information."\nEntity: 2 - AI\nIntent: 2 - Unintenti
-rid: RID-01102
-intent: 2 - Unintentional
-specific_domain: 3.1 > False or misleading information
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_question: What are the implications of this risk?
 scqa_situation: Title: AI Safety Governance Framework\nDomain: 3
-subdomain: 3.1 > False or misleading information
+title: AI Safety Governance Framework
+scqa_complication: thful or unreasonable content but presents it as if it were a fact, leading to biased and misleading information."\nEntity: 2 - AI\nIntent: 2 - Unintenti
 search_high_priority: AI Safety Governance Framework 3. Misinformation AI's inherent safety risks
-scqa_content_type: risk_description
+file_type: ai_risk_entry
+rid: RID-01102
+search_all_fields: AI Safety Governance Framework 3. Misinformation AI's inherent safety risks 3.1 > False or misleading information 3.1 > False or misleading information AI Risk Database v3 ai_risk_entry
 sheet: AI Risk Database v3
+row: 1079
+scqa_confidence: 1.0
+timing: 2 - Post-deployment
+intent: 2 - Unintentional
 entity: 2 - AI
 
 Content:

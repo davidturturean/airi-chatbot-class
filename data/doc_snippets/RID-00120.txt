@@ -1,29 +1,29 @@
 Repository ID: RID-00120
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-search_low_priority: AI Risk Database v3 ai_risk_entry
-row: 97
-scqa_answer: \nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 2 - Post-deployment
+content_preview: Title: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review\nDomain: 5. Human-Computer Interaction\nSub-domain: 5.1 > Overreliance and unsafe use\nRisk Category: Interaction risks\nDescription: Many novel risks posed by generative AI stem from the ways in which humans interact with th...
+subdomain: 5.1 > Overreliance and unsafe use
+scqa_situation: l risks posed by generative AI stem from the ways in which humans interact with these systems. For instance, sources discuss epistemic challenges in distinguishing AI-generated from human conte
 search_medium_priority: 5.1 > Overreliance and unsafe use 5.1 > Overreliance and unsafe use
-scqa_question: What are the implications of this risk?
+search_low_priority: AI Risk Database v3 ai_risk_entry
+file_type: ai_risk_entry
+search_high_priority: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review 5. Human-Computer Interaction Interaction risks
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_complication: Overreliance and unsafe use\nRisk Category: Interaction risks\nDescription: Many novel risks posed by generative AI stem from the ways in which humans in
+scqa_content_type: impact_analysis
+scqa_confidence: 1.0
+intent: 3 - Other
+risk_category: Interaction risks
+timing: 2 - Post-deployment
+sheet: AI Risk Database v3
+search_all_fields: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review 5. Human-Computer Interaction Interaction risks 5.1 > Overreliance and unsafe use 5.1 > Overreliance and unsafe use AI Risk Database v3 ai_risk_entry
+scqa_answer: \nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 2 - Post-deployment
 rid: RID-00120
 domain: 5. Human-Computer Interaction
 title: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review
-timing: 2 - Post-deployment
-scqa_complication: Overreliance and unsafe use\nRisk Category: Interaction risks\nDescription: Many novel risks posed by generative AI stem from the ways in which humans in
-search_all_fields: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review 5. Human-Computer Interaction Interaction risks 5.1 > Overreliance and unsafe use 5.1 > Overreliance and unsafe use AI Risk Database v3 ai_risk_entry
-specific_domain: 5.1 > Overreliance and unsafe use
-content_preview: Title: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review\nDomain: 5. Human-Computer Interaction\nSub-domain: 5.1 > Overreliance and unsafe use\nRisk Category: Interaction risks\nDescription: Many novel risks posed by generative AI stem from the ways in which humans interact with th...
-sheet: AI Risk Database v3
 entity: 3 - Other
-scqa_content_type: impact_analysis
-search_high_priority: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review 5. Human-Computer Interaction Interaction risks
-subdomain: 5.1 > Overreliance and unsafe use
-risk_category: Interaction risks
-scqa_confidence: 1.0
-intent: 3 - Other
-scqa_situation: l risks posed by generative AI stem from the ways in which humans interact with these systems. For instance, sources discuss epistemic challenges in distinguishing AI-generated from human conte
-file_type: ai_risk_entry
+specific_domain: 5.1 > Overreliance and unsafe use
+scqa_question: What are the implications of this risk?
+row: 97
 
 Content:
 Title: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review\nDomain: 5. Human-Computer Interaction\nSub-domain: 5.1 > Overreliance and unsafe use\nRisk Category: Interaction risks\nDescription: Many novel risks posed by generative AI stem from the ways in which humans interact with these systems. For instance, sources discuss epistemic challenges in distinguishing AI-generated from human content. They also address the issue of anthropomorphization, which can lead to an excessive trust in generative AI systems. On a similar note, many papers argue that the use of conversational agents could impact mental well-being or gradually supplant interpersonal communication, potentially leading to a dehumanization of interactions. Additionally, a frequently discussed interaction risk in the literature is the potential of LLMs to manipulate human behavior or to instigate users to engage in unethical or illegal activities.\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 2 - Post-deployment

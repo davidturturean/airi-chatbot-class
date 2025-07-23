@@ -1,0 +1,27 @@
+📝 Test output will be saved to: test_results_20250722_174844.txt
+
+
+[95m[1m================================================================================[0m
+[95m[1m                    AIRI CHATBOT COMPREHENSIVE FEATURE TEST                     [0m
+[95m[1m================================================================================[0m
+
+[93m⏰ Started at: 2025-07-22 17:48:44[0m
+
+[96m[1m🚀 Initializing Services[0m
+[96m-----------------------[0m
+📊 Initializing metadata service...
+Error loading table 'ai_risk_database_v3': Invalid Input Error: Attempting to execute an unsuccessful or closed pending query result
+Error: Conversion Error: Could not convert string '2024-05-06 00:00:00' to INT32
+Traceback (most recent call last):
+  File "/Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/src/core/metadata/metadata_loader_v2.py", line 225, in _load_table
+    self.connection.executemany(insert_sql, values)
+duckdb.duckdb.InvalidInputException: Invalid Input Error: Attempting to execute an unsuccessful or closed pending query result
+Error: Conversion Error: Could not convert string '2024-05-06 00:00:00' to INT32
+Error loading table 'change_log': Invalid Input Error: Attempting to execute an unsuccessful or closed pending query result
+Error: Conversion Error: timestamp field value out of range: "More information", expected format is (YYYY-MM-DD HH:MM:SS[.US][±HH:MM| ZONE])
+Traceback (most recent call last):
+  File "/Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/src/core/metadata/metadata_loader_v2.py", line 225, in _load_table
+    self.connection.executemany(insert_sql, values)
+duckdb.duckdb.InvalidInputException: Invalid Input Error: Attempting to execute an unsuccessful or closed pending query result
+Error: Conversion Error: timestamp field value out of range: "More information", expected format is (YYYY-MM-DD HH:MM:SS[.US][±HH:MM| ZONE])
+No handler found for file type: .xlsx

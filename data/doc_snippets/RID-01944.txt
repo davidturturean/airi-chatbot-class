@@ -1,0 +1,29 @@
+Repository ID: RID-01944
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_complication: Title: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems\nDomain: 4. Malicious Actor
+subdomain: 4.2 > Cyberattacks, weapon development or use, and mass harm
+intent: 1 - Intentional
+content_preview: Title: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems\nDomain: 4. Malicious Actors & Misuse\nSub-domain: 4.2 > Cyberattacks, weapon development or use, and mass harm\nRisk Category: Impacts of AI (Physical)\nRisk Subcategory: AI-based tools attacking...
+row: 1921
+scqa_situation: Title: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems\nDomain: 4. Malicious Actors & Misuse\nSub-domain: 4.2 > Cyberattacks, weapon development or use, a
+search_all_fields: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems 4. Malicious Actors & Misuse Impacts of AI (Physical) 4.2 > Cyberattacks, weapon development or use, and mass harm 4.2 > Cyberattacks, weapon development or use, and mass harm AI Risk Database v3 ai_risk_entry
+risk_category: Impacts of AI (Physical)
+scqa_answer: "\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment
+specific_domain: 4.2 > Cyberattacks, weapon development or use, and mass harm
+search_low_priority: AI Risk Database v3 ai_risk_entry
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+entity: 1 - Human
+search_medium_priority: 4.2 > Cyberattacks, weapon development or use, and mass harm 4.2 > Cyberattacks, weapon development or use, and mass harm
+scqa_question: What are the implications of this risk?
+scqa_content_type: impact_analysis
+domain: 4. Malicious Actors & Misuse
+sheet: AI Risk Database v3
+file_type: ai_risk_entry
+scqa_confidence: 1.0
+timing: 2 - Post-deployment
+rid: RID-01944
+title: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems
+search_high_priority: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems 4. Malicious Actors & Misuse Impacts of AI (Physical)
+
+Content:
+Title: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems\nDomain: 4. Malicious Actors & Misuse\nSub-domain: 4.2 > Cyberattacks, weapon development or use, and mass harm\nRisk Category: Impacts of AI (Physical)\nRisk Subcategory: AI-based tools attacking critical infrastructure\nDescription: "Critical infrastructure can also be damaged without AI integration, for instance, when AI-based tools are used indirectly to aid actions such as in coordinated power outages caused by large-scale user manipulation [159]."\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment

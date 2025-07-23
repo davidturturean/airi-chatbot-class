@@ -1,0 +1,29 @@
+Repository ID: RID-01153
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+timing: 3 - Other
+scqa_confidence: 1.0
+risk_category: Technical and operational risks
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+content_preview: Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.4 > Lack of transparency or interpretability\nRisk Category: Technical and operational risks\nRisk Subcategory: Opacity (the black box problem)\nDescription:...
+scqa_content_type: risk_description
+search_all_fields: Regulating under Uncertainty: Governance Options for Generative AI 7. AI System Safety, Failures, & Limitations Technical and operational risks 7.4 > Lack of transparency or interpretability 7.4 > Lack of transparency or interpretability AI Risk Database v3 ai_risk_entry
+intent: 2 - Unintentional
+scqa_question: What are the implications of this risk?
+domain: 7. AI System Safety, Failures, & Limitations
+scqa_complication: sparency or interpretability\nRisk Category: Technical and operational risks\nRisk Subcategory: Opacity (the black box problem)\nDescription: "Opacity sur
+file_type: ai_risk_entry
+sheet: AI Risk Database v3
+scqa_answer: that, while the inputs and outputs of a system can be observed, developers cannot explain in detail why specific inputs correspond to specific output
+search_medium_priority: 7.4 > Lack of transparency or interpretability 7.4 > Lack of transparency or interpretability
+specific_domain: 7.4 > Lack of transparency or interpretability
+scqa_situation: Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 7
+rid: RID-01153
+entity: 3 - Other
+title: Regulating under Uncertainty: Governance Options for Generative AI
+row: 1130
+subdomain: 7.4 > Lack of transparency or interpretability
+search_low_priority: AI Risk Database v3 ai_risk_entry
+search_high_priority: Regulating under Uncertainty: Governance Options for Generative AI 7. AI System Safety, Failures, & Limitations Technical and operational risks
+
+Content:
+Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.4 > Lack of transparency or interpretability\nRisk Category: Technical and operational risks\nRisk Subcategory: Opacity (the black box problem)\nDescription: "Opacity surrounding the technical, internal decision-making processes of generative AI models is popularly known as the “black box problem.”277 Generative AI models, most ubiquitously built on deep neural networks with hundreds of billions of internal connections,278 have become so complex that their internal decision-making processes are no longer traceable or interpretable to even the most advanced expert observers. This means that, while the inputs and outputs of a system can be observed, developers cannot explain in detail why specific inputs correspond to specific outputs."\nEntity: 3 - Other\nIntent: 2 - Unintentional\nTiming: 3 - Other

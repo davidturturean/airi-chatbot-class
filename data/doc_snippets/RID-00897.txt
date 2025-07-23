@@ -1,0 +1,29 @@
+Repository ID: RID-00897
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+intent: 3 - Other
+scqa_confidence: 1.0
+scqa_answer: s. This section delves into a detailed exposition of specific misaligned behaviors (•) and introduces what we term double edge components (+). These c
+risk_category: Double edge components
+search_high_priority: AI Alignment: A Comprehensive Survey 7. AI System Safety, Failures, & Limitations Double edge components
+scqa_content_type: impact_analysis
+scqa_situation: ism, optimizing for a non-robust proxy may result in misaligned behaviors, potentially leading to even more catastrophic outcomes. This section delves into a detailed exposition of specific misaligned behaviors (•) and introduces what we term double edge components (+). These components are designed to enhance the capability of AI systems in handling real-world settings but also potentially exacerbate misalignment issues. It should be n
+specific_domain: 7.2 > AI possessing dangerous capabilities
+search_all_fields: AI Alignment: A Comprehensive Survey 7. AI System Safety, Failures, & Limitations Double edge components 7.2 > AI possessing dangerous capabilities 7.2 > AI possessing dangerous capabilities AI Risk Database v3 ai_risk_entry
+subdomain: 7.2 > AI possessing dangerous capabilities
+sheet: AI Risk Database v3
+domain: 7. AI System Safety, Failures, & Limitations
+scqa_complication: handling real-world settings but also potentially exacerbate misalignment issues. It should be noted that some of these double edge components (+) remai
+timing: 1 - Pre-deployment
+entity: 2 - AI
+search_low_priority: AI Risk Database v3 ai_risk_entry
+title: AI Alignment: A Comprehensive Survey
+scqa_question: What are the implications of this risk?
+row: 874
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_medium_priority: 7.2 > AI possessing dangerous capabilities 7.2 > AI possessing dangerous capabilities
+rid: RID-00897
+content_preview: Title: AI Alignment: A Comprehensive Survey\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.2 > AI possessing dangerous capabilities\nRisk Category: Double edge components\nDescription: "Drawing from the misalignment mechanism, optimizing for a non-robust proxy may result in mis...
+file_type: ai_risk_entry
+
+Content:
+Title: AI Alignment: A Comprehensive Survey\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.2 > AI possessing dangerous capabilities\nRisk Category: Double edge components\nDescription: "Drawing from the misalignment mechanism, optimizing for a non-robust proxy may result in misaligned behaviors, potentially leading to even more catastrophic outcomes. This section delves into a detailed exposition of specific misaligned behaviors (•) and introduces what we term double edge components (+). These components are designed to enhance the capability of AI systems in handling real-world settings but also potentially exacerbate misalignment issues. It should be noted that some of these double edge components (+) remain speculative. Nevertheless, it is imperative to discuss their potential impact before it is too late, as the transition from controlled to uncontrolled advanced AI systems may be just one step away (Ngo, 2020b). "\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 1 - Pre-deployment

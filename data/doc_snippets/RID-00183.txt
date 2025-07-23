@@ -1,0 +1,29 @@
+Repository ID: RID-00183
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_all_fields: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review 7. AI System Safety, Failures, & Limitations Human-like immoral decisions 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness AI Risk Database v3 ai_risk_entry
+risk_category: Human-like immoral decisions
+row: 160
+scqa_complication: tle: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 7. AI System Safety, Failures,
+entity: 2 - AI
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_answer: "\nEntity: 2 - AI\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment
+file_type: ai_risk_entry
+scqa_situation: e ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category:
+timing: 2 - Post-deployment
+title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review
+search_low_priority: AI Risk Database v3 ai_risk_entry
+search_high_priority: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review 7. AI System Safety, Failures, & Limitations Human-like immoral decisions
+subdomain: 7.3 > Lack of capability or robustness
+search_medium_priority: 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness
+scqa_content_type: risk_description
+scqa_confidence: 1.0
+intent: 1 - Intentional
+specific_domain: 7.3 > Lack of capability or robustness
+sheet: AI Risk Database v3
+content_preview: Title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: Human-like immoral decisions\nRisk Subcategory: Human-like imm...
+domain: 7. AI System Safety, Failures, & Limitations
+scqa_question: 3 > Lack of capability or robustness\nRisk Category: Human-like immoral decisions\nRisk Subcategory: Human-like immoral decisions\nDescription: "If we design our machines to match human levels of ethical decision-making, such machines would then proceed to take some immoral actions (since we humans have had occasion to take immoral actions ourselves)?
+rid: RID-00183
+
+Content:
+Title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: Human-like immoral decisions\nRisk Subcategory: Human-like immoral decisions\nDescription: "If we design our machines to match human levels of ethical decision-making, such machines would then proceed to take some immoral actions (since we humans have had occasion to take immoral actions ourselves)."\nEntity: 2 - AI\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment

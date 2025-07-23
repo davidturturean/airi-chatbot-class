@@ -1,0 +1,29 @@
+Repository ID: RID-01123
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+domain: 5. Human-Computer Interaction
+timing: 3 - Other
+title: AI Safety Governance Framework
+scqa_situation: agency and autonomy\nRisk Category: Safety risks in AI Applications\nRisk Subcategory: Ethical Risks (Risks of challenging traditional social order)\nDescription: "The
+search_all_fields: AI Safety Governance Framework 5. Human-Computer Interaction Safety risks in AI Applications 5.2 > Loss of human agency and autonomy 5.2 > Loss of human agency and autonomy AI Risk Database v3 ai_risk_entry
+entity: 3 - Other
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_high_priority: AI Safety Governance Framework 5. Human-Computer Interaction Safety risks in AI Applications
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_answer: "\nEntity: 3 - Other\nIntent: 2 - Unintentional\nTiming: 3 - Other
+scqa_confidence: 1.0
+scqa_question: What are the implications of this risk?
+specific_domain: 5.2 > Loss of human agency and autonomy
+risk_category: Safety risks in AI Applications
+scqa_complication: of human agency and autonomy\nRisk Category: Safety risks in AI Applications\nRisk Subcategory: Ethical Risks (Risks of challenging traditional social ord
+sheet: AI Risk Database v3
+intent: 2 - Unintentional
+subdomain: 5.2 > Loss of human agency and autonomy
+rid: RID-01123
+file_type: ai_risk_entry
+content_preview: Title: AI Safety Governance Framework\nDomain: 5. Human-Computer Interaction\nSub-domain: 5.2 > Loss of human agency and autonomy\nRisk Category: Safety risks in AI Applications\nRisk Subcategory: Ethical Risks (Risks of challenging traditional social order)\nDescription: "The development and applic...
+row: 1100
+scqa_content_type: risk_description
+search_medium_priority: 5.2 > Loss of human agency and autonomy 5.2 > Loss of human agency and autonomy
+
+Content:
+Title: AI Safety Governance Framework\nDomain: 5. Human-Computer Interaction\nSub-domain: 5.2 > Loss of human agency and autonomy\nRisk Category: Safety risks in AI Applications\nRisk Subcategory: Ethical Risks (Risks of challenging traditional social order)\nDescription: "The development and application of AI may lead to tremendous changes in production tools and relations, accelerating the reconstruction of traditional industry modes, transforming traditional views on employment, fertility, and education, and bringing challenges to the stable performance of traditional social order."\nEntity: 3 - Other\nIntent: 2 - Unintentional\nTiming: 3 - Other

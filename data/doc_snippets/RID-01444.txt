@@ -1,0 +1,29 @@
+Repository ID: RID-01444
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_low_priority: AI Risk Database v3 ai_risk_entry
+sheet: AI Risk Database v3
+scqa_answer: 1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: Alignment failures in existing ML systems\nRisk Subcategory: Instrumental convergence\nDescription: -\nEntity: 2 - AI\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment
+domain: 7. AI System Safety, Failures, & Limitations
+entity: 2 - AI
+risk_category: Alignment failures in existing ML systems
+search_high_priority: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals 7. AI System Safety, Failures, & Limitations Alignment failures in existing ML systems
+subdomain: 7.1 > AI pursuing its own goals in conflict with human goals or values
+intent: 1 - Intentional
+row: 1421
+content_preview: Title: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: Alignment failures in existing ML systems\nRisk Subcategor...
+search_all_fields: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals 7. AI System Safety, Failures, & Limitations Alignment failures in existing ML systems 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values AI Risk Database v3 ai_risk_entry
+scqa_confidence: 1.0
+specific_domain: 7.1 > AI pursuing its own goals in conflict with human goals or values
+file_type: ai_risk_entry
+scqa_content_type: risk_description
+search_medium_priority: 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values
+scqa_situation: ions\nSub-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: Alignment failures in existing ML systems\nRisk Subcategory: Instrumental convergence\nDescription: -\nEntity: 2 - AI\nIntent: 1 - Intentiona
+timing: 2 - Post-deployment
+scqa_complication: t with human goals or values\nRisk Category: Alignment failures in existing ML systems\nRisk Subcategory: Instrumental convergence\nDescription: -\nEntity
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+rid: RID-01444
+scqa_question: What are the implications of this risk?
+title: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals
+
+Content:
+Title: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: Alignment failures in existing ML systems\nRisk Subcategory: Instrumental convergence\nDescription: -\nEntity: 2 - AI\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment

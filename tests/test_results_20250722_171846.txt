@@ -1,0 +1,200 @@
+📝 Test output will be saved to: test_results_20250722_171846.txt
+
+
+[95m[1m================================================================================[0m
+[95m[1m                    AIRI CHATBOT COMPREHENSIVE FEATURE TEST                     [0m
+[95m[1m================================================================================[0m
+
+[93m⏰ Started at: 2025-07-22 17:18:46[0m
+
+[96m[1m🚀 Initializing Services[0m
+[96m-----------------------[0m
+📊 Initializing metadata service...
+[92m✓ Metadata service ready: 0 rows loaded[0m
+🤖 Initializing Gemini model...
+[92m✓ Gemini model ready[0m
+🗄️ Initializing vector store...
+[92m✓ Vector store ready[0m
+
+[92m✓ All services initialized in 1.68 seconds[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                               📊 Metadata Queries                               [0m
+[95m[1m================================================================================[0m
+
+[94m🔍 Query:[0m [1mHow many risks are in the database?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should return total count[0m
+
+[92m📝 Response:[0m
+Counts the total number of rows in the "risks" table, which represents the total number of risks in the database.
+
+**Result**: 0
+
+(META-DB:ai_risks)
+
+[92m📊 Data Returned:[0m 1 items
+[92m🗃️ Sample Data:[0m
+  count_star(): 0
+
+[92m✓ Success! Response time: 0.84s[0m
+
+[94m🔍 Query:[0m [1mWhat are the main risk categories?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should list distinct categories[0m
+
+[92m📝 Response:[0m
+This SQL query selects the distinct values from the "risk_category" column in the "risks" table. The results are ordered alphabetically and limited to 100 rows.
+
+No results found for your query.
+
+(META-DB:ai_risks)
+
+[92m✓ Success! Response time: 0.93s[0m
+
+[94m🔍 Query:[0m [1mList all domains in the repository[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should show all domains[0m
+
+[92m📝 Response:[0m
+This SQL query selects all distinct values from the "domain" column in the "risks" table and orders the results alphabetically.
+
+No results found for your query.
+
+(META-DB:ai_risks)
+
+[92m✓ Success! Response time: 0.81s[0m
+
+[94m🔍 Query:[0m [1mHow many risks in domain 7?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should count domain 7 risks[0m
+
+[92m📝 Response:[0m
+Counts the number of risks where the domain is '7'.
+
+**Result**: 0
+
+(META-DB:ai_risks)
+
+[92m📊 Data Returned:[0m 1 items
+[92m🗃️ Sample Data:[0m
+  count_star(): 0
+
+[92m✓ Success! Response time: 9.33s[0m
+
+[94m🔍 Query:[0m [1mWhat is the earliest publication year?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should find min year[0m
+
+[92m📝 Response:[0m
+This query selects the minimum value from the "year" column in the "risks" table, which represents the earliest publication year.
+
+**Result**: nan
+
+(META-DB:ai_risks)
+
+[92m📊 Data Returned:[0m 1 items
+[92m🗃️ Sample Data:[0m
+  min("year"): nan
+
+[92m✓ Success! Response time: 1.03s[0m
+
+[94m🔍 Query:[0m [1mShow me the 10th risk in the database[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should return specific row[0m
+
+[92m📝 Response:[0m
+This query selects all columns from the "risks" table and returns only the 10th row (OFFSET 9).
+
+No results found for your query.
+
+(META-DB:ai_risks)
+
+[92m✓ Success! Response time: 1.25s[0m
+
+[94m🔍 Query:[0m [1mCount risks by entity type[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should group by entity[0m
+
+[92m📝 Response:[0m
+Counts the number of risks for each entity type.
+
+No results found for your query.
+
+(META-DB:ai_risks)
+
+[92m✓ Success! Response time: 0.83s[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                             🔬 Technical AI Queries                             [0m
+[95m[1m================================================================================[0m
+
+[94m🔍 Query:[0m [1mHow do transformer architectures work?[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should explain transformers[0m
+
+[92m📝 Response:[0m
+## Transformer Architecture: A Technical Explanation
+
+The Transformer architecture, introduced in the seminal paper "Attention is All You Need" [1], revolutionized sequence transduction tasks by dispensing with recurrent neural networks (RNNs) and convolutional neural networks (CNNs) in favor of a mechanism called **self-attention**. This allows for parallel processing of the input sequence, leading to significant speedups and improved performance, especially on long sequences.
+
+**1. Core Concep... [7964 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m📚 Sources:[0m
+  [1] Attention Is All You Need
+      URL: https://arxiv.org/abs/1706.03762
+
+[92m✓ Success! Response time: 9.62s[0m
+
+[94m🔍 Query:[0m [1mExplain attention mechanism in neural networks[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should detail attention[0m
+
+[92m📝 Response:[0m
+## Attention Mechanism in Neural Networks: A Technical Explanation
+
+The attention mechanism is a powerful technique used in neural networks, particularly in sequence-to-sequence models, that allows the model to focus on relevant parts of the input sequence when generating the output sequence.  It addresses the limitations of fixed-length context vectors used in traditional encoder-decoder architectures, which can struggle with long sequences. The core idea is to assign different weights to diffe... [6194 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m📚 Sources:[0m
+  [1] Neural Machine Translation by Jointly Learning to Align and Translate
+      URL: https://arxiv.org/abs/1409.0473
+
+[92m✓ Success! Response time: 9.35s[0m
+
+[94m🔍 Query:[0m [1mWhat is backpropagation in deep learning?[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should explain backprop[0m
+
+[92m📝 Response:[0m
+### Backpropagation in Deep Learning: A Technical Explanation
+
+Backpropagation, short for "backward propagation of errors," is a supervised learning algorithm used to train artificial neural networks (ANNs), particularly deep neural networks (DNNs). It is a specific application of the chain rule of calculus to efficiently compute the gradient of a loss function with respect to the weights and biases in the network. This gradient is then used to update the network's parameters via optimization al... [6980 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m📚 Sources:[0m
+  [1] Automatic Differentiation in Machine Learning: a Survey
+      URL: https://arxiv.org/abs/1502.05767
+
+[92m✓ Success! Response time: 8.91s[0m
+
+[94m🔍 Query:[0m [1mHow does BERT handle bidirectional context?[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should explain BERT[0m
+
+[92m📝 Response:[0m
+### BERT's Handling of Bidirectional Context: A Technical Explanation
+
+BERT (Bidirectional Encoder Representations from Transformers) achieves its powerful language understanding capabilities through a novel approach to handling bidirectional context during pre-training.  Unlike previous models that either used unidirectional language models or shallow concatenation of independently trained left-to-right and right-to-left models, BERT is designed to pre-train deep bidirectional representations b... [5916 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m📚 Sources:[0m
+  [1] BERT: Pre-training of Deep Bidirectional Transformers
+      URL: https://arxiv.org/abs/1810.04805
+
+[92m✓ Success! Response time: 8.74s[0m
+
+[94m🔍 Query:[0m [1mExplain vision transformers (ViT)[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should cover ViT[0m

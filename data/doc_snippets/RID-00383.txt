@@ -1,0 +1,29 @@
+Repository ID: RID-00383
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_answer: The company has now been fined for harvesting user data without consent to produce the chatbot (Dobberstein, 2021)
+file_type: ai_risk_entry
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_content_type: case_study
+scqa_situation: Title: Ethical and social risks of harm from language models\nRisk Category: Information Hazards\nRisk Subcategory: Compromising privacy by leaking private infiormation\nAdditional Evidence: Example: "Privacy leaks occurred when Scatterlab’s chatbot Lee Luda disclosed, ‘random names, addresses, and bank account numbers from the training dataset
+search_high_priority: Ethical and social risks of harm from language models Unspecified Information Hazards
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+specific_domain: Unspecified
+domain: Unspecified
+search_medium_priority: Unspecified
+timing: 
+intent: 
+content_preview: Title: Ethical and social risks of harm from language models\nRisk Category: Information Hazards\nRisk Subcategory: Compromising privacy by leaking private infiormation\nAdditional Evidence: Example: "Privacy leaks occurred when Scatterlab’s chatbot Lee Luda disclosed, ‘random names, addresses, and ...
+scqa_question: What are the implications of this risk?
+sheet: AI Risk Database v3
+search_all_fields: Ethical and social risks of harm from language models Unspecified Information Hazards Unspecified AI Risk Database v3 ai_risk_entry
+row: 360
+subdomain: 
+scqa_confidence: 1.0
+title: Ethical and social risks of harm from language models
+rid: RID-00383
+scqa_complication: Title: Ethical and social risks of harm from language models\nRisk Category: Information Hazards\nRisk Subcategory: Compromising privacy by leaking pr
+risk_category: Information Hazards
+entity: 
+
+Content:
+Title: Ethical and social risks of harm from language models\nRisk Category: Information Hazards\nRisk Subcategory: Compromising privacy by leaking private infiormation\nAdditional Evidence: Example: "Privacy leaks occurred when Scatterlab’s chatbot Lee Luda disclosed, ‘random names, addresses, and bank account numbers from the training dataset. ScatterLab had even uploaded a training model of Luda on GitHub, which included data that exposed personal information ... triggering a class-action lawsuit against ScatterLab’ (Kim, 2021). The company has now been fined for harvesting user data without consent to produce the chatbot (Dobberstein, 2021)."

@@ -1,32 +1,32 @@
 Repository ID: RID-00943
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-search_low_priority: AI Risk Database v3 ai_risk_entry
-sheet: AI Risk Database v3
-specific_domain: Unspecified
-intent: 
-scqa_situation: tions and
-governance mechanisms to ensure privacy in the context of AI technologies."
-scqa_complication: Systematic Literature Review\nRisk Category: Human-AI interaction\nRisk Subcategory: Privacy protection\nAdditional Evidence: "Privacy threats to citizens
-timing: 
-file_type: ai_risk_entry
-search_medium_priority: Unspecified
-title: What Ethics Can Say on Artificial Intelligence: Insights from a Systematic Literature Review
-search_all_fields: What Ethics Can Say on Artificial Intelligence: Insights from a Systematic Literature Review Unspecified Human-AI interaction Unspecified AI Risk Database v3 ai_risk_entry
-scqa_content_type: risk_description
-search_high_priority: What Ethics Can Say on Artificial Intelligence: Insights from a Systematic Literature Review Unspecified Human-AI interaction
-scqa_confidence: 1.0
-entity: 
+scqa_question: What are the implications of this risk?
 scqa_answer: This subset underscores the need for global regulations and
 governance mechanisms to ensure privacy in the context of AI technologies
-scqa_question: What are the implications of this risk?
-domain: Unspecified
-subdomain: 
 url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_all_fields: What Ethics Can Say on Artificial Intelligence: Insights from a Systematic Literature Review Unspecified Human-AI interaction Unspecified AI Risk Database v3 ai_risk_entry
 rid: RID-00943
-risk_category: Human-AI interaction
-row: 920
+scqa_confidence: 1.0
+title: What Ethics Can Say on Artificial Intelligence: Insights from a Systematic Literature Review
+search_medium_priority: Unspecified
+search_low_priority: AI Risk Database v3 ai_risk_entry
+intent: 
+subdomain: 
 content_preview: Title: What Ethics Can Say on Artificial Intelligence: Insights from a Systematic Literature Review\nRisk Category: Human-AI interaction\nRisk Subcategory: Privacy protection\nAdditional Evidence: "Privacy threats to citizens (10.5%). This subset underscores the need for global regulations and
 gover...
+timing: 
+scqa_situation: tions and
+governance mechanisms to ensure privacy in the context of AI technologies."
+scqa_content_type: risk_description
+search_high_priority: What Ethics Can Say on Artificial Intelligence: Insights from a Systematic Literature Review Unspecified Human-AI interaction
+scqa_complication: Systematic Literature Review\nRisk Category: Human-AI interaction\nRisk Subcategory: Privacy protection\nAdditional Evidence: "Privacy threats to citizens
+entity: 
+specific_domain: Unspecified
+sheet: AI Risk Database v3
+file_type: ai_risk_entry
+domain: Unspecified
+row: 920
+risk_category: Human-AI interaction
 
 Content:
 Title: What Ethics Can Say on Artificial Intelligence: Insights from a Systematic Literature Review\nRisk Category: Human-AI interaction\nRisk Subcategory: Privacy protection\nAdditional Evidence: "Privacy threats to citizens (10.5%). This subset underscores the need for global regulations and

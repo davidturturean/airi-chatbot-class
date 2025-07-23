@@ -1,29 +1,29 @@
 Repository ID: RID-00956
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-search_medium_priority: 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation
-scqa_content_type: impact_analysis
-title: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks
-sheet: AI Risk Database v3
-search_low_priority: AI Risk Database v3 ai_risk_entry
-subdomain: 1.1 > Unfair discrimination and misrepresentation
-row: 933
-search_all_fields: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks 1. Discrimination & Toxicity Bias and fairness 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation AI Risk Database v3 ai_risk_entry
-scqa_confidence: 1.0
-risk_category: Bias and fairness
-rid: RID-00956
-scqa_question: What are the implications of this risk?
-entity: 2 - AI
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-intent: 2 - Unintentional
-scqa_complication: Intelligence: Recognizing the Risks\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: B
-domain: 1. Discrimination & Toxicity
-file_type: ai_risk_entry
 specific_domain: 1.1 > Unfair discrimination and misrepresentation
-content_preview: Title: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Bias and fairness\nDescription: "Participants were concerned that AI systems might perpetuat...
-scqa_answer: AI judgements may have an unjust impact on specific populations, increasing socioeconomic inequalities and fostering discriminatory practises. Partic
-search_high_priority: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks 1. Discrimination & Toxicity Bias and fairness
+search_all_fields: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks 1. Discrimination & Toxicity Bias and fairness 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation AI Risk Database v3 ai_risk_entry
+rid: RID-00956
 timing: 3 - Other
+scqa_confidence: 1.0
 scqa_situation: Title: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Bias and fairness\nDescription: "Participants were concerned that AI systems might perpetuate current prejudices and discrimination, notably in hiring, lending and law enforcem
+entity: 2 - AI
+content_preview: Title: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Bias and fairness\nDescription: "Participants were concerned that AI systems might perpetuat...
+row: 933
+subdomain: 1.1 > Unfair discrimination and misrepresentation
+title: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks
+intent: 2 - Unintentional
+scqa_question: What are the implications of this risk?
+risk_category: Bias and fairness
+domain: 1. Discrimination & Toxicity
+scqa_answer: AI judgements may have an unjust impact on specific populations, increasing socioeconomic inequalities and fostering discriminatory practises. Partic
+file_type: ai_risk_entry
+scqa_content_type: impact_analysis
+scqa_complication: Intelligence: Recognizing the Risks\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: B
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_low_priority: AI Risk Database v3 ai_risk_entry
+sheet: AI Risk Database v3
+search_high_priority: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks 1. Discrimination & Toxicity Bias and fairness
+search_medium_priority: 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation
 
 Content:
 Title: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Bias and fairness\nDescription: "Participants were concerned that AI systems might perpetuate current prejudices and discrimination, notably in hiring, lending and law enforcement. They stressed the importance of designers creating AI systems that favour justice and avoid biases. The possibility that AI systems may unwittingly perpetuate existing prejudices and discrimination, particularly in sensitive industries such as employment, lending and law enforcement, raises ethical concerns about AI as well as bias and justice issues (Table 1). Because AI systems are trained on historical data, they may inherit and reproduce biases from previous datasets. As a result, AI judgements may have an unjust impact on specific populations, increasing socioeconomic inequalities and fostering discriminatory practises. Participants in the research emphasize the need of AI developers creating systems that promote justice and actively seek to minimise biases."\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 3 - Other

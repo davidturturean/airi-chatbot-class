@@ -1,0 +1,29 @@
+Repository ID: RID-01844
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+timing: 2 - Post-deployment
+scqa_complication: Title: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems\nDomain: 2. Privacy & Secur
+scqa_content_type: case_study
+content_preview: Title: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems\nDomain: 2. Privacy & Security\nSub-domain: 2.2 > AI system security vulnerabilities and attacks\nRisk Category: Model Development\nRisk Subcategory: Training-related (Adversarial examples)\nDescr...
+scqa_situation: Title: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems\nDomain: 2. Privacy & Security\nSub-domain: 2.2 > AI system security vulnerabilities and attacks\nR
+domain: 2. Privacy & Security
+scqa_confidence: 1.0
+scqa_question: What are the implications of this risk?
+risk_category: Model Development
+search_all_fields: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems 2. Privacy & Security Model Development 2.2 > AI system security vulnerabilities and attacks 2.2 > AI system security vulnerabilities and attacks AI Risk Database v3 ai_risk_entry
+search_high_priority: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems 2. Privacy & Security Model Development
+file_type: ai_risk_entry
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_low_priority: AI Risk Database v3 ai_risk_entry
+sheet: AI Risk Database v3
+scqa_answer: "\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment
+rid: RID-01844
+search_medium_priority: 2.2 > AI system security vulnerabilities and attacks 2.2 > AI system security vulnerabilities and attacks
+intent: 1 - Intentional
+subdomain: 2.2 > AI system security vulnerabilities and attacks
+specific_domain: 2.2 > AI system security vulnerabilities and attacks
+row: 1821
+title: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems
+entity: 1 - Human
+
+Content:
+Title: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems\nDomain: 2. Privacy & Security\nSub-domain: 2.2 > AI system security vulnerabilities and attacks\nRisk Category: Model Development\nRisk Subcategory: Training-related (Adversarial examples)\nDescription: "Adversarial examples [198, 83] refer to data that are designed to fool an AI model by inducing unintended behavior. They do this by exploiting spurious correlations learned by the model. They are part of inference-time attacks, where the examples are test examples. They generalize to different model architectures and models trained on different training sets."\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment

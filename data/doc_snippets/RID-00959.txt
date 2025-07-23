@@ -1,0 +1,29 @@
+Repository ID: RID-00959
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_answer: of trust and reliability concerns. These issues are of paramount importance in ensuring the protection of user welfare and the promotion of societal
+rid: RID-00959
+content_preview: Title: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.4 > Lack of transparency or interpretability\nRisk Category: Trust and reliability\nDescription: "The participants of the study emphasized t...
+search_high_priority: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks 7. AI System Safety, Failures, & Limitations Trust and reliability
+row: 936
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+subdomain: 7.4 > Lack of transparency or interpretability
+entity: 2 - AI
+intent: 3 - Other
+scqa_complication: Intelligence: Recognizing the Risks\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.4 > Lack of transparency or interpretability\nRis
+search_all_fields: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks 7. AI System Safety, Failures, & Limitations Trust and reliability 7.4 > Lack of transparency or interpretability 7.4 > Lack of transparency or interpretability AI Risk Database v3 ai_risk_entry
+risk_category: Trust and reliability
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_content_type: mitigation_strategy
+sheet: AI Risk Database v3
+specific_domain: 7.4 > Lack of transparency or interpretability
+search_medium_priority: 7.4 > Lack of transparency or interpretability 7.4 > Lack of transparency or interpretability
+title: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks
+file_type: ai_risk_entry
+scqa_question: What are the implications of this risk?
+scqa_situation: Title: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.4 > Lack of transparency or interpretability\nRisk C
+domain: 7. AI System Safety, Failures, & Limitations
+timing: 2 - Post-deployment
+scqa_confidence: 1.0
+
+Content:
+Title: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.4 > Lack of transparency or interpretability\nRisk Category: Trust and reliability\nDescription: "The participants of the study emphasized the importance of trustworthiness and reliability in AI systems. The authors emphasized the importance of preserving precision and objectivity in the outcomes produced by AI systems, while also ensuring transparency in their decision-making procedures. The significance of reliability and credibility in AI systems is escalating in tandem with the proliferation of these technologies across diverse domains of society. This underscores the importance of ensuring user confidence. The concern regarding the dependability of AI systems and their inherent biases is a common issue among research participants, emphasizing the necessity for stringent validation procedures and transparency. Establishing and implementing dependable standards, ensuring impartial algorithms and upholding transparency in the decision-making process are critical measures for addressing ethical considerations and fostering confidence in AI systems. The advancement and implementation of AI technology in an ethical manner is contingent upon the successful resolution of trust and reliability concerns. These issues are of paramount importance in ensuring the protection of user welfare and the promotion of societal advantages. The utilization of artificial intelligence was found to be a subject of significant concern for the majority of interviewees, particularly with regards to trust and reliability (Table 1, Figure 1). The establishment of trust in AI systems was highlighted as a crucial factor for facilitating their widespread adoption by two of the participants, specifically Participant 4 and 7. The authors reiterated the importance of prioritising the advancement of reliable and unbiased algorithms"\nEntity:

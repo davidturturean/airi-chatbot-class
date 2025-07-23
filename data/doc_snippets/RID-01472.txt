@@ -1,0 +1,29 @@
+Repository ID: RID-01472
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_complication: he invisibility of this contribution arguably contributes to a misunderstanding of AI capabilities.7"\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 1 -
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_confidence: 1.0
+scqa_question: What are the implications of this risk?
+specific_domain: 6.2 > Increased inequality and decline in employment quality
+content_preview: Title: Ten Hard Problems in Artificial Intelligence We Must Get Right\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.2 > Increased inequality and decline in employment quality\nRisk Category: Negative impacts of AI use\nRisk Subcategory: Under-recognized work\nDescription: "Without train...
+search_high_priority: Ten Hard Problems in Artificial Intelligence We Must Get Right 6. Socioeconomic and Environmental Negative impacts of AI use
+search_low_priority: AI Risk Database v3 ai_risk_entry
+timing: 1 - Pre-deployment
+title: Ten Hard Problems in Artificial Intelligence We Must Get Right
+sheet: AI Risk Database v3
+risk_category: Negative impacts of AI use
+scqa_answer: 7"\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 1 - Pre-deployment
+scqa_situation: Title: Ten Hard Problems in Artificial Intelligence We Must Get Right\nDomain: 6
+entity: 3 - Other
+row: 1449
+scqa_content_type: impact_analysis
+rid: RID-01472
+search_all_fields: Ten Hard Problems in Artificial Intelligence We Must Get Right 6. Socioeconomic and Environmental Negative impacts of AI use 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality AI Risk Database v3 ai_risk_entry
+search_medium_priority: 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality
+intent: 3 - Other
+domain: 6. Socioeconomic and Environmental
+file_type: ai_risk_entry
+subdomain: 6.2 > Increased inequality and decline in employment quality
+
+Content:
+Title: Ten Hard Problems in Artificial Intelligence We Must Get Right\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.2 > Increased inequality and decline in employment quality\nRisk Category: Negative impacts of AI use\nRisk Subcategory: Under-recognized work\nDescription: "Without training data, ML cannot take place. Much of this data comes from paid clickwork (also called “platform work” [170] or “microwork” [558]), unpaid crowdsourcing, and unpaid user behavior capture. Clickworkers, mainly in the global south, perform repetitive data-labeling tasks for use in the training of ML models [558]. The market value of such annotations “is projected to reach $13.7 billion by 2030” [228] and the annotation industry is widely reported to have little concern for workers’ rights. Besides welfare and rights, the invisibility of this contribution arguably contributes to a misunderstanding of AI capabilities.7"\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 1 - Pre-deployment

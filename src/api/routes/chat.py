@@ -84,92 +84,68 @@ def stream_message():
                 
                 time.sleep(0.3)
                 
-                # 1. Analyze the query
-                yield json.dumps("Analyzing your question...") + '\n'
-                query_type, domain = chat_service.query_processor.analyze_query(message)
+                # 1. Process the query through chat service
+                response_text, docs = chat_service.process_query(message, conversation_id)
                 
-                # 2. Retrieve documents
-                yield json.dumps("Searching repository for relevant information...") + '\n'
-                docs = chat_service._retrieve_documents(message, query_type)
+                # Check what type of results we got
+                is_metadata_query = isinstance(docs, list) and docs and isinstance(docs[0], dict)
+                is_technical_query = hasattr(docs, '__iter__') and docs and hasattr(docs[0], 'title') and hasattr(docs[0], 'url')
                 
-                if docs:
-                    if query_type in ["employment", "socioeconomic"]:
-                        employment_count = len([doc for doc in docs if any(keyword in doc.metadata.get('domain', '').lower() + doc.metadata.get('subdomain', '').lower() + doc.metadata.get('specific_domain', '').lower() 
-                                                                          for keyword in ['employ', 'job', 'work', 'labor', 'socioeconomic', 'economic', 'inequality'])])
-                        if employment_count > 0:
-                            yield json.dumps(f"Found {employment_count} employment-specific documents and {len(docs) - employment_count} additional relevant documents.") + '\n'
-                        else:
-                            yield json.dumps(f"Found {len(docs)} relevant documents in the repository.") + '\n'
-                    else:
-                        yield json.dumps(f"Found {len(docs)} relevant documents in the repository.") + '\n'
-                else:
-                    yield json.dumps("No specific documents found. Using general knowledge.") + '\n'
+                # Stream the response
+                words = response_text.split()
+                for i in range(0, len(words), 5):  # Send 5 words at a time
+                    chunk = ' '.join(words[i:i+5]) + ' '
+                    yield json.dumps(chunk) + '\n'
+                    time.sleep(0.1)
                 
-                # 3. Format context
-                context = chat_service._format_context(docs, query_type)
+                # Format documents for Related Documents tab
+                related_docs = []
                 
-                # 4. Generate response
-                yield json.dumps("Generating response...") + '\n'
+                if is_metadata_query:
+                    # Convert metadata results to document format
+                    for i, result in enumerate(docs[:10]):  # Limit to 10 documents
+                        # Try to extract meaningful title and create reference
+                        title = "Metadata Result"
+                        if 'risk_id' in result:
+                            title = f"Risk {result['risk_id']}"
+                        elif 'domain' in result:
+                            title = f"Domain: {result['domain']}"
+                        elif 'category' in result:
+                            title = f"Category: {result['category']}"
+                        
+                        # Create a pseudo-URL for metadata results
+                        url = f"metadata://result/{i}"
+                        
+                        # Add first non-null field value as subtitle
+                        for key, value in result.items():
+                            if value and key not in ['risk_id', 'domain', 'category']:
+                                title += f" - {str(value)[:50]}"
+                                break
+                        
+                        related_docs.append({"title": title, "url": url})
                 
-                if chat_service.gemini_model:
-                    try:
-                        # Prepare history
-                        history = chat_service._get_conversation_history(conversation_id)
-                        
-                        # Generate enhanced prompt
-                        prompt = chat_service.query_processor.generate_prompt(message, query_type, context)
-                        
-                        # Generate complete response first
-                        if hasattr(chat_service.gemini_model, 'generate_stream'):
-                            # For now, collect all chunks then enhance citations
-                            complete_response = ""
-                            for chunk in chat_service.gemini_model.generate_stream(prompt, history):
-                                complete_response += chunk
-                        else:
-                            # Non-streaming generation
-                            complete_response = chat_service.gemini_model.generate(prompt, history)
-                        
-                        # Apply citations to complete response
-                        enhanced_response = chat_service.citation_service.enhance_response_with_citations(complete_response, docs)
-                        
-                        # Now stream the enhanced response with proper citations
-                        words = enhanced_response.split()
-                        for i in range(0, len(words), 5):  # Send 5 words at a time
-                            chunk = ' '.join(words[i:i+5]) + ' '
-                            yield json.dumps(chunk) + '\n'
-                            time.sleep(0.1)
-                        
-                        # Send the related documents
-                        if docs:
-                            related_docs = []
-                            for doc in docs:
-                                url = doc.metadata.get("url", "#")
-                                if os.path.exists(url):
-                                    url = f"local-file://{url}"
-                                related_docs.append({"title": doc.metadata.get("title", "Unknown Title"), "url": url})
-                            yield json.dumps({"related_documents": related_docs}) + '\n'
-
-                        # Update conversation history
-                        chat_service._update_conversation_history(conversation_id, message, enhanced_response)
-                        
-                    except Exception as e:
-                        logger.error(f"Error generating response: {str(e)}")
-                        error_message = f"I encountered an error while generating a response: {str(e)}"
-                        yield json.dumps(error_message) + '\n'
-                else:
-                    # Fallback if Gemini model is not available
-                    fallback_response = chat_service._create_fallback_response(context, message)
-                    
-                    # Stream the fallback response
-                    words = fallback_response.split()
-                    for i in range(0, len(words), 5):
-                        chunk = ' '.join(words[i:i+5]) + ' '
-                        yield json.dumps(chunk) + '\n'
-                        time.sleep(0.1)
-                    
-                    # Update history
-                    enhanced_response = chat_service.citation_service.enhance_response_with_citations(fallback_response, docs)
-                    chat_service._update_conversation_history(conversation_id, message, enhanced_response)
+                elif is_technical_query:
+                    # Convert technical sources to document format
+                    for source in docs:
+                        related_docs.append({
+                            "title": source.title,
+                            "url": source.url
+                        })
+                
+                elif docs and hasattr(docs[0], 'metadata'):
+                    # Regular documents from vector store
+                    for doc in docs:
+                        url = doc.metadata.get("url", "#")
+                        if os.path.exists(url):
+                            url = f"local-file://{url}"
+                        related_docs.append({
+                            "title": doc.metadata.get("title", "Unknown Title"), 
+                            "url": url
+                        })
+                
+                # Send the related documents
+                if related_docs:
+                    yield json.dumps({"related_documents": related_docs}) + '\n'
                 
             except Exception as e:
                 logger.error(f"Error in streaming generator: {str(e)}")

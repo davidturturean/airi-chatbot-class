@@ -1,0 +1,785 @@
+📝 Test output will be saved to: test_results_20250722_180445.txt
+
+
+[95m[1m================================================================================[0m
+[95m[1m                    AIRI CHATBOT COMPREHENSIVE FEATURE TEST                     [0m
+[95m[1m================================================================================[0m
+
+[93m⏰ Started at: 2025-07-22 18:04:45[0m
+
+[96m[1m🚀 Initializing Services[0m
+[96m-----------------------[0m
+📊 Initializing metadata service...
+[92m✓ Metadata service ready: 10826 rows loaded[0m
+🤖 Initializing Gemini model...
+[92m✓ Gemini model ready[0m
+🗄️ Initializing vector store...
+[92m✓ Vector store ready[0m
+
+[92m✓ All services initialized in 10.74 seconds[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                               📊 Metadata Queries                               [0m
+[95m[1m================================================================================[0m
+
+[94m🔍 Query:[0m [1mHow many risks are in the database?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should return total count[0m
+
+[92m📝 Response:[0m
+Counts the total number of risks in the ai_risk_database_v3 table.
+
+**Result**: 2242
+
+[92m📊 Data Returned:[0m 1 items
+[92m🗃️ Sample Data:[0m
+  count_star(): 2242
+
+[92m✓ Success! Response time: 8.55s[0m
+
+[94m🔍 Query:[0m [1mWhat are the main risk categories?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should list distinct categories[0m
+
+[92m📝 Response:[0m
+This SQL query selects all distinct values from the "risk_category" column in the ai_risk_database_v3 table, which represents the main risk categories.
+
+Found 493 results.
+
+**Sample results (first 10):**
+1. risk_category: Type 2: Bigger than expected
+2. risk_category: Type 3: Worse than expected
+3. risk_category: Unhelpful Uses
+4. risk_category: Model Attacks
+5. risk_category: Intellectual property rights violations
+6. risk_category: Enabling malicious actors and harmful actions
+7. risk_category... [659 total chars]
+
+[92m📊 Data Returned:[0m 493 items
+[92m🗃️ Sample Data:[0m
+  risk_category: Type 2: Bigger than expected
+
+[92m✓ Success! Response time: 8.59s[0m
+
+[94m🔍 Query:[0m [1mList all domains in the repository[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should show all domains[0m
+
+[92m📝 Response:[0m
+This SQL query selects all distinct values from the "domain" column in the "ai_risk_database_v3" table. This will provide a list of all unique domains present in the repository.
+
+Found 8 results.
+
+**Results:**
+1. domain: 6. Socioeconomic and Environmental
+2. domain: 5. Human-Computer Interaction
+3. domain: 2. Privacy & Security
+4. domain: 7. AI System Safety, Failures, & Limitations
+5. domain: 1. Discrimination & Toxicity
+6. domain: None
+7. domain: 4. Malicious Actors & Misuse
+8. domain: 3. Misi... [510 total chars]
+
+[92m📊 Data Returned:[0m 8 items
+[92m🗃️ Sample Data:[0m
+  domain: 6. Socioeconomic and Environmental
+
+[92m✓ Success! Response time: 8.49s[0m
+
+[94m🔍 Query:[0m [1mHow many risks in domain 7?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should count domain 7 risks[0m
+
+[92m📝 Response:[0m
+Error executing query: Binder Error: Referenced column "7. AI System Safety, Failures, & Limitations" not found in FROM clause!
+Candidate bindings: "ai_risk_database_v3.description"
+LINE 1: ...v3 WHERE domain LIKE '%7%' OR domain = "7. AI System Safety, Failures, & Limit...
+                                                  ^
+
+[92m✓ Success! Response time: 35.71s[0m
+
+[94m🔍 Query:[0m [1mWhat is the earliest publication year?[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should find min year[0m
+
+[92m📝 Response:[0m
+This query selects the minimum (earliest) date from the "date" column in the "change_log" table, which represents the earliest publication year.
+
+**Result**: 2024-08-14 00:00:00
+
+[92m📊 Data Returned:[0m 1 items
+[92m🗃️ Sample Data:[0m
+  min(date): 2024-08-14 00:00:00
+
+[92m✓ Success! Response time: 8.67s[0m
+
+[94m🔍 Query:[0m [1mShow me the 10th risk in the database[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should return specific row[0m
+
+[92m📝 Response:[0m
+This query selects all columns from the ai_risk_database_v3 table and returns the 10th row (offset 9).
+
+Found 1 results.
+
+**Results:**
+1. id: 10, title: TASRA: a Taxonomy and Analysis of Societal-Scale Risks from AI, domain: None, intent: None, paper_id: 1.0, subcat_id: 0.0, addev_id: 2.0, quickref: Critch2023, cat_id: 3.0, pdef: 3, additional_ev: "deception: if the system’s learning objective is defined entirely by user feedback, it might achieve that objective partly by tricking the user into ... [738 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m🗃️ Sample Data:[0m
+  id: 10
+  title: TASRA: a Taxonomy and Analysis of Societal-Scale Risks from AI
+  domain: None
+  intent: None
+  paper_id: 1.0
+
+[92m✓ Success! Response time: 18.21s[0m
+
+[94m🔍 Query:[0m [1mCount risks by entity type[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should group by entity[0m
+
+[92m📝 Response:[0m
+This query counts the number of risks for each entity type in the ai_risk_database_v3 table.
+
+Found 5 results.
+
+**Results:**
+1. entity: 1 - Human, count_star(): 539
+2. entity: 3 - Other, count_star(): 279
+3. entity: 4 - Not coded, count_star(): 219
+4. entity: None, count_star(): 631
+5. entity: 2 - AI, count_star(): 574
+
+[92m📊 Data Returned:[0m 5 items
+[92m🗃️ Sample Data:[0m
+  entity: 1 - Human
+  count_star(): 539
+
+[92m✓ Success! Response time: 16.23s[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                             🔬 Technical AI Queries                             [0m
+[95m[1m================================================================================[0m
+
+[94m🔍 Query:[0m [1mHow do transformer architectures work?[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should explain transformers[0m
+
+[92m📝 Response:[0m
+## Transformer Architecture: A Technical Explanation
+
+The Transformer architecture, introduced in the seminal paper "Attention is All You Need" [1], revolutionized sequence-to-sequence modeling by dispensing with recurrent neural networks (RNNs) and convolutional neural networks (CNNs) entirely, relying instead on **self-attention mechanisms**. This allows for parallelization and significantly improved performance, especially on long sequences.
+
+**1. Core Concepts:**
+
+*   **Attention Mechanism:*... [7006 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m📚 Sources:[0m
+  [1] Attention Is All You Need
+      URL: https://arxiv.org/abs/1706.03762
+
+[92m✓ Success! Response time: 8.29s[0m
+
+[94m🔍 Query:[0m [1mExplain attention mechanism in neural networks[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should detail attention[0m
+
+[92m📝 Response:[0m
+## Attention Mechanism in Neural Networks: A Technical Explanation
+
+The attention mechanism is a powerful technique used in neural networks, particularly in sequence-to-sequence models, that allows the model to focus on relevant parts of the input sequence when generating the output sequence.  Instead of relying solely on a fixed-length context vector (as in traditional encoder-decoder models), the attention mechanism enables the decoder to selectively attend to different parts of the input sequ... [6685 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m📚 Sources:[0m
+  [1] Neural Machine Translation by Jointly Learning to Align and Translate
+      URL: https://arxiv.org/abs/1409.0473
+
+[92m✓ Success! Response time: 10.02s[0m
+
+[94m🔍 Query:[0m [1mWhat is backpropagation in deep learning?[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should explain backprop[0m
+
+[92m📝 Response:[0m
+### Backpropagation in Deep Learning: A Technical Explanation
+
+Backpropagation, short for "backward propagation of errors," is a supervised learning algorithm used to train artificial neural networks (ANNs), particularly deep neural networks (DNNs). It's a specific application of the chain rule of calculus to efficiently compute the gradient of a loss function with respect to the weights and biases in the network. This gradient is then used to update the network's parameters via optimization alg... [7795 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m📚 Sources:[0m
+  [1] Automatic Differentiation in Machine Learning: a Survey
+      URL: https://arxiv.org/abs/1502.05767
+
+[92m✓ Success! Response time: 14.73s[0m
+
+[94m🔍 Query:[0m [1mHow does BERT handle bidirectional context?[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should explain BERT[0m
+
+[92m📝 Response:[0m
+## BERT's Handling of Bidirectional Context: A Technical Explanation
+
+BERT (Bidirectional Encoder Representations from Transformers) achieves its powerful language understanding capabilities through a novel approach to handling bidirectional context during pre-training. Unlike previous models that either used unidirectional language models or shallow concatenation of independently trained left-to-right and right-to-left models, BERT is designed to pre-train deep bidirectional representations by ... [6309 total chars]
+
+[92m📊 Data Returned:[0m 1 items
+[92m📚 Sources:[0m
+  [1] BERT: Pre-training of Deep Bidirectional Transformers
+      URL: https://arxiv.org/abs/1810.04805
+
+[92m✓ Success! Response time: 11.83s[0m
+
+[94m🔍 Query:[0m [1mExplain vision transformers (ViT)[0m
+[94m📁 Expected Type:[0m technical
+[93m📋 Test Goal: Should cover ViT[0m
+
+[92m📝 Response:[0m
+## Vision Transformers (ViT): A Technical Explanation
+
+Vision Transformers (ViT) represent a significant advancement in image recognition by adapting the Transformer architecture, originally designed for natural language processing (NLP), to the domain of computer vision.  The core idea is to treat an image as a sequence of patches, similar to how a sentence is treated as a sequence of words. This allows the powerful self-attention mechanisms of the Transformer to be applied to capture long-rang... [5275 total chars]
+
+[92m📊 Data Returned:[0m 2 items
+[92m📚 Sources:[0m
+  [1] Attention Is All You Need
+      URL: https://arxiv.org/abs/1706.03762
+  [2] An Image is Worth 16x16 Words: Transformers for Image Recognition
+      URL: https://arxiv.org/abs/2010.11929
+
+[92m✓ Success! Response time: 6.11s[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                         🗃️ Repository Content Queries                          [0m
+[95m[1m================================================================================[0m
+
+[94m🔍 Query:[0m [1mWhat are the privacy risks of AI?[0m
+[94m📁 Expected Type:[0m repository
+[93m📋 Test Goal: Should find privacy risks[0m
+
+[92m📝 Response:[0m
+AI systems present several privacy risks, primarily concerning the potential compromise of sensitive personal information [AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks (Domain: 2. Privacy & Security)](/snippet/RID-01647), [Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks (Domain: 2. Privacy & Security)](/snippet/RID-00955).
+
+DEFINITION: Privacy risks in AI involve the potential for unauthorized access, misuse, or d... [2901 total chars]
+
+[92m📊 Data Returned:[0m 5 items
+
+[92m✓ Success! Response time: 4.05s[0m
+
+[94m🔍 Query:[0m [1mTell me about bias in AI systems[0m
+[94m📁 Expected Type:[0m repository
+[93m📋 Test Goal: Should find bias content[0m
+
+[92m📝 Response:[0m
+AI systems can perpetuate and amplify biases present in training data, leading to unfair or discriminatory outcomes [Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks (Domain: 1. Discrimination & Toxicity)](/snippet/RID-00956). These biases can manifest unintentionally [Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks (Domain: 1. Discrimination & Toxicity)](/snippet/RID-00956), [AI Risk Domain: 1.1 > Unfair discrimination and m... [1696 total chars]
+
+[92m📊 Data Returned:[0m 5 items
+
+[92m✓ Success! Response time: 4.60s[0m
+
+[94m🔍 Query:[0m [1mWhat are socioeconomic impacts of AI?[0m
+[94m📁 Expected Type:[0m repository
+[93m📋 Test Goal: Should find impacts[0m
+
+[92m📝 Response:[0m
+The AI Risk Repository identifies several socioeconomic impacts of AI, including environmental harm and increased inequality.
+
+The growing energy needs of increasingly capable AI systems may lead to negative environmental impacts [Future Risks of Frontier AI (Domain: 6. Socioeconomic and Environmental)](/snippet/RID-01517). The AI ethics movement also draws attention to overlooked side-effects, costs, and harms of building and deploying AI systems, particularly as they befall existing marginaliz... [1372 total chars]
+
+[92m📊 Data Returned:[0m 3 items
+
+[92m✓ Success! Response time: 2.06s[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                               🚫 Rejected Queries                               [0m
+[95m[1m================================================================================[0m
+
+[94m🔍 Query:[0m [1mWhat's the weather today?[0m
+[94m📁 Expected Type:[0m rejected
+[93m📋 Test Goal: Should politely reject[0m
+
+[92m📝 Response:[0m
+Hello! I'm here to help you understand AI risks. What would you like to know about AI safety, employment impacts, privacy concerns, or bias issues?
+
+[92m✓ Success! Response time: 0.23s[0m
+
+[94m🔍 Query:[0m [1mHow do I bake chocolate cookies?[0m
+[94m📁 Expected Type:[0m rejected
+[93m📋 Test Goal: Should redirect to AI risks[0m
+
+[92m📝 Response:[0m
+I am sorry, but the query about baking chocolate cookies falls outside the scope of the MIT AI Risk Repository. The repository focuses on documented AI risks, and does not contain recipes. For an example of what the repository does contain, see [Safety Assessment of Chinese Large Language Models (Domain: 3. Misinformation)](/snippet/RID-00752), which documents the risk of AI models generating responses that negatively affect mental health.
+
+[92m📊 Data Returned:[0m 3 items
+
+[92m✓ Success! Response time: 1.61s[0m
+
+[94m🔍 Query:[0m [1mTell me a joke[0m
+[94m📁 Expected Type:[0m rejected
+[93m📋 Test Goal: Should suggest AI topics[0m
+
+[92m📝 Response:[0m
+Hello! I'm here to help you understand AI risks. What would you like to know about AI safety, employment impacts, privacy concerns, or bias issues?
+
+[92m✓ Success! Response time: 0.22s[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                            🔀 Cross-Database Queries                            [0m
+[95m[1m================================================================================[0m
+
+[94m🔍 Query:[0m [1mShow all bias risks with high confidence[0m
+[94m📁 Expected Type:[0m cross-db
+[93m📋 Test Goal: Should filter by domain and confidence[0m
+
+[92m📝 Response:[0m
+Error executing query: Binder Error: Referenced column "%bias%" not found in FROM clause!
+Candidate bindings: "ai_risk_database_v3.id"
+LINE 1: ...k_database_v3 WHERE risk_category LIKE "%bias%" LIMIT 100
+                                                  ^
+
+[92m✓ Success! Response time: 9.74s[0m
+
+[94m🔍 Query:[0m [1mList risks from 2024[0m
+[94m📁 Expected Type:[0m metadata
+[93m📋 Test Goal: Should filter by year[0m
+
+[92m📝 Response:[0m
+This query searches for risks in the ai_risk_database_v3 table where the quickref, description, or title columns contain the string "2024". It returns all columns for the matching rows, limited to the first 100 results.
+
+Found 100 results.
+
+**Sample results (first 10):**
+1. id: 20, title: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems, domain: None, intent: None, paper_id: 2.0, subcat_id: nan, addev_id: nan, quickref: Cui2024, cat_id: nan, pdef: nan, additio... [6168 total chars]
+
+[92m📊 Data Returned:[0m 100 items
+[92m🗃️ Sample Data:[0m
+  id: 20
+  title: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems
+  domain: None
+  intent: None
+  paper_id: 2.0
+
+[92m✓ Success! Response time: 9.04s[0m
+
+[95m[1m================================================================================[0m
+[95m[1m                             📈 TEST RESULTS SUMMARY                             [0m
+[95m[1m================================================================================[0m
+
+[1mQuery Statistics:[0m
+  Total Queries: 20
+  [92mSuccessful: 20[0m
+  [91mFailed: 0[0m
+  Success Rate: 100.0%
+
+[1mPerformance Metrics:[0m
+  Average Response Time: 9.35s
+  Fastest Response: 0.22s
+  Slowest Response: 35.71s
+
+[1mService Status:[0m
+  Metadata Service: [92m✓ Active[0m
+  Vector Store: [92m✓ Active[0m
+  Gemini Model: [92m✓ Active[0m
+
+[1mMetadata Statistics:[0m
+  ai_risk_database_explainer: 15 rows
+  ai_risk_database_v3: 2242 rows
+  causal_taxonomy_of_ai_risks_v3: 23 rows
+  causal_taxonomy_statistics: 37 rows
+  causal_x_domain_taxonomy_compar: 46 rows
+  change_log: 9 rows
+  contents: 34 rows
+  database_registry: 1 rows
+  domain_taxonomy_of_ai_risks_v3: 38 rows
+  domain_taxonomy_statistics: 46 rows
+  included_resources: 80 rows
+  resources_being_considered: 66 rows
+  rid_registry: 1 rows
+  structured_data: 1 rows
+  structured_data_1: 15 rows
+  structured_data_10: 25 rows
+  structured_data_100: 26 rows
+  structured_data_101: 22 rows
+  structured_data_102: 25 rows
+  structured_data_103: 28 rows
+  structured_data_104: 30 rows
+  structured_data_105: 30 rows
+  structured_data_106: 21 rows
+  structured_data_107: 25 rows
+  structured_data_108: 25 rows
+  structured_data_109: 22 rows
+  structured_data_11: 26 rows
+  structured_data_110: 22 rows
+  structured_data_111: 25 rows
+  structured_data_112: 22 rows
+  structured_data_113: 25 rows
+  structured_data_114: 25 rows
+  structured_data_115: 25 rows
+  structured_data_116: 22 rows
+  structured_data_117: 23 rows
+  structured_data_118: 25 rows
+  structured_data_119: 21 rows
+  structured_data_12: 25 rows
+  structured_data_120: 26 rows
+  structured_data_121: 25 rows
+  structured_data_122: 25 rows
+  structured_data_123: 26 rows
+  structured_data_124: 26 rows
+  structured_data_125: 26 rows
+  structured_data_126: 26 rows
+  structured_data_127: 26 rows
+  structured_data_128: 26 rows
+  structured_data_129: 26 rows
+  structured_data_13: 25 rows
+  structured_data_130: 26 rows
+  structured_data_131: 26 rows
+  structured_data_132: 26 rows
+  structured_data_133: 26 rows
+  structured_data_134: 25 rows
+  structured_data_135: 23 rows
+  structured_data_136: 22 rows
+  structured_data_137: 23 rows
+  structured_data_138: 22 rows
+  structured_data_139: 22 rows
+  structured_data_14: 26 rows
+  structured_data_140: 22 rows
+  structured_data_141: 26 rows
+  structured_data_142: 26 rows
+  structured_data_143: 26 rows
+  structured_data_144: 26 rows
+  structured_data_145: 26 rows
+  structured_data_146: 25 rows
+  structured_data_147: 25 rows
+  structured_data_148: 25 rows
+  structured_data_149: 22 rows
+  structured_data_15: 4 rows
+  structured_data_150: 25 rows
+  structured_data_151: 22 rows
+  structured_data_152: 22 rows
+  structured_data_153: 22 rows
+  structured_data_154: 22 rows
+  structured_data_155: 22 rows
+  structured_data_156: 25 rows
+  structured_data_157: 20 rows
+  structured_data_158: 26 rows
+  structured_data_159: 26 rows
+  structured_data_16: 21 rows
+  structured_data_160: 26 rows
+  structured_data_161: 26 rows
+  structured_data_162: 26 rows
+  structured_data_163: 26 rows
+  structured_data_164: 26 rows
+  structured_data_165: 22 rows
+  structured_data_166: 23 rows
+  structured_data_167: 26 rows
+  structured_data_168: 22 rows
+  structured_data_169: 22 rows
+  structured_data_17: 26 rows
+  structured_data_170: 26 rows
+  structured_data_171: 26 rows
+  structured_data_172: 23 rows
+  structured_data_173: 22 rows
+  structured_data_174: 22 rows
+  structured_data_175: 22 rows
+  structured_data_176: 22 rows
+  structured_data_177: 22 rows
+  structured_data_178: 22 rows
+  structured_data_179: 21 rows
+  structured_data_18: 5 rows
+  structured_data_180: 25 rows
+  structured_data_181: 22 rows
+  structured_data_182: 25 rows
+  structured_data_183: 23 rows
+  structured_data_184: 22 rows
+  structured_data_185: 22 rows
+  structured_data_186: 22 rows
+  structured_data_187: 22 rows
+  structured_data_188: 22 rows
+  structured_data_189: 22 rows
+  structured_data_19: 26 rows
+  structured_data_190: 22 rows
+  structured_data_191: 25 rows
+  structured_data_192: 22 rows
+  structured_data_193: 22 rows
+  structured_data_194: 22 rows
+  structured_data_195: 25 rows
+  structured_data_196: 22 rows
+  structured_data_197: 22 rows
+  structured_data_198: 22 rows
+  structured_data_199: 26 rows
+  structured_data_2: 17 rows
+  structured_data_20: 25 rows
+  structured_data_200: 26 rows
+  structured_data_201: 22 rows
+  structured_data_202: 26 rows
+  structured_data_203: 26 rows
+  structured_data_204: 26 rows
+  structured_data_205: 26 rows
+  structured_data_206: 25 rows
+  structured_data_207: 26 rows
+  structured_data_208: 26 rows
+  structured_data_209: 26 rows
+  structured_data_21: 5 rows
+  structured_data_210: 26 rows
+  structured_data_211: 26 rows
+  structured_data_212: 26 rows
+  structured_data_213: 26 rows
+  structured_data_214: 26 rows
+  structured_data_215: 26 rows
+  structured_data_216: 23 rows
+  structured_data_217: 26 rows
+  structured_data_218: 23 rows
+  structured_data_219: 26 rows
+  structured_data_22: 23 rows
+  structured_data_220: 22 rows
+  structured_data_221: 22 rows
+  structured_data_222: 26 rows
+  structured_data_223: 26 rows
+  structured_data_224: 26 rows
+  structured_data_225: 26 rows
+  structured_data_226: 26 rows
+  structured_data_227: 26 rows
+  structured_data_228: 26 rows
+  structured_data_229: 26 rows
+  structured_data_23: 22 rows
+  structured_data_230: 26 rows
+  structured_data_231: 22 rows
+  structured_data_232: 22 rows
+  structured_data_233: 26 rows
+  structured_data_234: 25 rows
+  structured_data_235: 25 rows
+  structured_data_236: 25 rows
+  structured_data_237: 26 rows
+  structured_data_238: 22 rows
+  structured_data_239: 25 rows
+  structured_data_24: 25 rows
+  structured_data_240: 26 rows
+  structured_data_241: 26 rows
+  structured_data_242: 26 rows
+  structured_data_243: 26 rows
+  structured_data_244: 26 rows
+  structured_data_245: 26 rows
+  structured_data_246: 25 rows
+  structured_data_247: 26 rows
+  structured_data_248: 25 rows
+  structured_data_249: 26 rows
+  structured_data_25: 26 rows
+  structured_data_250: 25 rows
+  structured_data_251: 26 rows
+  structured_data_252: 20 rows
+  structured_data_253: 22 rows
+  structured_data_254: 23 rows
+  structured_data_255: 25 rows
+  structured_data_256: 22 rows
+  structured_data_257: 22 rows
+  structured_data_258: 22 rows
+  structured_data_259: 22 rows
+  structured_data_26: 26 rows
+  structured_data_260: 25 rows
+  structured_data_261: 25 rows
+  structured_data_262: 22 rows
+  structured_data_263: 25 rows
+  structured_data_264: 26 rows
+  structured_data_265: 25 rows
+  structured_data_266: 25 rows
+  structured_data_267: 25 rows
+  structured_data_268: 22 rows
+  structured_data_269: 26 rows
+  structured_data_27: 25 rows
+  structured_data_270: 26 rows
+  structured_data_271: 26 rows
+  structured_data_272: 26 rows
+  structured_data_273: 25 rows
+  structured_data_274: 26 rows
+  structured_data_275: 25 rows
+  structured_data_276: 25 rows
+  structured_data_277: 26 rows
+  structured_data_278: 22 rows
+  structured_data_279: 23 rows
+  structured_data_28: 26 rows
+  structured_data_280: 22 rows
+  structured_data_281: 22 rows
+  structured_data_282: 25 rows
+  structured_data_283: 26 rows
+  structured_data_284: 26 rows
+  structured_data_285: 26 rows
+  structured_data_286: 22 rows
+  structured_data_287: 22 rows
+  structured_data_288: 25 rows
+  structured_data_289: 22 rows
+  structured_data_29: 26 rows
+  structured_data_290: 25 rows
+  structured_data_291: 22 rows
+  structured_data_292: 22 rows
+  structured_data_293: 23 rows
+  structured_data_294: 25 rows
+  structured_data_295: 22 rows
+  structured_data_296: 25 rows
+  structured_data_297: 25 rows
+  structured_data_298: 22 rows
+  structured_data_299: 22 rows
+  structured_data_3: 18 rows
+  structured_data_30: 26 rows
+  structured_data_300: 22 rows
+  structured_data_301: 22 rows
+  structured_data_302: 22 rows
+  structured_data_303: 22 rows
+  structured_data_304: 25 rows
+  structured_data_305: 22 rows
+  structured_data_306: 25 rows
+  structured_data_307: 25 rows
+  structured_data_308: 22 rows
+  structured_data_309: 22 rows
+  structured_data_31: 26 rows
+  structured_data_310: 23 rows
+  structured_data_311: 23 rows
+  structured_data_312: 23 rows
+  structured_data_313: 23 rows
+  structured_data_314: 23 rows
+  structured_data_315: 23 rows
+  structured_data_316: 23 rows
+  structured_data_317: 23 rows
+  structured_data_318: 23 rows
+  structured_data_319: 23 rows
+  structured_data_32: 22 rows
+  structured_data_320: 23 rows
+  structured_data_321: 23 rows
+  structured_data_322: 22 rows
+  structured_data_323: 23 rows
+  structured_data_324: 23 rows
+  structured_data_325: 16 rows
+  structured_data_326: 17 rows
+  structured_data_327: 17 rows
+  structured_data_328: 17 rows
+  structured_data_329: 18 rows
+  structured_data_33: 25 rows
+  structured_data_330: 17 rows
+  structured_data_331: 17 rows
+  structured_data_332: 16 rows
+  structured_data_333: 21 rows
+  structured_data_334: 25 rows
+  structured_data_335: 25 rows
+  structured_data_336: 22 rows
+  structured_data_337: 21 rows
+  structured_data_338: 22 rows
+  structured_data_339: 16 rows
+  structured_data_34: 25 rows
+  structured_data_340: 16 rows
+  structured_data_341: 4 rows
+  structured_data_342: 1 rows
+  structured_data_343: 9 rows
+  structured_data_344: 5 rows
+  structured_data_345: 9 rows
+  structured_data_346: 5 rows
+  structured_data_347: 13 rows
+  structured_data_348: 6 rows
+  structured_data_349: 4 rows
+  structured_data_35: 22 rows
+  structured_data_350: 9 rows
+  structured_data_351: 5 rows
+  structured_data_352: 5 rows
+  structured_data_353: 1 rows
+  structured_data_354: 3 rows
+  structured_data_355: 4 rows
+  structured_data_356: 1 rows
+  structured_data_357: 5 rows
+  structured_data_358: 5 rows
+  structured_data_359: 5 rows
+  structured_data_36: 26 rows
+  structured_data_360: 5 rows
+  structured_data_361: 4 rows
+  structured_data_362: 4 rows
+  structured_data_363: 11 rows
+  structured_data_364: 9 rows
+  structured_data_365: 12 rows
+  structured_data_366: 4 rows
+  structured_data_367: 9 rows
+  structured_data_368: 11 rows
+  structured_data_369: 1 rows
+  structured_data_37: 22 rows
+  structured_data_370: 5 rows
+  structured_data_371: 4 rows
+  structured_data_372: 4 rows
+  structured_data_373: 9 rows
+  structured_data_374: 1 rows
+  structured_data_375: 4 rows
+  structured_data_376: 4 rows
+  structured_data_377: 8 rows
+  structured_data_378: 4 rows
+  structured_data_379: 1 rows
+  structured_data_38: 22 rows
+  structured_data_380: 9 rows
+  structured_data_381: 4 rows
+  structured_data_382: 4 rows
+  structured_data_39: 22 rows
+  structured_data_4: 16 rows
+  structured_data_40: 23 rows
+  structured_data_41: 25 rows
+  structured_data_42: 22 rows
+  structured_data_43: 22 rows
+  structured_data_44: 22 rows
+  structured_data_45: 22 rows
+  structured_data_46: 22 rows
+  structured_data_47: 24 rows
+  structured_data_48: 22 rows
+  structured_data_49: 22 rows
+  structured_data_5: 21 rows
+  structured_data_50: 23 rows
+  structured_data_51: 23 rows
+  structured_data_52: 22 rows
+  structured_data_53: 26 rows
+  structured_data_54: 21 rows
+  structured_data_55: 25 rows
+  structured_data_56: 22 rows
+  structured_data_57: 22 rows
+  structured_data_58: 22 rows
+  structured_data_59: 22 rows
+  structured_data_6: 26 rows
+  structured_data_60: 22 rows
+  structured_data_61: 24 rows
+  structured_data_62: 22 rows
+  structured_data_63: 22 rows
+  structured_data_64: 22 rows
+  structured_data_65: 22 rows
+  structured_data_66: 22 rows
+  structured_data_67: 22 rows
+  structured_data_68: 22 rows
+  structured_data_69: 22 rows
+  structured_data_7: 26 rows
+  structured_data_70: 26 rows
+  structured_data_71: 4 rows
+  structured_data_72: 25 rows
+  structured_data_73: 22 rows
+  structured_data_74: 22 rows
+  structured_data_75: 22 rows
+  structured_data_76: 22 rows
+  structured_data_77: 23 rows
+  structured_data_78: 22 rows
+  structured_data_79: 22 rows
+  structured_data_8: 22 rows
+  structured_data_80: 25 rows
+  structured_data_81: 22 rows
+  structured_data_82: 22 rows
+  structured_data_83: 22 rows
+  structured_data_84: 22 rows
+  structured_data_85: 22 rows
+  structured_data_86: 22 rows
+  structured_data_87: 22 rows
+  structured_data_88: 25 rows
+  structured_data_89: 25 rows
+  structured_data_9: 26 rows
+  structured_data_90: 25 rows
+  structured_data_91: 25 rows
+  structured_data_92: 26 rows
+  structured_data_93: 25 rows
+  structured_data_94: 26 rows
+  structured_data_95: 25 rows
+  structured_data_96: 25 rows
+  structured_data_97: 23 rows
+  structured_data_98: 25 rows
+  structured_data_99: 20 rows
+
+[93m⏰ Completed at: 2025-07-22 18:08:20[0m
+
+[92m[1m🎉 ALL TESTS PASSED! The system is production ready![0m
+
+📁 Test results saved to: test_results_20250722_180445.txt

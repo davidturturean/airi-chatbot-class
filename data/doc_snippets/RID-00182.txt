@@ -1,0 +1,29 @@
+Repository ID: RID-00182
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_answer: to this question may be contingent on the intrinsic capabilities of the creation, comparing—for example—animal rights and environmental ethics litera
+file_type: ai_risk_entry
+risk_category: AI rights and responsibilities
+search_all_fields: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review 7. AI System Safety, Failures, & Limitations AI rights and responsibilities 7.5 > AI welfare and rights 7.5 > AI welfare and rights AI Risk Database v3 ai_risk_entry
+sheet: AI Risk Database v3
+entity: 2 - AI
+search_low_priority: AI Risk Database v3 ai_risk_entry
+timing: 3 - Other
+intent: 3 - Other
+row: 159
+rid: RID-00182
+search_high_priority: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review 7. AI System Safety, Failures, & Limitations AI rights and responsibilities
+domain: 7. AI System Safety, Failures, & Limitations
+scqa_complication: y should be equals in ability but not in rights, that they should be inferior by design and expendable when needed, and that since they can be designed n
+search_medium_priority: 7.5 > AI welfare and rights 7.5 > AI welfare and rights
+specific_domain: 7.5 > AI welfare and rights
+content_preview: Title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.5 > AI welfare and rights\nRisk Category: AI rights and responsibilities\nRisk Subcategory: AI rights and responsib...
+title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review
+scqa_question: And if a simulation of life is equivalent to natural life, should those simulations be afforded the same rights, responsibilities and privileges afforded to natural life or persons?
+scqa_situation: e ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.5 > AI welfare and rights\nRisk Category: AI rights
+scqa_confidence: 1.0
+scqa_content_type: case_study
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+subdomain: 7.5 > AI welfare and rights
+
+Content:
+Title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.5 > AI welfare and rights\nRisk Category: AI rights and responsibilities\nRisk Subcategory: AI rights and responsibilities\nDescription: "We note literature—which gives us the domain termed Robot Rights—addressing the rights of the AI itself as we develop and implement it. We find arguments against [38] the affordance of rights for artificial agents: that they should be equals in ability but not in rights, that they should be inferior by design and expendable when needed, and that since they can be designed not to feel pain (or anything) they do not have the same rights as humans. On a more theoretical level, we find literature asking more fundamental questions, such as: at what point is a simulation of life (e.g. artificial intelligence) equivalent to life which originated through natural means [43]? And if a simulation of life is equivalent to natural life, should those simulations be afforded the same rights, responsibilities and privileges afforded to natural life or persons? Some literature suggests that the answer to this question may be contingent on the intrinsic capabilities of the creation, comparing—for example—animal rights and environmental ethics literature"\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 3 - Other

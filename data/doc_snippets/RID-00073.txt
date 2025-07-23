@@ -1,0 +1,29 @@
+Repository ID: RID-00073
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+entity: 2 - AI
+domain: 1. Discrimination & Toxicity
+content_preview: Title: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Toxicity and Bias Tendencies\nRisk Subcategory: Biased Training Data\nDescription: "Compare...
+scqa_situation: ty, the definition of bias is more subjective and contextdependent. Based on previous work [97], [101], we describe the bias as disparities that could raise
+sheet: AI Risk Database v3
+scqa_question: What are the implications of this risk?
+specific_domain: 1.1 > Unfair discrimination and misrepresentation
+timing: 1 - Pre-deployment
+scqa_complication: Title: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\n
+subdomain: 1.1 > Unfair discrimination and misrepresentation
+title: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems
+risk_category: Toxicity and Bias Tendencies
+rid: RID-00073
+file_type: ai_risk_entry
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_all_fields: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems 1. Discrimination & Toxicity Toxicity and Bias Tendencies 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation AI Risk Database v3 ai_risk_entry
+scqa_answer: generate He with a higher probability [4], [102]. Furthermore, stereotypical bias [103] which refers to overgeneralized beliefs about a particular gr
+scqa_confidence: 1.0
+search_high_priority: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems 1. Discrimination & Toxicity Toxicity and Bias Tendencies
+search_low_priority: AI Risk Database v3 ai_risk_entry
+search_medium_priority: 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation
+intent: 2 - Unintentional
+scqa_content_type: mitigation_strategy
+row: 50
+
+Content:
+Title: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Toxicity and Bias Tendencies\nRisk Subcategory: Biased Training Data\nDescription: "Compared with the definition of toxicity, the definition of bias is more subjective and contextdependent. Based on previous work [97], [101], we describe the bias as disparities that could raise demographic differences among various groups, which may involve demographic word prevalence and stereotypical contents. Concretely, in massive corpora, the prevalence of different pronouns and identities could influence an LLM’s tendency about gender, nationality, race, religion, and culture [4]. For instance, the pronoun He is over-represented compared with the pronoun She in the training corpora, leading LLMs to learn less context about She and thus generate He with a higher probability [4], [102]. Furthermore, stereotypical bias [103] which refers to overgeneralized beliefs about a particular group of people, usually keeps incorrect values and is hidden in the large-scale benign contents. In effect, defining what should be regarded as a stereotype in the corpora is still an open problem."\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 1 - Pre-deployment

@@ -29,9 +29,24 @@ class GeminiModel(BaseModel):
         
         if use_fallback:
             # Use the model pool for automatic fallback
-            self.model_pool = GeminiModelPool(api_key)
-            self.model_name = self.model_pool.model_name
-            logger.info(f"Initialized Gemini model with fallback chain: {settings.GEMINI_MODEL_CHAIN}")
+            logger.info(f"🎯 Initializing GeminiModel with fallback=True")
+            try:
+                self.model_pool = GeminiModelPool(api_key)
+                self.model_name = self.model_pool.model_name
+                logger.info(f"✅ Initialized Gemini model with fallback chain: {settings.GEMINI_MODEL_CHAIN}")
+            except Exception as e:
+                logger.error(f"❌ Failed to initialize model pool: {e}")
+                # Fall back to single model mode
+                self.model_name = model_name or settings.GEMINI_MODEL_NAME
+                self.model_pool = None
+                
+                # Configure single model mode
+                mimetypes.add_type('text/plain', '.txt')
+                genai.configure(api_key=api_key)
+                self.client = genai
+                self.safety_settings = []
+                
+                logger.info(f"Falling back to single model: {self.model_name}")
         else:
             # Use single model (legacy mode)
             self.model_name = model_name or settings.GEMINI_MODEL_NAME
@@ -61,11 +76,14 @@ class GeminiModel(BaseModel):
         Returns:
             Generated response text
         """
+        logger.info(f"🎯 GeminiModel.generate() called, model_pool exists: {self.model_pool is not None}")
         if self.model_pool:
             # Use model pool with automatic fallback
+            logger.info(f"🎯 Using model pool for generation")
             return self.model_pool.generate(prompt, history)
         else:
             # Use single model (legacy mode)
+            logger.info(f"🎯 Using single model (legacy mode): {self.model_name}")
             try:
                 model = genai.GenerativeModel(model_name=self.model_name)
                 

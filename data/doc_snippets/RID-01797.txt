@@ -1,0 +1,29 @@
+Repository ID: RID-01797
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_all_fields: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems Unspecified Dimension - Technical Attributes (AI inadequacy - technical failure) X.1 > Excluded X.1 > Excluded AI Risk Database v3 ai_risk_entry
+risk_category: Dimension - Technical Attributes (AI inadequacy - technical failure)
+content_preview: Title: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems\nSub-domain: X.1 > Excluded\nRisk Category: Dimension - Technical Attributes (AI inadequacy - technical failure)\nRisk Subcategory: Supervised/unsupervised AI (AI training performance related - Ro...
+file_type: ai_risk_entry
+domain: Unspecified
+specific_domain: X.1 > Excluded
+subdomain: X.1 > Excluded
+scqa_answer: "\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 1 - Pre-deployment
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_content_type: risk_description
+scqa_situation: Title: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems\nSub-domain: X.1 > Excluded\nRisk Category: Dimension - Technical Attributes (AI inadequacy - techn
+rid: RID-01797
+search_high_priority: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems Unspecified Dimension - Technical Attributes (AI inadequacy - technical failure)
+sheet: AI Risk Database v3
+scqa_question: What are the implications of this risk?
+title: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems
+intent: 3 - Other
+row: 1774
+timing: 1 - Pre-deployment
+entity: 3 - Other
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_complication: y: Dimension - Technical Attributes (AI inadequacy - technical failure)\nRisk Subcategory: Supervised/unsupervised AI (AI training performance related -
+search_medium_priority: X.1 > Excluded X.1 > Excluded
+scqa_confidence: 1.0
+
+Content:
+Title: Risk Sources and Risk Management Measures in Support of Standards for General-Purpose AI Systems\nSub-domain: X.1 > Excluded\nRisk Category: Dimension - Technical Attributes (AI inadequacy - technical failure)\nRisk Subcategory: Supervised/unsupervised AI (AI training performance related - Robustness)\nDescription: "As above, there are broadly two dimensions of technical failure modes: quality of data or input signal, and training performance. Due to a lack of transparency, it may be difficult to ascertain the type of technical failure that gives rise to a particular risk, and it is often a combination of several factors. Risks pertain- ing to AI failures are exacerbated by poor quality training data and imperfect training signals. Various measures can be implemented to improve the quality of the training data, and fine-tuning techniques can be used to disincentivize harmful model behavior."\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 1 - Pre-deployment

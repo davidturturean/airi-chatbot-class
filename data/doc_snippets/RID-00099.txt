@@ -1,29 +1,29 @@
 Repository ID: RID-00099
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-domain: Unspecified
-search_high_priority: Navigating the Landscape of AI Ethics and Responsibility Unspecified
-scqa_situation: Title: Navigating the Landscape of AI Ethics and Responsibility
-scqa_confidence: 0.95
-intent: 
 file_type: ai_risk_entry
-search_low_priority: AI Risk Database v3 ai_risk_entry
-search_medium_priority: Unspecified
-timing: 
-scqa_complication: 
-subdomain: 
-entity: 
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-content_preview: Title: Navigating the Landscape of AI Ethics and Responsibility
-title: Navigating the Landscape of AI Ethics and Responsibility
-search_all_fields: Navigating the Landscape of AI Ethics and Responsibility Unspecified Unspecified AI Risk Database v3 ai_risk_entry
-rid: RID-00099
-row: 76
-scqa_question: What should be done about this?
-risk_category: 
-sheet: AI Risk Database v3
 scqa_answer: Title: Navigating the Landscape of AI Ethics and Responsibility
-scqa_content_type: risk_description
+scqa_situation: Title: Navigating the Landscape of AI Ethics and Responsibility
+content_preview: Title: Navigating the Landscape of AI Ethics and Responsibility
 specific_domain: Unspecified
+search_medium_priority: Unspecified
+scqa_confidence: 0.95
+rid: RID-00099
+search_high_priority: Navigating the Landscape of AI Ethics and Responsibility Unspecified
+subdomain: 
+scqa_complication: 
+scqa_question: What should be done about this?
+timing: 
+risk_category: 
+search_all_fields: Navigating the Landscape of AI Ethics and Responsibility Unspecified Unspecified AI Risk Database v3 ai_risk_entry
+domain: Unspecified
+intent: 
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+sheet: AI Risk Database v3
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_content_type: risk_description
+entity: 
+row: 76
+title: Navigating the Landscape of AI Ethics and Responsibility
 
 Content:
 Title: Navigating the Landscape of AI Ethics and Responsibility

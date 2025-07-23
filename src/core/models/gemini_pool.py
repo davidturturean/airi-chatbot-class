@@ -142,12 +142,15 @@ class GeminiModelPool(BaseModel):
             logger.error(f"Error generating response with {model_name}: {error_str}")
             
             # Check if it's a quota error
+            logger.info(f"🔍 Checking if quota error: {self._is_quota_error(error_str)}")
             if self._is_quota_error(error_str):
                 logger.warning(f"Quota exceeded for {model_name}, marking for cooldown")
                 self._mark_model_failed(model_name)
+                logger.info(f"🚀 RAISING QuotaExceededError for {model_name}")
                 raise QuotaExceededError(f"Quota exceeded for {model_name}: {error_str}")
             else:
                 # For non-quota errors, re-raise as-is
+                logger.info(f"🔍 Not a quota error, re-raising as-is")
                 raise e
     
     def generate(self, prompt: str, history: Optional[List[Dict[str, Any]]] = None) -> str:
@@ -161,11 +164,13 @@ class GeminiModelPool(BaseModel):
         Returns:
             Generated response text
         """
+        logger.info(f"🎯 GeminiModelPool.generate() called with model chain: {self.model_chain}")
         last_error = None
         
         # Try each model in the chain
         for attempt in range(len(self.model_chain)):
             current_model = self._get_next_available_model()
+            logger.info(f"Attempt {attempt + 1}: Using model {current_model}")
             if not current_model:
                 break
                 
@@ -174,12 +179,18 @@ class GeminiModelPool(BaseModel):
                 
             except QuotaExceededError as e:
                 last_error = e
-                logger.info(f"Quota exceeded for {current_model}, trying next model...")
+                logger.info(f"🔥 CAUGHT QuotaExceededError for {current_model}, trying next model...")
                 continue
                 
             except Exception as e:
                 last_error = e
-                logger.error(f"Non-quota error with {current_model}: {str(e)}")
+                logger.error(f"❌ CAUGHT Exception (type: {type(e).__name__}) for {current_model}: {str(e)}")
+                
+                # Check if this is actually a quota error that wasn't caught as QuotaExceededError
+                if "429" in str(e) or "quota" in str(e).lower():
+                    logger.warning(f"🚨 This was a quota error but wasn't caught as QuotaExceededError!")
+                    # Treat it as a quota error
+                    continue
                 # For non-quota errors, try next model but with retries
                 retry_count = 0
                 while retry_count < settings.MAX_RETRIES_PER_MODEL:

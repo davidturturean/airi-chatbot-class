@@ -1,0 +1,29 @@
+Repository ID: RID-01471
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+file_type: ai_risk_entry
+intent: 4 - Not coded
+search_all_fields: Ten Hard Problems in Artificial Intelligence We Must Get Right Unspecified Negative impacts of AI use X.1 > Excluded X.1 > Excluded AI Risk Database v3 ai_risk_entry
+scqa_answer: 1 > Excluded\nRisk Category: Negative impacts of AI use\nDescription: "A major role of the current AI ethics movement is to draw attention to overlooked side-effects, costs, and harms of building and deploying AI systems, particularly as they befall existing marginalized groups:"\nEntity: 4 - Not coded\nIntent: 4 - Not coded\nTiming: 4 - Not coded
+search_low_priority: AI Risk Database v3 ai_risk_entry
+rid: RID-01471
+content_preview: Title: Ten Hard Problems in Artificial Intelligence We Must Get Right\nSub-domain: X.1 > Excluded\nRisk Category: Negative impacts of AI use\nDescription: "A major role of the current AI ethics movement is to draw attention to overlooked side-effects, costs, and harms of building and deploying AI sy...
+row: 1448
+search_medium_priority: X.1 > Excluded X.1 > Excluded
+title: Ten Hard Problems in Artificial Intelligence We Must Get Right
+scqa_question: What are the implications of this risk?
+scqa_content_type: impact_analysis
+specific_domain: X.1 > Excluded
+subdomain: X.1 > Excluded
+sheet: AI Risk Database v3
+entity: 4 - Not coded
+timing: 4 - Not coded
+scqa_situation: Title: Ten Hard Problems in Artificial Intelligence We Must Get Right\nSub-domain: X.1 > Excluded\nRisk Category: Negative impacts of AI use\nDescription: "A major role of the current AI ethics movement is to draw attention to overlooked side-effects, costs, and harms of building and deploying AI systems, particularly as they befall existing marginalized groups:"\nEntity: 4 - Not coded\nIntent: 4 - Not
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_confidence: 1.0
+risk_category: Negative impacts of AI use
+domain: Unspecified
+search_high_priority: Ten Hard Problems in Artificial Intelligence We Must Get Right Unspecified Negative impacts of AI use
+scqa_complication: \nSub-domain: X.1 > Excluded\nRisk Category: Negative impacts of AI use\nDescription: "A major role of the current AI ethics movement is to draw attention
+
+Content:
+Title: Ten Hard Problems in Artificial Intelligence We Must Get Right\nSub-domain: X.1 > Excluded\nRisk Category: Negative impacts of AI use\nDescription: "A major role of the current AI ethics movement is to draw attention to overlooked side-effects, costs, and harms of building and deploying AI systems, particularly as they befall existing marginalized groups:"\nEntity: 4 - Not coded\nIntent: 4 - Not coded\nTiming: 4 - Not coded

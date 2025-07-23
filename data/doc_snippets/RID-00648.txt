@@ -1,29 +1,29 @@
 Repository ID: RID-00648
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-sheet: AI Risk Database v3
-scqa_situation: its or harms caused by the assistant – especially in a sufficiently expansive sense, which could involve much of society (see Chapter 19). Having these metrics is useful both for assessing the risk of harm from the system and for using the metric as a training signal."\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming:
-intent: 2 - Unintentional
-search_high_priority: The Ethics of Advanced AI Assistants 6. Socioeconomic and Environmental Capability failures
-scqa_complication: in: 6.5 > Governance failure\nRisk Category: Capability failures\nRisk Subcategory: Difficult to develop metrics for evaluating benefits or harms caused b
 search_low_priority: AI Risk Database v3 ai_risk_entry
-risk_category: Capability failures
-scqa_answer: "\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 1 - Pre-deployment
-rid: RID-00648
-search_medium_priority: 6.5 > Governance failure 6.5 > Governance failure
 domain: 6. Socioeconomic and Environmental
-search_all_fields: The Ethics of Advanced AI Assistants 6. Socioeconomic and Environmental Capability failures 6.5 > Governance failure 6.5 > Governance failure AI Risk Database v3 ai_risk_entry
-scqa_confidence: 1.0
-scqa_content_type: risk_description
-row: 625
+risk_category: Capability failures
 specific_domain: 6.5 > Governance failure
+scqa_confidence: 1.0
 timing: 1 - Pre-deployment
-entity: 2 - AI
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-file_type: ai_risk_entry
-title: The Ethics of Advanced AI Assistants
-content_preview: Title: The Ethics of Advanced AI Assistants\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.5 > Governance failure\nRisk Category: Capability failures\nRisk Subcategory: Difficult to develop metrics for evaluating benefits or harms caused by AI assistants\nDescription: "Another difficulty...
-subdomain: 6.5 > Governance failure
+scqa_content_type: risk_description
 scqa_question: What are the implications of this risk?
+file_type: ai_risk_entry
+content_preview: Title: The Ethics of Advanced AI Assistants\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.5 > Governance failure\nRisk Category: Capability failures\nRisk Subcategory: Difficult to develop metrics for evaluating benefits or harms caused by AI assistants\nDescription: "Another difficulty...
+scqa_answer: "\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 1 - Pre-deployment
+subdomain: 6.5 > Governance failure
+search_medium_priority: 6.5 > Governance failure 6.5 > Governance failure
+scqa_complication: in: 6.5 > Governance failure\nRisk Category: Capability failures\nRisk Subcategory: Difficult to develop metrics for evaluating benefits or harms caused b
+entity: 2 - AI
+title: The Ethics of Advanced AI Assistants
+sheet: AI Risk Database v3
+search_high_priority: The Ethics of Advanced AI Assistants 6. Socioeconomic and Environmental Capability failures
+row: 625
+intent: 2 - Unintentional
+rid: RID-00648
+scqa_situation: its or harms caused by the assistant – especially in a sufficiently expansive sense, which could involve much of society (see Chapter 19). Having these metrics is useful both for assessing the risk of harm from the system and for using the metric as a training signal."\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming:
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_all_fields: The Ethics of Advanced AI Assistants 6. Socioeconomic and Environmental Capability failures 6.5 > Governance failure 6.5 > Governance failure AI Risk Database v3 ai_risk_entry
 
 Content:
 Title: The Ethics of Advanced AI Assistants\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.5 > Governance failure\nRisk Category: Capability failures\nRisk Subcategory: Difficult to develop metrics for evaluating benefits or harms caused by AI assistants\nDescription: "Another difficulty facing AI assistant systems is that it is challenging to develop metrics for evaluating particular aspects of benefits or harms caused by the assistant – especially in a sufficiently expansive sense, which could involve much of society (see Chapter 19). Having these metrics is useful both for assessing the risk of harm from the system and for using the metric as a training signal."\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 1 - Pre-deployment

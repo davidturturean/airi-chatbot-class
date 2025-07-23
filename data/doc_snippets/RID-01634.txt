@@ -1,0 +1,29 @@
+Repository ID: RID-01634
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+entity: 1 - Human
+scqa_complication: in: 6.6 > Environmental harm\nRisk Category: Environmental\nRisk Subcategory: Excessive water consumption\nDescription: "Excessive water consumption - Exc
+intent: 2 - Unintentional
+search_high_priority: A Collaborative, Human-Centred Taxonomy of AI, Algorithmic, and Automation Harms 6. Socioeconomic and Environmental Environmental
+scqa_situation: Title: A Collaborative, Human-Centred Taxonomy of AI, Algorithmic, and Automation Harms\nDomain: 6
+title: A Collaborative, Human-Centred Taxonomy of AI, Algorithmic, and Automation Harms
+scqa_answer: "\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 3 - Other
+risk_category: Environmental
+scqa_confidence: 1.0
+scqa_question: What are the implications of this risk?
+search_all_fields: A Collaborative, Human-Centred Taxonomy of AI, Algorithmic, and Automation Harms 6. Socioeconomic and Environmental Environmental 6.6 > Environmental harm 6.6 > Environmental harm AI Risk Database v3 ai_risk_entry
+content_preview: Title: A Collaborative, Human-Centred Taxonomy of AI, Algorithmic, and Automation Harms\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.6 > Environmental harm\nRisk Category: Environmental\nRisk Subcategory: Excessive water consumption\nDescription: "Excessive water consumption - Excessiv...
+rid: RID-01634
+timing: 3 - Other
+domain: 6. Socioeconomic and Environmental
+subdomain: 6.6 > Environmental harm
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_low_priority: AI Risk Database v3 ai_risk_entry
+file_type: ai_risk_entry
+specific_domain: 6.6 > Environmental harm
+scqa_content_type: risk_description
+row: 1611
+search_medium_priority: 6.6 > Environmental harm 6.6 > Environmental harm
+sheet: AI Risk Database v3
+
+Content:
+Title: A Collaborative, Human-Centred Taxonomy of AI, Algorithmic, and Automation Harms\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.6 > Environmental harm\nRisk Category: Environmental\nRisk Subcategory: Excessive water consumption\nDescription: "Excessive water consumption - Excessive use of water to cool data centres and for other purposes, leading to water restrictions or shortages for local communities or businesses."\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 3 - Other

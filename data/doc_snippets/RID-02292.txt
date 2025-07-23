@@ -1,0 +1,26 @@
+Repository ID: RID-02292
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+title: AI Risk Domain: 7.0 > AI system safety, failures, & limitations
+scqa_question: What are the implications of this risk?
+search_medium_priority: 7.0 > AI system safety, failures, & limitations
+scqa_confidence: 1.0
+search_high_priority: AI Risk Domain: 7.0 > AI system safety, failures, & limitations 7.0 > AI system safety, failures, & limitations
+summary_type: domain_aggregation
+content_preview: AI Risk Domain: 7.0 > AI system safety, failures, & limitations\n\nThis domain contains 19 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: The Risks of Machine Learning Systems\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.0 > AI system safety, failures, & l...
+rid: RID-02292
+sheet: AI Risk Database v3
+scqa_answer: in a modification of an intelligent system."\nEntity: 3 - Other\nIntent: 2 - Unintentional\nTiming: 2 - Post-deployment\n\nRisk Entry 9:\nTitle: Taxo
+scqa_complication: examples from the same distribution, or to examples with different characteristics (other distributions). Representative validation data can be used to
+scqa_content_type: case_study
+scqa_situation: ystem safety, failures, & limitations\n\nThis domain contains 19 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: The Risks of Machine Learning Systems\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.0 > AI system safety, failures
+entry_count: 19
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+file_type: ai_risk_domain_summary
+specific_domain: 7.0 > AI system safety, failures, & limitations
+is_summary: True
+search_low_priority: AI Risk Database v3 ai_risk_domain_summary
+search_all_fields: AI Risk Domain: 7.0 > AI system safety, failures, & limitations 7.0 > AI system safety, failures, & limitations 7.0 > AI system safety, failures, & limitations AI Risk Database v3 ai_risk_domain_summary
+domain: 7.0 > AI system safety, failures, & limitations
+
+Content:
+AI Risk Domain: 7.0 > AI system safety, failures, & limitations\n\nThis domain contains 19 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: The Risks of Machine Learning Systems\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.0 > AI system safety, failures, & limitations\nRisk Category: First-Order Risks\nDescription: "First-order risks can be generally broken down into risks arising from intended and unintended use, system design and implementation choices, and properties of the chosen dataset and learning components."\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 3 - Other\n\nRisk Entry 2:\nTitle: The Risks of Machine Learning Systems\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.0 > AI system safety, failures, & limitations\nRisk Category: First-Order Risks\nRisk Subcategory: Application\nDescription: "This is the risk posed by the intended application or use case. It is intuitive that some use cases will be inherently

@@ -1,0 +1,29 @@
+Repository ID: RID-01192
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_medium_priority: 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality
+title: Regulating under Uncertainty: Governance Options for Generative AI
+search_high_priority: Regulating under Uncertainty: Governance Options for Generative AI 6. Socioeconomic and Environmental Environmental, economical, and societal challenges
+search_all_fields: Regulating under Uncertainty: Governance Options for Generative AI 6. Socioeconomic and Environmental Environmental, economical, and societal challenges 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality AI Risk Database v3 ai_risk_entry
+domain: 6. Socioeconomic and Environmental
+intent: 2 - Unintentional
+entity: 2 - AI
+sheet: AI Risk Database v3
+scqa_situation: Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 6
+content_preview: Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.2 > Increased inequality and decline in employment quality\nRisk Category: Environmental, economical, and societal challenges\nRisk Subcategory: Impact on labor market...
+row: 1169
+scqa_complication: ecline in employment quality\nRisk Category: Environmental, economical, and societal challenges\nRisk Subcategory: Impact on labor markets (job loss and d
+rid: RID-01192
+scqa_answer: 5"\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 3 - Other
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+file_type: ai_risk_entry
+scqa_question: What are the implications of this risk?
+specific_domain: 6.2 > Increased inequality and decline in employment quality
+risk_category: Environmental, economical, and societal challenges
+scqa_content_type: impact_analysis
+scqa_confidence: 1.0
+timing: 3 - Other
+subdomain: 6.2 > Increased inequality and decline in employment quality
+search_low_priority: AI Risk Database v3 ai_risk_entry
+
+Content:
+Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.2 > Increased inequality and decline in employment quality\nRisk Category: Environmental, economical, and societal challenges\nRisk Subcategory: Impact on labor markets (job loss and displacement)\nDescription: "Currently, a significant share of workers (three in five) worry about losing their jobs entirely to AI in the next 10 years—particularly those who already work with AI. Some studies conclude that AI tools (generative and non-generative) will create significant job losses.573 The OECD has found that occupations at highest risk of being lost to automation from AI account for about 27% of employment.5"\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 3 - Other

@@ -1,0 +1,29 @@
+Repository ID: RID-01643
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_medium_priority: X.1 > Excluded X.1 > Excluded
+intent: 4 - Not coded
+entity: 4 - Not coded
+scqa_answer: "\nEntity: 4 - Not coded\nIntent: 4 - Not coded\nTiming: 4 - Not coded
+scqa_situation: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nSub-domain: X
+timing: 4 - Not coded
+subdomain: X.1 > Excluded
+risk_category: Missing requirements for the implemented hardware
+search_high_priority: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks Unspecified Missing requirements for the implemented hardware
+sheet: AI Risk Database v3
+specific_domain: X.1 > Excluded
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_content_type: risk_description
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_question: What are the implications of this risk?
+rid: RID-01643
+search_all_fields: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks Unspecified Missing requirements for the implemented hardware X.1 > Excluded X.1 > Excluded AI Risk Database v3 ai_risk_entry
+content_preview: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nSub-domain: X.1 > Excluded\nRisk Category: Missing requirements for the implemented hardware\nDescription: "The development and operation of an AI system can require significant amounts of (computatio...
+scqa_confidence: 1.0
+file_type: ai_risk_entry
+title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
+scqa_complication: agement of Root Causes for AI Risks\nSub-domain: X.1 > Excluded\nRisk Category: Missing requirements for the implemented hardware\nDescription: "The devel
+domain: Unspecified
+row: 1620
+
+Content:
+Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nSub-domain: X.1 > Excluded\nRisk Category: Missing requirements for the implemented hardware\nDescription: "The development and operation of an AI system can require significant amounts of (computational) power. If not considered in the hardware selection, this can become an issue in development and operation."\nEntity: 4 - Not coded\nIntent: 4 - Not coded\nTiming: 4 - Not coded

@@ -78,6 +78,15 @@ def create_app(config=None):
 def _initialize_services(logger):
     """Initialize all services and components."""
     try:
+        # Initialize metadata service FIRST (for Railway)
+        logger.info("Initializing metadata service...")
+        try:
+            from ..core.metadata import metadata_service
+            metadata_service.initialize()
+            logger.info(f"Metadata service initialized with {metadata_service.get_statistics()['total_rows']} rows")
+        except Exception as e:
+            logger.warning(f"Metadata service initialization failed: {str(e)}")
+        
         # Initialize vector store
         logger.info("Initializing vector store...")
         vector_store = VectorStore(

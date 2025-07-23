@@ -1,0 +1,29 @@
+Repository ID: RID-01104
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_answer: "\nEntity: 1 - Human\nIntent: 3 - Other\nTiming: 3 - Other
+search_high_priority: AI Safety Governance Framework 2. Privacy & Security AI's inherent safety risks
+intent: 3 - Other
+specific_domain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information
+timing: 3 - Other
+scqa_question: What are the implications of this risk?
+scqa_situation: Title: AI Safety Governance Framework\nDomain: 2
+scqa_complication: erring sensitive information\nRisk Category: AI's inherent safety risks\nRisk Subcategory: Risks from data (Risks of illegal collection and use of data)\n
+file_type: ai_risk_entry
+domain: 2. Privacy & Security
+search_medium_priority: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information
+title: AI Safety Governance Framework
+subdomain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information
+search_low_priority: AI Risk Database v3 ai_risk_entry
+content_preview: Title: AI Safety Governance Framework\nDomain: 2. Privacy & Security\nSub-domain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information\nRisk Category: AI's inherent safety risks\nRisk Subcategory: Risks from data (Risks of illegal collection and use of data)\nDescripti...
+entity: 1 - Human
+scqa_content_type: risk_description
+sheet: AI Risk Database v3
+row: 1081
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+risk_category: AI's inherent safety risks
+scqa_confidence: 1.0
+search_all_fields: AI Safety Governance Framework 2. Privacy & Security AI's inherent safety risks 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information AI Risk Database v3 ai_risk_entry
+rid: RID-01104
+
+Content:
+Title: AI Safety Governance Framework\nDomain: 2. Privacy & Security\nSub-domain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information\nRisk Category: AI's inherent safety risks\nRisk Subcategory: Risks from data (Risks of illegal collection and use of data)\nDescription: "The collection of AI training data and the interaction with users during service provision pose security risks, including collecting data without consent and improper use of data and personal information."\nEntity: 1 - Human\nIntent: 3 - Other\nTiming: 3 - Other
