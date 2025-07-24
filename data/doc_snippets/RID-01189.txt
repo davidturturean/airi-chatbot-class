@@ -1,29 +1,29 @@
 Repository ID: RID-01189
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-scqa_answer: "\nEntity: 4 - Not coded\nIntent: 4 - Not coded\nTiming: 4 - Not coded
-sheet: AI Risk Database v3
-search_low_priority: AI Risk Database v3 ai_risk_entry
-title: Regulating under Uncertainty: Governance Options for Generative AI
 entity: 4 - Not coded
-scqa_complication: ocioeconomic & Environmental\nRisk Category: Environmental, economical, and societal challenges\nDescription: "Beyond the risks associated with AI technol
-specific_domain: 6.0 > Socioeconomic & Environmental
 rid: RID-01189
-search_medium_priority: 6.0 > Socioeconomic & Environmental 6.0 > Socioeconomic & Environmental
-file_type: ai_risk_entry
-timing: 4 - Not coded
-intent: 4 - Not coded
-search_all_fields: Regulating under Uncertainty: Governance Options for Generative AI 6. Socioeconomic and Environmental Environmental, economical, and societal challenges 6.0 > Socioeconomic & Environmental 6.0 > Socioeconomic & Environmental AI Risk Database v3 ai_risk_entry
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-scqa_situation: Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 6
-risk_category: Environmental, economical, and societal challenges
-scqa_confidence: 1.0
-content_preview: Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.0 > Socioeconomic & Environmental\nRisk Category: Environmental, economical, and societal challenges\nDescription: "Beyond the risks associated with AI technology and ...
-row: 1166
+title: Regulating under Uncertainty: Governance Options for Generative AI
 scqa_question: What are the implications of this risk?
-search_high_priority: Regulating under Uncertainty: Governance Options for Generative AI 6. Socioeconomic and Environmental Environmental, economical, and societal challenges
 domain: 6. Socioeconomic and Environmental
+search_low_priority: AI Risk Database v3 ai_risk_entry
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+intent: 4 - Not coded
+search_medium_priority: 6.0 > Socioeconomic & Environmental 6.0 > Socioeconomic & Environmental
+specific_domain: 6.0 > Socioeconomic & Environmental
+file_type: ai_risk_entry
 subdomain: 6.0 > Socioeconomic & Environmental
+scqa_situation: Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 6
+scqa_confidence: 1.0
+sheet: AI Risk Database v3
+scqa_answer: "\nEntity: 4 - Not coded\nIntent: 4 - Not coded\nTiming: 4 - Not coded
+row: 1166
+scqa_complication: ocioeconomic & Environmental\nRisk Category: Environmental, economical, and societal challenges\nDescription: "Beyond the risks associated with AI technol
+timing: 4 - Not coded
+search_high_priority: Regulating under Uncertainty: Governance Options for Generative AI 6. Socioeconomic and Environmental Environmental, economical, and societal challenges
+risk_category: Environmental, economical, and societal challenges
 scqa_content_type: impact_analysis
+search_all_fields: Regulating under Uncertainty: Governance Options for Generative AI 6. Socioeconomic and Environmental Environmental, economical, and societal challenges 6.0 > Socioeconomic & Environmental 6.0 > Socioeconomic & Environmental AI Risk Database v3 ai_risk_entry
+content_preview: Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.0 > Socioeconomic & Environmental\nRisk Category: Environmental, economical, and societal challenges\nDescription: "Beyond the risks associated with AI technology and ...
 
 Content:
 Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.0 > Socioeconomic & Environmental\nRisk Category: Environmental, economical, and societal challenges\nDescription: "Beyond the risks associated with AI technology and its applications, and the legal challenges arising from its development, it is crucial to consider other long- term issues posed by the deployment of increasingly advanced generative AI models. These risks to society, sometimes referred to as “systemic risks,”537 encompass several key areas: the potential for excessive market concentration, the impacts on employment, environmental consequences, and broader risks to humanity."\nEntity: 4 - Not coded\nIntent: 4 - Not coded\nTiming: 4 - Not coded

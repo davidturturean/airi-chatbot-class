@@ -1,29 +1,29 @@
 Repository ID: RID-01637
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-content_preview: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
-search_all_fields: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks Unspecified Unspecified AI Risk Database v3 ai_risk_entry
-scqa_content_type: risk_description
-specific_domain: Unspecified
-scqa_situation: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
-file_type: ai_risk_entry
-intent: 
-scqa_confidence: 1.0
 rid: RID-01637
 search_low_priority: AI Risk Database v3 ai_risk_entry
-scqa_answer: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
-risk_category: 
-scqa_complication: agement of Root Causes for AI Risks
-timing: 
-entity: 
-search_medium_priority: Unspecified
-row: 1614
-subdomain: 
-sheet: AI Risk Database v3
-search_high_priority: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks Unspecified
-title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
+scqa_situation: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
 scqa_question: What are the implications of this risk?
-domain: Unspecified
+risk_category: 
+timing: 
+title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
+entity: 
+specific_domain: Unspecified
+intent: 
 url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+domain: Unspecified
+scqa_complication: agement of Root Causes for AI Risks
+content_preview: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
+search_high_priority: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks Unspecified
+row: 1614
+sheet: AI Risk Database v3
+subdomain: 
+scqa_content_type: risk_description
+search_all_fields: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks Unspecified Unspecified AI Risk Database v3 ai_risk_entry
+scqa_confidence: 1.0
+file_type: ai_risk_entry
+search_medium_priority: Unspecified
+scqa_answer: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
 
 Content:
 Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks

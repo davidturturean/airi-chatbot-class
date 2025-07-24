@@ -83,16 +83,31 @@ class QueryProcessor:
                     # Map inquiry types to our internal types
                     if query_type == "employment_risk":
                         query_type = "employment"
+                    elif query_type == "safety_risk":
+                        query_type = "safety"
+                    elif query_type == "privacy_risk":
+                        query_type = "privacy"
+                    elif query_type == "bias_risk":
+                        query_type = "bias"
+                    elif query_type == "technical_risk":
+                        query_type = "technical"
+                    elif query_type == "governance_risk":
+                        query_type = "governance"
+                    elif query_type.endswith("_risk"):
+                        # Default mapping for any other _risk patterns
+                        query_type = query_type.replace("_risk", "")
                     
                     # Enhanced logging with confidence and reasoning
                     logger.info(f"LLM classification - Domain: {domain}, Confidence: {confidence}")
                     if reasoning:
                         logger.info(f"LLM reasoning: {reasoning}")
                     
-                    # Smart fallback: if LLM confidence is LOW, try keyword fallback
-                    if confidence == 'low' and domain not in ['bias', 'socioeconomic', 'safety', 'privacy', 'governance', 'technical']:
-                        logger.info(f"LLM confidence is LOW, attempting keyword fallback...")
+                    # Smart fallback: if LLM confidence is LOW, only reset if domain is actually unknown
+                    if confidence == 'low' and domain == 'other':
+                        logger.info(f"LLM confidence is LOW and domain is unknown, attempting keyword fallback...")
                         domain = None  # This will trigger keyword classification below
+                    elif confidence == 'low' and domain in ['bias', 'socioeconomic', 'safety', 'privacy', 'governance', 'technical']:
+                        logger.info(f"LLM confidence is LOW but domain '{domain}' is valid, keeping classification")
                 
                 logger.info(f"Query type detected: {query_type}")
                 if domain:
@@ -147,9 +162,18 @@ class QueryProcessor:
             embeddings = self.sentence_transformer.encode([previous_query, current_query])
             similarity = cosine_similarity([embeddings[0]], [embeddings[1]])[0][0]
             
-            # Reset if similarity < 0.2 (very different queries)
-            should_reset = similarity < 0.2
-            logger.info(f"Query similarity: {similarity:.3f}, reset: {should_reset}")
+            # Check for domain change as additional reset trigger
+            prev_domain = self.domain_classifier.classify_domain(previous_query)
+            curr_domain = self.domain_classifier.classify_domain(current_query)
+            domain_changed = prev_domain != curr_domain and prev_domain != "other" and curr_domain != "other"
+            
+            # Reset if similarity < 0.3 (moderately different) OR domains significantly changed
+            should_reset = similarity < 0.3 or domain_changed
+            
+            # Enhanced logging
+            logger.info(f"Session reset check - Similarity: {similarity:.3f}, "
+                       f"Domain change: {prev_domain} → {curr_domain}, "
+                       f"Reset: {should_reset}")
             
             return should_reset
             
@@ -178,26 +202,30 @@ class QueryProcessor:
         
         return enhanced_query
     
-    def filter_documents_by_relevance(self, docs: List[Document], query_type: str) -> List[Document]:
+    def filter_documents_by_relevance(self, docs: List[Document], query_type: str, domain: str = None) -> List[Document]:
         """
-        Filter and prioritize documents based on query type.
+        Filter and prioritize documents based on domain (preferred) or query type.
         
         Args:
             docs: Retrieved documents
-            query_type: Query type
+            query_type: Query type (fallback)
+            domain: Domain classification (preferred for filtering)
             
         Returns:
             Filtered and prioritized documents
         """
+        # Use domain for filtering if provided, otherwise fall back to query_type
+        filter_key = domain if domain else query_type
+        
         # Generic domain-based document filtering
-        if query_type == "general" or not self.domain_classifier.is_domain_enabled(query_type):
+        if filter_key == "general" or not self.domain_classifier.is_domain_enabled(filter_key):
             return docs
         
         domain_docs = []
         other_docs = []
         
-        # Get domain keywords for matching
-        domain_keywords = self.domain_classifier.get_domain_keywords(query_type)
+        # Get domain keywords for matching using the filter key
+        domain_keywords = self.domain_classifier.get_domain_keywords(filter_key)
         
         for doc in docs:
             doc_domain = doc.metadata.get('domain', '').lower()
@@ -218,17 +246,18 @@ class QueryProcessor:
         # Prioritize domain docs, but include some others for context
         filtered_docs = domain_docs[:6] + other_docs[:2]
         
-        logger.info(f"Filtered to {len(domain_docs)} {query_type}-specific documents and {min(2, len(other_docs))} general documents")
+        logger.info(f"Filtered to {len(domain_docs)} {filter_key}-specific documents and {min(2, len(other_docs))} general documents")
         
         return filtered_docs
     
-    def generate_prompt(self, message: str, query_type: str, context: str, session_id: str = "default", docs: List[Document] = None) -> str:
+    def generate_prompt(self, message: str, query_type: str, domain: str, context: str, session_id: str = "default", docs: List[Document] = None) -> str:
         """
         Generate enhanced prompt using the new prompt management system.
 
         Args:
             message: User query
-            query_type: Detected query type  
+            query_type: Detected query type
+            domain: Detected domain (e.g., 'safety', 'privacy', 'bias')
             context: Retrieved context
             session_id: Session ID for intro tracking
             docs: Retrieved documents for RID extraction
@@ -236,13 +265,18 @@ class QueryProcessor:
         Returns:
             Enhanced prompt with brevity rules and domain-specific guidance
         """
-        # Detect domain from query type or use domain classifier
-        domain = query_type if query_type in ['socioeconomic', 'safety', 'privacy', 'bias', 'governance', 'technical'] else 'general'
-        if domain == 'general':
-            # Try to detect domain using classifier
+        # Use the provided domain, fallback to classifier if needed
+        if not domain or domain == 'other':
+            # Only use classifier as fallback if no domain was provided or it's 'other'
             detected_domain = self.domain_classifier.classify_domain(message)
             if detected_domain != 'other':
                 domain = detected_domain
+            else:
+                domain = 'general'
+        
+        # Ensure domain is valid for prompt templates
+        if domain not in ['socioeconomic', 'safety', 'privacy', 'bias', 'governance', 'technical']:
+            domain = 'general'
         
         # Extract available RIDs from documents
         available_rids = []

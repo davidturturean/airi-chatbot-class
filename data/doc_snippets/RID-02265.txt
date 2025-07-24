@@ -1,26 +1,26 @@
 Repository ID: RID-02265
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-file_type: ai_risk_domain_summary
-scqa_answer: of the absence of responsibility. The infamous “flash crash” of 2010 is an instance of this: numerous stock trading algorithms from a variety of comp
-entry_count: 59
-summary_type: domain_aggregation
-scqa_situation: es of current risk management and legal processes in the context of the development of an AGI."\nEntity: 1 - Human\nIntent: 3 - Other\nTiming: 1 - Pre-deployment\n\nRi
-specific_domain: 6.5 > Governance failure
-sheet: AI Risk Database v3
-search_all_fields: AI Risk Domain: 6.5 > Governance failure 6.5 > Governance failure 6.5 > Governance failure AI Risk Database v3 ai_risk_domain_summary
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-search_medium_priority: 6.5 > Governance failure
-search_high_priority: AI Risk Domain: 6.5 > Governance failure 6.5 > Governance failure
 scqa_question: If you leave your children in the care of a robotic nanny, and it malfunctions, are you liable or is the manufacturer [45]?
+specific_domain: 6.5 > Governance failure
+search_medium_priority: 6.5 > Governance failure
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+entry_count: 59
 domain: 6.5 > Governance failure
+rid: RID-02265
 scqa_complication: hese labs shall be evaluated. However, the literature also acknowledges potential risks of overregulation, which could hinder innovation.\nEntity: 4 - Not cod
-is_summary: True
-title: AI Risk Domain: 6.5 > Governance failure
-content_preview: AI Risk Domain: 6.5 > Governance failure\n\nThis domain contains 59 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: TASRA: a Taxonomy and Analysis of Societal-Scale Risks from AI\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.5 > Governance failure\nRisk Category: Type...
-scqa_confidence: 1.0
+scqa_answer: of the absence of responsibility. The infamous “flash crash” of 2010 is an instance of this: numerous stock trading algorithms from a variety of comp
+search_high_priority: AI Risk Domain: 6.5 > Governance failure 6.5 > Governance failure
+summary_type: domain_aggregation
 search_low_priority: AI Risk Database v3 ai_risk_domain_summary
 scqa_content_type: case_study
-rid: RID-02265
+search_all_fields: AI Risk Domain: 6.5 > Governance failure 6.5 > Governance failure 6.5 > Governance failure AI Risk Database v3 ai_risk_domain_summary
+sheet: AI Risk Database v3
+scqa_confidence: 1.0
+file_type: ai_risk_domain_summary
+content_preview: AI Risk Domain: 6.5 > Governance failure\n\nThis domain contains 59 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: TASRA: a Taxonomy and Analysis of Societal-Scale Risks from AI\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.5 > Governance failure\nRisk Category: Type...
+scqa_situation: es of current risk management and legal processes in the context of the development of an AGI."\nEntity: 1 - Human\nIntent: 3 - Other\nTiming: 1 - Pre-deployment\n\nRi
+title: AI Risk Domain: 6.5 > Governance failure
+is_summary: True
 
 Content:
 and Environmental\nSub-domain: 6.5 > Governance failure\nRisk Category: Inadequate management of AGI\nDescription: "The capabilities of current risk management and legal processes in the context of the development of an AGI."\nEntity: 1 - Human\nIntent: 3 - Other\nTiming: 1 - Pre-deployment\n\nRisk Entry 4:\nTitle: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.5 > Governance failure\nRisk Category: AI jurisprudence\nRisk Subcategory: AI jurisprudence\nDescription: "When considering legal frameworks, we note that at present no such framework has been identified in literature which would apply blame and responsibility to an autonomous agent for its actions. (Though we do suggest that the recent establishment of laws regarding autonomous vehicles may provide some early frameworks that can be evaluated for efficacy and gaps in future research.) Frequently the

@@ -813,8 +813,8 @@ class VectorStore:
             if domain and domain != 'Unspecified':
                 section_header += settings.CONTEXT_DOMAIN_TEMPLATE.format(domain=domain)
             
-            # Apply evidence budget (800 chars) with direct quote insertion
-            formatted_content = self._format_content_with_evidence_budget(doc.page_content, 800)
+            # Apply evidence budget (1200 chars for synthesis) with direct quote insertion
+            formatted_content = self._format_content_with_evidence_budget(doc.page_content, 1200)
             
             context += section_header + settings.CONTEXT_SECTION_SEPARATOR.format(content=formatted_content)
         

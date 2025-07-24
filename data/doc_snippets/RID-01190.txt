@@ -1,29 +1,29 @@
 Repository ID: RID-01190
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-rid: RID-01190
-scqa_confidence: 1.0
-search_low_priority: AI Risk Database v3 ai_risk_entry
-scqa_answer: "\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 3 - Other
-entity: 1 - Human
-timing: 3 - Other
-specific_domain: 6.1 > Power centralization and unfair distribution of benefits
-sheet: AI Risk Database v3
-subdomain: 6.1 > Power centralization and unfair distribution of benefits
-domain: 6. Socioeconomic and Environmental
-content_preview: Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.1 > Power centralization and unfair distribution of benefits\nRisk Category: Environmental, economical, and societal challenges\nRisk Subcategory: Concentration of mar...
-risk_category: Environmental, economical, and societal challenges
-search_high_priority: Regulating under Uncertainty: Governance Options for Generative AI 6. Socioeconomic and Environmental Environmental, economical, and societal challenges
-scqa_situation: Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 6
 scqa_complication: ntralization and unfair distribution of benefits\nRisk Category: Environmental, economical, and societal challenges\nRisk Subcategory: Concentration of m
-search_all_fields: Regulating under Uncertainty: Governance Options for Generative AI 6. Socioeconomic and Environmental Environmental, economical, and societal challenges 6.1 > Power centralization and unfair distribution of benefits 6.1 > Power centralization and unfair distribution of benefits AI Risk Database v3 ai_risk_entry
+subdomain: 6.1 > Power centralization and unfair distribution of benefits
+scqa_answer: "\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 3 - Other
+scqa_confidence: 1.0
 scqa_question: What are the implications of this risk?
-title: Regulating under Uncertainty: Governance Options for Generative AI
-file_type: ai_risk_entry
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-search_medium_priority: 6.1 > Power centralization and unfair distribution of benefits 6.1 > Power centralization and unfair distribution of benefits
-row: 1167
-intent: 1 - Intentional
+sheet: AI Risk Database v3
+timing: 3 - Other
 scqa_content_type: impact_analysis
+content_preview: Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.1 > Power centralization and unfair distribution of benefits\nRisk Category: Environmental, economical, and societal challenges\nRisk Subcategory: Concentration of mar...
+rid: RID-01190
+intent: 1 - Intentional
+risk_category: Environmental, economical, and societal challenges
+domain: 6. Socioeconomic and Environmental
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_low_priority: AI Risk Database v3 ai_risk_entry
+row: 1167
+search_all_fields: Regulating under Uncertainty: Governance Options for Generative AI 6. Socioeconomic and Environmental Environmental, economical, and societal challenges 6.1 > Power centralization and unfair distribution of benefits 6.1 > Power centralization and unfair distribution of benefits AI Risk Database v3 ai_risk_entry
+file_type: ai_risk_entry
+scqa_situation: Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 6
+specific_domain: 6.1 > Power centralization and unfair distribution of benefits
+search_high_priority: Regulating under Uncertainty: Governance Options for Generative AI 6. Socioeconomic and Environmental Environmental, economical, and societal challenges
+search_medium_priority: 6.1 > Power centralization and unfair distribution of benefits 6.1 > Power centralization and unfair distribution of benefits
+entity: 1 - Human
+title: Regulating under Uncertainty: Governance Options for Generative AI
 
 Content:
 Title: Regulating under Uncertainty: Governance Options for Generative AI\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.1 > Power centralization and unfair distribution of benefits\nRisk Category: Environmental, economical, and societal challenges\nRisk Subcategory: Concentration of market power (Trend toward market concentration)\nDescription: "In the generative AI market, barriers to entry are very high. Developers need access to vast volumes of data, computational resources, technical expertise, and capital. Large technology companies with such access are able to exploit economies of scale, economies of scope, and feedback effects (learning effects from user- generated data).542 All this gives them an overwhelming advantage over smaller companies, making competition increasingly challenging for these smaller entities."\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 3 - Other

@@ -1,29 +1,29 @@
 Repository ID: RID-01200
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-rid: RID-01200
-entity: 
-scqa_situation: Title: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile\nRisk Category: CBRN Information or Capabilities\nAdditional Evidence: "Recent research on this topic found that LLM outputs regarding biological threat creation and attack planning provided minimal assistance beyond traditional search engine queries, suggesting that state-of- the-art LLMs at the time these studies were conducted do not substantially increase the operational likelihood of such an attack
-risk_category: CBRN Information or Capabilities
-scqa_answer: , whether information access is one such barrier), and how well GAI can help actors address those barriers
-search_high_priority: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile Unspecified CBRN Information or Capabilities
-search_medium_priority: Unspecified
-scqa_question: , whether information access is one such barrier), and how well GAI can help actors address those barriers?
-intent: 
-timing: 
-scqa_confidence: 1.0
-domain: Unspecified
-search_low_priority: AI Risk Database v3 ai_risk_entry
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-sheet: AI Risk Database v3
-subdomain: 
-file_type: ai_risk_entry
-scqa_content_type: impact_analysis
-search_all_fields: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile Unspecified CBRN Information or Capabilities Unspecified AI Risk Database v3 ai_risk_entry
-scqa_complication: itle: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile\nRisk Category: CBRN Information or Capabilities\nAddi
 title: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile
+entity: 
+scqa_content_type: impact_analysis
+scqa_situation: Title: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile\nRisk Category: CBRN Information or Capabilities\nAdditional Evidence: "Recent research on this topic found that LLM outputs regarding biological threat creation and attack planning provided minimal assistance beyond traditional search engine queries, suggesting that state-of- the-art LLMs at the time these studies were conducted do not substantially increase the operational likelihood of such an attack
+sheet: AI Risk Database v3
+scqa_confidence: 1.0
+scqa_complication: itle: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile\nRisk Category: CBRN Information or Capabilities\nAddi
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_answer: , whether information access is one such barrier), and how well GAI can help actors address those barriers
+search_all_fields: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile Unspecified CBRN Information or Capabilities Unspecified AI Risk Database v3 ai_risk_entry
+search_medium_priority: Unspecified
+intent: 
+subdomain: 
+domain: Unspecified
+timing: 
 specific_domain: Unspecified
-content_preview: Title: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile\nRisk Category: CBRN Information or Capabilities\nAdditional Evidence: "Recent research on this topic found that LLM outputs regarding biological threat creation and attack planning provided minimal ...
+rid: RID-01200
+file_type: ai_risk_entry
+risk_category: CBRN Information or Capabilities
 row: 1177
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_question: , whether information access is one such barrier), and how well GAI can help actors address those barriers?
+search_high_priority: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile Unspecified CBRN Information or Capabilities
+content_preview: Title: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile\nRisk Category: CBRN Information or Capabilities\nAdditional Evidence: "Recent research on this topic found that LLM outputs regarding biological threat creation and attack planning provided minimal ...
 
 Content:
 Title: Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile\nRisk Category: CBRN Information or Capabilities\nAdditional Evidence: "Recent research on this topic found that LLM outputs regarding biological threat creation and attack planning provided minimal assistance beyond traditional search engine queries, suggesting that state-of- the-art LLMs at the time these studies were conducted do not substantially increase the operational likelihood of such an attack. The physical synthesis development, production, and use of chemical or biological agents will continue to require both applicable expertise and supporting materials and infrastructure. The impact of GAI on chemical or biological agent misuse will depend on what the key barriers for malicious actors are (e.g., whether information access is one such barrier), and how well GAI can help actors address those barriers."

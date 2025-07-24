@@ -12,6 +12,7 @@ from .citation_service import CitationService
 from ..validation.response_validator import validation_chain
 from ..metadata import metadata_service
 from ..query.technical_handler import get_technical_handler
+from .smart_web_search import smart_web_search
 from ...config.logging import get_logger
 from ...config.settings import settings
 
@@ -91,13 +92,66 @@ class ChatService:
             elif intent_result.category == IntentCategory.CROSS_DB_QUERY:
                 logger.info(f"Processing cross-database query (confidence: {intent_result.confidence:.2f})")
                 
-                # For now, route to metadata service which can handle joins
+                # Initialize metadata service if needed
                 if not metadata_service._initialized:
                     metadata_service.initialize()
                 
-                response, raw_results = metadata_service.query(message)
-                self._update_conversation_history(conversation_id, message, response)
-                return response, raw_results
+                # First, try to get structured data from metadata service
+                metadata_response, raw_results = metadata_service.query(message)
+                
+                # Also get related documents from vector store for context
+                query_type, domain = self.query_processor.analyze_query(message, conversation_id)
+                
+                # For cross-domain queries, get documents from multiple domains
+                if 'between' in message.lower() or 'cross-domain' in message.lower() or 'cross domain' in message.lower():
+                    # Extract domains mentioned in query
+                    domains_mentioned = []
+                    for d in ['healthcare', 'finance', 'education', 'military', 'legal']:
+                        if d in message.lower():
+                            domains_mentioned.append(d)
+                    
+                    # Get documents for each domain
+                    docs = []
+                    if domains_mentioned and self.vector_store:
+                        for domain_term in domains_mentioned:
+                            # Search for privacy risks in each specific domain
+                            search_query = f"{domain} risks {domain_term}"
+                            domain_docs = self.vector_store.get_relevant_documents(
+                                search_query, k=3
+                            )
+                            docs.extend(domain_docs)
+                        # Remove duplicates
+                        seen = set()
+                        unique_docs = []
+                        for doc in docs:
+                            doc_id = doc.metadata.get('rid', doc.page_content[:50])
+                            if doc_id not in seen:
+                                seen.add(doc_id)
+                                unique_docs.append(doc)
+                        docs = unique_docs[:6]  # Limit to 6 docs total
+                    else:
+                        docs = self.vector_store.get_relevant_documents(message, k=4) if self.vector_store else []
+                else:
+                    docs = self.vector_store.get_relevant_documents(message, k=3) if self.vector_store else []
+                
+                # Combine results if we have both
+                if docs and raw_results:
+                    # Create enriched response combining both sources
+                    combined_response = f"{metadata_response}\n\n**Related Repository Documents:**\n"
+                    for i, doc in enumerate(docs[:3], 1):
+                        rid = doc.metadata.get('rid', 'Unknown')
+                        title = doc.metadata.get('title', 'Untitled')
+                        combined_response += f"\n{i}. {title} ({rid})"
+                    
+                    # Combine sources for Related Documents tab
+                    combined_sources = raw_results + docs
+                    
+                    self._update_conversation_history(conversation_id, message, combined_response)
+                    return combined_response, combined_sources
+                else:
+                    # Return just metadata results if no documents found
+                    self._update_conversation_history(conversation_id, message, metadata_response)
+                    return metadata_response, raw_results
             
             # 3. Handle non-repository queries
             elif not intent_result.should_process:
@@ -149,12 +203,19 @@ class ChatService:
             context = self._format_context(docs, query_type)
             
             # 9. Generate response
-            response = self._generate_response(message, query_type, context, conversation_id, docs)
+            response = self._generate_response(message, query_type, domain, context, conversation_id, docs)
             
-            # 10. Enhance with citations
+            # 10. Check if web search needed and append results
+            web_results = smart_web_search.search_if_needed(message, context, len(docs))
+            if web_results:
+                web_context = smart_web_search.format_search_results(web_results)
+                response += web_context
+                logger.info(f"Added {len(web_results)} web search results to response")
+            
+            # 11. Enhance with citations
             enhanced_response = self.citation_service.enhance_response_with_citations(response, docs)
             
-            # 11. Self-validation chain for quality assurance
+            # 12. Self-validation chain for quality assurance
             validated_response, validation_results = validation_chain.validate_and_improve(
                 response=enhanced_response,
                 query=message,
@@ -222,7 +283,7 @@ class ChatService:
                 )
                 
                 # Filter and prioritize domain-specific documents
-                docs = self.query_processor.filter_documents_by_relevance(docs, query_type)
+                docs = self.query_processor.filter_documents_by_relevance(docs, query_type, domain)
                 
                 logger.info(f"Retrieved {len(docs)} documents using enhanced {domain} search")
             else:
@@ -265,7 +326,7 @@ class ChatService:
             logger.error(f"Error formatting context: {str(e)}")
             return ""
     
-    def _generate_response(self, message: str, query_type: str, context: str, conversation_id: str, docs: List[Document] = None) -> str:
+    def _generate_response(self, message: str, query_type: str, domain: str, context: str, conversation_id: str, docs: List[Document] = None) -> str:
         """Generate response using the AI model."""
         if not self.gemini_model:
             logger.warning("No Gemini model available")
@@ -276,7 +337,7 @@ class ChatService:
             history = self._get_conversation_history(conversation_id)
             
             # Generate enhanced prompt with session awareness and RID information
-            prompt = self.query_processor.generate_prompt(message, query_type, context, conversation_id, docs)
+            prompt = self.query_processor.generate_prompt(message, query_type, domain, context, conversation_id, docs)
             
             # DEBUG: Log the actual prompt being sent to Gemini
             logger.info(f"=== GEMINI PROMPT DEBUG ===")

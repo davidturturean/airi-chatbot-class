@@ -1,29 +1,29 @@
 Repository ID: RID-00175
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-scqa_answer: "\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 2 - Post-deployment
-search_low_priority: AI Risk Database v3 ai_risk_entry
-row: 152
-entity: 2 - AI
 intent: 3 - Other
-subdomain: 6.2 > Increased inequality and decline in employment quality
-title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review
-risk_category: Competing for jobs
-search_medium_priority: 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality
-scqa_complication: tle: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 6. Socioeconomic and Environmen
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_low_priority: AI Risk Database v3 ai_risk_entry
 scqa_confidence: 1.0
-specific_domain: 6.2 > Increased inequality and decline in employment quality
-search_all_fields: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review 6. Socioeconomic and Environmental Competing for jobs 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality AI Risk Database v3 ai_risk_entry
-rid: RID-00175
+risk_category: Competing for jobs
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 scqa_question: What are the implications of this risk?
 timing: 2 - Post-deployment
-content_preview: Title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.2 > Increased inequality and decline in employment quality\nRisk Category: Competing for jobs\nRisk Subcategory: Competing fo...
 file_type: ai_risk_entry
-scqa_situation: Title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 6
-domain: 6. Socioeconomic and Environmental
 scqa_content_type: risk_description
+search_medium_priority: 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality
+specific_domain: 6.2 > Increased inequality and decline in employment quality
+subdomain: 6.2 > Increased inequality and decline in employment quality
+row: 152
+scqa_answer: "\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 2 - Post-deployment
+title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review
+content_preview: Title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.2 > Increased inequality and decline in employment quality\nRisk Category: Competing for jobs\nRisk Subcategory: Competing fo...
 search_high_priority: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review 6. Socioeconomic and Environmental Competing for jobs
+entity: 2 - AI
+domain: 6. Socioeconomic and Environmental
 sheet: AI Risk Database v3
+search_all_fields: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review 6. Socioeconomic and Environmental Competing for jobs 6.2 > Increased inequality and decline in employment quality 6.2 > Increased inequality and decline in employment quality AI Risk Database v3 ai_risk_entry
+scqa_situation: Title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 6
+rid: RID-00175
+scqa_complication: tle: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 6. Socioeconomic and Environmen
 
 Content:
 Title: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.2 > Increased inequality and decline in employment quality\nRisk Category: Competing for jobs\nRisk Subcategory: Competing for jobs\nDescription: "AI agents may compete against humans for jobs, though history shows that when a technology replaces a human job, it creates new jobs that need more skills."\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 2 - Post-deployment

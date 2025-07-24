@@ -1,29 +1,29 @@
 Repository ID: RID-01451
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-domain: 4. Malicious Actors & Misuse
-title: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 specific_domain: 4.2 > Cyberattacks, weapon development or use, and mass harm
-row: 1428
 risk_category: Dangerous capabilities in AI systems
+row: 1428
 scqa_confidence: 1.0
-intent: 1 - Intentional
+content_preview: Title: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals\nDomain: 4. Malicious Actors & Misuse\nSub-domain: 4.2 > Cyberattacks, weapon development or use, and mass harm\nRisk Category: Dangerous capabilities in AI systems\nRisk Subcategory: Acquisition of a goal to har...
+search_low_priority: AI Risk Database v3 ai_risk_entry
+subdomain: 4.2 > Cyberattacks, weapon development or use, and mass harm
+rid: RID-01451
+entity: 1 - Human
 scqa_content_type: risk_description
 scqa_question: What are the implications of this risk?
-search_low_priority: AI Risk Database v3 ai_risk_entry
-rid: RID-01451
-content_preview: Title: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals\nDomain: 4. Malicious Actors & Misuse\nSub-domain: 4.2 > Cyberattacks, weapon development or use, and mass harm\nRisk Category: Dangerous capabilities in AI systems\nRisk Subcategory: Acquisition of a goal to har...
-search_medium_priority: 4.2 > Cyberattacks, weapon development or use, and mass harm 4.2 > Cyberattacks, weapon development or use, and mass harm
-timing: 1 - Pre-deployment
-scqa_complication: opment or use, and mass harm\nRisk Category: Dangerous capabilities in AI systems\nRisk Subcategory: Acquisition of a goal to harm society\nDescription: "
-scqa_answer: 2 > Cyberattacks, weapon development or use, and mass harm\nRisk Category: Dangerous capabilities in AI systems\nRisk Subcategory: Acquisition of a goal to harm society\nDescription: "cases of AI systems being given the outright goal of harming humanity (ChaosGPT);"\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 1 - Pre-deployment
-file_type: ai_risk_entry
-subdomain: 4.2 > Cyberattacks, weapon development or use, and mass harm
-search_high_priority: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals 4. Malicious Actors & Misuse Dangerous capabilities in AI systems
 sheet: AI Risk Database v3
-entity: 1 - Human
+domain: 4. Malicious Actors & Misuse
+search_high_priority: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals 4. Malicious Actors & Misuse Dangerous capabilities in AI systems
+intent: 1 - Intentional
+file_type: ai_risk_entry
+search_medium_priority: 4.2 > Cyberattacks, weapon development or use, and mass harm 4.2 > Cyberattacks, weapon development or use, and mass harm
+title: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_answer: 2 > Cyberattacks, weapon development or use, and mass harm\nRisk Category: Dangerous capabilities in AI systems\nRisk Subcategory: Acquisition of a goal to harm society\nDescription: "cases of AI systems being given the outright goal of harming humanity (ChaosGPT);"\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 1 - Pre-deployment
+scqa_complication: opment or use, and mass harm\nRisk Category: Dangerous capabilities in AI systems\nRisk Subcategory: Acquisition of a goal to harm society\nDescription: "
 scqa_situation: mass harm\nRisk Category: Dangerous capabilities in AI systems\nRisk Subcategory: Acquisition of a goal to harm society\nDescription: "cases of AI systems being g
 search_all_fields: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals 4. Malicious Actors & Misuse Dangerous capabilities in AI systems 4.2 > Cyberattacks, weapon development or use, and mass harm 4.2 > Cyberattacks, weapon development or use, and mass harm AI Risk Database v3 ai_risk_entry
+timing: 1 - Pre-deployment
 
 Content:
 Title: Advancing AI Governance: A Literature Review of Problems, Options, and Proposals\nDomain: 4. Malicious Actors & Misuse\nSub-domain: 4.2 > Cyberattacks, weapon development or use, and mass harm\nRisk Category: Dangerous capabilities in AI systems\nRisk Subcategory: Acquisition of a goal to harm society\nDescription: "cases of AI systems being given the outright goal of harming humanity (ChaosGPT);"\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 1 - Pre-deployment

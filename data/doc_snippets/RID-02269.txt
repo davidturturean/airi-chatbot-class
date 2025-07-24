@@ -1,26 +1,26 @@
 Repository ID: RID-02269
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-title: AI Risk Domain: 1.2 > Exposure to toxic content
-scqa_situation: main: 1.2 > Exposure to toxic content\n\nThis domain contains 106 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to toxic content\nRisk Category:
-scqa_answer: , and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to toxic content\nRisk C
-entry_count: 106
-scqa_content_type: mitigation_strategy
-domain: 1.2 > Exposure to toxic content
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-search_all_fields: AI Risk Domain: 1.2 > Exposure to toxic content 1.2 > Exposure to toxic content 1.2 > Exposure to toxic content AI Risk Database v3 ai_risk_domain_summary
 is_summary: True
-search_low_priority: AI Risk Database v3 ai_risk_domain_summary
-search_high_priority: AI Risk Domain: 1.2 > Exposure to toxic content 1.2 > Exposure to toxic content
-sheet: AI Risk Database v3
-search_medium_priority: 1.2 > Exposure to toxic content
+scqa_content_type: mitigation_strategy
 scqa_complication: AI Risk Domain: 1.2 > Exposure to toxic content\n\nThis domain contains 106 risk entries from the AI Risk Repository:\n\nRisk E
-scqa_question: What is considered a sensitive topic, such as egregious violence or adult sexual content, can vary widely by viewpoint?
-content_preview: AI Risk Domain: 1.2 > Exposure to toxic content\n\nThis domain contains 106 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to tox...
+search_high_priority: AI Risk Domain: 1.2 > Exposure to toxic content 1.2 > Exposure to toxic content
+search_medium_priority: 1.2 > Exposure to toxic content
+search_low_priority: AI Risk Database v3 ai_risk_domain_summary
 specific_domain: 1.2 > Exposure to toxic content
-scqa_confidence: 1.0
-rid: RID-02269
+sheet: AI Risk Database v3
 file_type: ai_risk_domain_summary
+rid: RID-02269
+scqa_situation: main: 1.2 > Exposure to toxic content\n\nThis domain contains 106 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to toxic content\nRisk Category:
+search_all_fields: AI Risk Domain: 1.2 > Exposure to toxic content 1.2 > Exposure to toxic content 1.2 > Exposure to toxic content AI Risk Database v3 ai_risk_domain_summary
+title: AI Risk Domain: 1.2 > Exposure to toxic content
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+content_preview: AI Risk Domain: 1.2 > Exposure to toxic content\n\nThis domain contains 106 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to tox...
 summary_type: domain_aggregation
+scqa_confidence: 1.0
+scqa_question: What is considered a sensitive topic, such as egregious violence or adult sexual content, can vary widely by viewpoint?
+entry_count: 106
+scqa_answer: , and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to toxic content\nRisk C
+domain: 1.2 > Exposure to toxic content
 
 Content:
-a widely discussed concern. Bang et al. (2021) evaluated several large models and found that they occasionally express inappropriate or extremist views when discussing political top-ics. Furthermore, models like ChatGPT (OpenAI, 2022) that claim political neutrality and aim to provide objective information for users have been shown to exhibit notable left-leaning political biases in areas like economics, social policy, foreign affairs, and civil liberties.\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 2 - Post-deployment\n\nRisk Entry 7:\nTitle: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to toxic content\nRisk Category: Harmful Content - Toxicity\nDescription: Generating unethical, fraudulent, toxic, violent, pornographic, or other harmful content is a further predominant concern, again focusing notably on LLMs and text-to-image models. Numerous studies highlight the risks associated with the
+violent, pornographic, or other harmful content is a further predominant concern, again focusing notably on LLMs and text-to-image models. Numerous studies highlight the risks associated with the intentional creation of disinformation, fake news, propaganda, or deepfakes, underscoring their significant threat to the integrity of public discourse and the trust in credible media. Additionally, papers explore the potential for generative models to aid in criminal activities, incidents of self-harm, identity theft, or impersonation. Furthermore, the literature investigates risks posed by LLMs when generating advice in high-stakes domains such as health, safety-related issues, as well as legal or financial matters.\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment\n\nRisk Entry 8:\nTitle: Evaluating the Social Impact of Generative AI Systems in Systems and Society\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to toxic content\nRisk Category:

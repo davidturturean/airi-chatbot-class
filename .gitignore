@@ -38,6 +38,12 @@ simple_store_data.json
 # Logs
 *.log
 
+# Test outputs
+tests/results/
+tests/debug/
+test_results_*.json
+debug_*.log
+
 # Backup files
 backup_*/
 

@@ -1,29 +1,29 @@
 Repository ID: RID-00885
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-scqa_complication: priate governance is crucial. However, AI governance is challenging to implement. First, machine learning systems have opaque algorithms and unpredictable out
-entity: 1 - Human
-title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration
-content_preview: Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.5 > Governance failure\nRisk Category: Regulations and policy challenges\nRisk Subcategory: Governance\nDescription: "Generative AI can create new risks a...
-file_type: ai_risk_entry
-scqa_question: What are the implications of this risk?
-scqa_situation: overnance. To ensure that generative AI functions in a way that benefits society, appropriate governance is crucial. However, AI governance is challenging to implement. First, machine learning systems have opaque algorithms and unpredictable outcomes, which can impede human controllability over AI b
 scqa_answer: s, which can impede human controllability over AI behavior and create difficulties in assigning liability and accountability for AI defects. Second, d
+scqa_content_type: risk_description
+scqa_complication: priate governance is crucial. However, AI governance is challenging to implement. First, machine learning systems have opaque algorithms and unpredictable out
+scqa_question: What are the implications of this risk?
+title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration
+row: 862
+search_medium_priority: 6.5 > Governance failure 6.5 > Governance failure
+rid: RID-00885
+specific_domain: 6.5 > Governance failure
+subdomain: 6.5 > Governance failure
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_situation: overnance. To ensure that generative AI functions in a way that benefits society, appropriate governance is crucial. However, AI governance is challenging to implement. First, machine learning systems have opaque algorithms and unpredictable outcomes, which can impede human controllability over AI b
 sheet: AI Risk Database v3
 intent: 3 - Other
-row: 862
-risk_category: Regulations and policy challenges
-scqa_content_type: risk_description
-search_high_priority: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 6. Socioeconomic and Environmental Regulations and policy challenges
-specific_domain: 6.5 > Governance failure
-rid: RID-00885
+content_preview: Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.5 > Governance failure\nRisk Category: Regulations and policy challenges\nRisk Subcategory: Governance\nDescription: "Generative AI can create new risks a...
 search_all_fields: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 6. Socioeconomic and Environmental Regulations and policy challenges 6.5 > Governance failure 6.5 > Governance failure AI Risk Database v3 ai_risk_entry
-search_low_priority: AI Risk Database v3 ai_risk_entry
 domain: 6. Socioeconomic and Environmental
-subdomain: 6.5 > Governance failure
-search_medium_priority: 6.5 > Governance failure 6.5 > Governance failure
-timing: 3 - Other
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+entity: 1 - Human
+file_type: ai_risk_entry
 scqa_confidence: 1.0
+search_high_priority: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 6. Socioeconomic and Environmental Regulations and policy challenges
+risk_category: Regulations and policy challenges
+timing: 3 - Other
 
 Content:
 Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.5 > Governance failure\nRisk Category: Regulations and policy challenges\nRisk Subcategory: Governance\nDescription: "Generative AI can create new risks as well as unintended consequences. Different entities such as corporations (Mäntymäki et al., 2022), universities, and governments (Taeihagh, 2021) are facing the challenge of creating and deploying AI governance. To ensure that generative AI functions in a way that benefits society, appropriate governance is crucial. However, AI governance is challenging to implement. First, machine learning systems have opaque algorithms and unpredictable outcomes, which can impede human controllability over AI behavior and create difficulties in assigning liability and accountability for AI defects. Second, data fragmentation and the lack of interoperability between systems challenge data governance within and across organizations (Taeihagh, 2021). Third, information asymmetries between technology giants and regulators create challenges to the legislation process, as the government lacks information resources for regulating AI (Taeihagh et al., 2021). For the same reasons, lawmakers are not able to design specific rules and duties for programmers (Kroll, 2015)."\nEntity: 1 - Human\nIntent: 3 - Other\nTiming: 3 - Other

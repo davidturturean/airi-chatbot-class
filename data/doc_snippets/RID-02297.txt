@@ -1,22 +1,22 @@
 Repository ID: RID-02297
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-search_high_priority: Causal Factor from Causal Taxonomy statistics
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-title: Causal Factor from Causal Taxonomy statistics
-search_all_fields: Causal Factor from Causal Taxonomy statistics Causal Taxonomy statistics causal_taxonomy
-scqa_content_type: risk_description
-sheet: Causal Taxonomy statistics
-content_preview: Causal Taxonomy Entry:\nThis page is not mobile-friendly; please access on a computer if you can.
 scqa_situation: Causal Taxonomy Entry:\nThis page is not mobile-friendly; please access on a computer if you can
-rid: RID-02297
-scqa_question: What should be done about this?
-scqa_confidence: 0.95
-file_type: causal_taxonomy
-search_low_priority: Causal Taxonomy statistics causal_taxonomy
-scqa_complication: 
-row: 1
+title: Causal Factor from Causal Taxonomy statistics
 search_medium_priority: 
+search_high_priority: Causal Factor from Causal Taxonomy statistics
+file_type: causal_taxonomy
+sheet: Causal Taxonomy statistics
+scqa_confidence: 0.95
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+content_preview: Causal Taxonomy Entry:\nThis page is not mobile-friendly; please access on a computer if you can.
+scqa_question: What should be done about this?
+search_all_fields: Causal Factor from Causal Taxonomy statistics Causal Taxonomy statistics causal_taxonomy
+row: 1
+scqa_content_type: risk_description
 scqa_answer: Causal Taxonomy Entry:\nThis page is not mobile-friendly; please access on a computer if you can
+rid: RID-02297
+scqa_complication: 
+search_low_priority: Causal Taxonomy statistics causal_taxonomy
 
 Content:
 Causal Taxonomy Entry:\nThis page is not mobile-friendly; please access on a computer if you can.

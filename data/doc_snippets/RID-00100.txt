@@ -1,28 +1,28 @@
 Repository ID: RID-00100
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-search_medium_priority: 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation
 intent: 2 - Unintentional
-rid: RID-00100
-sheet: AI Risk Database v3
-scqa_question: What are the implications of this risk?
-scqa_answer: "\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 2 - Post-deployment
-title: Navigating the Landscape of AI Ethics and Responsibility
-scqa_content_type: case_study
-scqa_situation: Title: Navigating the Landscape of AI Ethics and Responsibility\nDomain: 1
-risk_category: Broken systems
-subdomain: 1.1 > Unfair discrimination and misrepresentation
-search_low_priority: AI Risk Database v3 ai_risk_entry
 search_high_priority: Navigating the Landscape of AI Ethics and Responsibility 1. Discrimination & Toxicity Broken systems
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 scqa_confidence: 1.0
-row: 77
+sheet: AI Risk Database v3
+scqa_situation: Title: Navigating the Landscape of AI Ethics and Responsibility\nDomain: 1
+search_medium_priority: 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation
+risk_category: Broken systems
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_answer: "\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 2 - Post-deployment
+search_low_priority: AI Risk Database v3 ai_risk_entry
 entity: 2 - AI
-domain: 1. Discrimination & Toxicity
-scqa_complication: riables, like race or gender, but there is no transparency to this effect, making them impossible to challenge. These situations are typically only ident
+content_preview: Title: Navigating the Landscape of AI Ethics and Responsibility\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Broken systems\nDescription: "These are the most mentioned cases. They refer to situations where the algorithm or the t...
+scqa_content_type: case_study
+row: 77
+rid: RID-00100
 search_all_fields: Navigating the Landscape of AI Ethics and Responsibility 1. Discrimination & Toxicity Broken systems 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation AI Risk Database v3 ai_risk_entry
 specific_domain: 1.1 > Unfair discrimination and misrepresentation
-content_preview: Title: Navigating the Landscape of AI Ethics and Responsibility\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Broken systems\nDescription: "These are the most mentioned cases. They refer to situations where the algorithm or the t...
+scqa_question: What are the implications of this risk?
 timing: 2 - Post-deployment
+title: Navigating the Landscape of AI Ethics and Responsibility
+domain: 1. Discrimination & Toxicity
+scqa_complication: riables, like race or gender, but there is no transparency to this effect, making them impossible to challenge. These situations are typically only ident
+subdomain: 1.1 > Unfair discrimination and misrepresentation
 file_type: ai_risk_entry
 
 Content:

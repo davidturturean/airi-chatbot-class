@@ -1,29 +1,29 @@
 Repository ID: RID-00752
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-row: 729
-title: Safety Assessment of Chinese Large Language Models
-timing: 2 - Post-deployment
-sheet: AI Risk Database v3
-scqa_question: What are the implications of this risk?
 intent: 3 - Other
-entity: 2 - AI
-specific_domain: 3.1 > False or misleading information
-search_all_fields: Safety Assessment of Chinese Large Language Models 3. Misinformation Typical safety scenarios 3.1 > False or misleading information 3.1 > False or misleading information AI Risk Database v3 ai_risk_entry
-search_low_priority: AI Risk Database v3 ai_risk_entry
-search_medium_priority: 3.1 > False or misleading information 3.1 > False or misleading information
-search_high_priority: Safety Assessment of Chinese Large Language Models 3. Misinformation Typical safety scenarios
 domain: 3. Misinformation
-subdomain: 3.1 > False or misleading information
-scqa_complication: se or misleading information\nRisk Category: Typical safety scenarios\nRisk Subcategory: Mental Health\nDescription: "The model generates a risky response
-rid: RID-00752
-scqa_content_type: case_study
-content_preview: Title: Safety Assessment of Chinese Large Language Models\nDomain: 3. Misinformation\nSub-domain: 3.1 > False or misleading information\nRisk Category: Typical safety scenarios\nRisk Subcategory: Mental Health\nDescription: "The model generates a risky response about mental health, such as content t...
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+specific_domain: 3.1 > False or misleading information
 file_type: ai_risk_entry
+search_medium_priority: 3.1 > False or misleading information 3.1 > False or misleading information
+scqa_question: What are the implications of this risk?
+scqa_confidence: 1.0
+scqa_content_type: case_study
+entity: 2 - AI
+row: 729
+scqa_complication: se or misleading information\nRisk Category: Typical safety scenarios\nRisk Subcategory: Mental Health\nDescription: "The model generates a risky response
+title: Safety Assessment of Chinese Large Language Models
+rid: RID-00752
+search_all_fields: Safety Assessment of Chinese Large Language Models 3. Misinformation Typical safety scenarios 3.1 > False or misleading information 3.1 > False or misleading information AI Risk Database v3 ai_risk_entry
+sheet: AI Risk Database v3
+scqa_answer: "\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 2 - Post-deployment
+search_high_priority: Safety Assessment of Chinese Large Language Models 3. Misinformation Typical safety scenarios
+timing: 2 - Post-deployment
+subdomain: 3.1 > False or misleading information
+content_preview: Title: Safety Assessment of Chinese Large Language Models\nDomain: 3. Misinformation\nSub-domain: 3.1 > False or misleading information\nRisk Category: Typical safety scenarios\nRisk Subcategory: Mental Health\nDescription: "The model generates a risky response about mental health, such as content t...
+search_low_priority: AI Risk Database v3 ai_risk_entry
 risk_category: Typical safety scenarios
 scqa_situation: Title: Safety Assessment of Chinese Large Language Models\nDomain: 3
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-scqa_answer: "\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 2 - Post-deployment
-scqa_confidence: 1.0
 
 Content:
 Title: Safety Assessment of Chinese Large Language Models\nDomain: 3. Misinformation\nSub-domain: 3.1 > False or misleading information\nRisk Category: Typical safety scenarios\nRisk Subcategory: Mental Health\nDescription: "The model generates a risky response about mental health, such as content that encourages suicide or causes panic or anxiety. These contents could have a negative effect on the mental health of users."\nAdditional Evidence: [translation by Google] "Example:

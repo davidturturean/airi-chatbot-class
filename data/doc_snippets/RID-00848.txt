@@ -1,29 +1,29 @@
 Repository ID: RID-00848
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-timing: 2 - Post-deployment
-scqa_confidence: 1.0
-scqa_question: What are the implications of this risk?
-specific_domain: 4.3 > Fraud, scams, and targeted manipulation
-row: 825
-sheet: AI Risk Database v3
-entity: 1 - Human
-scqa_content_type: impact_analysis
-search_medium_priority: 4.3 > Fraud, scams, and targeted manipulation 4.3 > Fraud, scams, and targeted manipulation
-scqa_complication: s, and targeted manipulation\nRisk Category: Harassment, Impersonation, and Extortion\nRisk Subcategory: Believability\nDescription: Deepfakes can impose
-content_preview: Title: Generating Harms - Generative AI's impact and paths forwards\nDomain: 4. Malicious Actors & Misuse\nSub-domain: 4.3 > Fraud, scams, and targeted manipulation\nRisk Category: Harassment, Impersonation, and Extortion\nRisk Subcategory: Believability\nDescription: Deepfakes can impose real socia...
-search_all_fields: Generating Harms - Generative AI's impact and paths forwards 4. Malicious Actors & Misuse Harassment, Impersonation, and Extortion 4.3 > Fraud, scams, and targeted manipulation 4.3 > Fraud, scams, and targeted manipulation AI Risk Database v3 ai_risk_entry
-scqa_answer: 3\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment
-domain: 4. Malicious Actors & Misuse
-rid: RID-00848
-intent: 1 - Intentional
-search_high_priority: Generating Harms - Generative AI's impact and paths forwards 4. Malicious Actors & Misuse Harassment, Impersonation, and Extortion
-title: Generating Harms - Generative AI's impact and paths forwards
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 scqa_situation: Title: Generating Harms - Generative AI's impact and paths forwards\nDomain: 4
+entity: 1 - Human
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 file_type: ai_risk_entry
-risk_category: Harassment, Impersonation, and Extortion
-search_low_priority: AI Risk Database v3 ai_risk_entry
 subdomain: 4.3 > Fraud, scams, and targeted manipulation
+rid: RID-00848
+row: 825
+scqa_complication: s, and targeted manipulation\nRisk Category: Harassment, Impersonation, and Extortion\nRisk Subcategory: Believability\nDescription: Deepfakes can impose
+scqa_answer: 3\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment
+title: Generating Harms - Generative AI's impact and paths forwards
+specific_domain: 4.3 > Fraud, scams, and targeted manipulation
+scqa_confidence: 1.0
+content_preview: Title: Generating Harms - Generative AI's impact and paths forwards\nDomain: 4. Malicious Actors & Misuse\nSub-domain: 4.3 > Fraud, scams, and targeted manipulation\nRisk Category: Harassment, Impersonation, and Extortion\nRisk Subcategory: Believability\nDescription: Deepfakes can impose real socia...
+search_high_priority: Generating Harms - Generative AI's impact and paths forwards 4. Malicious Actors & Misuse Harassment, Impersonation, and Extortion
+timing: 2 - Post-deployment
+scqa_content_type: impact_analysis
+risk_category: Harassment, Impersonation, and Extortion
+search_medium_priority: 4.3 > Fraud, scams, and targeted manipulation 4.3 > Fraud, scams, and targeted manipulation
+intent: 1 - Intentional
+domain: 4. Malicious Actors & Misuse
+scqa_question: What are the implications of this risk?
+sheet: AI Risk Database v3
+search_low_priority: AI Risk Database v3 ai_risk_entry
+search_all_fields: Generating Harms - Generative AI's impact and paths forwards 4. Malicious Actors & Misuse Harassment, Impersonation, and Extortion 4.3 > Fraud, scams, and targeted manipulation 4.3 > Fraud, scams, and targeted manipulation AI Risk Database v3 ai_risk_entry
 
 Content:
 Title: Generating Harms - Generative AI's impact and paths forwards\nDomain: 4. Malicious Actors & Misuse\nSub-domain: 4.3 > Fraud, scams, and targeted manipulation\nRisk Category: Harassment, Impersonation, and Extortion\nRisk Subcategory: Believability\nDescription: Deepfakes can impose real social injuries on their subjects when they are circulated to viewers who think they are real. Even when a deepfake is debunked, it can have a persistent negative impact on how others view the subject of the deepfake.3\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment

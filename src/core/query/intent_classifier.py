@@ -62,7 +62,10 @@ class IntentClassifier:
                 "AI governance, regulation, and policy frameworks",
                 "Autonomous systems ethics and safety protocols",
                 "Corporate AI deployment assessments and audits",
-                "Government studies on AI impacts and risks"
+                "Government studies on AI impacts and risks",
+                "Cross-domain analysis of AI risks",
+                "Comparing risks between different sectors",
+                "Privacy risks in healthcare and finance"
             ],
             IntentCategory.METADATA_QUERY: [
                 "How many risks are in the database?",
@@ -89,7 +92,9 @@ class IntentClassifier:
                 "Show risks with their mitigations",
                 "Which experts work on bias issues?",
                 "Connect risks to mitigation strategies",
-                "Cross-reference between databases"
+                "Cross-reference between databases",
+                "List all risk IDs with their categories",
+                "Show metadata statistics"
             ],
             IntentCategory.CHIT_CHAT: [
                 "Hello, how are you today?",

@@ -1,26 +1,26 @@
 Repository ID: RID-02279
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+rid: RID-02279
+title: AI Risk Domain: 7.1 > AI pursuing its own goals in conflict with human goals or values
+domain: 7.1 > AI pursuing its own goals in conflict with human goals or values
+scqa_confidence: 1.0
+is_summary: True
+search_all_fields: AI Risk Domain: 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values AI Risk Database v3 ai_risk_domain_summary
+summary_type: domain_aggregation
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+specific_domain: 7.1 > AI pursuing its own goals in conflict with human goals or values
+scqa_question: What are the implications of this risk?
 search_medium_priority: 7.1 > AI pursuing its own goals in conflict with human goals or values
+sheet: AI Risk Database v3
+scqa_situation: se by malicious individuals or groups, especially in the context of open-source models, is highlighted in the literature as a significant factor emphasizing the critic
 search_high_priority: AI Risk Domain: 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values
 scqa_answer: s\nDescription: "Our culture, lifestyle, and even probability of survival may change drastically. Because the intentions programmed into an artificial
+file_type: ai_risk_domain_summary
 content_preview: AI Risk Domain: 7.1 > AI pursuing its own goals in conflict with human goals or values\n\nThis domain contains 90 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review\nDomain: 7. AI System Safety, Failures, & Limitatio...
+scqa_complication: th and respects human values. However, a central debate in this area concerns the methodological challenges in selecting appropriate values. While AI systems
+search_low_priority: AI Risk Database v3 ai_risk_domain_summary
 scqa_content_type: impact_analysis
 entry_count: 90
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-scqa_situation: se by malicious individuals or groups, especially in the context of open-source models, is highlighted in the literature as a significant factor emphasizing the critic
-file_type: ai_risk_domain_summary
-search_all_fields: AI Risk Domain: 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values AI Risk Database v3 ai_risk_domain_summary
-rid: RID-02279
-scqa_confidence: 1.0
-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values
-specific_domain: 7.1 > AI pursuing its own goals in conflict with human goals or values
-summary_type: domain_aggregation
-is_summary: True
-scqa_complication: th and respects human values. However, a central debate in this area concerns the methodological challenges in selecting appropriate values. While AI systems
-sheet: AI Risk Database v3
-scqa_question: What are the implications of this risk?
-title: AI Risk Domain: 7.1 > AI pursuing its own goals in conflict with human goals or values
-search_low_priority: AI Risk Database v3 ai_risk_domain_summary
 
 Content:
-as a significant factor emphasizing the critical importance of implementing robust safety measures.\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 3 - Other\n\nRisk Entry 2:\nTitle: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: Alignment\nDescription: The general tenet of AI alignment involves training generative AI systems to be harmless, helpful, and honest, ensuring their behavior aligns with and respects human values. However, a central debate in this area concerns the methodological challenges in selecting appropriate values. While AI systems can acquire human values through feedback, observation, or debate, there remains ambiguity over which individuals are qualified or legitimized to provide these guiding signals. Another prominent issue pertains to deceptive alignment, which might cause generative AI
+of red teaming measures are deemed to be essential in mitigating these risks, as is the need for increased AI safety research and promoting safety cultures within AI organizations instead of fueling the AI race. Furthermore, papers thematize risks from unforeseen emerging capabilities in generative models, restricting access to dangerous research works, or pausing AI research for the sake of improving safety or governance measures first. Another central issue is the fear of weaponizing AI or leveraging it for mass destruction, especially by using LLMs for the ideation and planning of how to attain, modify, and disseminate biological agents. In general, the threat of AI misuse by malicious individuals or groups, especially in the context of open-source models, is highlighted in the literature as a significant factor emphasizing the critical importance of implementing robust safety measures.\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 3 - Other\n\nRisk Entry 2:\nTitle: Mapping the

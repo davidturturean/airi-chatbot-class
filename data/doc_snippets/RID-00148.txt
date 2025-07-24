@@ -1,29 +1,29 @@
 Repository ID: RID-00148
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_confidence: 1.0
+sheet: AI Risk Database v3
+file_type: ai_risk_entry
+search_medium_priority: Unspecified
+scqa_situation: Title: Examining the differential risk from high-level artificial intelligence and the question of control
+scqa_answer: Title: Examining the differential risk from high-level artificial intelligence and the question of control
 content_preview: Title: Examining the differential risk from high-level artificial intelligence and the question of control
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+entity: 
+risk_category: 
+search_high_priority: Examining the differential risk from high-level artificial intelligence and the question of control Unspecified
+specific_domain: Unspecified
+intent: 
 timing: 
+scqa_content_type: risk_description
+scqa_complication: e: Examining the differential risk from high-level artificial intelligence and the question of control
+subdomain: 
+search_all_fields: Examining the differential risk from high-level artificial intelligence and the question of control Unspecified Unspecified AI Risk Database v3 ai_risk_entry
+rid: RID-00148
 row: 125
 domain: Unspecified
-scqa_complication: e: Examining the differential risk from high-level artificial intelligence and the question of control
-search_medium_priority: Unspecified
-search_high_priority: Examining the differential risk from high-level artificial intelligence and the question of control Unspecified
-search_all_fields: Examining the differential risk from high-level artificial intelligence and the question of control Unspecified Unspecified AI Risk Database v3 ai_risk_entry
-sheet: AI Risk Database v3
-scqa_confidence: 1.0
-search_low_priority: AI Risk Database v3 ai_risk_entry
-specific_domain: Unspecified
-file_type: ai_risk_entry
-rid: RID-00148
-scqa_answer: Title: Examining the differential risk from high-level artificial intelligence and the question of control
-scqa_content_type: risk_description
-entity: 
-subdomain: 
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-intent: 
-scqa_situation: Title: Examining the differential risk from high-level artificial intelligence and the question of control
-scqa_question: What are the implications of this risk?
 title: Examining the differential risk from high-level artificial intelligence and the question of control
-risk_category: 
+scqa_question: What are the implications of this risk?
 
 Content:
 Title: Examining the differential risk from high-level artificial intelligence and the question of control

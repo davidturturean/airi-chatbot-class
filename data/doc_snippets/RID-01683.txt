@@ -1,29 +1,29 @@
 Repository ID: RID-01683
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-specific_domain: Unspecified
-file_type: ai_risk_entry
-scqa_content_type: risk_description
-scqa_situation: Title: International AI Safety Report 2025\nRisk Category: Risks from malicious use\nRisk Subcategory: Cyber offence\nAdditional Evidence: "Cyber risk arises because general- purpose AI enables rapid and parallel operations at scale and lowers technical barriers
-sheet: AI Risk Database v3
-search_all_fields: International AI Safety Report 2025 Unspecified Risks from malicious use Unspecified AI Risk Database v3 ai_risk_entry
-risk_category: Risks from malicious use
-title: International AI Safety Report 2025
-entity: 
 content_preview: Title: International AI Safety Report 2025\nRisk Category: Risks from malicious use\nRisk Subcategory: Cyber offence\nAdditional Evidence: "Cyber risk arises because general- purpose AI enables rapid and parallel operations at scale and lowers technical barriers. While expert knowledge is still esse...
-search_medium_priority: Unspecified
+risk_category: Risks from malicious use
 scqa_confidence: 1.0
-row: 1660
 scqa_answer: While expert knowledge is still essential, AI tools reduce the human effort and knowledge needed to survey target systems and gain unauthorised access
-scqa_complication: tional AI Safety Report 2025\nRisk Category: Risks from malicious use\nRisk Subcategory: Cyber offence\nAdditional Evidence: "Cyber risk arises because ge
 rid: RID-01683
-subdomain: 
-domain: Unspecified
-scqa_question: What are the implications of this risk?
+entity: 
 timing: 
-intent: 
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 search_high_priority: International AI Safety Report 2025 Unspecified Risks from malicious use
 search_low_priority: AI Risk Database v3 ai_risk_entry
+search_all_fields: International AI Safety Report 2025 Unspecified Risks from malicious use Unspecified AI Risk Database v3 ai_risk_entry
+title: International AI Safety Report 2025
+subdomain: 
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_medium_priority: Unspecified
+scqa_question: What are the implications of this risk?
+file_type: ai_risk_entry
+scqa_complication: tional AI Safety Report 2025\nRisk Category: Risks from malicious use\nRisk Subcategory: Cyber offence\nAdditional Evidence: "Cyber risk arises because ge
+row: 1660
+sheet: AI Risk Database v3
+scqa_content_type: risk_description
+domain: Unspecified
+scqa_situation: Title: International AI Safety Report 2025\nRisk Category: Risks from malicious use\nRisk Subcategory: Cyber offence\nAdditional Evidence: "Cyber risk arises because general- purpose AI enables rapid and parallel operations at scale and lowers technical barriers
+specific_domain: Unspecified
+intent: 
 
 Content:
 Title: International AI Safety Report 2025\nRisk Category: Risks from malicious use\nRisk Subcategory: Cyber offence\nAdditional Evidence: "Cyber risk arises because general- purpose AI enables rapid and parallel operations at scale and lowers technical barriers. While expert knowledge is still essential, AI tools reduce the human effort and knowledge needed to survey target systems and gain unauthorised access."
