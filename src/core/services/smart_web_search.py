@@ -36,13 +36,16 @@ class SmartWebSearchService:
         self.repository_topics = [
             'bias', 'discrimination', 'fairness', 'privacy', 'surveillance',
             'safety', 'security', 'employment', 'job displacement', 'governance',
-            'regulation', 'ethics', 'transparency', 'accountability', 'risk'
+            'regulation', 'ethics', 'transparency', 'accountability', 'risk',
+            'mitigation', 'mitigations', 'controls', 'safeguards', 'protections',
+            'countermeasures', 'solutions', 'recommendations', 'prevention'
         ]
     
     def should_search(self, 
                      query: str, 
                      repository_content_length: int,
-                     documents_found: int) -> Tuple[bool, str]:
+                     documents_found: int,
+                     domain: str = None) -> Tuple[bool, str]:
         """
         Determine if web search should be performed based on strict criteria.
         
@@ -50,6 +53,10 @@ class SmartWebSearchService:
             Tuple of (should_search, reason)
         """
         query_lower = query.lower()
+        
+        # Check 0: Never search for 'other' domain queries - they should be synthesized
+        if domain == 'other':
+            return False, "Other domain queries should be answered through synthesis, not web search"
         
         # Check 1: Never search for general AI risk concepts
         for topic in self.repository_topics:
@@ -62,8 +69,13 @@ class SmartWebSearchService:
         # Check 3: Requires external context
         needs_external = any(re.search(p, query_lower) for p in self.external_patterns)
         
-        # Check 4: Repository has inadequate content
-        inadequate_content = repository_content_length < 100 or documents_found == 0
+        # Check 4: Repository has inadequate content (more nuanced for AI risk domains)
+        if domain and domain in ['safety', 'privacy', 'bias', 'governance', 'technical', 'socioeconomic']:
+            # For known AI risk domains, be less aggressive about triggering web search
+            inadequate_content = repository_content_length < 50 and documents_found == 0
+        else:
+            # For unknown domains, use more aggressive criteria
+            inadequate_content = repository_content_length < 100 or documents_found == 0
         
         # Check 5: Specific domain + current info (e.g., "latest healthcare AI regulations")
         specific_current = needs_current and re.search(r'\b(healthcare|finance|legal|military)\b', query_lower)
@@ -84,7 +96,8 @@ class SmartWebSearchService:
     def search_if_needed(self,
                         query: str,
                         repository_content: str,
-                        documents_found: int) -> Optional[List[SearchResult]]:
+                        documents_found: int,
+                        domain: str = None) -> Optional[List[SearchResult]]:
         """
         Perform web search only if strict criteria are met.
         
@@ -99,7 +112,8 @@ class SmartWebSearchService:
         should_search, reason = self.should_search(
             query, 
             len(repository_content),
-            documents_found
+            documents_found,
+            domain
         )
         
         if not should_search:

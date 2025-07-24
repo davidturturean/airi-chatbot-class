@@ -206,7 +206,7 @@ class ChatService:
             response = self._generate_response(message, query_type, domain, context, conversation_id, docs)
             
             # 10. Check if web search needed and append results
-            web_results = smart_web_search.search_if_needed(message, context, len(docs))
+            web_results = smart_web_search.search_if_needed(message, context, len(docs), domain)
             if web_results:
                 web_context = smart_web_search.format_search_results(web_results)
                 response += web_context

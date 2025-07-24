@@ -2,6 +2,7 @@
 Gemini model pool with automatic quota fallback.
 """
 import time
+from enum import Enum
 import google.generativeai as genai
 from typing import List, Dict, Any, Optional, Iterator
 import mimetypes
@@ -11,6 +12,12 @@ from ...config.logging import get_logger
 from ...config.settings import settings
 
 logger = get_logger(__name__)
+
+class CircuitBreakerState(Enum):
+    """Circuit breaker states for managing model availability."""
+    CLOSED = "closed"        # Normal operation
+    OPEN = "open"           # All models failed, blocking requests
+    HALF_OPEN = "half_open" # Testing if models are back online
 
 class GeminiModelPool(BaseModel):
     """Gemini AI model pool with automatic quota fallback."""
@@ -40,7 +47,21 @@ class GeminiModelPool(BaseModel):
         # Safety settings
         self.safety_settings = []
         
+        # Circuit breaker configuration
+        self.circuit_breaker_state = CircuitBreakerState.CLOSED
+        self.circuit_breaker_failure_threshold = getattr(settings, 'CIRCUIT_BREAKER_FAILURE_THRESHOLD', 3)
+        self.circuit_breaker_timeout = getattr(settings, 'CIRCUIT_BREAKER_TIMEOUT', 600)  # 10 minutes
+        self.circuit_breaker_half_open_timeout = getattr(settings, 'CIRCUIT_BREAKER_HALF_OPEN_TIMEOUT', 300)  # 5 minutes
+        
+        # Circuit breaker state tracking
+        self.circuit_breaker_last_failure_time = 0
+        self.circuit_breaker_failure_count = 0
+        self.circuit_breaker_last_success_time = time.time()
+        self.circuit_breaker_test_request_time = 0
+        
         logger.info(f"Initialized Gemini model pool with chain: {self.model_chain}")
+        logger.info(f"Circuit breaker: threshold={self.circuit_breaker_failure_threshold}, "
+                   f"timeout={self.circuit_breaker_timeout}s")
     
     @property
     def model_name(self) -> str:
@@ -77,17 +98,76 @@ class GeminiModelPool(BaseModel):
         self.failed_models[model_name] = time.time()
         logger.warning(f"Model {model_name} marked as failed, cooldown until {time.ctime(time.time() + settings.MODEL_COOLDOWN_TIME)}")
     
+    def _update_circuit_breaker_state(self):
+        """Update circuit breaker state based on current conditions."""
+        current_time = time.time()
+        
+        if self.circuit_breaker_state == CircuitBreakerState.OPEN:
+            # Check if we should transition to HALF_OPEN
+            time_since_failure = current_time - self.circuit_breaker_last_failure_time
+            if time_since_failure >= self.circuit_breaker_timeout:
+                self.circuit_breaker_state = CircuitBreakerState.HALF_OPEN
+                self.circuit_breaker_test_request_time = current_time
+                logger.info("Circuit breaker: OPEN → HALF_OPEN (testing recovery)")
+                
+        elif self.circuit_breaker_state == CircuitBreakerState.HALF_OPEN:
+            # Check if test request has been outstanding too long
+            time_since_test = current_time - self.circuit_breaker_test_request_time
+            if time_since_test > self.circuit_breaker_half_open_timeout:
+                self.circuit_breaker_state = CircuitBreakerState.OPEN
+                self.circuit_breaker_last_failure_time = current_time
+                logger.warning("Circuit breaker: HALF_OPEN → OPEN (test timeout)")
+    
+    def _record_circuit_breaker_success(self):
+        """Record successful request for circuit breaker."""
+        if self.circuit_breaker_state == CircuitBreakerState.HALF_OPEN:
+            self.circuit_breaker_state = CircuitBreakerState.CLOSED
+            self.circuit_breaker_failure_count = 0
+            self.circuit_breaker_last_success_time = time.time()
+            logger.info("Circuit breaker: HALF_OPEN → CLOSED (recovery confirmed)")
+        elif self.circuit_breaker_state == CircuitBreakerState.CLOSED:
+            self.circuit_breaker_last_success_time = time.time()
+    
+    def _record_circuit_breaker_failure(self):
+        """Record failed request for circuit breaker."""
+        current_time = time.time()
+        self.circuit_breaker_failure_count += 1
+        self.circuit_breaker_last_failure_time = current_time
+        
+        if (self.circuit_breaker_state == CircuitBreakerState.CLOSED and 
+            self.circuit_breaker_failure_count >= self.circuit_breaker_failure_threshold):
+            self.circuit_breaker_state = CircuitBreakerState.OPEN
+            logger.warning(f"Circuit breaker: CLOSED → OPEN (failures: {self.circuit_breaker_failure_count})")
+        elif self.circuit_breaker_state == CircuitBreakerState.HALF_OPEN:
+            self.circuit_breaker_state = CircuitBreakerState.OPEN
+            logger.warning("Circuit breaker: HALF_OPEN → OPEN (test failed)")
+    
     def _get_next_available_model(self) -> Optional[str]:
-        """Get the next available model in the chain."""
+        """Get the next available model in the chain with circuit breaker protection."""
+        # Update circuit breaker state first
+        self._update_circuit_breaker_state()
+        
+        # If circuit breaker is OPEN, deny all requests
+        if self.circuit_breaker_state == CircuitBreakerState.OPEN:
+            logger.debug("Circuit breaker OPEN - denying request")
+            return None
+        
+        # Find available models
         for i, model_name in enumerate(self.model_chain):
             if self._is_model_available(model_name):
                 self.current_model_index = i
                 return model_name
         
-        # If all models are in cooldown, use the primary one anyway
-        logger.warning("All models in cooldown, falling back to primary model")
-        self.current_model_index = 0
-        return self.model_chain[0]
+        # If no models available and circuit breaker allows, try primary for HALF_OPEN test
+        if self.circuit_breaker_state == CircuitBreakerState.HALF_OPEN:
+            logger.info("Circuit breaker HALF_OPEN - allowing test request with primary model")
+            self.current_model_index = 0
+            return self.model_chain[0]
+        
+        # No models available, record failure and return None
+        logger.warning("No models available - triggering circuit breaker")
+        self._record_circuit_breaker_failure()
+        return None
     
     def _generate_with_model(self, model_name: str, prompt: str, history: Optional[List[Dict[str, Any]]] = None) -> str:
         """Generate response with a specific model."""
@@ -170,16 +250,21 @@ class GeminiModelPool(BaseModel):
         # Try each model in the chain
         for attempt in range(len(self.model_chain)):
             current_model = self._get_next_available_model()
-            logger.info(f"Attempt {attempt + 1}: Using model {current_model}")
             if not current_model:
+                logger.error(f"No models available on attempt {attempt + 1} - circuit breaker active")
                 break
+            logger.info(f"Attempt {attempt + 1}: Using model {current_model}")
                 
             try:
-                return self._generate_with_model(current_model, prompt, history)
+                result = self._generate_with_model(current_model, prompt, history)
+                # Record success for circuit breaker
+                self._record_circuit_breaker_success()
+                return result
                 
             except QuotaExceededError as e:
                 last_error = e
                 logger.info(f"🔥 CAUGHT QuotaExceededError for {current_model}, trying next model...")
+                self._record_circuit_breaker_failure()
                 continue
                 
             except Exception as e:
@@ -190,13 +275,17 @@ class GeminiModelPool(BaseModel):
                 if "429" in str(e) or "quota" in str(e).lower():
                     logger.warning(f"🚨 This was a quota error but wasn't caught as QuotaExceededError!")
                     # Treat it as a quota error
+                    self._record_circuit_breaker_failure()
                     continue
                 # For non-quota errors, try next model but with retries
                 retry_count = 0
                 while retry_count < settings.MAX_RETRIES_PER_MODEL:
                     try:
                         time.sleep(settings.MODEL_RETRY_DELAY)
-                        return self._generate_with_model(current_model, prompt, history)
+                        result = self._generate_with_model(current_model, prompt, history)
+                        # Record success for circuit breaker
+                        self._record_circuit_breaker_success()
+                        return result
                     except Exception as retry_error:
                         retry_count += 1
                         last_error = retry_error
@@ -204,11 +293,20 @@ class GeminiModelPool(BaseModel):
                 
                 # Mark model as failed if all retries exhausted
                 self._mark_model_failed(current_model)
+                self._record_circuit_breaker_failure()
                 continue
         
-        # If all models failed, return error message
-        error_msg = f"All models in chain failed. Last error: {str(last_error)}"
-        logger.error(error_msg)
+        # If all models failed, provide appropriate error message
+        if last_error is None:
+            # No models were available (circuit breaker active)
+            state_msg = f"Circuit breaker is {self.circuit_breaker_state.value.upper()}"
+            error_msg = f"All models are currently unavailable ({state_msg}). Please try again later."
+            logger.error(f"No models available - {state_msg}")
+        else:
+            # Models were tried but failed
+            error_msg = f"All models in chain failed. Last error: {str(last_error)}"
+            logger.error(error_msg)
+        
         return f"I encountered an error while generating a response: {error_msg}"
     
     def generate_stream(self, prompt: str, history: Optional[List[Dict[str, Any]]] = None) -> Iterator[str]:

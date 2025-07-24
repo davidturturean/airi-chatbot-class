@@ -49,7 +49,7 @@ class DomainConfig:
         ),
         'safety': DomainDefinition(
             name='safety',
-            keywords=['safety', 'security', 'risk', 'harm', 'danger', 'threat', 'hazard', 'misuse', 'accident', 'injury', 'physical', 'cybersecurity', 'cyber', 'attack', 'cyberattack', 'vulnerability', 'vulnerabilities', 'malicious', 'hacking', 'weaponization', 'malicious actors'],
+            keywords=['safety', 'security', 'risk', 'harm', 'danger', 'threat', 'hazard', 'misuse', 'accident', 'injury', 'physical', 'cybersecurity', 'cyber', 'attack', 'cyberattack', 'vulnerability', 'vulnerabilities', 'malicious', 'hacking', 'weaponization', 'malicious actors', 'mitigation', 'mitigations', 'controls', 'safeguards', 'countermeasures', 'protections', 'prevention', 'defend', 'defense', 'defenses'],
             search_queries=[
                 "AI safety risks and mitigation",
                 "security threats from AI systems", 
@@ -89,7 +89,7 @@ class DomainConfig:
         ),
         'governance': DomainDefinition(
             name='governance',
-            keywords=['regulation', 'policy', 'oversight', 'governance', 'control', 'compliance', 'law', 'legal', 'ethics', 'accountability'],
+            keywords=['regulation', 'policy', 'oversight', 'governance', 'control', 'compliance', 'law', 'legal', 'ethics', 'accountability', 'mitigation', 'mitigations', 'controls', 'safeguards', 'guidelines', 'framework', 'frameworks', 'standards', 'measures', 'solutions', 'recommendations'],
             search_queries=[
                 "AI governance and policy frameworks",
                 "regulatory approaches to AI",
@@ -101,7 +101,7 @@ class DomainConfig:
         ),
         'technical': DomainDefinition(
             name='technical',
-            keywords=['algorithm', 'model', 'technical', 'performance', 'accuracy', 'robustness', 'reliability', 'system', 'network', 'networks', 'neural', 'input', 'inputs', 'training', 'machine learning', 'deep learning'],
+            keywords=['algorithm', 'model', 'technical', 'performance', 'accuracy', 'robustness', 'reliability', 'system', 'network', 'networks', 'neural', 'input', 'inputs', 'training', 'machine learning', 'deep learning', 'controls', 'technical controls', 'validation', 'verification', 'testing', 'monitoring'],
             search_queries=[
                 "technical AI system performance",
                 "algorithm reliability and robustness",
@@ -246,6 +246,39 @@ class DomainClassifier:
             
             if inquiry_type.lower() not in valid_values and inquiry_type.lower() not in valid_names:
                 return False
+        
+        # Validate domain (check both field names)
+        domain = result.get('domain') or result.get('primary_domain')
+        if domain:
+            if not isinstance(domain, str):
+                return False
+            
+            # Valid domains include all configured domains plus 'other'
+            valid_domains = list(self.config.domains.keys()) + ['other']
+            if domain.lower() not in [d.lower() for d in valid_domains]:
+                return False
+        
+        # Validate confidence level
+        confidence = result.get('confidence')
+        if confidence:
+            if not isinstance(confidence, str):
+                return False
+            
+            valid_confidence = ['low', 'medium', 'high']
+            if confidence.lower() not in valid_confidence:
+                return False
+        
+        # Domain-inquiry type consistency checks
+        if inquiry_type and domain:
+            # OUT_OF_SCOPE should typically have 'other' domain
+            if inquiry_type.upper() == 'OUT_OF_SCOPE' and domain.lower() != 'other':
+                # Log warning but don't fail validation
+                pass
+            
+            # EMPLOYMENT_RISK should typically have 'socioeconomic' domain
+            if inquiry_type.upper() == 'EMPLOYMENT_RISK' and domain.lower() != 'socioeconomic':
+                # Log warning but don't fail validation
+                pass
             
         return True
     

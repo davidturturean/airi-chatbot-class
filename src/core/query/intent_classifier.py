@@ -60,12 +60,16 @@ class IntentClassifier:
                 "Employment impacts and job displacement from automation",
                 "Privacy violations and security risks in AI systems",
                 "AI governance, regulation, and policy frameworks",
-                "Autonomous systems ethics and safety protocols",
+                "Autonomous systems ethics and safety protocols",  
                 "Corporate AI deployment assessments and audits",
                 "Government studies on AI impacts and risks",
                 "Cross-domain analysis of AI risks",
                 "Comparing risks between different sectors",
-                "Privacy risks in healthcare and finance"
+                "Privacy risks in healthcare and finance",
+                "How can I mitigate bias in AI systems?",
+                "What are best practices for preventing AI risks?",
+                "How to address privacy concerns in healthcare AI?",
+                "Strategies for reducing employment displacement from AI"
             ],
             IntentCategory.METADATA_QUERY: [
                 "How many risks are in the database?",
@@ -89,12 +93,14 @@ class IntentClassifier:
                 "Natural language processing algorithms"
             ],
             IntentCategory.CROSS_DB_QUERY: [
-                "Show risks with their mitigations",
-                "Which experts work on bias issues?",
-                "Connect risks to mitigation strategies",
-                "Cross-reference between databases",
-                "List all risk IDs with their categories",
-                "Show metadata statistics"
+                "Show risks with their specific mitigation IDs",
+                "List all risk IDs in domain 7 with their categories", 
+                "Which experts work on bias issues with their paper IDs?",
+                "Show risk database entries with related document excerpts",
+                "Find all governance entries cross-referenced with policy documents",
+                "Display risk metadata alongside relevant research papers",
+                "Cross-reference structured data with document content",
+                "Show database records with supporting document evidence"
             ],
             IntentCategory.CHIT_CHAT: [
                 "Hello, how are you today?",
@@ -112,10 +118,9 @@ class IntentClassifier:
             ]
         }
         
-        # Keep minimal hardcoded patterns for obvious spam/junk
+        # Keep minimal hardcoded patterns for obvious spam/junk - only unambiguous gibberish
         self.junk_patterns = [
-            'test', 'testing', '123', 'abc', 'qwerty', 'asdf',
-            'lorem ipsum', 'random', 'gibberish', '...', '???'
+            'lorem ipsum', 'qwerty', 'asdf', 'gibberish'
         ]
         
         # Security patterns (keep hardcoded for safety)
@@ -125,17 +130,16 @@ class IntentClassifier:
             'override', 'bypass', 'jailbreak', 'developer mode'
         ]
         
-        # Metadata query patterns for quick detection
+        # Metadata query patterns for quick detection - only specific terms
         self.metadata_patterns = [
             'how many', 'count', 'total number', 'statistics',
-            'list all', 'show all', 'what are the', 'repository',
-            'database', 'earliest', 'latest', 'who maintains',
+            'list all', 'show all', 'repository',
+            'database', 'who maintains',
             'risk categories', 'domains', 'taxonomy'
         ]
         
-        # Technical AI patterns
+        # Technical AI patterns - only specific technical terms
         self.technical_patterns = [
-            'how do', 'how does', 'explain', 'what is',
             'transformer', 'neural network', 'deep learning',
             'attention', 'backpropagation', 'architecture',
             'algorithm', 'model', 'training'
@@ -189,12 +193,49 @@ class IntentClassifier:
         """Quick security and junk pattern check."""
         query_lower = query.lower().strip()
         
-        # Empty or very short queries
+        # Basic structural junk detection
         if len(query_lower) < 2:
             return IntentResult(
                 category=IntentCategory.JUNK,
                 confidence=0.9,
                 reasoning="Query too short",
+                should_process=False,
+                suggested_response="Please provide a more specific question about AI risks."
+            )
+        
+        # All caps gibberish (but allow legitimate all-caps acronyms)
+        if query.isupper() and len(query) > 10 and not any(word.lower() in ['ai', 'ml', 'api', 'gpu', 'cpu'] for word in query.split()):
+            return IntentResult(
+                category=IntentCategory.JUNK,
+                confidence=0.85,
+                reasoning="All caps gibberish detected",
+                should_process=False,
+                suggested_response="Please provide a more specific question about AI risks."
+            )
+        
+        # Excessive repetition (same word/char repeated many times)
+        words = query_lower.split()
+        if len(words) > 1:
+            # Check for repeated words
+            word_counts = {}
+            for word in words:
+                word_counts[word] = word_counts.get(word, 0) + 1
+            max_repetition = max(word_counts.values()) if word_counts else 0
+            if max_repetition >= 4:  # Same word 4+ times
+                return IntentResult(
+                    category=IntentCategory.JUNK,
+                    confidence=0.9,
+                    reasoning="Excessive word repetition detected",
+                    should_process=False,
+                    suggested_response="Please provide a more specific question about AI risks."
+                )
+        
+        # Only punctuation or single characters
+        if len(query.strip()) > 0 and all(not c.isalnum() for c in query.strip()):
+            return IntentResult(
+                category=IntentCategory.JUNK,
+                confidence=0.95,
+                reasoning="Only punctuation detected",
                 should_process=False,
                 suggested_response="Please provide a more specific question about AI risks."
             )
@@ -211,7 +252,7 @@ class IntentClassifier:
         
         # Check for obvious junk/test queries
         junk_matches = sum(1 for pattern in self.junk_patterns if pattern in query_lower)
-        if junk_matches > 0 or query_lower in ['test', 'hello world', 'test test']:
+        if junk_matches > 0 or query_lower in ['hello world']:
             return IntentResult(
                 category=IntentCategory.JUNK,
                 confidence=min(1.0, 0.8 + (junk_matches * 0.1)),
@@ -220,9 +261,9 @@ class IntentClassifier:
                 suggested_response="Try asking about AI employment impacts, safety risks, privacy concerns, or bias issues."
             )
         
-        # Quick check for metadata queries
+        # Quick check for metadata queries - require more patterns to reduce false positives
         metadata_matches = sum(1 for pattern in self.metadata_patterns if pattern in query_lower)
-        if metadata_matches >= 2:  # Need at least 2 patterns for quick match
+        if metadata_matches >= 3:  # Need at least 3 patterns for quick match
             return IntentResult(
                 category=IntentCategory.METADATA_QUERY,
                 confidence=min(0.9, 0.7 + (metadata_matches * 0.1)),
@@ -230,9 +271,9 @@ class IntentClassifier:
                 should_process=True
             )
         
-        # Quick check for technical queries
+        # Quick check for technical queries - require more patterns to reduce false positives
         technical_matches = sum(1 for pattern in self.technical_patterns if pattern in query_lower)
-        if technical_matches >= 2 and any(ai_term in query_lower for ai_term in ['ai', 'ml', 'neural', 'model']):
+        if technical_matches >= 3 and any(ai_term in query_lower for ai_term in ['ai', 'ml', 'neural', 'model']):
             return IntentResult(
                 category=IntentCategory.TECHNICAL_AI_QUERY,
                 confidence=min(0.9, 0.7 + (technical_matches * 0.1)),

@@ -596,6 +596,7 @@ class SelfValidationChain:
             return response, basic_validation
         
         current_response = response
+        response_history = [response]  # Track response history to detect cycles
         
         for iteration in range(max_iterations):
             # Validate current response
@@ -624,7 +625,13 @@ class SelfValidationChain:
                 logger.info(f"Attempting revision: high accuracy ({accuracy_score:.2f}) but low coverage ({coverage_score:.2f})")
                 revised_response = self._generate_revision_suggestion(current_response, query, documents, validation)
                 if revised_response and revised_response != current_response:
+                    # Check for cycles - compare with previous responses
+                    if self._is_response_cycle(revised_response, response_history):
+                        logger.warning(f"Detected revision cycle - stopping iteration to prevent infinite loop")
+                        break
+                    
                     current_response = revised_response
+                    response_history.append(revised_response)
                     logger.info(f"Generated revision, continuing validation...")
                     continue
             
@@ -633,6 +640,142 @@ class SelfValidationChain:
             break
         
         return current_response, validation
+    
+    def _is_response_cycle(self, new_response: str, response_history: List[str]) -> bool:
+        """
+        Check if the new response creates a cycle with previous responses.
+        Uses semantic similarity and content fingerprinting to detect near-duplicate responses.
+        """
+        if not response_history:
+            return False
+        
+        try:
+            # Normalize responses for comparison
+            new_normalized = self._normalize_response_for_comparison(new_response)
+            
+            for i, previous_response in enumerate(response_history):
+                prev_normalized = self._normalize_response_for_comparison(previous_response)
+                
+                # Check for exact matches after normalization
+                if new_normalized == prev_normalized:
+                    logger.warning(f"Exact response cycle detected with history item {i}")
+                    return True
+                
+                # Check semantic similarity using multiple approaches
+                similarity_score = self._calculate_response_similarity(new_normalized, prev_normalized)
+                
+                # Configure similarity threshold based on response length
+                if len(new_normalized) < 100:  # Short responses
+                    similarity_threshold = 0.95
+                elif len(new_normalized) < 500:  # Medium responses  
+                    similarity_threshold = 0.85
+                else:  # Long responses
+                    similarity_threshold = 0.80
+                
+                if similarity_score > similarity_threshold:
+                    logger.warning(f"High similarity cycle detected with history item {i} "
+                                 f"(score: {similarity_score:.3f}, threshold: {similarity_threshold})")
+                    return True
+            
+            return False
+            
+        except Exception as e:
+            logger.error(f"Error in cycle detection: {e}")
+            # Fall back to simple comparison to avoid breaking validation
+            return any(new_response.strip() == prev.strip() for prev in response_history)
+    
+    def _normalize_response_for_comparison(self, response: str) -> str:
+        """Normalize response text for better cycle detection."""
+        import re
+        
+        # Remove extra whitespace and normalize
+        normalized = ' '.join(response.split())
+        
+        # Remove markdown formatting that might vary
+        normalized = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', normalized)  # Remove links
+        normalized = re.sub(r'\*\*([^*]+)\*\*', r'\1', normalized)      # Remove bold
+        normalized = re.sub(r'\*([^*]+)\*', r'\1', normalized)          # Remove italic
+        
+        # Remove citation patterns that might vary
+        normalized = re.sub(r'RID-\d+', 'RID-XXX', normalized)          # Normalize RID citations
+        
+        return normalized.lower().strip()
+    
+    def _calculate_response_similarity(self, text1: str, text2: str) -> float:
+        """Calculate semantic similarity between two responses using multiple methods."""
+        try:
+            # Method 1: Jaccard similarity for word overlap
+            words1 = set(text1.split())
+            words2 = set(text2.split())
+            
+            if not words1 or not words2:
+                jaccard_sim = 0.0
+            else:
+                intersection = len(words1.intersection(words2))
+                union = len(words1.union(words2))
+                jaccard_sim = intersection / union if union > 0 else 0.0
+            
+            # Method 2: Character n-gram similarity for structural similarity
+            def get_ngrams(text, n=3):
+                return set(text[i:i+n] for i in range(len(text) - n + 1))
+            
+            ngrams1 = get_ngrams(text1)
+            ngrams2 = get_ngrams(text2)
+            
+            if not ngrams1 or not ngrams2:
+                ngram_sim = 0.0
+            else:
+                ngram_intersection = len(ngrams1.intersection(ngrams2))
+                ngram_union = len(ngrams1.union(ngrams2))
+                ngram_sim = ngram_intersection / ngram_union if ngram_union > 0 else 0.0
+            
+            # Method 3: Length-normalized Levenshtein distance
+            def levenshtein_similarity(s1, s2):
+                if len(s1) == 0 or len(s2) == 0:
+                    return 0.0
+                
+                # Simple Levenshtein distance calculation
+                matrix = [[0] * (len(s2) + 1) for _ in range(len(s1) + 1)]
+                
+                for i in range(len(s1) + 1):
+                    matrix[i][0] = i
+                for j in range(len(s2) + 1):
+                    matrix[0][j] = j
+                
+                for i in range(1, len(s1) + 1):
+                    for j in range(1, len(s2) + 1):
+                        cost = 0 if s1[i-1] == s2[j-1] else 1
+                        matrix[i][j] = min(
+                            matrix[i-1][j] + 1,      # deletion
+                            matrix[i][j-1] + 1,      # insertion
+                            matrix[i-1][j-1] + cost  # substitution
+                        )
+                
+                distance = matrix[len(s1)][len(s2)]
+                max_len = max(len(s1), len(s2))
+                return 1.0 - (distance / max_len) if max_len > 0 else 1.0
+            
+            levenshtein_sim = levenshtein_similarity(text1, text2)
+            
+            # Combine similarities with weights
+            final_similarity = (
+                0.4 * jaccard_sim +      # Word overlap (most important)
+                0.3 * ngram_sim +        # Structural similarity
+                0.3 * levenshtein_sim    # Character-level similarity
+            )
+            
+            return final_similarity
+            
+        except Exception as e:
+            logger.error(f"Error calculating similarity: {e}")
+            # Fallback to simple word overlap
+            words1 = set(text1.split())
+            words2 = set(text2.split())
+            if not words1 or not words2:
+                return 0.0
+            intersection = len(words1.intersection(words2))
+            union = len(words1.union(words2))
+            return intersection / union if union > 0 else 0.0
     
     def _generate_revision_suggestion(self, response: str, query: str, documents: List[Document], validation: ResponseValidation) -> str:
         """Generate a revision suggestion to improve response coverage."""

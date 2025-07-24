@@ -45,14 +45,14 @@ DO NOT answer the user's question - only classify it with high accuracy.
    - socioeconomic: Employment, economic inequality, job displacement, labor impacts
      Examples: "Will AI take my job?", "How does automation affect wages?", "What's AI's impact on employment?", "Can AI cause unemployment?"
    
-   - safety: Physical harm, accidents, security threats, infrastructure failures
-     Examples: "Can AI cause accidents?", "Are autonomous vehicles safe?", "What are AI security risks?", "Can AI systems fail dangerously?"
+   - safety: Physical harm, accidents, security threats, infrastructure failures, risk mitigation
+     Examples: "Can AI cause accidents?", "Are autonomous vehicles safe?", "What are AI security risks?", "Can AI systems fail dangerously?", "How can we mitigate AI safety risks?", "What safety controls prevent AI harm?"
    
    - privacy: Data protection, surveillance, personal information, monitoring
      Examples: "How does AI affect privacy?", "Can AI systems spy on users?", "What data does AI collect?", "Are AI systems surveilling people?"
    
-   - governance: Regulation, policy, oversight, legal frameworks, compliance
-     Examples: "What regulations exist for AI?", "How should AI be governed?", "What legal frameworks apply to AI?", "Who oversees AI systems?"
+   - governance: Regulation, policy, oversight, legal frameworks, compliance, risk management
+     Examples: "What regulations exist for AI?", "How should AI be governed?", "What legal frameworks apply to AI?", "Who oversees AI systems?", "What governance controls reduce AI risks?", "How can policy mitigate AI threats?"
    
    - technical: Algorithm performance, accuracy, robustness, reliability, system failures
      Examples: "How reliable are AI algorithms?", "What are AI performance limits?", "How accurate are AI systems?", "Can AI systems be robust?"
@@ -84,6 +84,15 @@ Query: "How does AI work?"
 
 Query: "Tell me about cats"
 → Domain: other (HIGH confidence - completely off-topic)
+
+Query: "What are AI risk mitigations?"
+→ Domain: safety (MEDIUM confidence - general mitigation request, could be governance)
+
+Query: "Mitigations"
+→ Domain: safety (LOW confidence - vague but likely seeking risk controls)
+
+Query: "How to prevent AI bias?"
+→ Domain: bias (HIGH confidence - specific bias mitigation)
 
 🎯 RESPONSE FORMAT:
 Return ONLY a JSON object with this exact structure:

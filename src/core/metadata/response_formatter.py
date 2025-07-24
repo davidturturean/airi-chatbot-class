@@ -964,5 +964,136 @@ Format as JSON:
     def _format_with_gemini_generic(self, query: str, results: List[Dict[str, Any]], 
                                    context: Optional[Dict[str, Any]]) -> Dict[str, Any]:
         """Use Gemini to format generic responses intelligently."""
-        # TODO: Implement Gemini formatting
-        return self._fallback_generic_format(query, results, context)
+        try:
+            # Prepare data sample for Gemini
+            sample_results = results[:3]  # Use first 3 results as examples
+            total_count = len(results)
+            
+            # Extract field names and types to help Gemini understand the data structure
+            field_info = {}
+            if results:
+                for key, value in results[0].items():
+                    field_info[key] = type(value).__name__
+            
+            # Create a focused prompt for response synthesis
+            prompt = f"""You are helping analyze AI risk data. A user asked: "{query}"
+
+The query found {total_count} results. Here are the first few examples:
+
+{json.dumps(sample_results, indent=2)}
+
+Field types: {field_info}
+
+Please create a clear, informative response that:
+1. Summarizes what was found in natural language
+2. Highlights the most important insights
+3. Uses specific examples from the data
+4. Avoids dumping raw JSON - synthesize the information
+
+Focus on the content that would be most relevant to someone asking about "{query}".
+
+Respond in this JSON format:
+{{
+    "summary": "Brief overview of findings",
+    "content": "Detailed explanation with specific examples and insights"
+}}"""
+
+            # Generate response with Gemini
+            response = self.gemini_model.generate(prompt)
+            
+            # Parse Gemini response
+            try:
+                # Clean up the response to extract JSON
+                response_clean = response.strip()
+                if response_clean.startswith('```json'):
+                    response_clean = response_clean.replace('```json', '', 1)
+                    response_clean = response_clean.replace('```', '', 1)
+                
+                formatted_data = json.loads(response_clean.strip())
+                
+                # Validate the response structure
+                if not isinstance(formatted_data, dict) or 'content' not in formatted_data:
+                    raise ValueError("Invalid response structure")
+                
+                # Add metadata and visualizations if applicable
+                response_dict = {
+                    "summary": formatted_data.get("summary", f"Found {total_count} results"),
+                    "content": formatted_data.get("content", ""),
+                    "visualizations": []
+                }
+                
+                # Add simple visualization for large datasets
+                if total_count > 10:
+                    viz_text = f"Dataset Statistics:\n"
+                    viz_text += f"Total Results: {total_count}\n"
+                    viz_text += f"Showing Analysis: {min(10, total_count)} samples analyzed\n"
+                    
+                    # Add field distribution if meaningful
+                    if results and isinstance(results[0], dict):
+                        field_count = len(results[0].keys())
+                        viz_text += f"Data Fields: {field_count} attributes per record"
+                    
+                    response_dict["visualizations"] = [viz_text]
+                
+                return response_dict
+                
+            except (json.JSONDecodeError, ValueError) as e:
+                logger.warning(f"Failed to parse Gemini response for generic formatting: {e}")
+                # Create a fallback that still uses the Gemini content but with safe structure
+                return {
+                    "summary": f"Found {total_count} results for: {query}",
+                    "content": response.strip(),
+                    "visualizations": []
+                }
+                
+        except Exception as e:
+            logger.error(f"Gemini generic formatting failed: {e}")
+            # Fall back to the original method but with better formatting
+            return self._enhanced_generic_fallback(query, results, context)
+    
+    def _enhanced_generic_fallback(self, query: str, results: List[Dict[str, Any]], 
+                                  context: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+        """Enhanced fallback formatting that's better than raw JSON."""
+        total_count = len(results)
+        
+        if not results:
+            return {
+                "summary": "No results found",
+                "content": f"Your query '{query}' didn't return any matching data.",
+                "visualizations": []
+            }
+        
+        # Create a more readable summary
+        content_lines = [f"Found {total_count} results for your query about: **{query}**\n"]
+        
+        # Show key fields from first few results
+        display_results = results[:5]
+        
+        for i, result in enumerate(display_results, 1):
+            content_lines.append(f"**Result {i}:**")
+            
+            # Format each field nicely
+            for key, value in result.items():
+                if value is not None and str(value).strip():
+                    # Clean up the key name
+                    clean_key = key.replace('_', ' ').title()
+                    
+                    # Format the value based on type
+                    if isinstance(value, str) and len(value) > 100:
+                        # Truncate long strings
+                        clean_value = value[:100] + "..."
+                    else:
+                        clean_value = str(value)
+                    
+                    content_lines.append(f"  - **{clean_key}**: {clean_value}")
+            
+            content_lines.append("")  # Add spacing between results
+        
+        if total_count > 5:
+            content_lines.append(f"*({total_count - 5} additional results available)*")
+        
+        return {
+            "summary": f"Query returned {total_count} results",
+            "content": '\n'.join(content_lines),
+            "visualizations": []
+        }
