@@ -26,8 +26,8 @@ export const ChatInput = ({ question, setQuestion, onSubmit, isLoading }: ChatIn
                 if (isLoading) {
                     toast.error('Please wait for the model to finish its response!');
                 } else {
-                    // setShowSuggestions(false);
-                    onSubmit();
+                    onSubmit(question);
+                    setQuestion("");
                 }
             }
         }}
@@ -37,7 +37,10 @@ export const ChatInput = ({ question, setQuestion, onSubmit, isLoading }: ChatIn
 
         <button 
             className="rounded-full p-1.5 h-fit absolute bottom-2 right-2 m-0.5 border dark:border-zinc-600"
-            onClick={() => onSubmit(question)}
+            onClick={() => {
+                onSubmit(question);
+                setQuestion("");
+            }}
             disabled={question.length === 0}
         >
             <ArrowUpIcon size={14} />

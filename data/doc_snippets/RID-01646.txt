@@ -1,29 +1,29 @@
 Repository ID: RID-01646
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-scqa_answer: "\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 2 - Post-deployment
-file_type: ai_risk_entry
-domain: 1. Discrimination & Toxicity
-scqa_question: What are the implications of this risk?
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-risk_category: Discriminative data bias
-entity: 2 - AI
-scqa_content_type: risk_description
 search_high_priority: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks 1. Discrimination & Toxicity Discriminative data bias
-sheet: AI Risk Database v3
-subdomain: 1.1 > Unfair discrimination and misrepresentation
-search_low_priority: AI Risk Database v3 ai_risk_entry
-search_all_fields: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks 1. Discrimination & Toxicity Discriminative data bias 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation AI Risk Database v3 ai_risk_entry
-rid: RID-01646
-content_preview: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Discriminative data bias\nDescription: "Discriminative data bias describes the syste...
-scqa_complication: such as data representation. However, these issues are treated by other AI hazards in this list."\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 2 - Pos
+search_medium_priority: 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation
+scqa_confidence: 1.0
+domain: 1. Discrimination & Toxicity
+entity: 2 - AI
 scqa_situation: . Note, that the term bias is often used in other contexts, such as data representation. However, these issues are treated by other AI hazards in this list."
-intent: 2 - Unintentional
+content_preview: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Discriminative data bias\nDescription: "Discriminative data bias describes the syste...
 row: 1623
 specific_domain: 1.1 > Unfair discrimination and misrepresentation
-search_medium_priority: 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_question: What are the implications of this risk?
+sheet: AI Risk Database v3
+search_all_fields: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks 1. Discrimination & Toxicity Discriminative data bias 1.1 > Unfair discrimination and misrepresentation 1.1 > Unfair discrimination and misrepresentation AI Risk Database v3 ai_risk_entry
+intent: 2 - Unintentional
+scqa_complication: such as data representation. However, these issues are treated by other AI hazards in this list."\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 2 - Pos
+subdomain: 1.1 > Unfair discrimination and misrepresentation
 title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
 timing: 2 - Post-deployment
-scqa_confidence: 1.0
+scqa_answer: "\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 2 - Post-deployment
+file_type: ai_risk_entry
+rid: RID-01646
+search_low_priority: AI Risk Database v3 ai_risk_entry
+risk_category: Discriminative data bias
+scqa_content_type: risk_description
 
 Content:
 Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.1 > Unfair discrimination and misrepresentation\nRisk Category: Discriminative data bias\nDescription: "Discriminative data bias describes the systematic discrimination of groups of persons in the form of data shortcomings, such as distributional representation or incorrectness. Data bias can manifest in the model and lead to unfair decisions if not appropriately treated. Note, that the term bias is often used in other contexts, such as data representation. However, these issues are treated by other AI hazards in this list."\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 2 - Post-deployment

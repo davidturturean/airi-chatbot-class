@@ -1,0 +1,29 @@
+Repository ID: RID-01650
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_confidence: 1.0
+subdomain: 7.3 > Lack of capability or robustness
+search_high_priority: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks 7. AI System Safety, Failures, & Limitations Insufficient data representation
+search_all_fields: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks 7. AI System Safety, Failures, & Limitations Insufficient data representation 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness AI Risk Database v3 ai_risk_entry
+scqa_question: What are the implications of this risk?
+specific_domain: 7.3 > Lack of capability or robustness
+search_medium_priority: 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness
+scqa_situation: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 7
+file_type: ai_risk_entry
+entity: 3 - Other
+row: 1627
+scqa_content_type: risk_description
+sheet: AI Risk Database v3
+search_low_priority: AI Risk Database v3 ai_risk_entry
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+content_preview: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: Insufficient data representation\nDescription: "The distribution of the data us...
+scqa_complication: tion\nDescription: "The distribution of the data used for training a model should match the operational data ́s distribution while consisting of sufficie
+rid: RID-01650
+title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
+risk_category: Insufficient data representation
+scqa_answer: "\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 1 - Pre-deployment
+timing: 1 - Pre-deployment
+intent: 3 - Other
+domain: 7. AI System Safety, Failures, & Limitations
+
+Content:
+Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: Insufficient data representation\nDescription: "The distribution of the data used for training a model should match the operational data ́s distribution while consisting of sufficiently many samples. An important aspect of matching distributions between training and operational data is that also data which is rarely confronting the AI system in operation is represented in the training data."\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 1 - Pre-deployment

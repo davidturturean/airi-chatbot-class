@@ -59,6 +59,7 @@ def stream_message():
         logger.info(f"Received stream request: {data}")
         message = data.get('message', '')
         conversation_id = data.get('conversationId', 'default')
+        session_id = data.get('session_id') or request.headers.get('X-Session-ID')
         
         if not message:
             return jsonify({"error": "Message is required"}), 400
@@ -85,7 +86,7 @@ def stream_message():
                 time.sleep(0.3)
                 
                 # 1. Process the query through chat service
-                response_text, docs = chat_service.process_query(message, conversation_id)
+                response_text, docs = chat_service.process_query(message, conversation_id, session_id)
                 
                 # Check what type of results we got
                 is_metadata_query = isinstance(docs, list) and docs and isinstance(docs[0], dict)
@@ -135,11 +136,20 @@ def stream_message():
                 elif docs and hasattr(docs[0], 'metadata'):
                     # Regular documents from vector store
                     for doc in docs:
-                        url = doc.metadata.get("url", "#")
-                        if os.path.exists(url):
-                            url = f"local-file://{url}"
+                        rid = doc.metadata.get("rid")
+                        if rid:
+                            # Use RID-based URL that the frontend expects
+                            url = f"local-file://snippet/{rid}"
+                            title = doc.metadata.get("title", f"Document {rid}")
+                        else:
+                            # Fallback to original behavior
+                            url = doc.metadata.get("url", "#")
+                            if os.path.exists(url):
+                                url = f"local-file://{url}"
+                            title = doc.metadata.get("title", "Unknown Title")
+                        
                         related_docs.append({
-                            "title": doc.metadata.get("title", "Unknown Title"), 
+                            "title": title, 
                             "url": url
                         })
                 

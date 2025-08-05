@@ -1,29 +1,29 @@
 Repository ID: RID-00877
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-entity: 2 - AI
-intent: 2 - Unintentional
-search_high_priority: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 7. AI System Safety, Failures, & Limitations Technology concerns
-row: 854
-search_medium_priority: 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness
-content_preview: Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: Technology concerns\nDescription: "Challenges related to technology refer to the limitation...
-risk_category: Technology concerns
+file_type: ai_risk_entry
+title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration
+scqa_answer: ing from the limitations of the algorithms. Table 2 presents the technology challenges and issues associated with generative AI. These challenges incl
 rid: RID-00877
 scqa_complication: of capability or robustness\nRisk Category: Technology concerns\nDescription: "Challenges related to technology refer to the limitations or constraints a
-specific_domain: 7.3 > Lack of capability or robustness
-scqa_content_type: case_study
-scqa_answer: ing from the limitations of the algorithms. Table 2 presents the technology challenges and issues associated with generative AI. These challenges incl
-scqa_confidence: 1.0
-search_low_priority: AI Risk Database v3 ai_risk_entry
-file_type: ai_risk_entry
-scqa_question: What are the implications of this risk?
-domain: 7. AI System Safety, Failures, & Limitations
-sheet: AI Risk Database v3
-title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-scqa_situation: Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 7
 subdomain: 7.3 > Lack of capability or robustness
-timing: 3 - Other
+scqa_question: What are the implications of this risk?
+scqa_situation: Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 7
+search_high_priority: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 7. AI System Safety, Failures, & Limitations Technology concerns
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_confidence: 1.0
+intent: 2 - Unintentional
+scqa_content_type: case_study
+risk_category: Technology concerns
+search_low_priority: AI Risk Database v3 ai_risk_entry
+sheet: AI Risk Database v3
+content_preview: Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: Technology concerns\nDescription: "Challenges related to technology refer to the limitation...
+entity: 2 - AI
 search_all_fields: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 7. AI System Safety, Failures, & Limitations Technology concerns 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness AI Risk Database v3 ai_risk_entry
+search_medium_priority: 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness
+specific_domain: 7.3 > Lack of capability or robustness
+domain: 7. AI System Safety, Failures, & Limitations
+row: 854
+timing: 3 - Other
 
 Content:
 Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: Technology concerns\nDescription: "Challenges related to technology refer to the limitations or constraints associated with generative AI. For example, the quality of training data is a major challenge for the development of generative AI models. Hallucination, explainability, and authenticity of the output are also challenges resulting from the limitations of the algorithms. Table 2 presents the technology challenges and issues associated with generative AI. These challenges include hallucinations, training data quality, explainability, authenticity, and prompt engineering"\nEntity: 2 - AI\nIntent: 2 - Unintentional\nTiming: 3 - Other

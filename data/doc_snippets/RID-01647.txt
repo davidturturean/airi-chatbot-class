@@ -1,29 +1,29 @@
 Repository ID: RID-01647
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
-scqa_question: What are the implications of this risk?
-search_low_priority: AI Risk Database v3 ai_risk_entry
-file_type: ai_risk_entry
-scqa_answer: "\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 3 - Other
-scqa_complication: agement of Root Causes for AI Risks\nDomain: 2. Privacy & Security\nSub-domain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive in
-intent: 3 - Other
-search_high_priority: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks 2. Privacy & Security Harming users’ data privacy
-subdomain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information
-entity: 3 - Other
-scqa_situation: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 2
-specific_domain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information
-row: 1624
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-sheet: AI Risk Database v3
-domain: 2. Privacy & Security
-search_all_fields: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks 2. Privacy & Security Harming users’ data privacy 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information AI Risk Database v3 ai_risk_entry
-timing: 3 - Other
-content_preview: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 2. Privacy & Security\nSub-domain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information\nRisk Category: Harming users’ data privacy\nDescription: "Modern AI syst...
-search_medium_priority: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information
 scqa_confidence: 1.0
-scqa_content_type: risk_description
+specific_domain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information
+scqa_situation: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 2
+entity: 3 - Other
+scqa_complication: agement of Root Causes for AI Risks\nDomain: 2. Privacy & Security\nSub-domain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive in
 risk_category: Harming users’ data privacy
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+file_type: ai_risk_entry
+search_medium_priority: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information
+sheet: AI Risk Database v3
+content_preview: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 2. Privacy & Security\nSub-domain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information\nRisk Category: Harming users’ data privacy\nDescription: "Modern AI syst...
+row: 1624
+domain: 2. Privacy & Security
+timing: 3 - Other
+search_all_fields: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks 2. Privacy & Security Harming users’ data privacy 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information AI Risk Database v3 ai_risk_entry
+title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
+scqa_answer: "\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 3 - Other
+scqa_question: What are the implications of this risk?
+subdomain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information
+search_high_priority: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks 2. Privacy & Security Harming users’ data privacy
 rid: RID-01647
+intent: 3 - Other
+scqa_content_type: risk_description
+search_low_priority: AI Risk Database v3 ai_risk_entry
 
 Content:
 Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 2. Privacy & Security\nSub-domain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information\nRisk Category: Harming users’ data privacy\nDescription: "Modern AI systems rely on large amounts of data. If this includes personal data about individuals, the risk of harming the privacy of persons arises."\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 3 - Other

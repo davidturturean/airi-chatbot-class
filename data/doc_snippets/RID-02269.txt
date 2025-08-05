@@ -1,26 +1,26 @@
 Repository ID: RID-02269
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 is_summary: True
-scqa_content_type: mitigation_strategy
-scqa_complication: AI Risk Domain: 1.2 > Exposure to toxic content\n\nThis domain contains 106 risk entries from the AI Risk Repository:\n\nRisk E
-search_high_priority: AI Risk Domain: 1.2 > Exposure to toxic content 1.2 > Exposure to toxic content
-search_medium_priority: 1.2 > Exposure to toxic content
-search_low_priority: AI Risk Database v3 ai_risk_domain_summary
-specific_domain: 1.2 > Exposure to toxic content
-sheet: AI Risk Database v3
 file_type: ai_risk_domain_summary
-rid: RID-02269
-scqa_situation: main: 1.2 > Exposure to toxic content\n\nThis domain contains 106 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to toxic content\nRisk Category:
-search_all_fields: AI Risk Domain: 1.2 > Exposure to toxic content 1.2 > Exposure to toxic content 1.2 > Exposure to toxic content AI Risk Database v3 ai_risk_domain_summary
-title: AI Risk Domain: 1.2 > Exposure to toxic content
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-content_preview: AI Risk Domain: 1.2 > Exposure to toxic content\n\nThis domain contains 106 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to tox...
-summary_type: domain_aggregation
-scqa_confidence: 1.0
 scqa_question: What is considered a sensitive topic, such as egregious violence or adult sexual content, can vary widely by viewpoint?
+scqa_confidence: 1.0
+title: AI Risk Domain: 1.2 > Exposure to toxic content
+scqa_content_type: mitigation_strategy
+sheet: AI Risk Database v3
+content_preview: AI Risk Domain: 1.2 > Exposure to toxic content\n\nThis domain contains 106 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to tox...
+search_high_priority: AI Risk Domain: 1.2 > Exposure to toxic content 1.2 > Exposure to toxic content
+scqa_situation: main: 1.2 > Exposure to toxic content\n\nThis domain contains 106 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Risk Taxonomy, Mitigation, and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to toxic content\nRisk Category:
+search_low_priority: AI Risk Database v3 ai_risk_domain_summary
+rid: RID-02269
+search_all_fields: AI Risk Domain: 1.2 > Exposure to toxic content 1.2 > Exposure to toxic content 1.2 > Exposure to toxic content AI Risk Database v3 ai_risk_domain_summary
 entry_count: 106
-scqa_answer: , and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to toxic content\nRisk C
+specific_domain: 1.2 > Exposure to toxic content
 domain: 1.2 > Exposure to toxic content
+scqa_answer: , and Assessment Benchmarks of Large Language Model Systems\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to toxic content\nRisk C
+summary_type: domain_aggregation
+scqa_complication: AI Risk Domain: 1.2 > Exposure to toxic content\n\nThis domain contains 106 risk entries from the AI Risk Repository:\n\nRisk E
+search_medium_priority: 1.2 > Exposure to toxic content
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 
 Content:
 violent, pornographic, or other harmful content is a further predominant concern, again focusing notably on LLMs and text-to-image models. Numerous studies highlight the risks associated with the intentional creation of disinformation, fake news, propaganda, or deepfakes, underscoring their significant threat to the integrity of public discourse and the trust in credible media. Additionally, papers explore the potential for generative models to aid in criminal activities, incidents of self-harm, identity theft, or impersonation. Furthermore, the literature investigates risks posed by LLMs when generating advice in high-stakes domains such as health, safety-related issues, as well as legal or financial matters.\nEntity: 1 - Human\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment\n\nRisk Entry 8:\nTitle: Evaluating the Social Impact of Generative AI Systems in Systems and Society\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.2 > Exposure to toxic content\nRisk Category:

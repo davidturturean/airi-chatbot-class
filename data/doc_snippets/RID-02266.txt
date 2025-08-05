@@ -1,28 +1,28 @@
 Repository ID: RID-02266
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 scqa_situation: .3 > Lack of capability or robustness\n\nThis domain contains 114 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: TASRA: a Taxonomy and Analysis of Societal-Scale Risks from AI\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category:
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+rid: RID-02266
+search_high_priority: AI Risk Domain: 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness
+scqa_content_type: case_study
+scqa_question: Lack of capability or robustness\nRisk Category: Domain-specific AI - Effects on humans and other living beings: Non-existential risks\nRisk Subcategory: Safety\nDescription: "Are AI safe with respect to human life and property?
+summary_type: domain_aggregation
 sheet: AI Risk Database v3
 specific_domain: 7.3 > Lack of capability or robustness
-scqa_content_type: case_study
-entry_count: 114
-scqa_answer: a major category of societal-scale risk arises from large, well-intentioned interventions
-that go wrong.\nEntity: 2 - AI\nIntent: 2 - Unintentional\n
-search_low_priority: AI Risk Database v3 ai_risk_domain_summary
-scqa_complication: ions of its initial creators. However, impact on an unexpectedly large
-s cale can occur even if only one team is responsible for creating the technology\nEnti
-search_high_priority: AI Risk Domain: 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness
-search_all_fields: AI Risk Domain: 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness AI Risk Database v3 ai_risk_domain_summary
-title: AI Risk Domain: 7.3 > Lack of capability or robustness
-domain: 7.3 > Lack of capability or robustness
-summary_type: domain_aggregation
-content_preview: AI Risk Domain: 7.3 > Lack of capability or robustness\n\nThis domain contains 114 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: TASRA: a Taxonomy and Analysis of Societal-Scale Risks from AI\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capabi...
-scqa_confidence: 1.0
-scqa_question: Lack of capability or robustness\nRisk Category: Domain-specific AI - Effects on humans and other living beings: Non-existential risks\nRisk Subcategory: Safety\nDescription: "Are AI safe with respect to human life and property?
-rid: RID-02266
 file_type: ai_risk_domain_summary
+content_preview: AI Risk Domain: 7.3 > Lack of capability or robustness\n\nThis domain contains 114 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: TASRA: a Taxonomy and Analysis of Societal-Scale Risks from AI\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capabi...
 search_medium_priority: 7.3 > Lack of capability or robustness
 is_summary: True
+search_all_fields: AI Risk Domain: 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness AI Risk Database v3 ai_risk_domain_summary
+title: AI Risk Domain: 7.3 > Lack of capability or robustness
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_complication: ions of its initial creators. However, impact on an unexpectedly large
+s cale can occur even if only one team is responsible for creating the technology\nEnti
+scqa_answer: a major category of societal-scale risk arises from large, well-intentioned interventions
+that go wrong.\nEntity: 2 - AI\nIntent: 2 - Unintentional\n
+entry_count: 114
+scqa_confidence: 1.0
+domain: 7.3 > Lack of capability or robustness
+search_low_priority: AI Risk Database v3 ai_risk_domain_summary
 
 Content:
 Unethical decision making\nDescription: "If, for example, an agent was programmed to operate war machinery in the service of its country, it would need to make ethical decisions regarding the termination of human life. This capacity to make non-trivial ethical or moral judgments concerning people may pose issues for Human Rights."\nEntity: 2 - AI\nIntent: 1 - Intentional\nTiming: 2 - Post-deployment\n\nRisk Entry 8:\nTitle: Managing the ethical and risk implications of rapid advances in artificial intelligence: A literature review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: Domain-specific AI - Effects on humans and other living beings: Non-existential risks\nRisk Subcategory: Safety\nDescription: "Are AI safe with respect to human life and property? Will their use create unintended or intended safety issues?"\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 2 - Post-deployment\n\nRisk Entry 9:\nTitle: Managing

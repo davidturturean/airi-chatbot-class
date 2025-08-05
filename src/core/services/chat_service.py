@@ -41,13 +41,14 @@ class ChatService:
         # Conversation storage (in production, use a proper database)
         self.conversations: Dict[str, List[Dict[str, str]]] = {}
     
-    def process_query(self, message: str, conversation_id: str) -> Tuple[str, List[Any]]:
+    def process_query(self, message: str, conversation_id: str, session_id: str = None) -> Tuple[str, List[Any]]:
         """
         Process a user query with intent classification and pre-filtering.
         
         Args:
             message: User message
             conversation_id: Conversation identifier
+            session_id: Session identifier for snippet storage
             
         Returns:
             Tuple of (response_text, retrieved_documents)
@@ -213,7 +214,7 @@ class ChatService:
                 logger.info(f"Added {len(web_results)} web search results to response")
             
             # 11. Enhance with citations
-            enhanced_response = self.citation_service.enhance_response_with_citations(response, docs)
+            enhanced_response = self.citation_service.enhance_response_with_citations(response, docs, session_id)
             
             # 12. Self-validation chain for quality assurance
             validated_response, validation_results = validation_chain.validate_and_improve(

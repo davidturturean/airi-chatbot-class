@@ -1,29 +1,29 @@
 Repository ID: RID-01256
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 scqa_situation: Title: International Scientific Report on the Safety of Advanced AI\nRisk Category: Risks from Malfunctions\nRisk Subcategory: Risks from bias and underrepresentation\nAdditional Evidence: "There are several well- documented cases of AI systems displaying discriminatory behaviour based on race, gender, age, and disability status, causing substantial harm
-entity: 
-row: 1233
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-rid: RID-01256
-scqa_question: What are the implications of this risk?
-timing: 
-scqa_complication: on the Safety of Advanced AI\nRisk Category: Risks from Malfunctions\nRisk Subcategory: Risks from bias and underrepresentation\nAdditional Evidence: "The
-scqa_answer: This can cause serious harm if these systems are entrusted with increasingly high- stakes decisions which can have severe consequences for individuals
-scqa_confidence: 1.0
-search_all_fields: International Scientific Report on the Safety of Advanced AI Unspecified Risks from Malfunctions Unspecified AI Risk Database v3 ai_risk_entry
-search_high_priority: International Scientific Report on the Safety of Advanced AI Unspecified Risks from Malfunctions
+file_type: ai_risk_entry
+intent: 
 subdomain: 
-title: International Scientific Report on the Safety of Advanced AI
+scqa_content_type: risk_description
+timing: 
+domain: Unspecified
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+search_high_priority: International Scientific Report on the Safety of Advanced AI Unspecified Risks from Malfunctions
+scqa_complication: on the Safety of Advanced AI\nRisk Category: Risks from Malfunctions\nRisk Subcategory: Risks from bias and underrepresentation\nAdditional Evidence: "The
+search_all_fields: International Scientific Report on the Safety of Advanced AI Unspecified Risks from Malfunctions Unspecified AI Risk Database v3 ai_risk_entry
+sheet: AI Risk Database v3
 risk_category: Risks from Malfunctions
 specific_domain: Unspecified
-search_low_priority: AI Risk Database v3 ai_risk_entry
-intent: 
-domain: Unspecified
-scqa_content_type: risk_description
-file_type: ai_risk_entry
-sheet: AI Risk Database v3
-content_preview: Title: International Scientific Report on the Safety of Advanced AI\nRisk Category: Risks from Malfunctions\nRisk Subcategory: Risks from bias and underrepresentation\nAdditional Evidence: "There are several well- documented cases of AI systems displaying discriminatory behaviour based on race, gend...
+rid: RID-01256
+title: International Scientific Report on the Safety of Advanced AI
+scqa_answer: This can cause serious harm if these systems are entrusted with increasingly high- stakes decisions which can have severe consequences for individuals
+scqa_confidence: 1.0
+scqa_question: What are the implications of this risk?
 search_medium_priority: Unspecified
+row: 1233
+entity: 
+search_low_priority: AI Risk Database v3 ai_risk_entry
+content_preview: Title: International Scientific Report on the Safety of Advanced AI\nRisk Category: Risks from Malfunctions\nRisk Subcategory: Risks from bias and underrepresentation\nAdditional Evidence: "There are several well- documented cases of AI systems displaying discriminatory behaviour based on race, gend...
 
 Content:
 Title: International Scientific Report on the Safety of Advanced AI\nRisk Category: Risks from Malfunctions\nRisk Subcategory: Risks from bias and underrepresentation\nAdditional Evidence: "There are several well- documented cases of AI systems displaying discriminatory behaviour based on race, gender, age, and disability status, causing substantial harm. Given increasingly widespread adoption of AI systems across various sectors, such behaviour can perpetuate various types of bias, including race, gender, age, and disability. This can cause serious harm if these systems are entrusted with increasingly high- stakes decisions which can have severe consequences for individuals."

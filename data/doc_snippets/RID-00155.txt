@@ -1,29 +1,29 @@
 Repository ID: RID-00155
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-file_type: ai_risk_entry
-subdomain: 7.1 > AI pursuing its own goals in conflict with human goals or values
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-search_medium_priority: 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values
-scqa_content_type: risk_description
-search_all_fields: The risks associated with Artificial General Intelligence: A systematic review 7. AI System Safety, Failures, & Limitations AGIs being given or developing unsafe goals 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values AI Risk Database v3 ai_risk_entry
-title: The risks associated with Artificial General Intelligence: A systematic review
-sheet: AI Risk Database v3
 row: 132
-scqa_complication: Title: The risks associated with Artificial General Intelligence: A systematic review\nDomain: 7. AI System Safety, Failures, & Limitat
-scqa_question: What are the implications of this risk?
-scqa_confidence: 1.0
-timing: 1 - Pre-deployment
-intent: 3 - Other
-search_high_priority: The risks associated with Artificial General Intelligence: A systematic review 7. AI System Safety, Failures, & Limitations AGIs being given or developing unsafe goals
-specific_domain: 7.1 > AI pursuing its own goals in conflict with human goals or values
-scqa_situation: Title: The risks associated with Artificial General Intelligence: A systematic review\nDomain: 7
-content_preview: Title: The risks associated with Artificial General Intelligence: A systematic review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: AGIs being given or developing unsafe goals\nDescription: "T...
-domain: 7. AI System Safety, Failures, & Limitations
-scqa_answer: "\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 1 - Pre-deployment
-rid: RID-00155
-entity: 3 - Other
 risk_category: AGIs being given or developing unsafe goals
 search_low_priority: AI Risk Database v3 ai_risk_entry
+scqa_answer: "\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 1 - Pre-deployment
+search_all_fields: The risks associated with Artificial General Intelligence: A systematic review 7. AI System Safety, Failures, & Limitations AGIs being given or developing unsafe goals 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values AI Risk Database v3 ai_risk_entry
+scqa_question: What are the implications of this risk?
+scqa_complication: Title: The risks associated with Artificial General Intelligence: A systematic review\nDomain: 7. AI System Safety, Failures, & Limitat
+content_preview: Title: The risks associated with Artificial General Intelligence: A systematic review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: AGIs being given or developing unsafe goals\nDescription: "T...
+scqa_content_type: risk_description
+scqa_situation: Title: The risks associated with Artificial General Intelligence: A systematic review\nDomain: 7
+title: The risks associated with Artificial General Intelligence: A systematic review
+file_type: ai_risk_entry
+domain: 7. AI System Safety, Failures, & Limitations
+subdomain: 7.1 > AI pursuing its own goals in conflict with human goals or values
+scqa_confidence: 1.0
+entity: 3 - Other
+rid: RID-00155
+search_medium_priority: 7.1 > AI pursuing its own goals in conflict with human goals or values 7.1 > AI pursuing its own goals in conflict with human goals or values
+intent: 3 - Other
+specific_domain: 7.1 > AI pursuing its own goals in conflict with human goals or values
+sheet: AI Risk Database v3
+search_high_priority: The risks associated with Artificial General Intelligence: A systematic review 7. AI System Safety, Failures, & Limitations AGIs being given or developing unsafe goals
+timing: 1 - Pre-deployment
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 
 Content:
 Title: The risks associated with Artificial General Intelligence: A systematic review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values\nRisk Category: AGIs being given or developing unsafe goals\nDescription: "The risks associated with AGI goal safety, including human attempts at making goals safe, as well as the AGI making its own goals safe during self-improvement."\nEntity: 3 - Other\nIntent: 3 - Other\nTiming: 1 - Pre-deployment

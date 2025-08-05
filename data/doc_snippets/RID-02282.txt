@@ -1,26 +1,26 @@
 Repository ID: RID-02282
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-search_high_priority: AI Risk Domain: 7.4 > Lack of transparency or interpretability 7.4 > Lack of transparency or interpretability
-search_all_fields: AI Risk Domain: 7.4 > Lack of transparency or interpretability 7.4 > Lack of transparency or interpretability 7.4 > Lack of transparency or interpretability AI Risk Database v3 ai_risk_domain_summary
-content_preview: AI Risk Domain: 7.4 > Lack of transparency or interpretability\n\nThis domain contains 41 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.4 > La...
-file_type: ai_risk_domain_summary
-entry_count: 41
-title: AI Risk Domain: 7.4 > Lack of transparency or interpretability
-scqa_answer: raising concerns in critical scenarios specifically in the commercial use of LLMs in high-stake industries, such as medical diagnoses [351, 352, 353,
-scqa_confidence: 1.0
-scqa_question: Will we have transparency in AI decision making?
-specific_domain: 7.4 > Lack of transparency or interpretability
-is_summary: True
-search_medium_priority: 7.4 > Lack of transparency or interpretability
-summary_type: domain_aggregation
-domain: 7.4 > Lack of transparency or interpretability
-search_low_priority: AI Risk Database v3 ai_risk_domain_summary
-rid: RID-02282
 url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+title: AI Risk Domain: 7.4 > Lack of transparency or interpretability
+file_type: ai_risk_domain_summary
+rid: RID-02282
+search_medium_priority: 7.4 > Lack of transparency or interpretability
+search_low_priority: AI Risk Database v3 ai_risk_domain_summary
+scqa_situation: k of transparency or interpretability\n\nThis domain contains 41 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.4 > Lack of transparency or interpretability\nRisk C
+sheet: AI Risk Database v3
+search_all_fields: AI Risk Domain: 7.4 > Lack of transparency or interpretability 7.4 > Lack of transparency or interpretability 7.4 > Lack of transparency or interpretability AI Risk Database v3 ai_risk_domain_summary
 scqa_complication: AI Risk Domain: 7.4 > Lack of transparency or interpretability\n\nThis domain contains 41 risk entries from the AI Risk Reposit
 scqa_content_type: mitigation_strategy
-sheet: AI Risk Database v3
-scqa_situation: k of transparency or interpretability\n\nThis domain contains 41 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.4 > Lack of transparency or interpretability\nRisk C
+entry_count: 41
+scqa_answer: raising concerns in critical scenarios specifically in the commercial use of LLMs in high-stake industries, such as medical diagnoses [351, 352, 353,
+scqa_confidence: 1.0
+summary_type: domain_aggregation
+content_preview: AI Risk Domain: 7.4 > Lack of transparency or interpretability\n\nThis domain contains 41 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.4 > La...
+is_summary: True
+domain: 7.4 > Lack of transparency or interpretability
+scqa_question: Will we have transparency in AI decision making?
+specific_domain: 7.4 > Lack of transparency or interpretability
+search_high_priority: AI Risk Domain: 7.4 > Lack of transparency or interpretability 7.4 > Lack of transparency or interpretability
 
 Content:
 AI Risk Domain: 7.4 > Lack of transparency or interpretability\n\nThis domain contains 41 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Mapping the Ethics of Generative AI: A Comprehensive Scoping Review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.4 > Lack of transparency or interpretability\nRisk Category: Transparency - Explainability\nDescription: Being a multifaceted concept, the term 'transparency' is both used to refer to technical explainability as well as organizational openness. Regarding the former, papers underscore the need for mechanistic interpretability and for explaining internal mechanisms in generative models. On the organizational front, transparency relates to practices such as informing users about capabilities and shortcomings of models, as well as adhering to documentation and reporting requirements for data collection processes or risk evaluations.\nEntity: 4 - Not coded\nIntent: 4 - Not coded\nTiming: 4 - Not

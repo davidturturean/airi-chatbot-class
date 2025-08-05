@@ -1,26 +1,26 @@
 Repository ID: RID-02290
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-scqa_situation: Subcategory: Disparate Performance\nDescription: "In the context of evaluating the impact of generative AI systems, disparate performance refers to AI systems that per
-search_all_fields: AI Risk Domain: 1.3 > Unequal performance across groups 1.3 > Unequal performance across groups 1.3 > Unequal performance across groups AI Risk Database v3 ai_risk_domain_summary
-search_low_priority: AI Risk Database v3 ai_risk_domain_summary
 search_medium_priority: 1.3 > Unequal performance across groups
+search_low_priority: AI Risk Database v3 ai_risk_domain_summary
+scqa_question: What are the implications of this risk?
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+is_summary: True
+entry_count: 16
+scqa_content_type: case_study
+scqa_confidence: 1.0
 file_type: ai_risk_domain_summary
 search_high_priority: AI Risk Domain: 1.3 > Unequal performance across groups 1.3 > Unequal performance across groups
-domain: 1.3 > Unequal performance across groups
-scqa_complication: dels comes from the internet. However, the composition of this data reflects historical usage patterns; 5% of the world speaks English at home, yet 63.7% of i
-scqa_question: What are the implications of this risk?
-scqa_content_type: case_study
-sheet: AI Risk Database v3
-summary_type: domain_aggregation
-content_preview: AI Risk Domain: 1.3 > Unequal performance across groups\n\nThis domain contains 16 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Sociotechnical Harms of Algorithmic Systems: Scoping a Taxonomy for Harm Reduction\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.3 > Unequal pe...
-specific_domain: 1.3 > Unequal performance across groups
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 rid: RID-02290
-title: AI Risk Domain: 1.3 > Unequal performance across groups
-is_summary: True
-scqa_confidence: 1.0
+search_all_fields: AI Risk Domain: 1.3 > Unequal performance across groups 1.3 > Unequal performance across groups 1.3 > Unequal performance across groups AI Risk Database v3 ai_risk_domain_summary
+content_preview: AI Risk Domain: 1.3 > Unequal performance across groups\n\nThis domain contains 16 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Sociotechnical Harms of Algorithmic Systems: Scoping a Taxonomy for Harm Reduction\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.3 > Unequal pe...
 scqa_answer: requires that the interventions used are documented for which particular populations and norms that they seek to cover, and which they do not""\nEnti
-entry_count: 16
+domain: 1.3 > Unequal performance across groups
+title: AI Risk Domain: 1.3 > Unequal performance across groups
+scqa_complication: dels comes from the internet. However, the composition of this data reflects historical usage patterns; 5% of the world speaks English at home, yet 63.7% of i
+sheet: AI Risk Database v3
+scqa_situation: Subcategory: Disparate Performance\nDescription: "In the context of evaluating the impact of generative AI systems, disparate performance refers to AI systems that per
+summary_type: domain_aggregation
+specific_domain: 1.3 > Unequal performance across groups
 
 Content:
 AI Risk Domain: 1.3 > Unequal performance across groups\n\nThis domain contains 16 risk entries from the AI Risk Repository:\n\nRisk Entry 1:\nTitle: Sociotechnical Harms of Algorithmic Systems: Scoping a Taxonomy for Harm Reduction\nDomain: 1. Discrimination & Toxicity\nSub-domain: 1.3 > Unequal performance across groups\nRisk Category: Representational Harms\nRisk Subcategory: Erasing social groups\nDescription: people, attributes, or artifacts associated with specific social groups are systematically absent or under-represented... Design choices [143] and training data [212] influence which people

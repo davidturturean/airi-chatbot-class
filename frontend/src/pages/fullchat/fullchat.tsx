@@ -1,172 +1,37 @@
-import { useState, useRef } from 'react';
-import { Chat } from '../chat/chat';
+import { Chat } from '../../components/chat';
 import { Header } from '../../components/header';
-import { message } from '../../interfaces/interfaces';
-import { v4 as uuidv4 } from 'uuid';
-
-const API_URL = '';
-
-const WELCOME: message = {
-  content: "Hi! I'm your AI assistant to help you navigate the AI Risk repository. How can I help you today?",
-  role: 'assistant',
-  id: uuidv4(),
-};
+import { SnippetModal } from '../../components/snippet-modal';
+import { useSidebar } from '@/context/SidebarContext';
+import { useChat } from '@/context/ChatContext';
+import { useState } from 'react';
 
 export function FullChat() {
-  const [previousMessages, setPreviousMessages] = useState<message[]>([]);
-  const [currentMessage, setCurrentMessage] = useState<message | null>(WELCOME);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const messageHandlerRef = useRef<((event: MessageEvent) => void) | null>(null);
 
-  const [domain, setDomain] = useState('');
-  const [suggestedUseCases, setSuggestedUseCases] = useState<string[]>([]);
-  const [relatedDocuments, setRelatedDocuments] = useState<{ title: string; url: string }[]>([]);
+  const { previousMessages, currentMessage, handleSubmit, isLoading, sessionId, clearSession } = useChat();
+  const { domain, setDomain, relatedDocuments, suggestedUseCases, handleDomainSubmit } = useSidebar();
+  
+  // Modal state for snippet display
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRid, setSelectedRid] = useState<string | null>(null);
 
   const handleFileClick = async (url: string) => {
-    // Handle different types of document URLs
-    if (url.startsWith('metadata://')) {
-      // For metadata results, we could potentially show a modal or detail view
-      // For now, just alert the user
-      alert('This is a metadata query result. Details view coming soon!');
-    } else if (url.startsWith('http://') || url.startsWith('https://')) {
-      // External URLs - open in new tab
-      window.open(url, '_blank', 'noopener,noreferrer');
-    } else if (url.startsWith('local-file://')) {
-      // Local file references - extract snippet ID
-      const path = url.replace('local-file://', '');
-      const snippetId = path.split('/').pop();
-      window.open(`/snippet/${snippetId}`, '_blank', 'noopener,noreferrer');
+    // Extract RID from URL and open modal
+    const match = url.match(/RID-\d{5}/);
+    if (match) {
+      setSelectedRid(match[0]);
+      setIsModalOpen(true);
     } else {
-      // Default behavior - assume it's a snippet ID
+      // Fallback to original behavior for non-RID URLs
       const snippetId = url.split('/').pop();
-      window.open(`/snippet/${snippetId}`, '_blank', 'noopener,noreferrer');
-    }
-  };
-
-  const cleanupMessageHandler = () => {
-    if (messageHandlerRef.current) {
-      messageHandlerRef.current = null;
-    }
-  };
-
-  async function handleSubmit(text?: string) {
-    if (isLoading) return;
-    const messageText = text;
-    if (!messageText || !messageText.trim()) return;
-
-    const userMessage: message = { content: messageText, role: 'user', id: uuidv4() };
-    setPreviousMessages((prev) => [...prev, userMessage]);
-
-    const loadingMessage: message = { content: 'Loading...', role: 'assistant', id: 'loading' };
-    setCurrentMessage(loadingMessage);
-
-    try {
-      const stream = await fetch(`${API_URL}api/v1/stream`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: messageText }),
-      });
-
-      if (!stream.body) throw new Error('Failed!!');
-
-      const reader = stream.body.getReader();
-      const decoder = new TextDecoder();
-      let done = false;
-      let buffer = '';
-      let accumulatedText = '';
-
-      while (!done) {
-        const { value, done: doneReading } = await reader.read();
-        done = doneReading;
-        buffer += decoder.decode(value, { stream: !done });
-
-        const lines = buffer.split('\n');
-        buffer = lines.pop() ?? '';
-
-        for (const line of lines) {
-          if (line.trim()) {
-            try {
-              
-              
-              const parsed = JSON.parse(line);
-
-               const isStatusMessage =
-                typeof parsed === "string" &&
-                (
-                  parsed.startsWith("Processing") ||
-                  parsed.startsWith("Analyzing") ||
-                  parsed.startsWith("Searching") ||
-                  parsed.startsWith("Generating") ||
-                  parsed.startsWith("Found") ||
-                  parsed.startsWith("No specific documents") ||
-                  parsed.startsWith("Using general knowledge")
-                );
-
-              if (isStatusMessage) {
-                // Optionally show this briefly in the UI via some loading bar/spinner
-                  const currMess: message = { content: parsed, role: 'assistant', id: uuidv4() };
-                  setCurrentMessage(currMess);
-                  continue
-               }
-
-              if (parsed.related_documents) {
-                setRelatedDocuments(parsed.related_documents);
-              } else {
-                accumulatedText += parsed;
-                const currMess: message = { content: accumulatedText, role: 'assistant', id: uuidv4() };
-                setCurrentMessage(currMess);
-              }
-            } catch (err) {
-              console.error('Error parsing line:', line, err);
-            }
-          }
-        }
+      if (snippetId && snippetId.startsWith('RID-')) {
+        setSelectedRid(snippetId);
+        setIsModalOpen(true);
+      } else {
+        window.open(`/snippet/${snippetId}`, '_blank', 'noopener,noreferrer');
       }
-
-      const botMessage: message = {
-        content: accumulatedText,
-        role: 'assistant',
-        id: uuidv4(),
-      };
-
-      setPreviousMessages((prev) => [...prev, botMessage]);
-      setCurrentMessage(null);
-    } catch (error) {
-      console.error('Error sending message:', error);
-      const errorMessage: message = {
-        content: 'Error talking to server.',
-        role: 'assistant',
-        id: uuidv4(),
-      };
-      setPreviousMessages((prev) => [...prev, errorMessage]);
-      setCurrentMessage(null);
-    } finally {
-      setIsLoading(false);
-      cleanupMessageHandler();
-    }
-  }
-
-  const handleDomainSubmit = async () => {
-    if (!domain.trim()) return;
-
-    try {
-      const response = await fetch(`${API_URL}api/v1/use_cases`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ domain }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch use cases');
-      }
-
-      const data = await response.json();
-      setSuggestedUseCases(data.use_cases || []);
-    } catch (error) {
-      console.error('Error fetching use cases:', error);
-      setSuggestedUseCases(['Error fetching use cases. Please try again.']);
     }
   };
+
 
   const defaultUseCases = ['Medical chatbot', 'Customer service agent', 'Model risk review'];
 
@@ -180,21 +45,20 @@ export function FullChat() {
           {/* 0. Text Explainer */}
           <section className="space-y-2">
             <h2 className="text-2xl font-bold text-gray-800">AI Risk Assistant</h2>
-            <p className="text-sm text-gray-600 leading-relaxed max-w-2xl">
+            <p className="text-sm text-gray-600 leading-relaxed">
               This assistant helps you explore and assess AI risk factors, drawing from the AI Risk Index. You can
               ask about governance frameworks, benchmarks, mitigations, and more.
             </p>
-            <p>We are currently collecting message histories to improve user experience. Please be advised that your conversations will be stored in our database.</p>
+              <div className="bg-white border rounded-xl p-4 shadow-sm">
+                <p className="text-sm text-gray-600 leading-relaxed">
+              We are currently collecting message histories to improve user experience. Please be advised that your conversations will be stored in our database.
+            </p>
+          </div>
           </section>
 
           {/* Chat Component */}
           <div className="bg-white rounded-xl shadow border p-4 h-[80vh] overflow-y-auto">
-            <Chat
-              previousMessages={previousMessages}
-              currentMessage={currentMessage}
-              handleSubmit={handleSubmit}
-              isLoading={isLoading}
-            />
+            <Chat previousMessages={previousMessages} currentMessage={currentMessage} handleSubmit={handleSubmit} isLoading={isLoading} />
           </div>
         </div>
 
@@ -290,8 +154,31 @@ export function FullChat() {
               </button>
             ))}
           </div>
+          
+          {/* Session management */}
+          <div className="bg-white border rounded-xl p-4 shadow-sm">
+            <h3 className="text-md font-semibold mb-2">Session</h3>
+            <p className="text-xs text-gray-500 mb-2">ID: {sessionId.slice(0, 8)}...</p>
+            <button
+              onClick={clearSession}
+              className="text-sm text-red-600 hover:text-red-800"
+            >
+              Clear Session Data
+            </button>
+          </div>
         </aside>
       </main>
+      
+      {/* Snippet Modal */}
+      <SnippetModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+          setSelectedRid(null);
+        }}
+        rid={selectedRid}
+        sessionId={sessionId}
+      />
     </div>
   );
 }

@@ -1,29 +1,29 @@
 Repository ID: RID-01653
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 file_type: ai_risk_entry
-scqa_content_type: impact_analysis
-title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
-search_high_priority: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks 7. AI System Safety, Failures, & Limitations Poor model design choices
-scqa_complication: agement of Root Causes for AI Risks\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Catego
-rid: RID-01653
 subdomain: 7.3 > Lack of capability or robustness
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-content_preview: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: Poor model design choices\nDescription: "The model specifications have signific...
-specific_domain: 7.3 > Lack of capability or robustness
-scqa_answer: "\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 1 - Pre-deployment
-search_all_fields: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks 7. AI System Safety, Failures, & Limitations Poor model design choices 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness AI Risk Database v3 ai_risk_entry
-scqa_situation: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 7
-search_medium_priority: 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness
-risk_category: Poor model design choices
+scqa_question: What are the implications of this risk?
 scqa_confidence: 1.0
 intent: 2 - Unintentional
-sheet: AI Risk Database v3
+rid: RID-01653
+scqa_content_type: impact_analysis
+specific_domain: 7.3 > Lack of capability or robustness
+scqa_situation: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 7
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+risk_category: Poor model design choices
+search_high_priority: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks 7. AI System Safety, Failures, & Limitations Poor model design choices
+scqa_complication: agement of Root Causes for AI Risks\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Catego
+search_medium_priority: 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness
+scqa_answer: "\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 1 - Pre-deployment
+content_preview: Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: Poor model design choices\nDescription: "The model specifications have signific...
+search_low_priority: AI Risk Database v3 ai_risk_entry
 row: 1630
-entity: 1 - Human
+search_all_fields: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks 7. AI System Safety, Failures, & Limitations Poor model design choices 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness AI Risk Database v3 ai_risk_entry
+title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks
+sheet: AI Risk Database v3
 domain: 7. AI System Safety, Failures, & Limitations
 timing: 1 - Pre-deployment
-scqa_question: What are the implications of this risk?
-search_low_priority: AI Risk Database v3 ai_risk_entry
+entity: 1 - Human
 
 Content:
 Title: AI Hazard Management: A Framework for the Systematic Management of Root Causes for AI Risks\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: Poor model design choices\nDescription: "The model specifications have significant impact on the functionality of an AI system. The developer mak- ing wrong decisions might cause the AI system to behave biased and unreliable."\nEntity: 1 - Human\nIntent: 2 - Unintentional\nTiming: 1 - Pre-deployment

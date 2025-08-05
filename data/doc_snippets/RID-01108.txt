@@ -1,29 +1,29 @@
 Repository ID: RID-01108
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_situation: Title: AI Safety Governance Framework\nDomain: 2
+entity: 1 - Human
+sheet: AI Risk Database v3
+row: 1085
+scqa_answer: "\nEntity: 1 - Human\nIntent: 3 - Other\nTiming: 3 - Other
 search_low_priority: AI Risk Database v3 ai_risk_entry
 intent: 3 - Other
-content_preview: Title: AI Safety Governance Framework\nDomain: 2. Privacy & Security\nSub-domain: 2.2 > AI system security vulnerabilities and attacks\nRisk Category: AI's inherent safety risks\nRisk Subcategory: Risks from AI systems (Risks of exploitation through defects and backdoors)\nDescription: "The standard...
-rid: RID-01108
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-domain: 2. Privacy & Security
-search_medium_priority: 2.2 > AI system security vulnerabilities and attacks 2.2 > AI system security vulnerabilities and attacks
-scqa_complication: vulnerabilities and attacks\nRisk Category: AI's inherent safety risks\nRisk Subcategory: Risks from AI systems (Risks of exploitation through defects an
 scqa_question: What are the implications of this risk?
-scqa_situation: Title: AI Safety Governance Framework\nDomain: 2
 timing: 3 - Other
-file_type: ai_risk_entry
-search_all_fields: AI Safety Governance Framework 2. Privacy & Security AI's inherent safety risks 2.2 > AI system security vulnerabilities and attacks 2.2 > AI system security vulnerabilities and attacks AI Risk Database v3 ai_risk_entry
-entity: 1 - Human
-risk_category: AI's inherent safety risks
-search_high_priority: AI Safety Governance Framework 2. Privacy & Security AI's inherent safety risks
-subdomain: 2.2 > AI system security vulnerabilities and attacks
-scqa_confidence: 1.0
 title: AI Safety Governance Framework
-row: 1085
+search_medium_priority: 2.2 > AI system security vulnerabilities and attacks 2.2 > AI system security vulnerabilities and attacks
+rid: RID-01108
+risk_category: AI's inherent safety risks
 specific_domain: 2.2 > AI system security vulnerabilities and attacks
+scqa_complication: vulnerabilities and attacks\nRisk Category: AI's inherent safety risks\nRisk Subcategory: Risks from AI systems (Risks of exploitation through defects an
+search_high_priority: AI Safety Governance Framework 2. Privacy & Security AI's inherent safety risks
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+scqa_confidence: 1.0
+domain: 2. Privacy & Security
+search_all_fields: AI Safety Governance Framework 2. Privacy & Security AI's inherent safety risks 2.2 > AI system security vulnerabilities and attacks 2.2 > AI system security vulnerabilities and attacks AI Risk Database v3 ai_risk_entry
+file_type: ai_risk_entry
 scqa_content_type: risk_description
-sheet: AI Risk Database v3
-scqa_answer: "\nEntity: 1 - Human\nIntent: 3 - Other\nTiming: 3 - Other
+content_preview: Title: AI Safety Governance Framework\nDomain: 2. Privacy & Security\nSub-domain: 2.2 > AI system security vulnerabilities and attacks\nRisk Category: AI's inherent safety risks\nRisk Subcategory: Risks from AI systems (Risks of exploitation through defects and backdoors)\nDescription: "The standard...
+subdomain: 2.2 > AI system security vulnerabilities and attacks
 
 Content:
 Title: AI Safety Governance Framework\nDomain: 2. Privacy & Security\nSub-domain: 2.2 > AI system security vulnerabilities and attacks\nRisk Category: AI's inherent safety risks\nRisk Subcategory: Risks from AI systems (Risks of exploitation through defects and backdoors)\nDescription: "The standardized API, feature libraries, toolkits used in the design, training, and verification stages of AI algorithms and models, development interfaces, and execution platforms may contain logical flaws and vulnerabilities. These weaknesses can be exploited, and in some cases, backdoors can be intentionally embedded, posing significant risks of being triggered and used for attacks."\nEntity: 1 - Human\nIntent: 3 - Other\nTiming: 3 - Other

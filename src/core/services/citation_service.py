@@ -9,6 +9,8 @@ from langchain.docstore.document import Document
 
 from ...config.logging import get_logger
 from ...config.settings import settings
+from ...core.storage.snippet_database import snippet_db
+from datetime import datetime
 
 logger = get_logger(__name__)
 
@@ -17,25 +19,32 @@ class CitationService:
     
     def __init__(self):
         self.snippets_dir = settings.DOC_SNIPPETS_DIR
-        # Ensure snippets directory exists
+        # Ensure snippets directory exists for legacy support
         self.snippets_dir.mkdir(parents=True, exist_ok=True)
         
         # RID to citation mapping for deterministic citation replacement
         self.rid_citation_map = {}
+        
+        # Current session ID (will be set per request)
+        self.current_session_id = None
     
-    def enhance_response_with_citations(self, response: str, docs: List[Document]) -> str:
+    def enhance_response_with_citations(self, response: str, docs: List[Document], session_id: str = None) -> str:
         """
         Add RID-based citations to the response text with inline highlighting.
         
         Args:
             response: Generated response text
             docs: Source documents
+            session_id: Session ID for storing snippets
             
         Returns:
             Response with enhanced RID-based citations and highlighting
         """
         if not docs:
             return response
+        
+        # Set current session for this request
+        self.current_session_id = session_id
         
         # Build RID citation mapping
         self.rid_citation_map = {}
@@ -45,8 +54,12 @@ class CitationService:
                 citation = self._format_rid_citation(doc)
                 self.rid_citation_map[rid] = citation
                 
-                # Save snippet for the RID
-                self._save_rid_snippet(doc, rid)
+                # Save snippet to database if session ID provided
+                if session_id:
+                    self._save_rid_snippet_to_db(doc, rid, session_id)
+                else:
+                    # Fall back to file system for legacy support
+                    self._save_rid_snippet(doc, rid)
         
         # Replace RID placeholders and legacy patterns
         enhanced_response = self._replace_rid_citations(response, docs)
@@ -250,7 +263,7 @@ class CitationService:
         return f"[{citation_text}](/snippet/{rid})"
     
     def _save_rid_snippet(self, doc: Document, rid: str) -> None:
-        """Save document snippet using RID for easy retrieval."""
+        """Save document snippet using RID for easy retrieval (legacy file system support)."""
         snippet_path = self.snippets_dir / f"{rid}.txt"
         
         try:
@@ -266,6 +279,80 @@ class CitationService:
                 f.write(f"\nContent:\n{doc.page_content}")
         except Exception as e:
             logger.error(f"Error saving RID snippet for {rid}: {str(e)}")
+    
+    def _save_rid_snippet_to_db(self, doc: Document, rid: str, session_id: str):
+        """Save document content as JSON snippet in database."""
+        try:
+            metadata = doc.metadata or {}
+            content = doc.page_content
+            
+            # Parse title from content if not in metadata
+            title = metadata.get('title', rid)
+            if not title or title == rid:
+                lines = content.split('\n')
+                for line in lines:
+                    if line.startswith('Title:'):
+                        title = line.replace('Title:', '').strip()
+                        break
+            
+            # Create JSON snippet
+            snippet_data = {
+                "rid": rid,
+                "title": title,
+                "content": content,
+                "metadata": {
+                    "domain": metadata.get('domain', ''),
+                    "subdomain": metadata.get('subdomain', metadata.get('specific_domain', '')),
+                    "risk_category": metadata.get('risk_category', ''),
+                    "entity": self._map_entity_value(metadata.get('entity', '')),
+                    "intent": self._map_intent_value(metadata.get('intent', '')),
+                    "timing": self._map_timing_value(metadata.get('timing', '')),
+                    "description": metadata.get('description', ''),
+                    "source_file": metadata.get('url', metadata.get('source_file', '')),
+                    "row_number": metadata.get('row', None)
+                },
+                "highlights": metadata.get('search_terms', []),
+                "created_at": datetime.now().isoformat()
+            }
+            
+            # Save to database
+            success = snippet_db.save_snippet(session_id, rid, snippet_data)
+            if success:
+                logger.info(f"Saved snippet {rid} to database for session {session_id}")
+            else:
+                logger.error(f"Failed to save snippet {rid} to database")
+                # Fall back to file system
+                self._save_rid_snippet(doc, rid)
+            
+        except Exception as e:
+            logger.error(f"Error saving snippet to database for {rid}: {str(e)}")
+            # Fall back to file system
+            self._save_rid_snippet(doc, rid)
+    
+    def _map_entity_value(self, entity: str) -> str:
+        """Map numeric entity values to readable strings."""
+        entity_map = {
+            '1': 'Human',
+            '2': 'AI',
+            '3': 'Human & AI'
+        }
+        return entity_map.get(str(entity), entity)
+    
+    def _map_intent_value(self, intent: str) -> str:
+        """Map numeric intent values to readable strings."""
+        intent_map = {
+            '1': 'Intentional',
+            '2': 'Unintentional'
+        }
+        return intent_map.get(str(intent), intent)
+    
+    def _map_timing_value(self, timing: str) -> str:
+        """Map numeric timing values to readable strings."""
+        timing_map = {
+            '1': 'Pre-deployment',
+            '2': 'Post-deployment'
+        }
+        return timing_map.get(str(timing), timing)
     
     def get_snippet_by_rid(self, rid: str, include_metadata: bool = False) -> str:
         """Get snippet content by RID."""

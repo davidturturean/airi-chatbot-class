@@ -1,29 +1,29 @@
 Repository ID: RID-00881
 Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
-file_type: ai_risk_entry
-subdomain: 6.3 > Economic and cultural devaluation of human effort
-scqa_question: What are the implications of this risk?
-specific_domain: 6.3 > Economic and cultural devaluation of human effort
-domain: 6. Socioeconomic and Environmental
-rid: RID-00881
-content_preview: Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.3 > Economic and cultural devaluation of human effort\nRisk Category: Technology concerns\nRisk Subcategory: Authenticity\nDescription: "As the advancemen...
-scqa_situation: Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 6
-row: 858
-entity: 2 - AI
-scqa_answer: s (McCormack et al., 2019)."\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 2 - Post-deployment
-title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration
-search_low_priority: AI Risk Database v3 ai_risk_entry
-url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
 scqa_complication: devaluation of human effort\nRisk Category: Technology concerns\nRisk Subcategory: Authenticity\nDescription: "As the advancement of generative AI increa
-risk_category: Technology concerns
-sheet: AI Risk Database v3
-search_medium_priority: 6.3 > Economic and cultural devaluation of human effort 6.3 > Economic and cultural devaluation of human effort
 scqa_content_type: risk_description
 timing: 2 - Post-deployment
-search_high_priority: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 6. Socioeconomic and Environmental Technology concerns
+subdomain: 6.3 > Economic and cultural devaluation of human effort
+risk_category: Technology concerns
+specific_domain: 6.3 > Economic and cultural devaluation of human effort
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration
+content_preview: Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.3 > Economic and cultural devaluation of human effort\nRisk Category: Technology concerns\nRisk Subcategory: Authenticity\nDescription: "As the advancemen...
+scqa_situation: Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 6
 intent: 3 - Other
 search_all_fields: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 6. Socioeconomic and Environmental Technology concerns 6.3 > Economic and cultural devaluation of human effort 6.3 > Economic and cultural devaluation of human effort AI Risk Database v3 ai_risk_entry
+entity: 2 - AI
 scqa_confidence: 1.0
+search_medium_priority: 6.3 > Economic and cultural devaluation of human effort 6.3 > Economic and cultural devaluation of human effort
+file_type: ai_risk_entry
+scqa_answer: s (McCormack et al., 2019)."\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 2 - Post-deployment
+scqa_question: What are the implications of this risk?
+search_high_priority: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration 6. Socioeconomic and Environmental Technology concerns
+rid: RID-00881
+row: 858
+search_low_priority: AI Risk Database v3 ai_risk_entry
+sheet: AI Risk Database v3
+domain: 6. Socioeconomic and Environmental
 
 Content:
 Title: Generative AI and ChatGPT: Applications, Challenges, and AI-Human Collaboration\nDomain: 6. Socioeconomic and Environmental\nSub-domain: 6.3 > Economic and cultural devaluation of human effort\nRisk Category: Technology concerns\nRisk Subcategory: Authenticity\nDescription: "As the advancement of generative AI increases, it becomes harder to determine the authenticity of a piece of work. Photos that seem to capture events or people in the real world may be synthesized by DeepFake AI. The power of generative AI could lead to large-scale manipulations of images and videos, worsening the problem of the spread of fake information or news on social media platforms (Gragnaniello et al., 2022). In the field of arts, an artistic portrait or music could be the direct output of an algorithm. Critics have raised the issue that AI-generated artwork lacks authenticity since algorithms tend to generate generic and repetitive results (McCormack et al., 2019)."\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 2 - Post-deployment

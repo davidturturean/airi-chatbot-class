@@ -1,0 +1,29 @@
+Repository ID: RID-00157
+Source: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+content_preview: Title: The risks associated with Artificial General Intelligence: A systematic review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: AGIs with poor ethics, morals and values\nDescription: "The risks associated with an AGI wit...
+domain: 7. AI System Safety, Failures, & Limitations
+search_high_priority: The risks associated with Artificial General Intelligence: A systematic review 7. AI System Safety, Failures, & Limitations AGIs with poor ethics, morals and values
+scqa_confidence: 1.0
+sheet: AI Risk Database v3
+timing: 2 - Post-deployment
+url: data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+rid: RID-00157
+intent: 3 - Other
+entity: 2 - AI
+risk_category: AGIs with poor ethics, morals and values
+scqa_question: What are the implications of this risk?
+specific_domain: 7.3 > Lack of capability or robustness
+scqa_answer: 3 > Lack of capability or robustness\nRisk Category: AGIs with poor ethics, morals and values\nDescription: "The risks associated with an AGI without human morals and ethics, with the wrong morals, without the capability of moral reasoning, judgement"\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 2 - Post-deployment
+row: 134
+scqa_content_type: risk_description
+scqa_situation: Title: The risks associated with Artificial General Intelligence: A systematic review\nDomain: 7
+subdomain: 7.3 > Lack of capability or robustness
+search_all_fields: The risks associated with Artificial General Intelligence: A systematic review 7. AI System Safety, Failures, & Limitations AGIs with poor ethics, morals and values 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness AI Risk Database v3 ai_risk_entry
+file_type: ai_risk_entry
+search_medium_priority: 7.3 > Lack of capability or robustness 7.3 > Lack of capability or robustness
+scqa_complication: Title: The risks associated with Artificial General Intelligence: A systematic review\nDomain: 7. AI System Safety, Failures, & Limitat
+search_low_priority: AI Risk Database v3 ai_risk_entry
+title: The risks associated with Artificial General Intelligence: A systematic review
+
+Content:
+Title: The risks associated with Artificial General Intelligence: A systematic review\nDomain: 7. AI System Safety, Failures, & Limitations\nSub-domain: 7.3 > Lack of capability or robustness\nRisk Category: AGIs with poor ethics, morals and values\nDescription: "The risks associated with an AGI without human morals and ethics, with the wrong morals, without the capability of moral reasoning, judgement"\nEntity: 2 - AI\nIntent: 3 - Other\nTiming: 2 - Post-deployment
