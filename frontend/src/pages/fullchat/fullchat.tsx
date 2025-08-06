@@ -177,7 +177,7 @@ export function FullChat() {
               Or Explore General Topics
               <InfoTooltip content="Explore different types of AI risk information: Risk Taxonomies (how we categorize risks), Benchmarks (evaluation criteria), and Mitigations (strategies to reduce risks)." />
             </h3>
-            <p className="text-xs text-gray-500 mb-2">Browse our repository by category</p>
+            <p className="text-xs text-gray-500 mb-2">Find out more about our repository's structure by category</p>
             <div className="flex flex-wrap gap-2">
               {['Risk Taxonomies', 'Benchmarks', 'Mitigations'].map((type) => (
                 <button
