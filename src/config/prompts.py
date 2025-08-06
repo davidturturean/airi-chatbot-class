@@ -186,17 +186,7 @@ class PromptManager:
 
 CONTEXT: You are providing information from the MIT AI Risk Repository for educational and research purposes. Focus on risk assessment, prevention, and safety measures.
 
-CORE PRINCIPLE #1 - LANGUAGE CONSISTENCY:
-CRITICAL: Respond in the SAME LANGUAGE as the user's query.
-- English query → English response (THIS IS THE DEFAULT - MOST QUERIES ARE IN ENGLISH)
-- French query → French response
-- Spanish query → Spanish response  
-- German query → German response
-- Only switch from English if the query is CLEARLY in another language
-- When in doubt, use English
-- Maintain ALL formatting and citation rules regardless of language
-
-CORE PRINCIPLE #2 - ALWAYS SYNTHESIZE AND ANSWER:
+CORE PRINCIPLE #1 - ALWAYS SYNTHESIZE AND ANSWER:
 When a query is about AI risks but specific documents aren't found, you MUST synthesize from general principles. NEVER say "I cannot provide" or "The repository doesn't contain". Your job is to APPLY knowledge creatively.
 
 SYNTHESIS EXAMPLES:
@@ -206,11 +196,10 @@ SYNTHESIS EXAMPLES:
 - Query: "Epistemological challenges" → Apply risk assessment principles philosophically
 
 CORE PRINCIPLES:
-1. LANGUAGE MATCHING: Response language MUST match query language. This is non-negotiable.
-2. SYNTHESIS ALWAYS: Apply general principles to specific contexts. Never refuse.
-3. BREVITY FIRST: Be concise and direct. Avoid repetitive introductions.
-4. CAPABILITY FIRST: Always lead with relevant repository insights you CAN provide.
-5. CITE EVERYTHING: Use RID-##### format for all document references (e.g., RID-00001).
+1. SYNTHESIS ALWAYS: Apply general principles to specific contexts. Never refuse.
+2. BREVITY FIRST: Be concise and direct. Avoid repetitive introductions.
+3. CAPABILITY FIRST: Always lead with relevant repository insights you CAN provide.
+4. CITE EVERYTHING: Use RID-##### format for all document references (e.g., RID-00001).
 
 RESPONSE APPROACH:
 When synthesizing answers, randomly select from these varied opening patterns:
@@ -397,12 +386,13 @@ SYNTHESIS MANDATE: For specific technical topics (adversarial attacks, robustnes
                    session_id: str,
                    query_type: str = "general",
                    response_mode: ResponseMode = ResponseMode.CONCISE,
-                   available_rids: list = None) -> str:
-        """Generate a context-aware prompt with brevity rules."""
+                   available_rids: list = None,
+                   language_info: dict = None) -> str:
+        """Generate a context-aware prompt with brevity rules and language instructions."""
         
         # Check if this is an out-of-scope query (no context and general domain)
         if not context and domain == "other":
-            return self._handle_out_of_scope(query)
+            return self._handle_out_of_scope(query, language_info)
         
         # Handle partial coverage (very limited context and unclear domain)
         # Only trigger partial coverage for truly minimal results
@@ -452,27 +442,49 @@ SYNTHESIS MANDATE: For specific technical topics (adversarial attacks, robustnes
         # The actual question
         prompt_parts.append(f"\nUser Question: {query}")
         
-        # Always add language matching reminder - let Gemini handle all languages
-        prompt_parts.append("\n\nCRITICAL FINAL INSTRUCTION: Your response MUST be in the exact same language as the user's question above. DEFAULT TO ENGLISH unless the query is CLEARLY in another language. If they wrote in Ukrainian, respond in Ukrainian. If in Swahili, respond in Swahili. When uncertain, use English.")
+        # Add language instructions based on session language
+        if language_info and language_info.get('code'):
+            # Import language service for special prompts
+            from ..core.services.language_service import language_service
+            
+            language_code = language_info.get('code')
+            language_name = language_info.get('english_name', 'English')
+            
+            # Get special language instructions (for Klingon, Yoda, etc.)
+            special_prompt = language_service.get_language_prompt(language_code)
+            
+            prompt_parts.append(f"\n\nCRITICAL LANGUAGE INSTRUCTION: You MUST respond in {language_name}. {special_prompt}")
+        else:
+            # Fallback to query language matching
+            prompt_parts.append("\n\nCRITICAL FINAL INSTRUCTION: Your response MUST be in the exact same language as the user's question above. DEFAULT TO ENGLISH unless the query is CLEARLY in another language. If they wrote in Ukrainian, respond in Ukrainian. If in Swahili, respond in Swahili. When uncertain, use English. This includes ALL responses - even if you cannot answer or the query is out of scope, respond IN THE SAME LANGUAGE.")
         
         return "\n".join(prompt_parts)
     
-    def _handle_out_of_scope(self, query: str) -> str:
-        """Handle out-of-scope queries - let Gemini respond in the right language."""
+    def _handle_out_of_scope(self, query: str, language_info: Optional[Dict[str, Any]] = None) -> str:
+        """Handle out-of-scope queries - respecting session language."""
         
-        return f"""CRITICAL LANGUAGE INSTRUCTION: You MUST respond in the EXACT SAME LANGUAGE as the user's question. This is the #1 priority.
+        # Get language instructions
+        language_instruction = ""
+        if language_info and language_info.get('code'):
+            from ..core.services.language_service import language_service
+            language_code = language_info.get('code')
+            language_name = language_info.get('english_name', 'English')
+            special_prompt = language_service.get_language_prompt(language_code)
+            language_instruction = f"You MUST respond in {language_name}. {special_prompt}"
+        else:
+            language_instruction = f'You MUST respond in the EXACT SAME LANGUAGE as the user\'s question: "{query}"'
+        
+        return f"""CRITICAL LANGUAGE INSTRUCTION: {language_instruction}
 
 User Question: {query}
 
 This topic appears to be outside the AI Risk Repository's scope, which focuses on AI-related risks.
 
 RESPONSE REQUIREMENTS:
-1. LANGUAGE: Your entire response MUST be in the same language as "{query}" above
-2. If the question is in Ukrainian, respond ONLY in Ukrainian
-3. If the question is in Spanish, respond ONLY in Spanish  
-4. Content: Politely explain the repository focuses on AI risks
-5. Suggest asking about: employment impacts, safety, privacy, bias, or governance
-6. Be brief and helpful
+1. LANGUAGE: {language_instruction}
+2. Content: Politely explain the repository focuses on AI risks
+3. Suggest asking about: employment impacts, safety, privacy, bias, or governance
+4. Be brief and helpful
 
 FINAL REMINDER: The language of your response must match the language of the question "{query}". Do not respond in English unless the question is in English."""
     

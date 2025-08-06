@@ -43,6 +43,8 @@ tests/results/
 tests/debug/
 test_results_*.json
 debug_*.log
+extracted_prompts_responses.json
+extracted_prompts_responses.md
 
 # Backup files
 backup_*/
@@ -68,3 +70,6 @@ Thumbs.db
 # Node modules
 node_modules/
 frontend/node_modules/
+
+# Time tracking analysis
+time_tracking_analysis/

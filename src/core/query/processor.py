@@ -537,7 +537,7 @@ class QueryProcessor:
         
         return filtered_docs
     
-    def generate_prompt(self, message: str, query_type: str, domain: str, context: str, session_id: str = "default", docs: List[Document] = None) -> str:
+    def generate_prompt(self, message: str, query_type: str, domain: str, context: str, session_id: str = "default", docs: List[Document] = None, language_info: Dict[str, Any] = None) -> str:
         """
         Generate enhanced prompt using the new prompt management system.
 
@@ -548,9 +548,10 @@ class QueryProcessor:
             context: Retrieved context
             session_id: Session ID for intro tracking
             docs: Retrieved documents for RID extraction
+            language_info: Language information for session
             
         Returns:
-            Enhanced prompt with brevity rules and domain-specific guidance
+            Enhanced prompt with brevity rules, domain-specific guidance, and language instructions
         """
         # Use the provided domain, fallback to classifier if needed
         if not domain or domain == 'other':
@@ -587,5 +588,6 @@ class QueryProcessor:
             context=context,
             session_id=session_id,
             query_type=query_type,
-            available_rids=available_rids
+            available_rids=available_rids,
+            language_info=language_info
         )

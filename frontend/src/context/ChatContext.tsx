@@ -22,6 +22,13 @@ const getSessionId = (): string => {
   return sessionId;
 };
 
+interface LanguageInfo {
+  code: string;
+  native_name: string;
+  english_name: string;
+  category: string;
+}
+
 interface ChatContextType {
   previousMessages: message[];
   currentMessage: message | null;
@@ -31,6 +38,8 @@ interface ChatContextType {
   setCurrentMessage: React.Dispatch<React.SetStateAction<message | null>>;
   sessionId: string;
   clearSession: () => Promise<void>;
+  sessionLanguage: LanguageInfo | null;
+  setSessionLanguage: (language: LanguageInfo) => void;
 }
 
 const ChatContext = createContext<ChatContextType | null>(null);
@@ -42,6 +51,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false);
   const messageHandlerRef = useRef<((event: MessageEvent) => void) | null>(null);
   const [sessionId] = useState<string>(getSessionId());
+  const [sessionLanguage, setSessionLanguage] = useState<LanguageInfo | null>(null);
 
   const cleanupMessageHandler = () => {
     if (messageHandlerRef.current) {
@@ -85,7 +95,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         },
         body: JSON.stringify({ 
           message: messageText,
-          session_id: sessionId 
+          session_id: sessionId,
+          language_code: sessionLanguage?.code  // Pass selected language if set
         }),
       });
 
@@ -133,6 +144,9 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
               
               if (parsed.related_documents) {
                 setRelatedDocuments(parsed.related_documents);
+              } else if (parsed.language) {
+                // Update session language when received from backend
+                setSessionLanguage(parsed.language);
               } else {
                 accumulatedText += parsed;
                 const currMess: message = { content: accumulatedText, role: 'assistant', id: uuidv4() };
@@ -178,6 +192,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       setCurrentMessage,
       sessionId,
       clearSession,
+      sessionLanguage,
+      setSessionLanguage,
     }}>
       {children}
     </ChatContext.Provider>

@@ -18,9 +18,10 @@ logger = get_logger(__name__)
 class MetadataService:
     """Service for handling metadata queries across multiple databases."""
     
-    def __init__(self):
+    def __init__(self, gemini_model=None):
         self.loader = MetadataLoader()
         self.query_generator = QueryGenerator()
+        self.gemini_model = gemini_model  # Optional for language-aware messages
         self._initialized = False
         self._cache = {}
         self._cache_ttl = 1800  # 30 minutes
@@ -75,9 +76,14 @@ class MetadataService:
         elapsed = time.time() - start_time
         logger.info(f"Metadata service initialized: {total_rows} total rows in {elapsed:.2f}s")
     
-    def query(self, natural_query: str, target_databases: Optional[List[str]] = None) -> Tuple[str, List[Dict[str, Any]]]:
+    def query(self, natural_query: str, language_info: Optional[Dict[str, Any]] = None, target_databases: Optional[List[str]] = None) -> Tuple[str, List[Dict[str, Any]]]:
         """
         Execute a natural language query against the metadata.
+        
+        Args:
+            natural_query: The natural language query
+            language_info: Language information for response generation
+            target_databases: Optional list of target databases
         
         Returns:
             Tuple of (formatted_response, raw_results)
@@ -169,7 +175,10 @@ class MetadataService:
         response_parts = [sql_query.explanation]
         
         if results.empty:
-            response_parts.append("\nNo results found for your query.")
+            # Use language-aware message for no results
+            from ...utils.language_helper import get_no_results_message
+            no_results_msg = get_no_results_message(query, self.gemini_model)
+            response_parts.append(f"\n{no_results_msg}")
         else:
             # Format based on query type
             if sql_query.is_aggregation:
@@ -296,4 +305,5 @@ class MetadataService:
         return stats
 
 # Global metadata service instance
+# Global instance - gemini_model will be set by chat_service when available
 metadata_service = MetadataService()

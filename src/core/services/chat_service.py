@@ -9,10 +9,12 @@ from ..models.gemini import GeminiModel
 from ..storage.vector_store import VectorStore
 from ..query.processor import QueryProcessor
 from .citation_service import CitationService
-from ..validation.response_validator import validation_chain
-from ..metadata import metadata_service
-from ..query.technical_handler import get_technical_handler
-from .smart_web_search import smart_web_search
+# Import these locally to avoid import errors
+# from ..validation.response_validator import validation_chain
+# from ..metadata import metadata_service
+# from ..query.technical_handler import get_technical_handler
+# from .smart_web_search import smart_web_search
+# from .language_service import language_service
 from ...config.logging import get_logger
 from ...config.settings import settings
 
@@ -38,22 +40,52 @@ class ChatService:
         self.query_processor = QueryProcessor(query_monitor)
         self.citation_service = CitationService()
         
+        # Initialize language service with Gemini model
+        if gemini_model:
+            try:
+                from .language_service import language_service
+                language_service.gemini_model = gemini_model
+            except Exception as e:
+                logger.warning(f"Could not initialize language service: {e}")
+        
+        # Session language tracking
+        self.session_languages: Dict[str, Dict[str, Any]] = {}
+        
         # Conversation storage (in production, use a proper database)
         self.conversations: Dict[str, List[Dict[str, str]]] = {}
     
-    def process_query(self, message: str, conversation_id: str, session_id: str = None) -> Tuple[str, List[Any]]:
+    def process_query(self, message: str, conversation_id: str, session_id: str = None, language_code: str = None) -> Tuple[str, List[Any], Optional[Dict[str, Any]]]:
         """
         Process a user query with intent classification and pre-filtering.
         
         Args:
             message: User message
             conversation_id: Conversation identifier
-            session_id: Session identifier for snippet storage
+            session_id: Session identifier for snippet storage and language tracking
+            language_code: Optional manually selected language code
             
         Returns:
-            Tuple of (response_text, retrieved_documents)
+            Tuple of (response_text, retrieved_documents, language_info)
         """
         try:
+            # Handle language selection priority
+            if language_code:
+                # User explicitly selected a language - use it and store for session
+                try:
+                    from .language_service import language_service
+                    language_info = language_service.get_language_info(language_code)
+                    if session_id and language_info:
+                        self.session_languages[session_id] = language_info
+                except Exception as lang_error:
+                    logger.warning(f"Failed to get language info for code '{language_code}': {lang_error}")
+                    # Fallback to session language or default
+                    if session_id and session_id in self.session_languages:
+                        language_info = self.session_languages[session_id]
+                    else:
+                        language_info = self._get_default_language_info()
+            else:
+                # No explicit selection, check session or detect
+                language_info = self._get_or_detect_language(message, session_id)
             # 1. Intent classification (Phase 2.1) - Using working version from copy folder
             from ...core.query.intent_classifier import intent_classifier, IntentCategory
             intent_result = intent_classifier.classify_intent(message)
@@ -62,43 +94,72 @@ class ChatService:
             if intent_result.category == IntentCategory.METADATA_QUERY:
                 logger.info(f"Processing metadata query (confidence: {intent_result.confidence:.2f})")
                 
-                # Initialize metadata service if needed
-                if not metadata_service._initialized:
-                    metadata_service.initialize()
-                
-                # Execute metadata query
-                response, raw_results = metadata_service.query(message)
+                try:
+                    from ..metadata import metadata_service
+                    
+                    # Initialize metadata service if needed
+                    if not metadata_service._initialized:
+                        metadata_service.initialize()
+                    
+                    # Set gemini model for language-aware messages
+                    if self.gemini_model:
+                        metadata_service.gemini_model = self.gemini_model
+                    
+                    # Execute metadata query with language info
+                    response, raw_results = metadata_service.query(message, language_info)
+                except ImportError as e:
+                    logger.error(f"Failed to import metadata service: {e}")
+                    response = "Metadata service is currently unavailable."
+                    raw_results = []
                 
                 # Update conversation history
                 self._update_conversation_history(conversation_id, message, response)
-                return response, raw_results
+                return response, raw_results, language_info
             
             elif intent_result.category == IntentCategory.TECHNICAL_AI_QUERY:
                 logger.info(f"Processing technical AI query (confidence: {intent_result.confidence:.2f})")
                 
-                # Get technical handler
-                technical_handler = get_technical_handler()
-                
-                # Set up Gemini model
-                if self.gemini_model:
-                    technical_handler.gemini_model = self.gemini_model
-                
-                # Execute technical query
-                response, sources = technical_handler.handle_technical_query(message)
+                try:
+                    from ..query.technical_handler import get_technical_handler
+                    
+                    # Get technical handler
+                    technical_handler = get_technical_handler()
+                    
+                    # Set up Gemini model
+                    if self.gemini_model:
+                        technical_handler.gemini_model = self.gemini_model
+                    
+                    # Execute technical query with language info
+                    response, sources = technical_handler.handle_technical_query(message, language_info)
+                except ImportError as e:
+                    logger.error(f"Failed to import technical handler: {e}")
+                    response = "Technical query handler is currently unavailable."
+                    sources = []
                 
                 # Update conversation history
                 self._update_conversation_history(conversation_id, message, response)
-                return response, sources
+                return response, sources, language_info
             
             elif intent_result.category == IntentCategory.CROSS_DB_QUERY:
                 logger.info(f"Processing cross-database query (confidence: {intent_result.confidence:.2f})")
                 
-                # Initialize metadata service if needed
-                if not metadata_service._initialized:
-                    metadata_service.initialize()
-                
-                # First, try to get structured data from metadata service
-                metadata_response, raw_results = metadata_service.query(message)
+                try:
+                    from ..metadata import metadata_service
+                    
+                    # Initialize metadata service if needed
+                    if not metadata_service._initialized:
+                        metadata_service.initialize()
+                    
+                    # Set gemini model for language-aware messages
+                    if self.gemini_model:
+                        metadata_service.gemini_model = self.gemini_model
+                    
+                    # First, try to get structured data from metadata service with language info
+                    metadata_response, raw_results = metadata_service.query(message, language_info)
+                except ImportError as e:
+                    logger.error(f"Failed to import metadata service: {e}")
+                    metadata_response = "Metadata service is currently unavailable."
+                    raw_results = []
                 
                 # Also get related documents from vector store for context
                 query_type, domain = self.query_processor.analyze_query(message, conversation_id)
@@ -159,24 +220,27 @@ class ChatService:
                 logger.info(f"Query filtered by intent classifier: {intent_result.category.value} (confidence: {intent_result.confidence:.2f})")
                 
                 if intent_result.suggested_response:
-                    # Translate the English response template to match the query language
-                    if self.gemini_model:
+                    # Use session language instead of detecting from query
+                    if self.gemini_model and language_info:
                         try:
-                            language_prompt = f"""User Question (detect the language): {message}
-
-English response template: {intent_result.suggested_response}
+                            # Get language details
+                            from ..services.language_service import language_service
+                            language_code = language_info.get('code', 'en')
+                            language_name = language_info.get('english_name', 'English')
+                            special_prompt = language_service.get_language_prompt(language_code)
+                            
+                            language_prompt = f"""English response template: {intent_result.suggested_response}
 
 CRITICAL INSTRUCTION: 
-1. Detect the language of the user's question above
-2. If the question is in English, return the English response template as-is
-3. If the question is in another language, translate the ENTIRE English response template to that EXACT language
-4. Maintain the same helpful tone and all the AI risk topic suggestions
-5. Do NOT add any extra text or explanations
+You MUST translate the entire English response template above to {language_name}.
+{special_prompt}
+Maintain the same helpful tone and all the AI risk topic suggestions.
+Do NOT add any extra text or explanations.
 
 Your response must be ONLY the translated text, nothing else."""
                             
                             response = self.gemini_model.generate(language_prompt, [])
-                            logger.info(f"Generated language-aware out-of-scope response")
+                            logger.info(f"Generated {language_name} out-of-scope response")
                         except Exception as e:
                             logger.warning(f"Failed to translate out-of-scope response: {e}")
                             # Fallback to English template
@@ -186,7 +250,7 @@ Your response must be ONLY the translated text, nothing else."""
                 else:
                     # Use prompt manager to get language-aware out-of-scope response
                     from ...config.prompts import prompt_manager
-                    out_of_scope_prompt = prompt_manager._handle_out_of_scope(message)
+                    out_of_scope_prompt = prompt_manager._handle_out_of_scope(message, language_info)
                     
                     # Generate response using Gemini to ensure correct language
                     if self.gemini_model:
@@ -201,17 +265,21 @@ Your response must be ONLY the translated text, nothing else."""
                 
                 # Update conversation history even for filtered queries
                 self._update_conversation_history(conversation_id, message, response)
-                return response, []
+                return response, [], language_info
             
             # 4. Process repository-related queries
             logger.info(f"Processing repository query (intent confidence: {intent_result.confidence:.2f})")
             
             # 4. Query refinement check (Phase 2.2) - handle over-broad queries
-            from ...core.query.refinement import query_refiner
-            refinement_result = query_refiner.analyze_query(message)
+            try:
+                from ...core.query.refinement import query_refiner
+                refinement_result = query_refiner.analyze_query(message)
+            except ImportError as e:
+                logger.warning(f"Failed to import query refiner: {e}")
+                refinement_result = None
             
             # 5. Handle over-broad queries with suggestions (less aggressive)
-            if refinement_result.needs_refinement and refinement_result.complexity.value == 'very_broad':
+            if refinement_result and refinement_result.needs_refinement and refinement_result.complexity.value == 'very_broad':
                 logger.info(f"Query is very broad and needs refinement: {refinement_result.complexity.value}")
                 
                 # Use auto-refined query if available
@@ -220,10 +288,10 @@ Your response must be ONLY the translated text, nothing else."""
                     message = refinement_result.refined_query
                 elif refinement_result.suggestions:
                     # Only block very_broad queries with suggestions, let broad queries proceed
-                    suggestion_response = query_refiner.format_suggestions_response(refinement_result)
+                    suggestion_response = query_refiner.format_suggestions_response(refinement_result, language_info)
                     self._update_conversation_history(conversation_id, message, suggestion_response)
-                    return suggestion_response, []
-            elif refinement_result.needs_refinement and refinement_result.complexity.value == 'broad':
+                    return suggestion_response, [], language_info
+            elif refinement_result and refinement_result.needs_refinement and refinement_result.complexity.value == 'broad':
                 # For broad queries, use auto-refined query if available, but don't block with suggestions
                 if refinement_result.refined_query:
                     logger.info(f"Using auto-refined query for broad query: {refinement_result.refined_query}")
@@ -240,14 +308,18 @@ Your response must be ONLY the translated text, nothing else."""
             context = self._format_context(docs, query_type)
             
             # 9. Generate response
-            response = self._generate_response(message, query_type, domain, context, conversation_id, docs)
+            response = self._generate_response(message, query_type, domain, context, conversation_id, docs, language_info)
             
             # 10. Check if web search needed and append results
-            web_results = smart_web_search.search_if_needed(message, context, len(docs), domain)
-            if web_results:
-                web_context = smart_web_search.format_search_results(web_results)
-                response += web_context
-                logger.info(f"Added {len(web_results)} web search results to response")
+            try:
+                from .smart_web_search import smart_web_search
+                web_results = smart_web_search.search_if_needed(message, context, len(docs), domain)
+                if web_results:
+                    web_context = smart_web_search.format_search_results(web_results)
+                    response += web_context
+                    logger.info(f"Added {len(web_results)} web search results to response")
+            except ImportError as e:
+                logger.warning(f"Failed to import smart web search: {e}")
             
             # 11. Clean response to remove any unprompted additions
             # Remove any "Risk Taxonomies" or similar sections that weren't asked for
@@ -275,29 +347,44 @@ Your response must be ONLY the translated text, nothing else."""
             enhanced_response = self.citation_service.enhance_response_with_citations(response, docs, session_id)
             
             # 13. Self-validation chain for quality assurance
-            validated_response, validation_results = validation_chain.validate_and_improve(
-                response=enhanced_response,
-                query=message,
-                documents=docs,
-                domain=domain
-            )
+            try:
+                from ..validation.response_validator import validation_chain
+                validated_response, validation_results = validation_chain.validate_and_improve(
+                    response=enhanced_response,
+                    query=message,
+                    documents=docs,
+                    domain=domain
+                )
+            except ImportError as e:
+                logger.warning(f"Failed to import validation chain: {e}")
+                validated_response = enhanced_response
+                validation_results = None
             
             # Log validation results
-            logger.info(f"Response validation: {validation_results.overall_result.value} "
-                       f"(score: {validation_results.overall_score:.2f})")
-            
-            if validation_results.overall_score < 0.6:
-                logger.warning(f"Low quality response detected. Recommendations: {validation_results.recommendations}")
+            if validation_results:
+                logger.info(f"Response validation: {validation_results.overall_result.value} "
+                           f"(score: {validation_results.overall_score:.2f})")
+                
+                if validation_results.overall_score < 0.6:
+                    logger.warning(f"Low quality response detected. Recommendations: {validation_results.recommendations}")
             
             # 14. Update conversation history
             self._update_conversation_history(conversation_id, message, validated_response)
             
-            return validated_response, docs
+            return validated_response, docs, language_info
             
         except Exception as e:
             logger.error(f"Error processing query: {str(e)}")
-            error_response = f"I encountered an error while processing your question: {str(e)}"
-            return error_response, []
+            # Try to get language info safely
+            language_info = None
+            if session_id and session_id in self.session_languages:
+                language_info = self.session_languages.get(session_id)
+            if not language_info:
+                language_info = self._get_default_language_info()
+            # Translate error message
+            english_error = f"I encountered an error while processing your question: {str(e)}"
+            error_response = self._translate_error_message(english_error, language_info)
+            return error_response, [], language_info
     
     def _retrieve_documents(self, message: str, query_type: str, domain: str = None) -> List[Document]:
         """Retrieve relevant documents with relevance threshold filtering."""
@@ -330,9 +417,13 @@ Your response must be ONLY the translated text, nothing else."""
             # The domain was already correctly classified by LLM in analyze_query()
             if not domain:
                 # Only use rule-based as fallback if no domain was determined
-                from ...config.domains import domain_classifier
-                domain = domain_classifier.classify_domain(message)
-                logger.info(f"Using fallback rule-based domain classification: {domain}")
+                try:
+                    from ...config.domains import domain_classifier
+                    domain = domain_classifier.classify_domain(message)
+                    logger.info(f"Using fallback rule-based domain classification: {domain}")
+                except ImportError as e:
+                    logger.warning(f"Failed to import domain classifier: {e}")
+                    domain = "general"
             else:
                 logger.info(f"Using LLM domain classification: {domain}")
             
@@ -367,8 +458,12 @@ Your response must be ONLY the translated text, nothing else."""
                 return unique_docs[:8]  # Return top 8 unique docs
             
             # Check if domain supports enhanced search
-            from ...config.domains import domain_classifier
-            domain_config = domain_classifier.get_domain_config(domain)
+            try:
+                from ...config.domains import domain_classifier
+                domain_config = domain_classifier.get_domain_config(domain)
+            except ImportError as e:
+                logger.warning(f"Failed to import domain classifier: {e}")
+                domain_config = None
             
             if domain_config and domain_config.enhanced_search:
                 if domain == "socioeconomic":
@@ -376,7 +471,11 @@ Your response must be ONLY the translated text, nothing else."""
                     enhanced_query = self.query_processor.enhance_query(message, query_type)
                 else:
                     # For other domains, use domain-specific search queries
-                    enhanced_queries = domain_classifier.get_domain_queries(domain)
+                    try:
+                        enhanced_queries = domain_classifier.get_domain_queries(domain)
+                    except Exception as e:
+                        logger.warning(f"Failed to get domain queries: {e}")
+                        enhanced_queries = None
                     if enhanced_queries:
                         # Choose the best enhanced query based on the original message
                         enhanced_query = self._select_best_enhanced_query(message, enhanced_queries)
@@ -434,18 +533,18 @@ Your response must be ONLY the translated text, nothing else."""
             logger.error(f"Error formatting context: {str(e)}")
             return ""
     
-    def _generate_response(self, message: str, query_type: str, domain: str, context: str, conversation_id: str, docs: List[Document] = None) -> str:
+    def _generate_response(self, message: str, query_type: str, domain: str, context: str, conversation_id: str, docs: List[Document] = None, language_info: Dict[str, Any] = None) -> str:
         """Generate response using the AI model."""
         if not self.gemini_model:
             logger.warning("No Gemini model available")
-            return self._create_fallback_response(context, message)
+            return self._create_fallback_response(context, message, language_info)
         
         try:
             # Prepare conversation history (with topic change detection)
             history = self._get_conversation_history(conversation_id, query_type)
             
-            # Generate enhanced prompt with session awareness and RID information
-            prompt = self.query_processor.generate_prompt(message, query_type, domain, context, conversation_id, docs)
+            # Generate enhanced prompt with session awareness, RID information, and language
+            prompt = self.query_processor.generate_prompt(message, query_type, domain, context, conversation_id, docs, language_info)
             
             # DEBUG: Log the actual prompt being sent to Gemini
             logger.info(f"=== GEMINI PROMPT DEBUG ===")
@@ -490,21 +589,25 @@ Focus on: risk assessment, prevention strategies, and safety measures."""
                     
                 except Exception as retry_error:
                     logger.error(f"Gemini refused even with educational context: {retry_error}")
-                    # Return a helpful message to the user
-                    return ("I apologize, but I'm unable to provide detailed information on this specific topic due to content restrictions. "
-                           "Please try rephrasing your question to focus on risk prevention, safety measures, or policy considerations. "
-                           "You can also explore related topics like AI safety frameworks, risk mitigation strategies, or ethical guidelines.")
+                    # Return a helpful message to the user in their language
+                    english_msg = ("I apologize, but I'm unable to provide detailed information on this specific topic due to content restrictions. "
+                                  "Please try rephrasing your question to focus on risk prevention, safety measures, or policy considerations. "
+                                  "You can also explore related topics like AI safety frameworks, risk mitigation strategies, or ethical guidelines.")
+                    return self._translate_error_message(english_msg, language_info)
             else:
-                # For non-safety errors, return the original error
+                # For non-safety errors, return the original error in user's language
                 logger.error(f"Error generating response: {str(e)}")
-                return f"I encountered an error while generating a response: {str(e)}"
+                english_error = f"I encountered an error while generating a response: {str(e)}"
+                return self._translate_error_message(english_error, language_info)
     
-    def _create_fallback_response(self, context: str, message: str) -> str:
+    def _create_fallback_response(self, context: str, message: str, language_info: Dict[str, Any] = None) -> str:
         """Create a fallback response when AI model is not available."""
         if context:
-            return f"Based on the AI Risk Repository, here's what I found:\\n\\n{context[:1000]}..."
+            english_msg = f"Based on the AI Risk Repository, here's what I found:\\n\\n{context[:1000]}..."
+            return self._translate_error_message(english_msg, language_info)
         else:
-            return "I'm sorry, but I couldn't find specific information in the AI Risk Repository for your query. The repository covers risks related to discrimination, privacy, misinformation, malicious use, human-computer interaction, socioeconomic impacts, and system safety."
+            english_msg = "I'm sorry, but I couldn't find specific information in the AI Risk Repository for your query. The repository covers risks related to discrimination, privacy, misinformation, malicious use, human-computer interaction, socioeconomic impacts, and system safety."
+            return self._translate_error_message(english_msg, language_info)
     
     def _get_conversation_history(self, conversation_id: str, current_query_type: str = None) -> List[Dict[str, Any]]:
         """Get conversation history for the model.
@@ -591,6 +694,136 @@ Focus on: risk assessment, prevention strategies, and safety measures."""
                 best_query = query
         
         return best_query
+    
+    def _get_default_language_info(self) -> Dict[str, Any]:
+        """
+        Get default language info (English) safely.
+        
+        Returns:
+            Default English language info dict
+        """
+        try:
+            from .language_service import language_service
+            return language_service.get_language_info("en")
+        except Exception as e:
+            logger.warning(f"Failed to get language info from service: {e}")
+            # Return minimal English language info as fallback
+            return {
+                'code': 'en',
+                'native_name': 'English',
+                'english_name': 'English',
+                'confidence': 1.0
+            }
+    
+    def _get_or_detect_language(self, message: str, session_id: Optional[str]) -> Dict[str, Any]:
+        """
+        Get session language or detect from message.
+        
+        Args:
+            message: User message
+            session_id: Session identifier
+            
+        Returns:
+            Language info dict
+        """
+        # If no session ID, default to English
+        if not session_id:
+            return self._get_default_language_info()
+        
+        # Check if we already have a language for this session
+        if session_id in self.session_languages:
+            return self.session_languages[session_id]
+        
+        # Try to detect language from the first message
+        try:
+            from .language_service import language_service
+            language_info = language_service.detect_language(message)
+            
+            # Store for future use
+            self.session_languages[session_id] = language_info
+            
+            logger.info(f"Detected language for session {session_id}: {language_info['english_name']} (confidence: {language_info.get('confidence', 0.9):.2f})")
+            
+            return language_info
+        except Exception as e:
+            logger.warning(f"Failed to detect language: {e}")
+            # Fallback to English
+            language_info = self._get_default_language_info()
+            self.session_languages[session_id] = language_info
+            return language_info
+    
+    def set_session_language(self, session_id: str, language_code: str) -> bool:
+        """
+        Manually set language for a session.
+        
+        Args:
+            session_id: Session identifier
+            language_code: Language code to set
+            
+        Returns:
+            True if successful
+        """
+        try:
+            from .language_service import language_service
+            language_info = language_service.get_language_info(language_code)
+            if language_info:
+                self.session_languages[session_id] = language_info
+                logger.info(f"Manually set language for session {session_id}: {language_info['english_name']}")
+                return True
+            return False
+        except Exception as e:
+            logger.error(f"Failed to set session language: {e}")
+            return False
+    
+    def get_session_language(self, session_id: str) -> Optional[Dict[str, Any]]:
+        """Get current language for a session."""
+        return self.session_languages.get(session_id)
+    
+    def _translate_error_message(self, english_message: str, language_info: Dict[str, Any]) -> str:
+        """
+        Translate an error message to the user's session language.
+        
+        Args:
+            english_message: The error message in English
+            language_info: Language information for the session
+            
+        Returns:
+            Translated error message or original if translation fails
+        """
+        # If no language info or already English, return as-is
+        if not language_info or language_info.get('code') == 'en':
+            return english_message
+        
+        # Try to translate using Gemini
+        if self.gemini_model:
+            try:
+                from ..services.language_service import language_service
+                language_code = language_info.get('code', 'en')
+                language_name = language_info.get('english_name', 'English')
+                special_prompt = language_service.get_language_prompt(language_code)
+                
+                translation_prompt = f"""Translate this error message to {language_name}:
+
+{english_message}
+
+CRITICAL INSTRUCTIONS:
+1. Translate the ENTIRE message to {language_name}
+2. Maintain the same helpful and apologetic tone
+3. Keep any technical details if present
+4. {special_prompt}
+5. Return ONLY the translated message, no explanations
+
+Translated message:"""
+                
+                translated = self.gemini_model.generate(translation_prompt, [])
+                logger.info(f"Translated error message to {language_name}")
+                return translated
+                
+            except Exception as e:
+                logger.warning(f"Failed to translate error message: {e}")
+                return english_message
+        
+        return english_message
     
     def _update_conversation_history(self, conversation_id: str, message: str, response: str) -> None:
         """Update conversation history."""

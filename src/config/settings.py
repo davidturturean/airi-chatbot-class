@@ -33,8 +33,8 @@ class Settings:
     
     # Multi-model fallback configuration
     GEMINI_MODEL_CHAIN = [
-        "gemini-2.0-flash",
-        "gemini-2.5-flash", 
+        "gemini-2.5-flash",
+        "gemini-2.0-flash", 
         "gemini-2.5-flash-lite-preview-06-17"
     ]
     
@@ -103,7 +103,7 @@ class Settings:
     MAX_CONVERSATION_HISTORY = 5
     
     # Monitor Configuration
-    MONITOR_MODEL_NAME = "gemini-2.0-flash"
+    MONITOR_MODEL_NAME = "gemini-2.5-flash"
     MONITOR_TIMEOUT = 30  # seconds
     MONITOR_MAX_RETRIES = 3
     MONITOR_ENABLE_RULE_BASED = True

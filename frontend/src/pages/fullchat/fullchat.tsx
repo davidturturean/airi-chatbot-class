@@ -2,13 +2,14 @@ import { Chat } from '../../components/chat';
 import { Header } from '../../components/header';
 import { SnippetModal } from '../../components/snippet-modal';
 import { InfoTooltip } from '../../components/info-tooltip';
+import { LanguageSelector } from '../../components/language-selector';
 import { useSidebar } from '@/context/SidebarContext';
 import { useChat } from '@/context/ChatContext';
 import { useState, useEffect } from 'react';
 
 export function FullChat() {
 
-  const { previousMessages, currentMessage, handleSubmit, isLoading, sessionId, clearSession } = useChat();
+  const { previousMessages, currentMessage, handleSubmit, isLoading, sessionId, clearSession, sessionLanguage, setSessionLanguage } = useChat();
   const { domain, setDomain, relatedDocuments, suggestedUseCases, handleDomainSubmit } = useSidebar();
   
   // Modal state for snippet display
@@ -70,11 +71,22 @@ export function FullChat() {
         <div className="xl:col-span-2 space-y-6">
           {/* 0. Text Explainer */}
           <section className="space-y-2">
-            <h2 className="text-2xl font-bold text-gray-800">AI Risk Assistant</h2>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              This assistant helps you explore and assess AI risk factors, drawing from the AI Risk Index. You can
-              ask about governance frameworks, benchmarks, mitigations, and more.
-            </p>
+            <div className="flex items-start justify-between">
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold text-gray-800">AI Risk Assistant</h2>
+                <p className="text-sm text-gray-600 leading-relaxed mt-2">
+                  This assistant helps you explore and assess AI risk factors, drawing from the AI Risk Index. You can
+                  ask about governance frameworks, benchmarks, mitigations, and more.
+                </p>
+              </div>
+              <div className="ml-4">
+                <LanguageSelector
+                  sessionId={sessionId}
+                  currentLanguage={sessionLanguage}
+                  onLanguageChange={setSessionLanguage}
+                />
+              </div>
+            </div>
               <div className="bg-white border rounded-xl p-4 shadow-sm">
                 <p className="text-sm text-gray-600 leading-relaxed">
               We are currently collecting message histories to improve user experience. Please be advised that your conversations will be stored in our database.

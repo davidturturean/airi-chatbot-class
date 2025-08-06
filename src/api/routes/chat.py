@@ -36,14 +36,36 @@ def send_message():
         if not message:
             return jsonify({"error": "Message is required"}), 400
         
-        # Process the query
-        response_text, docs = chat_service.process_query(message, conversation_id)
+        # Get session ID and language from request
+        session_id = data.get('session_id') or request.headers.get('X-Session-ID')
+        language_code = data.get('language_code')  # Get manually selected language
         
-        return jsonify({
+        # Process the query
+        result = chat_service.process_query(message, conversation_id, session_id, language_code)
+        
+        # Handle both old (2-tuple) and new (3-tuple) return formats
+        if len(result) == 3:
+            response_text, docs, language_info = result
+        else:
+            response_text, docs = result
+            language_info = None
+        
+        response_data = {
             "id": conversation_id,
             "response": response_text,
             "status": "complete"
-        })
+        }
+        
+        # Add language info if available
+        if language_info:
+            response_data["language"] = {
+                "code": language_info.get('code'),
+                "native_name": language_info.get('native_name'),
+                "english_name": language_info.get('english_name'),
+                "category": language_info.get('category', 'major')
+            }
+        
+        return jsonify(response_data)
         
     except Exception as e:
         logger.error(f"Error in send_message: {str(e)}")
@@ -60,6 +82,7 @@ def stream_message():
         message = data.get('message', '')
         conversation_id = data.get('conversationId', 'default')
         session_id = data.get('session_id') or request.headers.get('X-Session-ID') or 'default'
+        language_code = data.get('language_code')  # Get manually selected language
         
         if not message:
             return jsonify({"error": "Message is required"}), 400
@@ -86,7 +109,15 @@ def stream_message():
                 time.sleep(0.3)
                 
                 # 1. Process the query through chat service
-                response_text, docs = chat_service.process_query(message, conversation_id, session_id)
+                # Process query and get language info
+                result = chat_service.process_query(message, conversation_id, session_id, language_code)
+                
+                # Handle both old (2-tuple) and new (3-tuple) return formats
+                if len(result) == 3:
+                    response_text, docs, language_info = result
+                else:
+                    response_text, docs = result
+                    language_info = None
                 
                 # Check what type of results we got
                 is_metadata_query = isinstance(docs, list) and docs and isinstance(docs[0], dict)
@@ -184,6 +215,15 @@ def stream_message():
                 # Send the related documents
                 if related_docs:
                     yield json.dumps({"related_documents": related_docs}) + '\n'
+                
+                # Send language info if available
+                if language_info:
+                    yield json.dumps({"language": {
+                        "code": language_info.get('code'),
+                        "native_name": language_info.get('native_name'),
+                        "english_name": language_info.get('english_name'),
+                        "category": language_info.get('category', 'major')
+                    }}) + '\n'
                 
             except Exception as e:
                 logger.error(f"Error in streaming generator: {str(e)}")

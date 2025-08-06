@@ -3,7 +3,7 @@ Query refinement engine for handling over-broad queries and providing suggestion
 Helps users ask better questions and discover relevant content.
 """
 import re
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Any
 from dataclasses import dataclass
 from enum import Enum
 
@@ -271,10 +271,18 @@ class QueryRefiner:
         
         return None
     
-    def format_suggestions_response(self, result: RefinementResult) -> str:
-        """Format refinement suggestions into a user-friendly response."""
+    def format_suggestions_response(self, result: RefinementResult, language_info: Optional[Dict[str, Any]] = None) -> str:
+        """Format refinement suggestions into a user-friendly response.
+        
+        Args:
+            result: The refinement result
+            language_info: Language information for response generation
+        """
         if not result.needs_refinement:
             return None
+        
+        # TODO: Translate refinement suggestions based on language_info
+        # For now, keep English but structure allows future translation
         
         if result.complexity == QueryComplexity.VERY_BROAD:
             response = f'Your question "{result.original_query}" covers a broad area. The repository has specific information on:\n\n'

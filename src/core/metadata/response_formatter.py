@@ -317,10 +317,16 @@ class ResponseFormatter:
     def _format_empty_results(self, query: str, metadata: ResponseMetadata, 
                              debug: bool) -> FormattedResponse:
         """Handle empty result sets."""
+        from ...utils.language_helper import get_no_results_message
+        
         suggestions = self._generate_query_suggestions(query)
         
-        content = "No results found for your query.\n\n"
+        # Get language-aware "no results" message
+        no_results_msg = get_no_results_message(query, self.gemini_model)
+        content = f"{no_results_msg}\n\n"
+        
         if suggestions:
+            # TODO: Could also translate suggestions if needed
             content += "Try these alternative queries:\n"
             for i, suggestion in enumerate(suggestions, 1):
                 content += f"{i}. {suggestion}\n"

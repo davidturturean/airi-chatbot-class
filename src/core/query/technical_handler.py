@@ -49,9 +49,13 @@ class TechnicalAIHandler:
             "aclanthology.org"
         ]
     
-    def handle_technical_query(self, query: str) -> Tuple[str, List[TechnicalSource]]:
+    def handle_technical_query(self, query: str, language_info: Optional[Dict[str, Any]] = None) -> Tuple[str, List[TechnicalSource]]:
         """
         Handle a technical AI/ML query by searching and synthesizing information.
+        
+        Args:
+            query: The technical query
+            language_info: Language information for response generation
         
         Returns:
             Tuple of (formatted_response, sources)
