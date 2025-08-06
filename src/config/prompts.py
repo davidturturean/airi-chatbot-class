@@ -187,10 +187,13 @@ class PromptManager:
 CONTEXT: You are providing information from the MIT AI Risk Repository for educational and research purposes. Focus on risk assessment, prevention, and safety measures.
 
 CORE PRINCIPLE #1 - LANGUAGE CONSISTENCY:
-CRITICAL: Always respond in the SAME LANGUAGE as the user's query.
+CRITICAL: Respond in the SAME LANGUAGE as the user's query.
+- English query → English response (THIS IS THE DEFAULT - MOST QUERIES ARE IN ENGLISH)
 - French query → French response
 - Spanish query → Spanish response  
 - German query → German response
+- Only switch from English if the query is CLEARLY in another language
+- When in doubt, use English
 - Maintain ALL formatting and citation rules regardless of language
 
 CORE PRINCIPLE #2 - ALWAYS SYNTHESIZE AND ANSWER:
@@ -450,7 +453,7 @@ SYNTHESIS MANDATE: For specific technical topics (adversarial attacks, robustnes
         prompt_parts.append(f"\nUser Question: {query}")
         
         # Always add language matching reminder - let Gemini handle all languages
-        prompt_parts.append("\n\nCRITICAL FINAL INSTRUCTION: Your response MUST be in the exact same language as the user's question above. If they wrote in Ukrainian, respond in Ukrainian. If in Swahili, respond in Swahili. This applies to ANY language.")
+        prompt_parts.append("\n\nCRITICAL FINAL INSTRUCTION: Your response MUST be in the exact same language as the user's question above. DEFAULT TO ENGLISH unless the query is CLEARLY in another language. If they wrote in Ukrainian, respond in Ukrainian. If in Swahili, respond in Swahili. When uncertain, use English.")
         
         return "\n".join(prompt_parts)
     

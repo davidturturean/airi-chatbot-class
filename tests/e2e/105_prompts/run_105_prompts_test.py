@@ -47,12 +47,20 @@ def initialize_services():
     """Initialize all services as done in the web app"""
     print("Initializing services...")
     
-    # Initialize Gemini model
-    gemini_model = GeminiModel(settings.GEMINI_API_KEY)
+    # Initialize Gemini model with fallback support
+    gemini_model = GeminiModel(
+        api_key=settings.GEMINI_API_KEY,
+        model_name=settings.GEMINI_MODEL_NAME,
+        use_fallback=True
+    )
     
-    # Initialize vector store
-    vector_store = VectorStore()
-    vector_store.initialize()
+    # Initialize vector store with proper parameters
+    vector_store = VectorStore(
+        api_key=settings.GEMINI_API_KEY,
+        repository_path=str(settings.INFO_FILES_DIR),
+        persist_directory=str(settings.CHROMA_DB_DIR),
+        use_hybrid_search=settings.USE_HYBRID_SEARCH
+    )
     
     # Initialize query monitor
     query_monitor = Monitor(settings.GEMINI_API_KEY)
