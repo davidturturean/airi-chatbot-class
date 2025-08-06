@@ -11,6 +11,7 @@ interface SnippetMetadata {
   description?: string;
   source_file?: string;
   row_number?: number;
+  type?: string;
 }
 
 interface SnippetJSON {
@@ -38,6 +39,14 @@ export const SnippetModal: React.FC<SnippetModalProps> = ({
   const [snippetData, setSnippetData] = React.useState<SnippetJSON | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  
+  // Client-side cache for snippets to avoid refetching
+  const [snippetCache, setSnippetCache] = React.useState<Record<string, SnippetJSON>>({});
+
+  // Clear cache when session changes
+  useEffect(() => {
+    setSnippetCache({});
+  }, [sessionId]);
 
   useEffect(() => {
     if (isOpen && rid) {
@@ -47,6 +56,14 @@ export const SnippetModal: React.FC<SnippetModalProps> = ({
 
   const fetchSnippet = async () => {
     if (!rid) return;
+    
+    // Check cache first
+    const cacheKey = `${sessionId}-${rid}`;
+    if (snippetCache[cacheKey]) {
+      setSnippetData(snippetCache[cacheKey]);
+      setError(null);
+      return; // Use cached data, no loading needed
+    }
     
     setLoading(true);
     setError(null);
@@ -59,6 +76,12 @@ export const SnippetModal: React.FC<SnippetModalProps> = ({
       
       const data = await response.json();
       setSnippetData(data);
+      
+      // Cache the successful fetch
+      setSnippetCache(prev => ({
+        ...prev,
+        [cacheKey]: data
+      }));
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -170,16 +193,25 @@ export const SnippetModal: React.FC<SnippetModalProps> = ({
               {/* Main content with highlighting */}
               <div className="prose prose-sm max-w-none">
                 <h3 className="text-sm font-semibold text-gray-700 mb-3">Content</h3>
-                <div className="bg-gray-50 p-4 rounded-lg text-sm whitespace-pre-wrap">
-                  {snippetData.highlights && snippetData.highlights.length > 0 ? (
-                    <Highlighter
-                      highlightClassName="bg-yellow-200"
-                      searchWords={snippetData.highlights}
-                      autoEscape={true}
-                      textToHighlight={snippetData.content}
-                    />
+                <div className="bg-gray-50 p-4 rounded-lg text-sm">
+                  {/* Check if content is JSON (for metadata results) */}
+                  {snippetData.metadata?.type === 'metadata_query_result' ? (
+                    <pre className="whitespace-pre-wrap font-mono text-xs">
+                      {snippetData.content}
+                    </pre>
                   ) : (
-                    snippetData.content
+                    <div className="whitespace-pre-wrap">
+                      {snippetData.highlights && snippetData.highlights.length > 0 ? (
+                        <Highlighter
+                          highlightClassName="bg-yellow-200"
+                          searchWords={snippetData.highlights}
+                          autoEscape={true}
+                          textToHighlight={snippetData.content}
+                        />
+                      ) : (
+                        snippetData.content
+                      )}
+                    </div>
                   )}
                 </div>
               </div>

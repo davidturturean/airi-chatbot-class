@@ -23,7 +23,11 @@ class SnippetDatabase:
     
     def _init_database(self):
         """Create tables if they don't exist."""
-        with sqlite3.connect(self.db_path) as conn:
+        # Use WAL mode and set timeout to prevent locking issues
+        with sqlite3.connect(self.db_path, timeout=30.0) as conn:
+            # Enable WAL mode for better concurrency
+            conn.execute("PRAGMA journal_mode=WAL")
+            conn.execute("PRAGMA busy_timeout=30000")  # 30 seconds
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS snippet_sessions (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -39,6 +43,9 @@ class SnippetDatabase:
             conn.execute("CREATE INDEX IF NOT EXISTS idx_session_id ON snippet_sessions(session_id)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_created_at ON snippet_sessions(created_at)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_rid ON snippet_sessions(rid)")
+            
+            # Add composite index for faster (session_id, rid) lookups
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_session_rid ON snippet_sessions(session_id, rid)")
             
             # Table for session management
             conn.execute("""
@@ -65,10 +72,10 @@ class SnippetDatabase:
             True if saved successfully
         """
         try:
-            # Ensure session exists
-            self._ensure_session(session_id)
-            
-            with sqlite3.connect(self.db_path) as conn:
+            with sqlite3.connect(self.db_path, timeout=30.0) as conn:
+                # Ensure session exists using the same connection
+                self._ensure_session(session_id, conn)
+                
                 conn.execute("""
                     INSERT OR REPLACE INTO snippet_sessions (session_id, rid, data, accessed_at)
                     VALUES (?, ?, ?, CURRENT_TIMESTAMP)
@@ -94,7 +101,8 @@ class SnippetDatabase:
             Snippet data or None if not found
         """
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with sqlite3.connect(self.db_path, timeout=30.0) as conn:
+                conn.execute("PRAGMA journal_mode=WAL")
                 conn.row_factory = sqlite3.Row
                 cursor = conn.execute("""
                     SELECT data FROM snippet_sessions 
@@ -110,9 +118,10 @@ class SnippetDatabase:
                         WHERE session_id = ? AND rid = ?
                     """, (session_id, rid))
                     
-                    # Update session activity
-                    self._update_session_activity(session_id)
+                    # Update session activity using the same connection
+                    self._update_session_activity(session_id, conn)
                     
+                    conn.commit()
                     return json.loads(row['data'])
                     
         except Exception as e:
@@ -123,7 +132,7 @@ class SnippetDatabase:
     def get_session_snippets(self, session_id: str) -> List[Dict[str, Any]]:
         """Get all snippets for a session."""
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with sqlite3.connect(self.db_path, timeout=30.0) as conn:
                 conn.row_factory = sqlite3.Row
                 cursor = conn.execute("""
                     SELECT rid, data, created_at, accessed_at 
@@ -150,7 +159,7 @@ class SnippetDatabase:
     def clear_session(self, session_id: str) -> bool:
         """Clear all snippets for a session."""
         try:
-            with sqlite3.connect(self.db_path) as conn:
+            with sqlite3.connect(self.db_path, timeout=30.0) as conn:
                 conn.execute("DELETE FROM snippet_sessions WHERE session_id = ?", (session_id,))
                 conn.execute("DELETE FROM user_sessions WHERE session_id = ?", (session_id,))
                 conn.commit()
@@ -174,7 +183,7 @@ class SnippetDatabase:
         try:
             cutoff_date = datetime.now() - timedelta(days=days)
             
-            with sqlite3.connect(self.db_path) as conn:
+            with sqlite3.connect(self.db_path, timeout=30.0) as conn:
                 # Get sessions to delete
                 cursor = conn.execute("""
                     SELECT session_id FROM user_sessions 
@@ -206,24 +215,41 @@ class SnippetDatabase:
             logger.error(f"Error cleaning up sessions: {str(e)}")
             return 0
     
-    def _ensure_session(self, session_id: str):
+    def _ensure_session(self, session_id: str, conn=None):
         """Ensure a session exists in the database."""
-        with sqlite3.connect(self.db_path) as conn:
+        if conn:
+            # Use existing connection
             conn.execute("""
                 INSERT OR IGNORE INTO user_sessions (session_id)
                 VALUES (?)
             """, (session_id,))
-            conn.commit()
+        else:
+            # Create new connection
+            with sqlite3.connect(self.db_path, timeout=30.0) as conn:
+                conn.execute("""
+                    INSERT OR IGNORE INTO user_sessions (session_id)
+                    VALUES (?)
+                """, (session_id,))
+                conn.commit()
     
-    def _update_session_activity(self, session_id: str):
+    def _update_session_activity(self, session_id: str, conn=None):
         """Update the last activity timestamp for a session."""
-        with sqlite3.connect(self.db_path) as conn:
+        if conn:
+            # Use existing connection
             conn.execute("""
                 UPDATE user_sessions 
                 SET last_activity = CURRENT_TIMESTAMP 
                 WHERE session_id = ?
             """, (session_id,))
-            conn.commit()
+        else:
+            # Create new connection
+            with sqlite3.connect(self.db_path, timeout=30.0) as conn:
+                conn.execute("""
+                    UPDATE user_sessions 
+                    SET last_activity = CURRENT_TIMESTAMP 
+                    WHERE session_id = ?
+                """, (session_id,))
+                conn.commit()
     
     def generate_session_id(self) -> str:
         """Generate a new unique session ID."""

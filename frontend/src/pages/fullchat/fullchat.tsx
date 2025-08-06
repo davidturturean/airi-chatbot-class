@@ -1,9 +1,10 @@
 import { Chat } from '../../components/chat';
 import { Header } from '../../components/header';
 import { SnippetModal } from '../../components/snippet-modal';
+import { InfoTooltip } from '../../components/info-tooltip';
 import { useSidebar } from '@/context/SidebarContext';
 import { useChat } from '@/context/ChatContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function FullChat() {
 
@@ -15,15 +16,23 @@ export function FullChat() {
   const [selectedRid, setSelectedRid] = useState<string | null>(null);
 
   const handleFileClick = async (url: string) => {
-    // Extract RID from URL and open modal
-    const match = url.match(/RID-\d{5}/);
-    if (match) {
-      setSelectedRid(match[0]);
+    // Extract RID or META ID from URL and open modal
+    const ridMatch = url.match(/RID-\d{5}/);
+    const metaMatch = url.match(/META-\d{5}/);
+    
+    if (ridMatch) {
+      setSelectedRid(ridMatch[0]);
       setIsModalOpen(true);
+    } else if (metaMatch) {
+      setSelectedRid(metaMatch[0]);
+      setIsModalOpen(true);
+    } else if (url.startsWith('metadata://')) {
+      // Handle legacy metadata URLs
+      alert('This is a metadata query result. Please refresh the query to see the updated format.');
     } else {
-      // Fallback to original behavior for non-RID URLs
+      // Fallback to original behavior for other URLs
       const snippetId = url.split('/').pop();
-      if (snippetId && snippetId.startsWith('RID-')) {
+      if (snippetId && (snippetId.startsWith('RID-') || snippetId.startsWith('META-'))) {
         setSelectedRid(snippetId);
         setIsModalOpen(true);
       } else {
@@ -31,6 +40,23 @@ export function FullChat() {
       }
     }
   };
+
+  // Listen for snippet modal events from chat component
+  useEffect(() => {
+    const handleOpenSnippetModal = (event: CustomEvent) => {
+      const { rid } = event.detail;
+      if (rid) {
+        setSelectedRid(rid);
+        setIsModalOpen(true);
+      }
+    };
+
+    window.addEventListener('openSnippetModal', handleOpenSnippetModal as EventListener);
+    
+    return () => {
+      window.removeEventListener('openSnippetModal', handleOpenSnippetModal as EventListener);
+    };
+  }, []);
 
 
   const defaultUseCases = ['Medical chatbot', 'Customer service agent', 'Model risk review'];
@@ -81,15 +107,20 @@ export function FullChat() {
             </ul>
           </div>
 
-          <div className="bg-white border rounded-xl p-4 shadow-sm">
-            {/** TODO: attach a model to suggest use for use cases for different types of users */}
-            <h3 className="text-md font-semibold mb-2">Example Use Cases</h3>
+          <div className="bg-white border-2 border-gray-200 rounded-xl p-5 shadow-sm">
+            <h3 className="text-md font-semibold mb-1 flex items-center gap-2">
+              Get Personalized Questions
+              <InfoTooltip content="Based on what you tell us about your role or area of interest, we'll suggest specific AI risk questions you should consider. For example, educators might ask about AI in grading, while developers might focus on model safety." />
+            </h3>
+            <p className="text-xs text-gray-500 mb-3">
+              Tell us your role, field, or interest area for personalized AI risk questions
+            </p>
             <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-end">
               <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-600 mb-1">Enter your domain or field:</label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">I'm interested in AI risks for:</label>
                 <input
                   type="text"
-                  placeholder="e.g. education, finance, healthcare"
+                  placeholder="e.g., education, healthcare, research, policy, startup"
                   value={domain}
                   onChange={(e) => setDomain(e.target.value)}
                   className="w-full px-4 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-red-400"
@@ -141,18 +172,23 @@ export function FullChat() {
             )}
           </div>
 
-          <div className="bg-white border rounded-xl p-4 shadow-sm">
-            <h3 className="text-md font-semibold mb-2">Request Types</h3>
-            <span className="text-gray-500">Try asking about:</span>
-            {['Risk Taxonomies', 'Benchmarks', 'Mitigations'].map((type) => (
-              <button
-                key={type}
-                onClick={() => handleSubmit(type)}
-                className="bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full"
-              >
-                {type}
-              </button>
-            ))}
+          <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+            <h3 className="text-md font-semibold mb-1 flex items-center gap-2">
+              Or Explore General Topics
+              <InfoTooltip content="Explore different types of AI risk information: Risk Taxonomies (how we categorize risks), Benchmarks (evaluation criteria), and Mitigations (strategies to reduce risks)." />
+            </h3>
+            <p className="text-xs text-gray-500 mb-2">Browse our repository by category</p>
+            <div className="flex flex-wrap gap-2">
+              {['Risk Taxonomies', 'Benchmarks', 'Mitigations'].map((type) => (
+                <button
+                  key={type}
+                  onClick={() => handleSubmit(type)}
+                  className="bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-full text-sm transition"
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
           </div>
           
           {/* Session management */}

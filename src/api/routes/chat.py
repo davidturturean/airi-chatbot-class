@@ -59,7 +59,7 @@ def stream_message():
         logger.info(f"Received stream request: {data}")
         message = data.get('message', '')
         conversation_id = data.get('conversationId', 'default')
-        session_id = data.get('session_id') or request.headers.get('X-Session-ID')
+        session_id = data.get('session_id') or request.headers.get('X-Session-ID') or 'default'
         
         if not message:
             return jsonify({"error": "Message is required"}), 400
@@ -92,20 +92,28 @@ def stream_message():
                 is_metadata_query = isinstance(docs, list) and docs and isinstance(docs[0], dict)
                 is_technical_query = hasattr(docs, '__iter__') and docs and hasattr(docs[0], 'title') and hasattr(docs[0], 'url')
                 
-                # Stream the response
-                words = response_text.split()
-                for i in range(0, len(words), 5):  # Send 5 words at a time
-                    chunk = ' '.join(words[i:i+5]) + ' '
+                # Stream the response while preserving paragraph formatting
+                # Use character-based chunking instead of word-based to preserve newlines
+                chunk_size = 100  # Send 100 characters at a time
+                for i in range(0, len(response_text), chunk_size):
+                    chunk = response_text[i:i+chunk_size]
                     yield json.dumps(chunk) + '\n'
-                    time.sleep(0.1)
+                    time.sleep(0.05)  # Slightly faster streaming
                 
                 # Format documents for Related Documents tab
                 related_docs = []
                 
                 if is_metadata_query:
-                    # Convert metadata results to document format
+                    # Import snippet_db at the top of generate function if not already imported
+                    from ...core.storage.snippet_database import snippet_db
+                    from datetime import datetime
+                    
+                    # Convert metadata results to document format and save as snippets
                     for i, result in enumerate(docs[:10]):  # Limit to 10 documents
-                        # Try to extract meaningful title and create reference
+                        # Generate a special RID for metadata results
+                        meta_rid = f"META-{i:05d}"
+                        
+                        # Try to extract meaningful title
                         title = "Metadata Result"
                         if 'risk_id' in result:
                             title = f"Risk {result['risk_id']}"
@@ -113,16 +121,36 @@ def stream_message():
                             title = f"Domain: {result['domain']}"
                         elif 'category' in result:
                             title = f"Category: {result['category']}"
-                        
-                        # Create a pseudo-URL for metadata results
-                        url = f"metadata://result/{i}"
+                        elif 'category_level' in result:
+                            title = f"{result['category_level']}"
                         
                         # Add first non-null field value as subtitle
                         for key, value in result.items():
-                            if value and key not in ['risk_id', 'domain', 'category']:
+                            if value and key not in ['risk_id', 'domain', 'category', 'category_level']:
                                 title += f" - {str(value)[:50]}"
                                 break
                         
+                        # Create snippet data for metadata result
+                        snippet_data = {
+                            "rid": meta_rid,
+                            "title": title,
+                            "content": json.dumps(result, indent=2),
+                            "metadata": {
+                                "type": "metadata_query_result",
+                                "domain": result.get('domain', ''),
+                                "category": result.get('category', ''),
+                                "risk_id": result.get('risk_id', ''),
+                                "source_file": "Metadata Query Result",
+                            },
+                            "highlights": [],
+                            "created_at": datetime.now().isoformat()
+                        }
+                        
+                        # Save to database
+                        snippet_db.save_snippet(session_id, meta_rid, snippet_data)
+                        
+                        # Use RID-based URL
+                        url = f"local-file://snippet/{meta_rid}"
                         related_docs.append({"title": title, "url": url})
                 
                 elif is_technical_query:

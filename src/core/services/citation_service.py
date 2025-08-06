@@ -61,8 +61,12 @@ class CitationService:
                     # Fall back to file system for legacy support
                     self._save_rid_snippet(doc, rid)
         
+        # IMPORTANT: Apply paragraph formatting FIRST before adding citations
+        # This prevents citations from interfering with sentence splitting
+        enhanced_response = self._format_paragraphs(response)
+        
         # Replace RID placeholders and legacy patterns
-        enhanced_response = self._replace_rid_citations(response, docs)
+        enhanced_response = self._replace_rid_citations(enhanced_response, docs)
         
         # Add inline highlighting for supported claims
         enhanced_response = self._add_inline_highlighting(enhanced_response, docs)
@@ -148,7 +152,7 @@ class CitationService:
                 citations_list.append(f"{rid}: {citation}")
             
             if citations_list:
-                enhanced_response += "\n\n**Sources:**\n" + "\n".join(f"• {cite}" for cite in citations_list)
+                enhanced_response += "\n\n---\n\n**Sources:**\n" + "\n".join(f"• {cite}" for cite in citations_list)
                 logger.info(f"✓ Appended {len(citations_list)} citations to response")
         
         return enhanced_response
@@ -158,6 +162,78 @@ class CitationService:
         # For now, implement basic highlighting
         # Future enhancement: use fuzzy matching to find exact phrases from sources
         return response  # Placeholder for inline highlighting feature
+    
+    def _format_paragraphs(self, text: str) -> str:
+        """Format text into readable paragraphs with natural breaks."""
+        # Only skip for special sections, not for content that might have a stray \n\n
+        if text.startswith('**Sources:**') or text.startswith('•'):
+            logger.info(f"Skipping formatting - special section")
+            return text
+        
+        # Check if PROPERLY formatted (multiple paragraph breaks)
+        paragraph_count = text.count('\n\n')
+        if paragraph_count >= 3:  # At least 3 paragraph breaks means it's already well formatted
+            logger.info(f"Already well formatted with {paragraph_count} paragraph breaks")
+            return text
+        
+        # Improved sentence splitting using regex to handle various cases
+        import re
+        # Split on periods that are followed by a space OR uppercase letter (handles no space cases)
+        # Also handles exclamation and question marks
+        sentence_pattern = r'(?<=[.!?])\s+(?=[A-Z])|(?<=[.!?])(?=[A-Z])'
+        sentences = re.split(sentence_pattern, text)
+        
+        # Clean up and fix sentences
+        cleaned_sentences = []
+        for sent in sentences:
+            sent = sent.strip()
+            if sent:
+                # Add period back if missing
+                if not sent.endswith('.') and not sent.endswith('!') and not sent.endswith('?'):
+                    sent += '.'
+                cleaned_sentences.append(sent)
+        
+        # Group into paragraphs of 2-3 sentences
+        paragraphs = []
+        current = []
+        
+        for i, sent in enumerate(cleaned_sentences):
+            current.append(sent)
+            
+            # Break after 2-3 sentences
+            if len(current) >= 2:
+                # Check if next sentence starts with transition word
+                if i + 1 < len(cleaned_sentences):
+                    next_sent = cleaned_sentences[i + 1]
+                    if any(next_sent.startswith(word) for word in 
+                           ['Furthermore', 'Additionally', 'However', 'Moreover', 
+                            'Therefore', 'Meanwhile', 'This includes', 'This raises',
+                            'Given', 'To ensure', 'Mitigation']):
+                        # Break before transition
+                        paragraphs.append(' '.join(current))
+                        current = []
+                    elif len(current) >= 3:
+                        # Break after 3 sentences max
+                        paragraphs.append(' '.join(current))
+                        current = []
+                else:
+                    # Last sentence
+                    paragraphs.append(' '.join(current))
+                    current = []
+        
+        # Add any remaining sentences
+        if current:
+            paragraphs.append(' '.join(current))
+        
+        # Log for debugging
+        logger.info(f"_format_paragraphs: Split {len(cleaned_sentences)} sentences into {len(paragraphs)} paragraphs")
+        logger.info(f"First 100 chars of input: {text[:100]}")
+        logger.info(f"Number of paragraph breaks added: {len(paragraphs) - 1}")
+        
+        result = '\n\n'.join(paragraphs)
+        logger.info(f"First 200 chars of output: {result[:200]}")
+        
+        return result
     
     def _validate_section_citations(self, response: str, docs: List[Document]) -> str:
         """Validate that each paragraph has proper citations and avoid RID overuse."""
@@ -176,12 +252,21 @@ class CitationService:
                 if rid and rid in paragraph:
                     rid_usage_count[rid] = rid_usage_count.get(rid, 0) + 1
         
-        # Validate each paragraph
+        # Validate each paragraph and apply formatting
         validated_paragraphs = []
+        sources_section = None
+        
         for i, paragraph in enumerate(paragraphs):
-            # Skip source lists and metadata
-            if paragraph.startswith('**Sources:**') or paragraph.startswith('•'):
-                validated_paragraphs.append(paragraph)
+            # Handle source lists separately
+            if paragraph.startswith('**Sources:**') or (i > 0 and paragraphs[i-1].startswith('**Sources:**') and paragraph.startswith('•')):
+                if not sources_section:
+                    sources_section = []
+                sources_section.append(paragraph)
+                continue
+            
+            # Skip bullet points that are part of sources
+            if paragraph.startswith('•') and sources_section is not None:
+                sources_section.append(paragraph)
                 continue
                 
             # Check if paragraph has citations
@@ -214,7 +299,14 @@ class CitationService:
             logger.info(f"Detected overused RIDs: {overused_rids}")
             validated_paragraphs = self._redistribute_overused_rids(validated_paragraphs, overused_rids, available_rids)
         
-        return '\n\n'.join(validated_paragraphs)
+        # Combine paragraphs and add visual separator before sources
+        result = '\n\n'.join(validated_paragraphs)
+        
+        # Add sources section with visual separator if it exists
+        if sources_section:
+            result += '\n\n---\n\n' + '\n'.join(sources_section)
+        
+        return result
     
     def _find_best_rid_for_paragraph(self, paragraph: str, available_rids: List[str], usage_count: dict) -> str:
         """Find the best RID to cite for a paragraph based on usage and relevance."""
@@ -267,16 +359,23 @@ class CitationService:
         snippet_path = self.snippets_dir / f"{rid}.txt"
         
         try:
+            content = doc.page_content
+            # Replace literal \n with actual newlines
+            if content and '\\n' in content:
+                content = content.replace('\\n', '\n')
+            
             with open(snippet_path, 'w', encoding='utf-8') as f:
                 f.write(f"Repository ID: {rid}\n")
                 f.write(f"Source: {doc.metadata.get('source', 'Unknown')}\n")
                 
-                # Add all metadata
-                for key, value in doc.metadata.items():
-                    if key not in ['source', 'page_content', 'content_hash']:
-                        f.write(f"{key}: {value}\n")
+                # Only add relevant metadata fields (not internal ones)
+                relevant_fields = ['title', 'domain', 'subdomain', 'risk_category', 
+                                 'entity', 'intent', 'timing', 'description']
+                for key in relevant_fields:
+                    if key in doc.metadata and doc.metadata[key]:
+                        f.write(f"{key.replace('_', ' ').title()}: {doc.metadata[key]}\n")
                 
-                f.write(f"\nContent:\n{doc.page_content}")
+                f.write(f"\nContent:\n{content}")
         except Exception as e:
             logger.error(f"Error saving RID snippet for {rid}: {str(e)}")
     
@@ -286,14 +385,50 @@ class CitationService:
             metadata = doc.metadata or {}
             content = doc.page_content
             
-            # Parse title from content if not in metadata
-            title = metadata.get('title', rid)
+            # Replace literal \n with actual newlines in content
+            if content and '\\n' in content:
+                content = content.replace('\\n', '\n')
+            
+            # Parse title from metadata or content
+            title = metadata.get('title', '')
+            
+            # Clean up title - replace literal \n with space
+            if title and '\\n' in title:
+                title = title.replace('\\n', ' ').strip()
+            
+            # If no title in metadata, try to extract from content
             if not title or title == rid:
-                lines = content.split('\n')
+                lines = content.split('\n') if content else []
+                
+                # Look for "Title:" prefix first
                 for line in lines:
                     if line.startswith('Title:'):
                         title = line.replace('Title:', '').strip()
                         break
+                
+                # If no "Title:" found, try to extract from first meaningful line
+                if not title or title == rid:
+                    for line in lines:
+                        # Skip metadata lines and empty lines
+                        line = line.strip()
+                        if (line and 
+                            not line.startswith('Repository ID:') and 
+                            not line.startswith('Source:') and
+                            not line.startswith('Domain:') and
+                            not line.startswith('Sub-domain:') and
+                            not line.startswith('Risk Category:') and
+                            not line.startswith('Entity:') and
+                            not line.startswith('Intent:') and
+                            not line.startswith('Timing:') and
+                            not line.startswith('Description:')):
+                            # Take first 100 chars of first meaningful line
+                            title = line[:100]
+                            if title:
+                                break
+            
+            # Final fallback
+            if not title:
+                title = f"Document {rid}"
             
             # Create JSON snippet
             snippet_data = {
@@ -361,16 +496,42 @@ class CitationService:
         if snippet_path.exists():
             try:
                 with open(snippet_path, 'r', encoding='utf-8') as f:
-                    content = f.read()
+                    full_content = f.read()
+                    
+                    # Parse the file to extract just the content after "Content:" marker
+                    lines = full_content.split('\n')
+                    content_start = -1
+                    
+                    for i, line in enumerate(lines):
+                        if line.strip().startswith('Content:'):
+                            content_start = i + 1
+                            break
+                    
+                    if content_start > 0:
+                        # Get only the actual content, not the metadata
+                        actual_content = '\n'.join(lines[content_start:])
+                        # Replace literal \n with real newlines
+                        if '\\n' in actual_content:
+                            actual_content = actual_content.replace('\\n', '\n')
+                    else:
+                        actual_content = full_content
+                    
                     if include_metadata:
-                        # This is a simplified implementation. A more robust implementation
-                        # would parse the file content and return a JSON object.
+                        # Extract clean metadata from the file
+                        metadata = {}
+                        for line in lines[:content_start-1] if content_start > 0 else lines:
+                            if ':' in line:
+                                key, value = line.split(':', 1)
+                                key = key.strip().lower().replace(' ', '_')
+                                metadata[key] = value.strip()
+                        
                         return {
-                            "content": content,
+                            "content": actual_content,
+                            "metadata": metadata,
                             "file_type": "text"
                         }
                     else:
-                        return content
+                        return actual_content
             except Exception as e:
                 logger.error(f"Error reading RID snippet {rid}: {str(e)}")
                 return f"Error reading snippet {rid}: {str(e)}"

@@ -161,7 +161,17 @@ class ChatService:
                 if intent_result.suggested_response:
                     response = intent_result.suggested_response
                 else:
-                    response = "I can help you understand AI risks from the MIT AI Risk Repository. Try asking about employment impacts, safety concerns, privacy issues, or algorithmic bias."
+                    import random
+                    responses = [
+                        "I can help you understand AI risks from the MIT AI Risk Repository. Try asking about employment impacts, safety concerns, privacy issues, or algorithmic bias.",
+                        "I specialize in AI risk information. Consider asking about workforce disruption, system failures, data privacy, or discriminatory algorithms.",
+                        "The repository covers AI risks across multiple domains. Explore topics like automation impacts, safety incidents, surveillance concerns, or fairness issues.",
+                        "I provide insights on AI risks. Ask about job displacement, operational hazards, security breaches, or equity challenges.",
+                        "My focus is AI risk analysis. Inquire about economic effects, safety protocols, privacy violations, or bias patterns.",
+                        "I assist with AI risk queries. Topics include employment changes, accident risks, data misuse, or algorithmic discrimination.",
+                        "The AI Risk Repository addresses various concerns. Try questions about labor impacts, system safety, information security, or fairness metrics."
+                    ]
+                    response = random.choice(responses)
                 
                 # Update conversation history even for filtered queries
                 self._update_conversation_history(conversation_id, message, response)
@@ -334,8 +344,8 @@ class ChatService:
             return self._create_fallback_response(context, message)
         
         try:
-            # Prepare conversation history
-            history = self._get_conversation_history(conversation_id)
+            # Prepare conversation history (with topic change detection)
+            history = self._get_conversation_history(conversation_id, query_type)
             
             # Generate enhanced prompt with session awareness and RID information
             prompt = self.query_processor.generate_prompt(message, query_type, domain, context, conversation_id, docs)
@@ -371,15 +381,38 @@ class ChatService:
         else:
             return "I'm sorry, but I couldn't find specific information in the AI Risk Repository for your query. The repository covers risks related to discrimination, privacy, misinformation, malicious use, human-computer interaction, socioeconomic impacts, and system safety."
     
-    def _get_conversation_history(self, conversation_id: str) -> List[Dict[str, Any]]:
-        """Get conversation history for the model."""
+    def _get_conversation_history(self, conversation_id: str, current_query_type: str = None) -> List[Dict[str, Any]]:
+        """Get conversation history for the model.
+        
+        Args:
+            conversation_id: The conversation ID
+            current_query_type: The type of the current query (to detect topic changes)
+        """
         if conversation_id not in self.conversations:
             return []
         
-        # Get last N messages and convert to model format
+        # Get last N messages
         history = self.conversations[conversation_id][-settings.MAX_CONVERSATION_HISTORY:]
-        model_history = []
         
+        # If this appears to be a completely different topic, limit history
+        # to avoid contamination between unrelated queries
+        if current_query_type and len(history) > 0:
+            last_message = history[-1]['content'] if history else ""
+            
+            # Check for obvious topic changes (very different queries)
+            topic_change_indicators = [
+                "when we all fall asleep" in last_message.lower() and "customer service" in current_query_type,
+                "philosophical" in str(last_message).lower() and "technical" in current_query_type,
+                len(last_message) < 50 and current_query_type == "technical"  # Short previous query, now technical
+            ]
+            
+            if any(topic_change_indicators):
+                logger.info("Topic change detected - limiting conversation history")
+                # Only keep system context, not previous unrelated conversation
+                return []
+        
+        # Convert to model format
+        model_history = []
         for msg in history:
             if msg['role'] == 'user':
                 model_history.append({"role": "user", "parts": [{"text": msg['content']}]})

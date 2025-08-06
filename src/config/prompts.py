@@ -2,9 +2,10 @@
 Centralized prompt management system for the AIRI chatbot.
 Contains both monitor prompts and advanced response generation prompts with brevity rules.
 """
-from typing import Dict, Optional, Any
+from typing import Dict, Optional, Any, List
 from dataclasses import dataclass
 from enum import Enum
+import random
 
 @dataclass
 class PromptConfig:
@@ -199,9 +200,25 @@ CORE PRINCIPLES:
 4. CITE EVERYTHING: Use RID-##### format for all document references (e.g., RID-00001).
 
 RESPONSE APPROACH:
-- Start: "While the repository doesn't have [specific X], general [domain] principles suggest..."
-- Then: Apply documented patterns to the specific context
-- End: Acknowledge synthesis transparently
+When specific documents aren't found, randomly select from these varied opening patterns:
+1. "While the repository doesn't have [specific X], general [domain] principles suggest..."
+2. "Although [specific X] isn't directly documented, the repository's [domain] patterns indicate..."
+3. "The repository lacks [specific X] specifically, but its [domain] framework reveals..."
+4. "Without [specific X] in the repository, we can apply [domain] risk principles to understand..."
+5. "Despite no direct coverage of [specific X], documented [domain] patterns suggest..."
+6. "The repository doesn't specifically address [specific X], yet [domain] principles apply..."
+7. "[Specific X] isn't explicitly covered, however the repository's [domain] analysis shows..."
+8. "Absent [specific X] documentation, the repository's [domain] risk taxonomy indicates..."
+9. "Though [specific X] isn't catalogued, general [domain] risks in the repository suggest..."
+10. "The repository doesn't detail [specific X], but extrapolating from [domain] patterns..."
+11. "Without explicit [specific X] coverage, the repository's [domain] framework suggests..."
+12. "[Specific X] isn't directly available, yet documented [domain] principles reveal..."
+13. "The repository lacks dedicated [specific X] content, though [domain] risk patterns indicate..."
+14. "No specific [specific X] documents exist, but the repository's [domain] analysis suggests..."
+15. "While [specific X] isn't explicitly documented, synthesizing from [domain] risks shows..."
+
+Then: Apply documented patterns to the specific context
+Note: Synthesis approach indicates when specific documents are unavailable
 
 CITATION RULES:
 - ONLY use RIDs that are explicitly provided in the context below
@@ -227,10 +244,19 @@ RESPONSE GUIDELINES:
 
 """
 
-        # Out-of-scope template (super concise)
-        self.out_of_scope_template = """The AI Risk Repository doesn't contain information about {topic}. 
-
-Try asking about: AI employment impacts, safety risks, privacy concerns, bias issues, or governance challenges."""
+        # Out-of-scope templates (variety for natural responses)
+        self.out_of_scope_templates = [
+            "The AI Risk Repository doesn't contain information about {topic}.\n\nTry asking about: AI employment impacts, safety risks, privacy concerns, bias issues, or governance challenges.",
+            "This topic falls outside the repository's AI risk focus.\n\nConsider exploring: employment disruption, safety hazards, privacy violations, algorithmic bias, or governance gaps.",
+            "{Topic} isn't covered in the AI Risk Repository.\n\nThe repository specializes in: AI workforce impacts, system safety, data privacy, discrimination risks, and regulatory challenges.",
+            "The repository focuses on AI risks rather than {topic}.\n\nAvailable topics include: labor market effects, AI accidents, surveillance concerns, fairness issues, and policy frameworks.",
+            "That subject isn't within the repository's scope.\n\nInstead, explore: automation's employment effects, AI safety failures, privacy breaches, bias patterns, or oversight mechanisms.",
+            "The AI Risk Repository doesn't address {topic} specifically.\n\nRelevant areas include: job displacement, operational risks, information security, equity concerns, and compliance requirements.",
+            "This query falls outside the repository's domain.\n\nThe repository covers: economic disruption from AI, safety incidents, data misuse, discriminatory algorithms, and regulatory approaches."
+        ]
+        
+        # Select a random template for variety
+        self.out_of_scope_template = random.choice(self.out_of_scope_templates)
 
         # Domain-specific templates
         self.domain_templates = {
@@ -240,7 +266,13 @@ Try asking about: AI employment impacts, safety risks, privacy concerns, bias is
 SOCIOECONOMIC FOCUS: You're answering about employment, economic inequality, labor disruption, or workforce impacts from AI.""",
                 context_template="Based on socioeconomic risk data from the repository:\n\n{context}",
                 brevity_rules="Focus on specific employment/economic impacts. Mention Domain 6.2 (employment quality) and 6.3 (economic devaluation) when relevant.",
-                capability_first="The repository documents specific employment risks including:",
+                capability_first=random.choice([
+                    "The repository documents specific employment risks including:",
+                    "Employment-related risks catalogued include:",
+                    "Documented workforce impacts encompass:",
+                    "Labor market risks identified include:",
+                    "The repository's employment data reveals:"
+                ]),
                 domain_guidance="Prioritize job displacement, wage effects, and inequality data."
             ),
             
@@ -252,7 +284,13 @@ SAFETY FOCUS: You're answering about AI safety risks, security threats, potentia
 SYNTHESIS MANDATE: For queries about trends, emerging risks, or time-specific questions, synthesize from documented patterns. Example: "For 2023-2024 trends, I'll synthesize from the repository's documented safety patterns and risk evolution indicators." """,
                 context_template="Based on AI safety risk data from the repository:\n\n{context}",
                 brevity_rules="Focus on specific safety risks and mitigation strategies. Synthesize when needed.",
-                capability_first="The repository documents safety patterns that indicate:",
+                capability_first=random.choice([
+                    "The repository documents safety patterns that indicate:",
+                    "Safety risks documented here reveal:",
+                    "Identified safety concerns include:",
+                    "The repository's safety analysis shows:",
+                    "Documented safety patterns encompass:"
+                ]),
                 domain_guidance="Prioritize concrete safety scenarios and documented risks."
             ),
             
@@ -264,7 +302,13 @@ PRIVACY FOCUS: You're answering about data privacy, surveillance, personal infor
 SYNTHESIS MANDATE: For sector-specific queries (healthcare, finance, etc.), apply general privacy principles to those contexts. Example: "For healthcare privacy, I'll apply general data leakage and inference risks to medical records and patient data." """,
                 context_template="Based on privacy risk data from the repository:\n\n{context}",
                 brevity_rules="Focus on specific privacy risks. Apply to requested sectors when needed.",
-                capability_first="The repository documents privacy patterns applicable across sectors:",
+                capability_first=random.choice([
+                    "The repository documents privacy patterns applicable across sectors:",
+                    "Privacy concerns catalogued include:",
+                    "Data protection risks identified encompass:",
+                    "The repository's privacy analysis reveals:",
+                    "Documented surveillance patterns show:"
+                ]),
                 domain_guidance="Prioritize surveillance, data misuse, and personal information threats."
             ),
             
@@ -274,7 +318,13 @@ SYNTHESIS MANDATE: For sector-specific queries (healthcare, finance, etc.), appl
 BIAS FOCUS: You're answering about algorithmic bias, discrimination, fairness, or equity issues in AI systems.""",
                 context_template="Based on bias and discrimination data from the repository:\n\n{context}",
                 brevity_rules="Focus on specific bias scenarios and fairness issues.",
-                capability_first="The repository documents bias risks including:",
+                capability_first=random.choice([
+                    "The repository documents bias risks including:",
+                    "Documented bias scenarios encompass:",
+                    "Discrimination patterns identified include:",
+                    "The repository's fairness analysis reveals:",
+                    "Algorithmic bias risks catalogued include:"
+                ]),
                 domain_guidance="Prioritize discrimination cases, representation issues, and fairness metrics."
             ),
             
@@ -284,7 +334,13 @@ BIAS FOCUS: You're answering about algorithmic bias, discrimination, fairness, o
 GOVERNANCE FOCUS: You're answering about AI regulation, policy, oversight, legal compliance, or accountability.""",
                 context_template="Based on governance and policy data from the repository:\n\n{context}",
                 brevity_rules="Focus on specific regulatory frameworks and compliance issues.",
-                capability_first="The repository covers governance risks including:",
+                capability_first=random.choice([
+                    "The repository covers governance risks including:",
+                    "Governance challenges identified include:",
+                    "Regulatory gaps documented encompass:",
+                    "The repository's policy analysis reveals:",
+                    "Oversight mechanisms described include:"
+                ]),
                 domain_guidance="Prioritize regulatory gaps, compliance challenges, and oversight mechanisms."
             ),
             
@@ -296,7 +352,13 @@ TECHNICAL FOCUS: You're answering about AI system performance, reliability, accu
 SYNTHESIS MANDATE: For specific technical topics (adversarial attacks, robustness, etc.), synthesize from general technical risks. Example: "For adversarial attacks, I'll apply general robustness and security failures to adversarial contexts." """,
                 context_template="Based on technical risk data from the repository:\n\n{context}",
                 brevity_rules="Focus on technical failures. Synthesize for specific attack vectors.",
-                capability_first="The repository documents technical vulnerabilities including:",
+                capability_first=random.choice([
+                    "The repository documents technical vulnerabilities including:",
+                    "Technical failures recorded include:",
+                    "System vulnerabilities identified encompass:",
+                    "The repository's technical analysis reveals:",
+                    "Performance risks documented include:"
+                ]),
                 domain_guidance="Prioritize system failures, performance issues, and reliability metrics."
             ),
             
@@ -304,7 +366,13 @@ SYNTHESIS MANDATE: For specific technical topics (adversarial attacks, robustnes
                 system_instruction=self.base_system,
                 context_template="Based on the AI Risk Repository:\n\n{context}",
                 brevity_rules="Be concise. Focus on what the repository actually contains.",
-                capability_first="The MIT AI Risk Repository contains:",
+                capability_first=random.choice([
+                    "The MIT AI Risk Repository contains:",
+                    "The repository encompasses:",
+                    "Available documentation includes:",
+                    "The AI risk database contains:",
+                    "Repository contents include:"
+                ]),
                 domain_guidance=None
             )
         }
@@ -389,27 +457,45 @@ SYNTHESIS MANDATE: For specific technical topics (adversarial attacks, robustnes
         else:
             suggestion = "AI employment impacts, safety risks, privacy concerns, bias issues, or governance challenges"
         
-        return f"""The AI Risk Repository doesn't contain information about that topic.
-
-Try asking about: {suggestion}."""
+        # Select random template for variety
+        templates = [
+            f"The AI Risk Repository doesn't contain information about that topic.\n\nTry asking about: {suggestion}.",
+            f"This topic falls outside the repository's scope.\n\nConsider exploring: {suggestion}.",
+            f"That query isn't covered in the AI Risk Repository.\n\nThe repository specializes in: {suggestion}.",
+            f"The repository focuses on AI risks rather than this subject.\n\nAvailable topics include: {suggestion}.",
+            f"This isn't within the repository's domain.\n\nInstead, explore: {suggestion}.",
+            f"The AI Risk Repository doesn't address this specifically.\n\nRelevant areas include: {suggestion}.",
+            f"Your query falls outside the repository's focus.\n\nThe repository covers: {suggestion}."
+        ]
+        
+        return random.choice(templates)
     
     def _handle_partial_coverage(self, query: str, context: str) -> str:
         """Handle queries with limited context - provide what we can."""
-        return f"""The AI Risk Repository only partially addresses your question. Here's what it does contain:
-
-{context[:400]}...
-
-For more comprehensive information, try asking about more specific AI risk domains like employment impacts, safety concerns, privacy issues, or algorithmic bias."""
+        templates = [
+            f"The AI Risk Repository only partially addresses your question. Here's what it does contain:\n\n{context[:400]}...\n\nFor more comprehensive information, try asking about more specific AI risk domains like employment impacts, safety concerns, privacy issues, or algorithmic bias.",
+            f"Limited information is available on this topic. The repository contains:\n\n{context[:400]}...\n\nFor deeper coverage, explore specific risk categories like workforce disruption, safety failures, or privacy violations.",
+            f"The repository touches on this peripherally. Available information:\n\n{context[:400]}...\n\nConsider refining your query to focus on documented risk areas like bias, governance, or technical failures.",
+            f"Partial coverage exists for your query. Here's the relevant content:\n\n{context[:400]}...\n\nFor fuller insights, target specific domains: socioeconomic impacts, security risks, or ethical concerns.",
+            f"The repository has limited data on this. What's available:\n\n{context[:400]}...\n\nTry narrowing to established risk categories for more complete information."
+        ]
+        
+        return random.choice(templates)
     
     def get_clarification_prompt(self, query: str, suggestions: list) -> str:
         """Generate a prompt for over-broad queries with clarifying suggestions."""
         suggestion_text = "\n".join([f"• {s}" for s in suggestions])
         
-        return f"""Your question "{query}" covers a broad area. The repository has specific information on:
-
-{suggestion_text}
-
-Which aspect would you like to explore?"""
+        templates = [
+            f"Your question \"{query}\" covers a broad area. The repository has specific information on:\n\n{suggestion_text}\n\nWhich aspect would you like to explore?",
+            f"\"{query}\" encompasses multiple topics. The repository can address:\n\n{suggestion_text}\n\nWhich area interests you most?",
+            f"That's a wide-ranging query. Available information includes:\n\n{suggestion_text}\n\nWhat specific aspect should we focus on?",
+            f"Your question spans several domains. The repository covers:\n\n{suggestion_text}\n\nWhich topic would you prefer to examine?",
+            f"This query touches multiple areas. Documented topics include:\n\n{suggestion_text}\n\nWhich direction should we take?",
+            f"Several angles are possible for \"{query}\". Options include:\n\n{suggestion_text}\n\nWhat's your primary interest?"
+        ]
+        
+        return random.choice(templates)
     
     def get_follow_up_suggestions(self, domain: str) -> list:
         """Get follow-up question suggestions for a domain."""

@@ -407,12 +407,23 @@ class IntentClassifier:
         
         # Check for general knowledge
         elif best_category == IntentCategory.GENERAL_KNOWLEDGE and confidence >= 0.7:
+            import random
+            responses = [
+                "I specialize in AI risks. Try asking about AI impacts on employment, safety concerns, privacy issues, or algorithmic bias.",
+                "My focus is AI risk analysis. Consider questions about workforce disruption, system failures, data privacy, or discriminatory algorithms.",
+                "I provide AI risk insights. Explore topics like automation impacts, safety incidents, surveillance concerns, or fairness issues.",
+                "The repository covers AI risks. Ask about job displacement, operational hazards, security breaches, or equity challenges.",
+                "I assist with AI risk queries. Topics include economic effects, safety protocols, privacy violations, or bias patterns.",
+                "My expertise is AI risks. Inquire about employment changes, accident risks, data misuse, or algorithmic discrimination.",
+                "I handle AI risk information. Try questions about labor impacts, system safety, information security, or fairness metrics."
+            ]
+            
             return IntentResult(
                 category=IntentCategory.GENERAL_KNOWLEDGE,
                 confidence=confidence,
                 reasoning=f"Semantic similarity to general topics: {best_score:.2f}",
                 should_process=False,
-                suggested_response="I specialize in AI risks. Try asking about AI impacts on employment, safety concerns, privacy issues, or algorithmic bias."
+                suggested_response=random.choice(responses)
             )
         
         # Default to repository with lower confidence

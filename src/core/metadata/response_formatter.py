@@ -1022,8 +1022,17 @@ Respond in this JSON format:
                     "visualizations": []
                 }
                 
-                # Add simple visualization for large datasets
-                if total_count > 10:
+                # Only add visualization for non-metadata queries with large datasets
+                # Check if this is a metadata query by looking for specific fields
+                is_metadata_query = False
+                if results and isinstance(results[0], dict):
+                    # Check for metadata-specific fields
+                    metadata_fields = {'risk_id', 'domain', 'category', 'category_level', 'risk_category'}
+                    if any(field in results[0] for field in metadata_fields):
+                        is_metadata_query = True
+                
+                # Only add statistics for non-metadata queries
+                if total_count > 10 and not is_metadata_query:
                     viz_text = f"Dataset Statistics:\n"
                     viz_text += f"Total Results: {total_count}\n"
                     viz_text += f"Showing Analysis: {min(10, total_count)} samples analyzed\n"

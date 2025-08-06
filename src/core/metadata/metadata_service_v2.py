@@ -222,8 +222,16 @@ class FlexibleMetadataService:
                 for insight in formatted_response.insights:
                     response_text += f"- {insight.key_finding}\n"
             
-            # Add visualizations if available
-            if formatted_response.visualizations:
+            # Add visualizations if available (but skip for metadata queries)
+            # Check if this is a metadata query by looking for specific fields
+            is_metadata_result = False
+            if data and isinstance(data[0], dict):
+                metadata_fields = {'risk_id', 'domain', 'category', 'category_level', 'risk_category'}
+                if any(field in data[0] for field in metadata_fields):
+                    is_metadata_result = True
+            
+            # Only add visualizations for non-metadata queries
+            if formatted_response.visualizations and not is_metadata_result:
                 response_text += "\n"
                 for viz in formatted_response.visualizations:
                     response_text += f"\n{viz}\n"

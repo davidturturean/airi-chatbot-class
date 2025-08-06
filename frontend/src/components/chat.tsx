@@ -50,8 +50,26 @@ export function Chat({ previousMessages, currentMessage, handleSubmit, isLoading
             }`}>
               <ReactMarkdown
                 components={{
+                  p: ({ children }) => <p className="mb-3">{children}</p>,
                   a: ({ node, ...props }) => {
                     const href = props.href || '';
+                    // Handle RID links to trigger modal instead of opening new tabs
+                    if (href.startsWith('/snippet/')) {
+                      const rid = href.substring('/snippet/'.length);
+                      return (
+                        <a 
+                          {...props} 
+                          href="#" 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            // Trigger the modal by calling the parent's handleFileClick
+                            // This needs to be passed down as a prop
+                            window.dispatchEvent(new CustomEvent('openSnippetModal', { detail: { rid } }));
+                          }}
+                          className="text-blue-600 underline cursor-pointer" 
+                        />
+                      );
+                    }
                     if (href.startsWith('/api/snippet/')) {
                       const fileName = href.substring('/api/snippet/'.length);
                       return <a {...props} href={`/snippet/${fileName}`} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline" />;
@@ -69,7 +87,13 @@ export function Chat({ previousMessages, currentMessage, handleSubmit, isLoading
         {currentMessage && (
           <div key={currentMessage.id} className="flex justify-start">
             <div className="px-4 py-2 rounded-2xl max-w-xl bg-gray-100 shadow-sm text-sm text-black">
-              <ReactMarkdown>{currentMessage.content}</ReactMarkdown>
+              <ReactMarkdown
+                components={{
+                  p: ({ children }) => <p className="mb-3">{children}</p>,
+                }}
+              >
+                {currentMessage.content}
+              </ReactMarkdown>
             </div>
           </div>
         )}

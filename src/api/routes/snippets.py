@@ -40,8 +40,8 @@ def get_snippet(doc_id):
         if '.' in doc_id:
             return redirect(url_for('file_content.get_file_content', path=doc_id))
 
-        # Check if this is a RID format (RID-#####)
-        if doc_id.startswith('RID-') and len(doc_id) == 9:
+        # Check if this is a RID format (RID-#####) or META format (META-#####)
+        if (doc_id.startswith('RID-') and len(doc_id) == 9) or (doc_id.startswith('META-') and len(doc_id) == 10):
             # First try to get from database
             snippet_data = snippet_db.get_snippet(session_id, doc_id)
             
@@ -49,14 +49,16 @@ def get_snippet(doc_id):
                 logger.info(f"Retrieved snippet {doc_id} from database for session {session_id}")
                 return jsonify(snippet_data)
             
-            # If not in database, try to get from citation service (legacy)
-            snippet = chat_service.citation_service.get_snippet_by_rid(doc_id, include_metadata=True)
-            
-            if snippet and "not found" not in str(snippet).lower():
-                # Convert legacy format to new JSON format and save
-                json_snippet = _convert_to_json_format(doc_id, snippet)
-                snippet_db.save_snippet(session_id, doc_id, json_snippet)
-                return jsonify(json_snippet)
+            # For RID format, try legacy citation service
+            if doc_id.startswith('RID-'):
+                # If not in database, try to get from citation service (legacy)
+                snippet = chat_service.citation_service.get_snippet_by_rid(doc_id, include_metadata=True)
+                
+                if snippet and "not found" not in str(snippet).lower():
+                    # Convert legacy format to new JSON format and save
+                    json_snippet = _convert_to_json_format(doc_id, snippet)
+                    snippet_db.save_snippet(session_id, doc_id, json_snippet)
+                    return jsonify(json_snippet)
         else:
             # Legacy format support
             snippet = chat_service.citation_service.get_snippet_content(doc_id, include_metadata=True)
