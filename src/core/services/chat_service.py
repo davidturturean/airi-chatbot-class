@@ -159,19 +159,45 @@ class ChatService:
                 logger.info(f"Query filtered by intent classifier: {intent_result.category.value} (confidence: {intent_result.confidence:.2f})")
                 
                 if intent_result.suggested_response:
-                    response = intent_result.suggested_response
+                    # Translate the English response template to match the query language
+                    if self.gemini_model:
+                        try:
+                            language_prompt = f"""User Question (detect the language): {message}
+
+English response template: {intent_result.suggested_response}
+
+CRITICAL INSTRUCTION: 
+1. Detect the language of the user's question above
+2. If the question is in English, return the English response template as-is
+3. If the question is in another language, translate the ENTIRE English response template to that EXACT language
+4. Maintain the same helpful tone and all the AI risk topic suggestions
+5. Do NOT add any extra text or explanations
+
+Your response must be ONLY the translated text, nothing else."""
+                            
+                            response = self.gemini_model.generate(language_prompt, [])
+                            logger.info(f"Generated language-aware out-of-scope response")
+                        except Exception as e:
+                            logger.warning(f"Failed to translate out-of-scope response: {e}")
+                            # Fallback to English template
+                            response = intent_result.suggested_response
+                    else:
+                        response = intent_result.suggested_response
                 else:
-                    import random
-                    responses = [
-                        "I can help you understand AI risks from the MIT AI Risk Repository. Try asking about employment impacts, safety concerns, privacy issues, or algorithmic bias.",
-                        "I specialize in AI risk information. Consider asking about workforce disruption, system failures, data privacy, or discriminatory algorithms.",
-                        "The repository covers AI risks across multiple domains. Explore topics like automation impacts, safety incidents, surveillance concerns, or fairness issues.",
-                        "I provide insights on AI risks. Ask about job displacement, operational hazards, security breaches, or equity challenges.",
-                        "My focus is AI risk analysis. Inquire about economic effects, safety protocols, privacy violations, or bias patterns.",
-                        "I assist with AI risk queries. Topics include employment changes, accident risks, data misuse, or algorithmic discrimination.",
-                        "The AI Risk Repository addresses various concerns. Try questions about labor impacts, system safety, information security, or fairness metrics."
-                    ]
-                    response = random.choice(responses)
+                    # Use prompt manager to get language-aware out-of-scope response
+                    from ...config.prompts import prompt_manager
+                    out_of_scope_prompt = prompt_manager._handle_out_of_scope(message)
+                    
+                    # Generate response using Gemini to ensure correct language
+                    if self.gemini_model:
+                        try:
+                            response = self.gemini_model.generate(out_of_scope_prompt, [])
+                        except Exception as e:
+                            logger.warning(f"Failed to generate out-of-scope response: {e}")
+                            # Fallback to generic message
+                            response = "This topic is outside the AI Risk Repository's scope."
+                    else:
+                        response = "This topic is outside the AI Risk Repository's scope."
                 
                 # Update conversation history even for filtered queries
                 self._update_conversation_history(conversation_id, message, response)
@@ -223,10 +249,32 @@ class ChatService:
                 response += web_context
                 logger.info(f"Added {len(web_results)} web search results to response")
             
-            # 11. Enhance with citations
+            # 11. Clean response to remove any unprompted additions
+            # Remove any "Risk Taxonomies" or similar sections that weren't asked for
+            response_lines = response.split('\n')
+            cleaned_lines = []
+            skip_section = False
+            
+            for line in response_lines:
+                # Detect start of unprompted sections
+                if any(trigger in line for trigger in ['Risk Taxonomies', 'Additional Information:', 'You might also be interested']):
+                    skip_section = True
+                    logger.info(f"Removing unprompted section starting with: {line[:50]}")
+                    continue
+                
+                # Reset skip flag on new paragraph/section that looks legitimate
+                if skip_section and line.strip() == '':
+                    skip_section = False
+                
+                if not skip_section:
+                    cleaned_lines.append(line)
+            
+            response = '\n'.join(cleaned_lines).strip()
+            
+            # 12. Enhance with citations
             enhanced_response = self.citation_service.enhance_response_with_citations(response, docs, session_id)
             
-            # 12. Self-validation chain for quality assurance
+            # 13. Self-validation chain for quality assurance
             validated_response, validation_results = validation_chain.validate_and_improve(
                 response=enhanced_response,
                 query=message,
@@ -241,7 +289,7 @@ class ChatService:
             if validation_results.overall_score < 0.6:
                 logger.warning(f"Low quality response detected. Recommendations: {validation_results.recommendations}")
             
-            # 12. Update conversation history
+            # 14. Update conversation history
             self._update_conversation_history(conversation_id, message, validated_response)
             
             return validated_response, docs
@@ -258,6 +306,26 @@ class ChatService:
             return []
         
         try:
+            # Special handling for TASRA Type queries (e.g., "Type 3", "Type 1")
+            # to prevent confusion with database IDs
+            import re
+            type_pattern = re.match(r'.*\btype\s*(\d+)\b.*', message.lower())
+            if type_pattern:
+                type_num = type_pattern.group(1)
+                # Map common TASRA types to their full names
+                tasra_types = {
+                    '1': 'Type 1: Diffusion of responsibility',
+                    '2': 'Type 2: Bigger than expected',
+                    '3': 'Type 3: Worse than expected',
+                    '4': 'Type 4',  # Add more as discovered
+                    '5': 'Type 5: Criminal weaponization'
+                }
+                if type_num in tasra_types:
+                    # Replace the query with the full TASRA type name
+                    full_type_name = tasra_types[type_num]
+                    message = message.lower().replace(f'type {type_num}', full_type_name)
+                    logger.info(f"Detected TASRA Type query, searching for: {full_type_name}")
+            
             # Use the domain already determined by query_processor (don't override with rule-based)
             # The domain was already correctly classified by LLM in analyze_query()
             if not domain:
@@ -268,12 +336,41 @@ class ChatService:
             else:
                 logger.info(f"Using LLM domain classification: {domain}")
             
+            # Special handling for biosecurity-related queries
+            biosecurity_keywords = ['biosecurity', 'biosafety', 'biological', 'bioweapon', 'pathogen', 'cbrn']
+            if any(keyword in message.lower() for keyword in biosecurity_keywords):
+                logger.info("Detected biosecurity-related query, expanding search")
+                # Expand search to include CBRN and biological threat terms
+                all_docs = []
+                search_terms = [
+                    message,
+                    "CBRN biological threat AI",
+                    "biological agent AI misuse"
+                ]
+                for search_query in search_terms:
+                    try:
+                        bio_docs = self.vector_store.get_relevant_documents(search_query, k=3)
+                        all_docs.extend(bio_docs)
+                    except Exception as e:
+                        logger.warning(f"Error searching for '{search_query}': {e}")
+                
+                # Remove duplicates based on content
+                seen_contents = set()
+                unique_docs = []
+                for doc in all_docs:
+                    content_hash = hash(doc.page_content[:200] if len(doc.page_content) > 200 else doc.page_content)
+                    if content_hash not in seen_contents:
+                        seen_contents.add(content_hash)
+                        unique_docs.append(doc)
+                
+                logger.info(f"Retrieved {len(unique_docs)} unique documents for biosecurity query")
+                return unique_docs[:8]  # Return top 8 unique docs
+            
             # Check if domain supports enhanced search
             from ...config.domains import domain_classifier
             domain_config = domain_classifier.get_domain_config(domain)
             
             if domain_config and domain_config.enhanced_search:
-                # Enhanced search for domains that support it
                 if domain == "socioeconomic":
                     # Use existing employment-specific enhancement
                     enhanced_query = self.query_processor.enhance_query(message, query_type)
@@ -371,8 +468,36 @@ class ChatService:
             return response
             
         except Exception as e:
-            logger.error(f"Error generating response: {str(e)}")
-            return f"I encountered an error while generating a response: {str(e)}"
+            error_str = str(e).lower()
+            
+            # Check if this is a safety/policy refusal
+            if any(term in error_str for term in ['safety', 'policy', 'harmful', 'refused', 'violate', 'inappropriate']):
+                logger.warning(f"Gemini refused query due to safety filters. Query: {message[:100]}...")
+                logger.warning(f"Refusal reason: {str(e)}")
+                
+                # Try once more with educational context
+                try:
+                    educational_prompt = f"""Context: Analyzing documented AI risks from the MIT AI Risk Repository for research purposes.
+                    
+{prompt}
+
+Focus on: risk assessment, prevention strategies, and safety measures."""
+                    
+                    logger.info("Retrying with educational context...")
+                    response = self.gemini_model.generate(educational_prompt, history)
+                    logger.info("Successfully generated response with educational context")
+                    return response
+                    
+                except Exception as retry_error:
+                    logger.error(f"Gemini refused even with educational context: {retry_error}")
+                    # Return a helpful message to the user
+                    return ("I apologize, but I'm unable to provide detailed information on this specific topic due to content restrictions. "
+                           "Please try rephrasing your question to focus on risk prevention, safety measures, or policy considerations. "
+                           "You can also explore related topics like AI safety frameworks, risk mitigation strategies, or ethical guidelines.")
+            else:
+                # For non-safety errors, return the original error
+                logger.error(f"Error generating response: {str(e)}")
+                return f"I encountered an error while generating a response: {str(e)}"
     
     def _create_fallback_response(self, context: str, message: str) -> str:
         """Create a fallback response when AI model is not available."""

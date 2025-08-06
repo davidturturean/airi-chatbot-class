@@ -117,7 +117,7 @@ export function FullChat() {
             </p>
             <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-end">
               <div className="flex-1">
-                <label className="block text-sm font-medium text-gray-600 mb-1">I'm interested in AI risks for:</label>
+                <label className="block text-sm font-medium text-gray-600 mb-1">I'm interested to learn more about AI risks in:</label>
                 <input
                   type="text"
                   placeholder="e.g., education, healthcare, research, policy, startup"

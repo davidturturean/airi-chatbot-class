@@ -184,7 +184,16 @@ class PromptManager:
         # Base system instruction with brevity rules and RID citation system
         self.base_system = """You are a specialist AI assistant for the MIT AI Risk Repository, a comprehensive database of 1600+ documented AI risks.
 
-CORE PRINCIPLE #1 - ALWAYS SYNTHESIZE AND ANSWER:
+CONTEXT: You are providing information from the MIT AI Risk Repository for educational and research purposes. Focus on risk assessment, prevention, and safety measures.
+
+CORE PRINCIPLE #1 - LANGUAGE CONSISTENCY:
+CRITICAL: Always respond in the SAME LANGUAGE as the user's query.
+- French query → French response
+- Spanish query → Spanish response  
+- German query → German response
+- Maintain ALL formatting and citation rules regardless of language
+
+CORE PRINCIPLE #2 - ALWAYS SYNTHESIZE AND ANSWER:
 When a query is about AI risks but specific documents aren't found, you MUST synthesize from general principles. NEVER say "I cannot provide" or "The repository doesn't contain". Your job is to APPLY knowledge creatively.
 
 SYNTHESIS EXAMPLES:
@@ -194,31 +203,32 @@ SYNTHESIS EXAMPLES:
 - Query: "Epistemological challenges" → Apply risk assessment principles philosophically
 
 CORE PRINCIPLES:
-1. SYNTHESIS ALWAYS: Apply general principles to specific contexts. Never refuse.
-2. BREVITY FIRST: Be concise and direct. Avoid repetitive introductions.
-3. CAPABILITY FIRST: Always lead with relevant repository insights you CAN provide.
-4. CITE EVERYTHING: Use RID-##### format for all document references (e.g., RID-00001).
+1. LANGUAGE MATCHING: Response language MUST match query language. This is non-negotiable.
+2. SYNTHESIS ALWAYS: Apply general principles to specific contexts. Never refuse.
+3. BREVITY FIRST: Be concise and direct. Avoid repetitive introductions.
+4. CAPABILITY FIRST: Always lead with relevant repository insights you CAN provide.
+5. CITE EVERYTHING: Use RID-##### format for all document references (e.g., RID-00001).
 
 RESPONSE APPROACH:
-When specific documents aren't found, randomly select from these varied opening patterns:
-1. "While the repository doesn't have [specific X], general [domain] principles suggest..."
-2. "Although [specific X] isn't directly documented, the repository's [domain] patterns indicate..."
-3. "The repository lacks [specific X] specifically, but its [domain] framework reveals..."
-4. "Without [specific X] in the repository, we can apply [domain] risk principles to understand..."
-5. "Despite no direct coverage of [specific X], documented [domain] patterns suggest..."
-6. "The repository doesn't specifically address [specific X], yet [domain] principles apply..."
-7. "[Specific X] isn't explicitly covered, however the repository's [domain] analysis shows..."
-8. "Absent [specific X] documentation, the repository's [domain] risk taxonomy indicates..."
-9. "Though [specific X] isn't catalogued, general [domain] risks in the repository suggest..."
-10. "The repository doesn't detail [specific X], but extrapolating from [domain] patterns..."
-11. "Without explicit [specific X] coverage, the repository's [domain] framework suggests..."
-12. "[Specific X] isn't directly available, yet documented [domain] principles reveal..."
-13. "The repository lacks dedicated [specific X] content, though [domain] risk patterns indicate..."
-14. "No specific [specific X] documents exist, but the repository's [domain] analysis suggests..."
-15. "While [specific X] isn't explicitly documented, synthesizing from [domain] risks shows..."
+When synthesizing answers, randomly select from these varied opening patterns:
+1. "Based on documented [domain] risks, [specific X]..."
+2. "Drawing from [domain] risk patterns, [specific X]..."
+3. "Applying [domain] risk analysis to [specific X]..."
+4. "Relevant [domain] risks for [specific X] include..."
+5. "Documented [domain] patterns apply to [specific X] through..."
+6. "For [specific X], established [domain] risks indicate..."
+7. "Comprehensive [domain] data shows that [specific X]..."
+8. "Synthesizing [domain] documentation, [specific X]..."
+9. "Based on analogous [domain] risks, [specific X]..."
+10. "The [domain] risk taxonomy addresses [specific X] through..."
+11. "Leveraging documented [domain] patterns, [specific X]..."
+12. "Analysis of [domain] risks reveals that [specific X]..."
+13. "Extrapolating from established [domain] risks, [specific X]..."
+14. "Documented [domain] risks apply to [specific X] in..."
+15. "Building on [domain] risk documentation, [specific X]..."
 
-Then: Apply documented patterns to the specific context
-Note: Synthesis approach indicates when specific documents are unavailable
+Then: Apply documented patterns to provide comprehensive answers
+Note: Focus on what insights ARE available, not what's missing
 
 CITATION RULES:
 - ONLY use RIDs that are explicitly provided in the context below
@@ -439,48 +449,49 @@ SYNTHESIS MANDATE: For specific technical topics (adversarial attacks, robustnes
         # The actual question
         prompt_parts.append(f"\nUser Question: {query}")
         
+        # Always add language matching reminder - let Gemini handle all languages
+        prompt_parts.append("\n\nCRITICAL FINAL INSTRUCTION: Your response MUST be in the exact same language as the user's question above. If they wrote in Ukrainian, respond in Ukrainian. If in Swahili, respond in Swahili. This applies to ANY language.")
+        
         return "\n".join(prompt_parts)
     
     def _handle_out_of_scope(self, query: str) -> str:
-        """Handle out-of-scope queries with helpful redirection."""
-        # Try to infer what they might be looking for
-        query_lower = query.lower()
+        """Handle out-of-scope queries - let Gemini respond in the right language."""
         
-        if any(word in query_lower for word in ['job', 'work', 'employment', 'career']):
-            suggestion = "AI employment impacts or job displacement risks"
-        elif any(word in query_lower for word in ['safe', 'danger', 'harm', 'risk']):
-            suggestion = "AI safety risks or potential harms"
-        elif any(word in query_lower for word in ['privacy', 'data', 'personal']):
-            suggestion = "AI privacy risks or data protection concerns"
-        elif any(word in query_lower for word in ['bias', 'fair', 'discrimination']):
-            suggestion = "AI bias or algorithmic discrimination"
-        else:
-            suggestion = "AI employment impacts, safety risks, privacy concerns, bias issues, or governance challenges"
-        
-        # Select random template for variety
-        templates = [
-            f"The AI Risk Repository doesn't contain information about that topic.\n\nTry asking about: {suggestion}.",
-            f"This topic falls outside the repository's scope.\n\nConsider exploring: {suggestion}.",
-            f"That query isn't covered in the AI Risk Repository.\n\nThe repository specializes in: {suggestion}.",
-            f"The repository focuses on AI risks rather than this subject.\n\nAvailable topics include: {suggestion}.",
-            f"This isn't within the repository's domain.\n\nInstead, explore: {suggestion}.",
-            f"The AI Risk Repository doesn't address this specifically.\n\nRelevant areas include: {suggestion}.",
-            f"Your query falls outside the repository's focus.\n\nThe repository covers: {suggestion}."
-        ]
-        
-        return random.choice(templates)
+        return f"""CRITICAL LANGUAGE INSTRUCTION: You MUST respond in the EXACT SAME LANGUAGE as the user's question. This is the #1 priority.
+
+User Question: {query}
+
+This topic appears to be outside the AI Risk Repository's scope, which focuses on AI-related risks.
+
+RESPONSE REQUIREMENTS:
+1. LANGUAGE: Your entire response MUST be in the same language as "{query}" above
+2. If the question is in Ukrainian, respond ONLY in Ukrainian
+3. If the question is in Spanish, respond ONLY in Spanish  
+4. Content: Politely explain the repository focuses on AI risks
+5. Suggest asking about: employment impacts, safety, privacy, bias, or governance
+6. Be brief and helpful
+
+FINAL REMINDER: The language of your response must match the language of the question "{query}". Do not respond in English unless the question is in English."""
     
     def _handle_partial_coverage(self, query: str, context: str) -> str:
-        """Handle queries with limited context - provide what we can."""
-        templates = [
-            f"The AI Risk Repository only partially addresses your question. Here's what it does contain:\n\n{context[:400]}...\n\nFor more comprehensive information, try asking about more specific AI risk domains like employment impacts, safety concerns, privacy issues, or algorithmic bias.",
-            f"Limited information is available on this topic. The repository contains:\n\n{context[:400]}...\n\nFor deeper coverage, explore specific risk categories like workforce disruption, safety failures, or privacy violations.",
-            f"The repository touches on this peripherally. Available information:\n\n{context[:400]}...\n\nConsider refining your query to focus on documented risk areas like bias, governance, or technical failures.",
-            f"Partial coverage exists for your query. Here's the relevant content:\n\n{context[:400]}...\n\nFor fuller insights, target specific domains: socioeconomic impacts, security risks, or ethical concerns.",
-            f"The repository has limited data on this. What's available:\n\n{context[:400]}...\n\nTry narrowing to established risk categories for more complete information."
-        ]
+        """Handle queries with limited context - let Gemini handle language."""
         
-        return random.choice(templates)
+        return f"""CRITICAL LANGUAGE INSTRUCTION: You MUST respond in the EXACT SAME LANGUAGE as the user's question. This is the #1 priority.
+
+User Question: {query}
+
+Available context (limited):
+{context[:400]}...
+
+RESPONSE REQUIREMENTS:
+1. LANGUAGE: Your entire response MUST be in the same language as "{query}" above
+2. If the question is in Ukrainian, respond ONLY in Ukrainian
+3. If the question is in Spanish, respond ONLY in Spanish
+4. Content: Share what's available from the context
+5. Suggest more specific queries about documented risks
+6. Be helpful and concise
+
+FINAL REMINDER: The language of your response must match the language of the question "{query}". Do not respond in English unless the question is in English."""
     
     def get_clarification_prompt(self, query: str, suggestions: list) -> str:
         """Generate a prompt for over-broad queries with clarifying suggestions."""
