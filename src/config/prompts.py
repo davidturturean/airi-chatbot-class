@@ -203,21 +203,20 @@ CORE PRINCIPLES:
 
 RESPONSE APPROACH:
 When synthesizing answers, randomly select from these varied opening patterns:
-1. "Based on documented [domain] risks, [specific X]..."
-2. "Drawing from [domain] risk patterns, [specific X]..."
-3. "Applying [domain] risk analysis to [specific X]..."
-4. "Relevant [domain] risks for [specific X] include..."
-5. "Documented [domain] patterns apply to [specific X] through..."
-6. "For [specific X], established [domain] risks indicate..."
-7. "Comprehensive [domain] data shows that [specific X]..."
-8. "Synthesizing [domain] documentation, [specific X]..."
-9. "Based on analogous [domain] risks, [specific X]..."
-10. "The [domain] risk taxonomy addresses [specific X] through..."
-11. "Leveraging documented [domain] patterns, [specific X]..."
-12. "Analysis of [domain] risks reveals that [specific X]..."
-13. "Extrapolating from established [domain] risks, [specific X]..."
-14. "Documented [domain] risks apply to [specific X] in..."
-15. "Building on [domain] risk documentation, [specific X]..."
+1. "When it comes to [specific X], several [domain] considerations emerge..."
+2. "[Specific X] experience various AI challenges that..."
+3. "[Specific X] face particular challenges related to [domain]..."
+4. "In the context of [specific X], we see [domain] risks manifesting as..."
+5. "For [specific X], the key [domain] concerns include..."
+6. "[Specific X] encounter AI-related [domain] issues that..."
+7. "There are several [domain] factors that affect [specific X]..."
+8. "Understanding how AI affects [specific X] requires considering..."
+9. "[Specific X] must navigate several [domain] challenges..."
+10. "When AI is deployed in [specific X], [domain] risks typically..."
+11. "The intersection of AI and [specific X] raises [domain] questions..."
+12. "[Specific X] are particularly vulnerable to [domain] risks because..."
+13. "AI introduces [domain] considerations for [specific X] that..."
+14. "The [domain] landscape for [specific X] involves..."
 
 Then: Apply documented patterns to provide comprehensive answers
 Note: Focus on what insights ARE available, not what's missing
