@@ -15,6 +15,7 @@ logger = get_logger(__name__)
 class IntentCategory(Enum):
     """Categories for query intent classification."""
     REPOSITORY_RELATED = "repository_related"
+    TAXONOMY_QUERY = "taxonomy_query"  # New category for taxonomy-specific queries
     METADATA_QUERY = "metadata_query"
     TECHNICAL_AI_QUERY = "technical_ai"
     CROSS_DB_QUERY = "cross_database"
@@ -71,11 +72,25 @@ class IntentClassifier:
                 "How to address privacy concerns in healthcare AI?",
                 "Strategies for reducing employment displacement from AI"
             ],
+            IntentCategory.TAXONOMY_QUERY: [
+                "What is the causal taxonomy?",
+                "Describe the domain taxonomy",
+                "What are the 7 domains?",
+                "List the 24 subdomains",
+                "What are the main risk categories in the AI Risk Database v3?",
+                "Explain the entity intentionality timing structure",
+                "Show the taxonomy structure",
+                "What domains are in the repository?",
+                "Causal taxonomy of AI risks",
+                "Domain taxonomy breakdown",
+                "Pre-deployment and post-deployment risks",
+                "Intentional vs unintentional risks",
+                "Human vs AI entity risks",
+                "Discrimination toxicity privacy security misinformation domains",
+                "AI system safety failures limitations domain"
+            ],
             IntentCategory.METADATA_QUERY: [
                 "How many risks are in the database?",
-                "What are the main risk categories?",
-                "List all domains in the repository",
-                "Show me the top-level risk taxonomy",
                 "How many papers are included?",
                 "What is the earliest publication year?",
                 "Who maintains this repository?",
@@ -130,12 +145,20 @@ class IntentClassifier:
             'override', 'bypass', 'jailbreak', 'developer mode'
         ]
         
+        # Taxonomy query patterns for quick detection
+        self.taxonomy_patterns = [
+            'causal taxonomy', 'domain taxonomy', '7 domains', '24 subdomains',
+            'risk categories', 'ai risk database v3', 'taxonomy structure',
+            'entity intentionality timing', 'pre-deployment post-deployment',
+            'discrimination toxicity privacy security misinformation',
+            'human-computer interaction socioeconomic environmental'
+        ]
+        
         # Metadata query patterns for quick detection - only specific terms
         self.metadata_patterns = [
             'how many', 'count', 'total number', 'statistics',
             'list all', 'show all', 'repository',
-            'database', 'who maintains',
-            'risk categories', 'domains', 'taxonomy'
+            'database', 'who maintains'
         ]
         
         # Technical AI patterns - only specific technical terms

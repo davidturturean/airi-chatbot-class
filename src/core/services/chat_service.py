@@ -91,6 +91,61 @@ class ChatService:
             intent_result = intent_classifier.classify_intent(message)
             
             # 2. Route based on intent category
+            # 2.1 Handle taxonomy queries with highest priority
+            if intent_result.category == IntentCategory.TAXONOMY_QUERY:
+                logger.info(f"Processing taxonomy query (confidence: {intent_result.confidence:.2f})")
+                
+                try:
+                    from ..taxonomy.taxonomy_handler import TaxonomyHandler
+                    
+                    # Create taxonomy handler instance
+                    taxonomy_handler = TaxonomyHandler()
+                    
+                    # Get structured taxonomy response
+                    taxonomy_response = taxonomy_handler.handle_taxonomy_query(message)
+                    
+                    # Handle language translation if needed
+                    response_content = taxonomy_response.content
+                    if self.gemini_model and language_info and language_info.get('code', 'en') != 'en':
+                        try:
+                            from ..services.language_service import language_service
+                            language_code = language_info.get('code', 'en')
+                            language_name = language_info.get('english_name', 'English')
+                            special_prompt = language_service.get_language_prompt(language_code)
+                            
+                            translation_prompt = f"""Translate this taxonomy information to {language_name}:
+
+{response_content}
+
+{special_prompt}
+Keep all formatting, headings, and structure intact.
+Translate technical terms appropriately for {language_name} speakers."""
+                            
+                            response_content = self.gemini_model.generate(translation_prompt, [])
+                            logger.info(f"Translated taxonomy response to {language_name}")
+                        except Exception as e:
+                            logger.warning(f"Failed to translate taxonomy response: {e}")
+                    
+                    # Create source citation for the preprint
+                    sources = [{
+                        'metadata': {
+                            'title': taxonomy_response.source,
+                            'rid': 'PREPRINT-001',
+                            'type': 'preprint'
+                        },
+                        'page_content': 'AI Risk Repository Preprint - Comprehensive taxonomy reference'
+                    }]
+                    
+                    # Update conversation history
+                    self._update_conversation_history(conversation_id, message, response_content)
+                    return response_content, sources, language_info
+                    
+                except Exception as e:
+                    logger.error(f"Failed to handle taxonomy query: {e}")
+                    # Fall through to metadata handler as backup
+                    intent_result.category = IntentCategory.METADATA_QUERY
+            
+            # 2.2 Handle metadata queries
             if intent_result.category == IntentCategory.METADATA_QUERY:
                 logger.info(f"Processing metadata query (confidence: {intent_result.confidence:.2f})")
                 
