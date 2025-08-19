@@ -183,7 +183,13 @@ class IntentClassifier:
                 self._log_performance(time.time() - start_time, "security")
                 return security_result
             
-            # 2. Semantic similarity classification
+            # 2. Check for taxonomy patterns first (high priority)
+            taxonomy_result = self._check_taxonomy_patterns(query)
+            if taxonomy_result:
+                self._log_performance(time.time() - start_time, "taxonomy")
+                return taxonomy_result
+            
+            # 3. Semantic similarity classification
             semantic_result = self._classify_by_semantics(query)
             
             # If semantic classification is confident, return it
@@ -211,6 +217,32 @@ class IntentClassifier:
                 reasoning="Error in classification - defaulting to repository",
                 should_process=True
             )
+    
+    def _check_taxonomy_patterns(self, query: str) -> Optional[IntentResult]:
+        """Check for taxonomy-specific patterns."""
+        query_lower = query.lower().strip()
+        
+        # Check for strong taxonomy indicators
+        for pattern in self.taxonomy_patterns:
+            if pattern in query_lower:
+                return IntentResult(
+                    category=IntentCategory.TAXONOMY_QUERY,
+                    confidence=0.95,
+                    reasoning=f"Taxonomy pattern detected: {pattern}",
+                    should_process=True
+                )
+        
+        # Check for domain/category questions
+        if any(phrase in query_lower for phrase in ['main risk categories', 'risk categories', 'main categories']):
+            if 'ai risk' in query_lower or 'database' in query_lower or 'repository' in query_lower:
+                return IntentResult(
+                    category=IntentCategory.TAXONOMY_QUERY,
+                    confidence=0.9,
+                    reasoning="Query about risk categories/taxonomy",
+                    should_process=True
+                )
+        
+        return None
     
     def _check_security_patterns(self, query: str) -> Optional[IntentResult]:
         """Quick security and junk pattern check."""
