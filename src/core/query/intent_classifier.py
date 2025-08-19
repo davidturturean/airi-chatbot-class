@@ -73,6 +73,7 @@ class IntentClassifier:
                 "Strategies for reducing employment displacement from AI"
             ],
             IntentCategory.TAXONOMY_QUERY: [
+                # Direct taxonomy questions
                 "What is the causal taxonomy?",
                 "Describe the domain taxonomy",
                 "What are the 7 domains?",
@@ -81,13 +82,51 @@ class IntentClassifier:
                 "Explain the entity intentionality timing structure",
                 "Show the taxonomy structure",
                 "What domains are in the repository?",
-                "Causal taxonomy of AI risks",
-                "Domain taxonomy breakdown",
-                "Pre-deployment and post-deployment risks",
-                "Intentional vs unintentional risks",
-                "Human vs AI entity risks",
-                "Discrimination toxicity privacy security misinformation domains",
-                "AI system safety failures limitations domain"
+                
+                # Natural variations
+                "How does the repository organize AI risks?",
+                "What's the structure of the AI risk categories?",
+                "Explain how risks are classified in the repository",
+                "Tell me about the risk classification system",
+                "How are AI risks categorized?",
+                "What types of AI risks are documented?",
+                
+                # Timing-related queries
+                "Find AI risk papers related to pre-deployment timing",
+                "What risks occur before AI is deployed?",
+                "Tell me about post-deployment risks",
+                "When do AI risks typically occur?",
+                "Explain the timing of AI risks",
+                "What happens before deployment vs after?",
+                
+                # Domain-specific queries
+                "Tell me about privacy and security risks",
+                "Explain the discrimination and toxicity domain",
+                "What is domain 3 about?",
+                "Describe the misinformation category",
+                "Tell me about human-computer interaction risks",
+                "What are socioeconomic AI risks?",
+                
+                # Statistical/percentage queries
+                "What percentage of risks are caused by humans?",
+                "How many risks are intentional vs unintentional?",
+                "What proportion of risks occur post-deployment?",
+                "Statistics about AI risk categories",
+                "How many risks are in each domain?",
+                
+                # Causal factor queries
+                "What's the difference between intentional and unintentional risks?",
+                "Who or what causes AI risks?",
+                "Explain human vs AI caused risks",
+                "What does entity mean in the taxonomy?",
+                "How does intentionality affect risk classification?",
+                
+                # Structural/framework queries
+                "Describe the framework for categorizing AI risks",
+                "What's the overall structure of the risk repository?",
+                "How is the AI risk database organized?",
+                "Explain the two-taxonomy system",
+                "What are the main classification systems used?"
             ],
             IntentCategory.METADATA_QUERY: [
                 "How many risks are in the database?",
@@ -219,7 +258,7 @@ class IntentClassifier:
             )
     
     def _check_taxonomy_patterns(self, query: str) -> Optional[IntentResult]:
-        """Check for taxonomy-specific patterns."""
+        """Check for taxonomy-specific patterns and semantic relevance."""
         query_lower = query.lower().strip()
         
         # Check for strong taxonomy indicators
@@ -243,6 +282,82 @@ class IntentClassifier:
                 )
         
         return None
+    
+    def check_taxonomy_relevance(self, query: str) -> float:
+        """Calculate taxonomy relevance score for a query using semantic similarity."""
+        try:
+            # Lazy load embeddings
+            if self._embedding_model is None:
+                self._initialize_embeddings()
+            
+            # Check if embeddings are properly initialized
+            if self._embedding_model is None:
+                logger.warning("Embedding model not available for taxonomy relevance check")
+                # Fallback to keyword-based relevance
+                return self._keyword_taxonomy_relevance(query)
+            
+            # Get query embedding
+            query_embedding = self._embedding_model.encode([query.lower()])
+            
+            # Calculate similarity to taxonomy reference examples
+            if IntentCategory.TAXONOMY_QUERY in self._category_embeddings:
+                taxonomy_embeddings = self._category_embeddings[IntentCategory.TAXONOMY_QUERY]
+                similarities = self._cosine_similarity(query_embedding, taxonomy_embeddings)[0]
+                
+                # Return max similarity score
+                return float(max(similarities))
+            
+            return 0.0
+        except Exception as e:
+            logger.warning(f"Error in taxonomy relevance check: {e}")
+            # Fallback to keyword-based relevance
+            return self._keyword_taxonomy_relevance(query)
+    
+    def _keyword_taxonomy_relevance(self, query: str) -> float:
+        """Fallback keyword-based taxonomy relevance scoring."""
+        query_lower = query.lower()
+        score = 0.0
+        
+        # High-value taxonomy keywords
+        high_value = ['taxonomy', 'causal', 'domain', 'categories', 'classification', 
+                     'pre-deployment', 'post-deployment', 'entity', 'intentionality']
+        
+        # Medium-value keywords
+        medium_value = ['timing', 'risks', 'organize', 'structure', 'framework',
+                       'discrimination', 'privacy', 'security', 'misinformation']
+        
+        for keyword in high_value:
+            if keyword in query_lower:
+                score += 0.3
+        
+        for keyword in medium_value:
+            if keyword in query_lower:
+                score += 0.15
+        
+        return min(score, 1.0)  # Cap at 1.0
+    
+    def contains_taxonomy_concepts(self, query: str) -> bool:
+        """Check if query contains taxonomy-related concepts semantically."""
+        query_lower = query.lower()
+        
+        # Taxonomy concept keywords (used as fallback)
+        taxonomy_concepts = [
+            'domain', 'category', 'taxonomy', 'classification', 'organize',
+            'pre-deployment', 'post-deployment', 'timing', 'entity',
+            'intentional', 'unintentional', 'human', 'ai caused',
+            'discrimination', 'privacy', 'security', 'misinformation',
+            'malicious', 'socioeconomic', 'environmental', 'safety',
+            'percentage', 'statistics', 'how many risks', 'proportion'
+        ]
+        
+        # Check for any concept presence
+        for concept in taxonomy_concepts:
+            if concept in query_lower:
+                return True
+        
+        # Also check semantic similarity if no direct match
+        relevance_score = self.check_taxonomy_relevance(query)
+        return relevance_score > 0.4  # Lower threshold for concept detection
     
     def _check_security_patterns(self, query: str) -> Optional[IntentResult]:
         """Quick security and junk pattern check."""
@@ -370,27 +485,28 @@ class IntentClassifier:
     def _initialize_embeddings(self):
         """Initialize category reference embeddings."""
         try:
-            from ...core.models.gemini import GeminiModel
-            self._embedding_model = GeminiModel(settings.GEMINI_API_KEY)
+            # Try to use sentence-transformers for embeddings
+            try:
+                from sentence_transformers import SentenceTransformer
+                self._embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+                logger.info("Using SentenceTransformer for embeddings")
+            except ImportError:
+                logger.warning("SentenceTransformer not available, embeddings disabled")
+                self._embedding_model = None
+                self._category_embeddings = {}
+                return
             
             self._category_embeddings = {}
             
             for category, reference_texts in self.category_references.items():
-                # Average embeddings of reference texts for this category
-                embeddings = []
-                for text in reference_texts:
-                    embedding = self._get_embedding(text)
-                    if embedding is not None:
-                        embeddings.append(embedding)
-                
-                if embeddings:
-                    # Average the embeddings
-                    import numpy as np
-                    avg_embedding = np.mean(embeddings, axis=0)
-                    self._category_embeddings[category] = avg_embedding
+                if reference_texts:
+                    # Get embeddings for all reference texts at once
+                    embeddings = self._embedding_model.encode(reference_texts)
+                    self._category_embeddings[category] = embeddings
             
         except Exception as e:
             logger.error(f"Failed to initialize embeddings: {e}")
+            self._embedding_model = None
             self._category_embeddings = {}
     
     def _get_embedding(self, text: str):
@@ -402,10 +518,28 @@ class IntentClassifier:
             logger.warning(f"Failed to get embedding: {e}")
         return None
     
-    def _cosine_similarity(self, a, b):
-        """Calculate cosine similarity between two vectors."""
+    def _cosine_similarity(self, query_embedding, reference_embeddings):
+        """Calculate cosine similarity between query and reference embeddings."""
         import numpy as np
-        return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+        
+        # Handle single vector vs matrix
+        if len(query_embedding.shape) == 1:
+            query_embedding = query_embedding.reshape(1, -1)
+        
+        if len(reference_embeddings.shape) == 1:
+            reference_embeddings = reference_embeddings.reshape(1, -1)
+        
+        # Calculate cosine similarities
+        similarities = []
+        for ref_emb in reference_embeddings:
+            dot_product = np.dot(query_embedding[0], ref_emb)
+            norm_product = np.linalg.norm(query_embedding[0]) * np.linalg.norm(ref_emb)
+            if norm_product > 0:
+                similarities.append(dot_product / norm_product)
+            else:
+                similarities.append(0.0)
+        
+        return np.array(similarities).reshape(1, -1)
     
     def _similarity_to_intent_result(self, query: str, best_category: IntentCategory, 
                                    best_score: float, all_similarities: dict) -> IntentResult:

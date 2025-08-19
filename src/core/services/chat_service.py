@@ -270,9 +270,85 @@ Translate technical terms appropriately for {language_name} speakers."""
                     self._update_conversation_history(conversation_id, message, metadata_response)
                     return metadata_response, raw_results
             
-            # 3. Handle non-repository queries
+            # 3. Multi-stage classification for better taxonomy detection
+            # Check taxonomy relevance if initial classification is uncertain
+            if intent_result.confidence < 0.7 and intent_result.category != IntentCategory.TAXONOMY_QUERY:
+                # Check taxonomy relevance
+                taxonomy_relevance = intent_classifier.check_taxonomy_relevance(message)
+                logger.info(f"Taxonomy relevance check: {taxonomy_relevance:.2f} for uncertain query")
+                
+                if taxonomy_relevance > 0.5:
+                    # Route to taxonomy handler
+                    logger.info(f"Routing to taxonomy handler based on relevance score: {taxonomy_relevance:.2f}")
+                    try:
+                        from ..taxonomy.taxonomy_handler import TaxonomyHandler
+                        taxonomy_handler = TaxonomyHandler()
+                        taxonomy_response = taxonomy_handler.handle_taxonomy_query(message)
+                        
+                        # Handle language translation if needed
+                        response_content = taxonomy_response.content
+                        if self.gemini_model and language_info and language_info.get('code', 'en') != 'en':
+                            try:
+                                from ..services.language_service import language_service
+                                language_code = language_info.get('code', 'en')
+                                language_name = language_info.get('english_name', 'English')
+                                special_prompt = language_service.get_language_prompt(language_code)
+                                
+                                translation_prompt = f"""Translate this taxonomy information to {language_name}:
+
+{response_content}
+
+{special_prompt}
+Keep all formatting, headings, and structure intact."""
+                                
+                                response_content = self.gemini_model.generate(translation_prompt, [])
+                            except Exception as e:
+                                logger.warning(f"Failed to translate taxonomy response: {e}")
+                        
+                        sources = [{
+                            'metadata': {'title': taxonomy_response.source, 'rid': 'PREPRINT-001'},
+                            'page_content': 'AI Risk Repository Preprint - Taxonomy reference'
+                        }]
+                        
+                        self._update_conversation_history(conversation_id, message, response_content)
+                        return response_content, sources, language_info
+                    except Exception as e:
+                        logger.error(f"Failed to handle as taxonomy query: {e}")
+            
+            # 4. Handle non-repository queries
             elif not intent_result.should_process:
                 logger.info(f"Query filtered by intent classifier: {intent_result.category.value} (confidence: {intent_result.confidence:.2f})")
+                
+                # Before returning generic response, check if it contains taxonomy concepts
+                if intent_classifier.contains_taxonomy_concepts(message):
+                    logger.info("Query contains taxonomy concepts despite low confidence - routing to taxonomy handler")
+                    try:
+                        from ..taxonomy.taxonomy_handler import TaxonomyHandler
+                        taxonomy_handler = TaxonomyHandler()
+                        taxonomy_response = taxonomy_handler.handle_taxonomy_query(message)
+                        
+                        response_content = taxonomy_response.content
+                        if self.gemini_model and language_info and language_info.get('code', 'en') != 'en':
+                            try:
+                                from ..services.language_service import language_service
+                                language_code = language_info.get('code', 'en')
+                                language_name = language_info.get('english_name', 'English')
+                                special_prompt = language_service.get_language_prompt(language_code)
+                                
+                                translation_prompt = f"""Translate to {language_name}: {response_content}"""
+                                response_content = self.gemini_model.generate(translation_prompt, [])
+                            except Exception as e:
+                                logger.warning(f"Translation failed: {e}")
+                        
+                        sources = [{
+                            'metadata': {'title': 'AI Risk Repository Preprint', 'rid': 'PREPRINT-001'},
+                            'page_content': 'Taxonomy reference'
+                        }]
+                        
+                        self._update_conversation_history(conversation_id, message, response_content)
+                        return response_content, sources, language_info
+                    except Exception as e:
+                        logger.error(f"Taxonomy fallback failed: {e}")
                 
                 if intent_result.suggested_response:
                     # Use session language instead of detecting from query

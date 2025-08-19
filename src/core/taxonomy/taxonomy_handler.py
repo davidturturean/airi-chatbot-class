@@ -165,16 +165,32 @@ class TaxonomyHandler:
         """Handle a taxonomy-specific query and return structured response."""
         query_lower = query.lower()
         
-        # Determine which taxonomy is being asked about
-        if any(term in query_lower for term in ['causal', 'entity', 'intentionality', 'timing', 'pre-deployment', 'post-deployment']):
+        # Analyze query semantically to determine intent
+        query_focus = self._analyze_query_focus(query_lower)
+        
+        # Route to appropriate response generator
+        if query_focus['is_search']:
+            return self._get_search_context_response(query_lower)
+        elif query_focus['is_specific_domain']:
+            return self._get_specific_domain_response(query_lower, query_focus['domain_id'])
+        elif query_focus['is_timing_focused']:
+            return self._get_timing_focused_response(query_lower)
+        elif query_focus['is_statistical']:
+            return self._get_statistical_response(query_lower)
+        elif query_focus['is_causal']:
             return self._get_causal_taxonomy_response(query_lower)
-        elif any(term in query_lower for term in ['domain', '7 domain', '24 subdomain', 'discrimination', 'privacy', 'misinformation']):
+        elif query_focus['is_domain_list']:
             return self._get_domain_taxonomy_response(query_lower)
-        elif 'risk categories' in query_lower or 'main categories' in query_lower or 'ai risk database v3' in query_lower:
-            return self._get_both_taxonomies_response(query_lower)
         else:
-            # Default to showing both taxonomies
-            return self._get_both_taxonomies_response(query_lower)
+            # Intelligently decide based on query content
+            if any(term in query_lower for term in ['organize', 'structure', 'framework', 'categorize', 'classify']):
+                return self._get_both_taxonomies_response(query_lower)
+            elif any(term in query_lower for term in ['entity', 'intentional', 'timing', 'when', 'who']):
+                return self._get_causal_taxonomy_response(query_lower)
+            elif any(term in query_lower for term in ['domain', 'type', 'kind', 'category']):
+                return self._get_domain_taxonomy_response(query_lower)
+            else:
+                return self._get_both_taxonomies_response(query_lower)
     
     def _get_causal_taxonomy_response(self, query: str) -> TaxonomyResponse:
         """Generate response for causal taxonomy queries."""
@@ -295,3 +311,231 @@ These taxonomies work together to provide comprehensive classification - the Cau
         for domain in self.domain_taxonomy['domains']:
             subdomains.extend(domain['subdomains'])
         return subdomains
+    
+    def _analyze_query_focus(self, query: str) -> Dict[str, Any]:
+        """Analyze what aspect of the taxonomy the query is asking about."""
+        focus = {
+            'is_search': False,
+            'is_specific_domain': False,
+            'domain_id': None,
+            'is_timing_focused': False,
+            'is_statistical': False,
+            'is_causal': False,
+            'is_domain_list': False
+        }
+        
+        # Check for search queries
+        if any(term in query for term in ['find', 'search', 'papers', 'documents', 'studies']):
+            focus['is_search'] = True
+        
+        # Check for specific domain references
+        domain_keywords = {
+            1: ['discrimination', 'toxicity', 'bias', 'toxic'],
+            2: ['privacy', 'security', 'data protection', 'vulnerabilities'],
+            3: ['misinformation', 'fake', 'false information', 'misleading'],
+            4: ['malicious', 'misuse', 'fraud', 'deception'],
+            5: ['human-computer', 'hci', 'interaction', 'automation', 'employment'],
+            6: ['socioeconomic', 'environmental', 'societal', 'economic'],
+            7: ['safety', 'failures', 'limitations', 'alignment', 'existential']
+        }
+        
+        for domain_id, keywords in domain_keywords.items():
+            if any(kw in query for kw in keywords):
+                focus['is_specific_domain'] = True
+                focus['domain_id'] = domain_id
+                break
+        
+        # Check for domain number references
+        import re
+        domain_match = re.search(r'domain\s*(\d)', query)
+        if domain_match:
+            focus['is_specific_domain'] = True
+            focus['domain_id'] = int(domain_match.group(1))
+        
+        # Check for timing focus
+        if any(term in query for term in ['timing', 'pre-deployment', 'post-deployment', 'before deployment', 'after deployment', 'when']):
+            focus['is_timing_focused'] = True
+        
+        # Check for statistical queries
+        if any(term in query for term in ['percentage', 'percent', 'how many', 'proportion', 'statistics', 'number of']):
+            focus['is_statistical'] = True
+        
+        # Check for causal taxonomy indicators
+        if any(term in query for term in ['entity', 'intentionality', 'causal', 'who causes', 'human vs ai']):
+            focus['is_causal'] = True
+        
+        # Check for domain list queries
+        if any(term in query for term in ['7 domains', 'seven domains', 'all domains', 'list domains', 'what domains']):
+            focus['is_domain_list'] = True
+        
+        return focus
+    
+    def _get_search_context_response(self, query: str) -> TaxonomyResponse:
+        """Provide taxonomy context for search queries."""
+        # Extract what they're searching for
+        if 'pre-deployment' in query or 'before deployment' in query:
+            content = f"""## Pre-deployment Risks in the AI Risk Repository
+
+**Pre-deployment** is a key timing category in our Causal Taxonomy, representing {self.causal_taxonomy['statistics']['timing']['Pre-deployment']} of all documented risks.
+
+### Understanding Pre-deployment Risks:
+These are risks that occur **before** an AI model is deployed to production, including:
+- Design flaws and biases introduced during development
+- Training data issues and poisoning
+- Inadequate testing and validation
+- Misalignment with intended goals
+
+### Context in the Causal Taxonomy:
+Pre-deployment risks can be:
+- **Human-caused**: Poor design decisions, biased data collection
+- **AI-caused**: Model behavior during training/testing
+- **Intentional or Unintentional**: Deliberate choices vs oversights
+
+### Related Domains:
+Pre-deployment risks appear across all 7 domains but are particularly relevant for:
+- **Discrimination & Toxicity**: Biased training data
+- **AI System Safety**: Alignment and testing issues
+- **Privacy & Security**: Data handling during development
+
+*To search for specific pre-deployment papers, the system will now search the document repository...*
+
+*Source: The AI Risk Repository (Slattery et al., 2024)*"""
+        else:
+            # Generic search context
+            content = self._get_both_taxonomies_response(query).content
+        
+        return TaxonomyResponse(
+            content=content,
+            taxonomy_type="search_context",
+            source="AI Risk Repository Preprint"
+        )
+    
+    def _get_specific_domain_response(self, query: str, domain_id: int) -> TaxonomyResponse:
+        """Provide detailed information about a specific domain."""
+        domain = self.get_specific_domain(domain_id)
+        if not domain:
+            return self._get_domain_taxonomy_response(query)
+        
+        subdomains_str = "\n   - ".join(domain['subdomains'])
+        
+        content = f"""## Domain {domain['id']}: {domain['name']}
+
+{domain['description']}
+
+### Key Statistics:
+- **Percentage of all risks**: {domain['percentage']}
+- **Number of subdomains**: {len(domain['subdomains'])}
+
+### Subdomains:
+   - {subdomains_str}
+
+### Context in Repository:
+This is one of 7 domains in the AI Risk Repository's Domain Taxonomy, which organizes {self.domain_taxonomy['total_risks']} risks from {self.domain_taxonomy['documents_analyzed']} documents.
+
+### Related Domains:
+"""
+        
+        # Add related domains based on common patterns
+        if domain_id == 2:  # Privacy & Security
+            content += "- **Misinformation** (Domain 3): Privacy breaches can enable misinformation\n"
+            content += "- **Malicious Actors** (Domain 4): Security vulnerabilities exploited maliciously\n"
+        elif domain_id == 1:  # Discrimination
+            content += "- **Human-Computer Interaction** (Domain 5): Biased AI affects user interactions\n"
+            content += "- **Socioeconomic** (Domain 6): Discrimination has societal impacts\n"
+        
+        content += f"\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+        
+        return TaxonomyResponse(
+            content=content,
+            taxonomy_type="specific_domain",
+            source="AI Risk Repository Preprint"
+        )
+    
+    def _get_timing_focused_response(self, query: str) -> TaxonomyResponse:
+        """Provide timing-focused causal taxonomy information."""
+        content = f"""## Timing in the AI Risk Causal Taxonomy
+
+The **Timing** dimension is one of three key factors in the Causal Taxonomy, categorizing when risks occur in the AI lifecycle.
+
+### Timing Categories:
+
+#### 1. **Pre-deployment** ({self.causal_taxonomy['statistics']['timing']['Pre-deployment']} of risks)
+- **Definition**: Risks occurring before the AI model is deployed to production
+- **Examples**: 
+  - Biased training data collection
+  - Flawed model architecture decisions
+  - Inadequate testing procedures
+  - Misalignment during training
+
+#### 2. **Post-deployment** ({self.causal_taxonomy['statistics']['timing']['Post-deployment']} of risks)
+- **Definition**: Risks occurring after the AI model has been trained and deployed
+- **Examples**:
+  - Misuse by end users
+  - Emergent behaviors in production
+  - Adversarial attacks
+  - Drift from original training distribution
+
+#### 3. **Other** ({self.causal_taxonomy['statistics']['timing']['Other']} of risks)
+- **Definition**: Risks without clearly specified timing
+- **Examples**: Systemic or ongoing risks that span the lifecycle
+
+### Interaction with Other Causal Factors:
+- **Entity**: Both humans and AI can cause risks at either timing stage
+- **Intentionality**: Pre-deployment often involves unintentional oversights; post-deployment sees more intentional misuse
+
+### Key Insight:
+The majority of risks ({self.causal_taxonomy['statistics']['timing']['Post-deployment']}) occur **post-deployment**, highlighting the importance of ongoing monitoring and governance.
+
+*Source: The AI Risk Repository (Slattery et al., 2024)*"""
+        
+        return TaxonomyResponse(
+            content=content,
+            taxonomy_type="timing_focused",
+            source="AI Risk Repository Preprint"
+        )
+    
+    def _get_statistical_response(self, query: str) -> TaxonomyResponse:
+        """Provide statistical information about the taxonomies."""
+        content = f"""## AI Risk Repository Statistics
+
+### Overall Repository:
+- **Total Risks Documented**: {self.domain_taxonomy['total_risks']}
+- **Documents Analyzed**: {self.domain_taxonomy['documents_analyzed']}
+- **Domains**: 7
+- **Subdomains**: 24
+
+### Causal Taxonomy Distribution:
+
+#### By Entity (Who causes the risk?):
+- **AI-caused**: {self.causal_taxonomy['statistics']['entity']['AI']}
+- **Human-caused**: {self.causal_taxonomy['statistics']['entity']['Human']}
+- **Other/Unspecified**: {self.causal_taxonomy['statistics']['entity']['Other']}
+
+#### By Intentionality:
+- **Intentional**: {self.causal_taxonomy['statistics']['intentionality']['Intentional']}
+- **Unintentional**: {self.causal_taxonomy['statistics']['intentionality']['Unintentional']}
+- **Other/Unspecified**: {self.causal_taxonomy['statistics']['intentionality']['Other']}
+
+#### By Timing:
+- **Pre-deployment**: {self.causal_taxonomy['statistics']['timing']['Pre-deployment']}
+- **Post-deployment**: {self.causal_taxonomy['statistics']['timing']['Post-deployment']}
+- **Other/Unspecified**: {self.causal_taxonomy['statistics']['timing']['Other']}
+
+### Domain Taxonomy Distribution:
+"""
+        
+        for domain in self.domain_taxonomy['domains']:
+            content += f"\n{domain['id']}. **{domain['name']}**: {domain['percentage']} of risks"
+        
+        content += """\n\n### Key Findings:
+- Post-deployment risks are most common (62%)
+- AI and humans cause roughly equal proportions of risks
+- Discrimination & Toxicity is the largest domain (16.2%)
+
+*Source: The AI Risk Repository (Slattery et al., 2024)*"""
+        
+        return TaxonomyResponse(
+            content=content,
+            taxonomy_type="statistical",
+            source="AI Risk Repository Preprint"
+        )
