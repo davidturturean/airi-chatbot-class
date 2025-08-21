@@ -7,7 +7,6 @@ import numpy as np
 import time
 from collections import OrderedDict
 from sklearn.metrics.pairwise import cosine_similarity
-from sentence_transformers import SentenceTransformer
 
 from ...config.logging import get_logger
 from ...config.settings import settings
@@ -437,12 +436,13 @@ class QueryProcessor:
         previous_query, _ = self.session_queries[session_id]  # Extract query from (query, timestamp) tuple
         
         try:
-            # Lazy initialization of sentence transformer
+            # Lazy initialization of embedding service
             if self.sentence_transformer is None:
                 try:
-                    self.sentence_transformer = SentenceTransformer('all-MiniLM-L6-v2')
+                    from ..utils.embeddings import google_embedding_service
+                    self.sentence_transformer = google_embedding_service
                 except Exception as e:
-                    logger.warning(f"Could not load sentence transformer: {e}")
+                    logger.warning(f"Could not load embedding service: {e}")
                     return False
             
             # Calculate semantic similarity

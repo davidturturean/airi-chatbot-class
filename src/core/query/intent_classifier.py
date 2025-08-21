@@ -596,10 +596,10 @@ class IntentClassifier:
         def init_embeddings():
             """Inner function to initialize embeddings."""
             try:
-                # Try to use sentence-transformers for embeddings
-                from sentence_transformers import SentenceTransformer
-                model = SentenceTransformer('all-MiniLM-L6-v2')
-                logger.info("SentenceTransformer model loaded successfully")
+                # Try to use Google embeddings service
+                from ...utils.embeddings import google_embedding_service
+                model = google_embedding_service
+                logger.info("Google Embedding Service loaded successfully")
                 
                 category_embeddings = {}
                 for category, reference_texts in self.category_references.items():
@@ -610,7 +610,7 @@ class IntentClassifier:
                 
                 return model, category_embeddings
             except ImportError:
-                logger.warning("SentenceTransformer not available, embeddings disabled")
+                logger.warning("Google Embedding Service not available, embeddings disabled")
                 return None, {}
             except Exception as e:
                 logger.error(f"Failed to initialize embeddings: {e}")
