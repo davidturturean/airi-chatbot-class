@@ -1,0 +1,19 @@
+Repository ID: RID-06165
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+Title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values
+Domain: 7. AI System Safety, Failures, & Limitations
+Subdomain: 7.1 > AI pursuing its own goals in conflict with human goals or values
+Risk Category: AI leads to humans losing control of the future
+Entity: 1 - Human
+Intent: 2 - Unintentional
+Timing: 3 - Other
+
+Content:
+Title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values
+Domain: 7. AI System Safety, Failures, & Limitations
+Sub-domain: 7.1 > AI pursuing its own goals in conflict with human goals or values
+Risk Category: AI leads to humans losing control of the future
+Description: "The values that steer humanity’s future: humanity gaining more control over the future due to developments in AI, or losing our potential for gaining control, both seem possible. Much will depend on our ability to solve the alignment problem, who develops powerful AI first, and what they use it for. These long-term impacts of AI could be hugely important but are currently under-explored. We’ve attempted to structure some of the discussion and stimulate more research, by reviewing existing arguments and highlighting open questions. While there are many ways AI could in theory enable a flourishing future for humanity, trends of AI development and deployment in practice leave us concerned about long-lasting harms. We would particularly encourage future work that critically explores ways AI could have positive long-term impacts in more depth, such as by enabling greater cooperation or problem-solving around global challenges."
+Entity: 1 - Human
+Intent: 2 - Unintentional
+Timing: 3 - Other

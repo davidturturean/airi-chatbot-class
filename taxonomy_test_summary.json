@@ -1,0 +1,162 @@
+[
+  {
+    "id": 1,
+    "query": "List all 24 subdomains organized by domain",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 1.0,
+    "response_length": 2163
+  },
+  {
+    "id": 2,
+    "query": "What's the difference between intentional and unintentional risks?",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 0.45,
+    "response_length": 1796
+  },
+  {
+    "id": 3,
+    "query": "Show me every domain in the AI risk taxonomy",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 1.0,
+    "response_length": 2330
+  },
+  {
+    "id": 4,
+    "query": "What are all the subdomains under Privacy & Security?",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 1.0,
+    "response_length": 712
+  },
+  {
+    "id": 5,
+    "query": "Give me complete statistics for all risk categories",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 1.0,
+    "response_length": 1129
+  },
+  {
+    "id": 6,
+    "query": "Compare pre-deployment vs post-deployment risks",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 0.45,
+    "response_length": 1343
+  },
+  {
+    "id": 7,
+    "query": "What is the difference between human and AI caused risks?",
+    "passed": false,
+    "coverage": 0.75,
+    "completeness_level": 0.45,
+    "response_length": 1196
+  },
+  {
+    "id": 8,
+    "query": "Compare the causal taxonomy with the domain taxonomy",
+    "passed": false,
+    "coverage": 0.4,
+    "completeness_level": 0.45,
+    "response_length": 1177
+  },
+  {
+    "id": 9,
+    "query": "List the 3 dimensions of the causal taxonomy",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 0.7,
+    "response_length": 1177
+  },
+  {
+    "id": 10,
+    "query": "Show all subdomains related to AI System Safety",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 1.0,
+    "response_length": 643
+  },
+  {
+    "id": 11,
+    "query": "What are the main risk categories in the AI Risk Database v3?",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 0.7,
+    "response_length": 3565
+  },
+  {
+    "id": 12,
+    "query": "Explain the complete structure of AI risk categorization",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 0.8,
+    "response_length": 3565
+  },
+  {
+    "id": 13,
+    "query": "Provide full details about the Discrimination & Toxicity domain",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 1.0,
+    "response_length": 698
+  },
+  {
+    "id": 14,
+    "query": "Give me all information about timing in the causal taxonomy",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 0.8,
+    "response_length": 1343
+  },
+  {
+    "id": 15,
+    "query": "How many risks are in each of the 7 domains?",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 0.9,
+    "response_length": 1129
+  },
+  {
+    "id": 16,
+    "query": "What percentage of risks fall into each causal category?",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 1.0,
+    "response_length": 1129
+  },
+  {
+    "id": 17,
+    "query": "Tell me everything about how AI risks are organized",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 0.8,
+    "response_length": 3565
+  },
+  {
+    "id": 18,
+    "query": "I need a complete list of all risk subcategories",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 1.0,
+    "response_length": 3565
+  },
+  {
+    "id": 19,
+    "query": "Show the full breakdown of unintentional AI-caused post-deployment risks",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 1.0,
+    "response_length": 1343
+  },
+  {
+    "id": 20,
+    "query": "List every single subdomain across all 7 domains with their percentages",
+    "passed": true,
+    "coverage": 1.0,
+    "completeness_level": 1.0,
+    "response_length": 2163
+  }
+]

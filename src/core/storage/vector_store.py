@@ -8,7 +8,7 @@ from typing import List, Dict, Any, Optional, Tuple
 from collections import Counter
 
 from langchain_chroma import Chroma
-from langchain_community.document_loaders import TextLoader
+from langchain_community.document_loaders import TextLoader, Docx2txtLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain.docstore.document import Document
@@ -16,10 +16,12 @@ from langchain_core.retrievers import BaseRetriever
 from langchain_community.retrievers import BM25Retriever
 from rank_bm25 import BM25Okapi
 import numpy as np
+from ..retrieval.multi_strategy_retriever import MultiStrategyRetriever
 
 from .document_processor import DocumentProcessor
 from ..retrieval.advanced_retrieval import advanced_retriever
 from ..taxonomy.scqa_taxonomy import scqa_manager, SCQAComponent
+from ..metadata.fact_extractor import FactExtractor
 from ...config.logging import get_logger
 from ...config.settings import settings
 from ...config.domains import domain_classifier
@@ -110,14 +112,22 @@ class FieldAwareHybridRetriever(BaseRetriever):
     
     def _get_relevant_documents(self, query: str, *, run_manager=None) -> List[Document]:
         """Get relevant documents using field-aware hybrid search."""
-        # Get docs from vector retriever
-        vector_docs = self.vector_retriever.get_relevant_documents(query)
+        # Get docs from vector retriever (use invoke to avoid deprecation)
+        try:
+            vector_docs = self.vector_retriever.invoke(query)
+        except:
+            # Fallback to deprecated method if invoke not available
+            vector_docs = self.vector_retriever.get_relevant_documents(query)
         
         # Get field-aware keyword matches
         field_aware_docs = self._get_field_aware_matches(query)
         
         # Get standard keyword docs as fallback
-        standard_keyword_docs = self.keyword_retriever.get_relevant_documents(query)
+        try:
+            standard_keyword_docs = self.keyword_retriever.invoke(query)
+        except:
+            # Fallback to deprecated method if invoke not available
+            standard_keyword_docs = self.keyword_retriever.get_relevant_documents(query)
         
         # Track unique docs and scores
         unique_docs = {}
@@ -257,11 +267,15 @@ class VectorStore:
         self.vector_store = None
         self.keyword_retriever = None
         self.hybrid_retriever = None
+        self.multi_strategy_retriever = None  # New multi-strategy retriever
         self.structured_data = []
         self.all_documents = []
         
         # Document processor
         self.document_processor = DocumentProcessor()
+        
+        # Fact extractor for metadata enrichment
+        self.fact_extractor = FactExtractor()
         
         # Ensure directories exist
         settings.ensure_directories()
@@ -354,6 +368,24 @@ class VectorStore:
                         logger.error(f"Error processing file {file_path.name}: {str(e)}")
                         files_failed += 1
             
+            # ALSO process doc_snippets directory for preprint and other chunks
+            snippets_path = Path(self.repository_path).parent / 'doc_snippets'
+            if snippets_path.exists():
+                logger.info(f"Processing doc_snippets directory at {snippets_path}")
+                snippet_count = 0
+                
+                # Process RID-PREP files (preprint chunks)
+                for snippet_file in snippets_path.glob('RID-PREP-*.txt'):
+                    try:
+                        docs = self._process_snippet_file(snippet_file)
+                        if docs:
+                            self.all_documents.extend(docs)
+                            snippet_count += len(docs)
+                    except Exception as e:
+                        logger.error(f"Error processing snippet {snippet_file.name}: {str(e)}")
+                
+                logger.info(f"Processed {snippet_count} preprint snippets from doc_snippets")
+            
             logger.info(f"Document processing summary: {files_processed} processed, {files_failed} with errors")
             logger.info(f"Loaded {len(self.all_documents)} total documents")
             
@@ -434,8 +466,19 @@ class VectorStore:
             if self.use_hybrid_search and not self.hybrid_retriever:
                 try:
                     # Get all documents from the vector store to rebuild BM25
-                    all_docs = self.vector_store.get()
-                    if not all_docs or not all_docs['documents']:
+                    # Use the Chroma collection's get() method to retrieve all documents
+                    if hasattr(self.vector_store, '_collection'):
+                        all_docs = self.vector_store._collection.get()
+                    else:
+                        # Fallback: try to get documents via similarity search with large k
+                        logger.warning("Using fallback document retrieval method")
+                        sample_docs = self.vector_store.similarity_search("", k=1000)
+                        all_docs = {
+                            'documents': [doc.page_content for doc in sample_docs],
+                            'metadatas': [doc.metadata for doc in sample_docs]
+                        }
+                    
+                    if not all_docs or not all_docs.get('documents'):
                         logger.warning("No documents found in vector store - disabling hybrid search")
                         self.use_hybrid_search = False
                         return True
@@ -443,13 +486,25 @@ class VectorStore:
                     # Reconstruct Document objects for BM25
                     documents = []
                     for i, text in enumerate(all_docs['documents']):
-                        metadata = all_docs['metadatas'][i] if all_docs['metadatas'] else {}
-                        doc = Document(page_content=text, metadata=metadata)
-                        documents.append(doc)
+                        if text:  # Skip empty documents
+                            metadata = all_docs['metadatas'][i] if all_docs.get('metadatas') and i < len(all_docs['metadatas']) else {}
+                            doc = Document(page_content=text, metadata=metadata or {})
+                            documents.append(doc)
                     
                     logger.info(f"Building BM25 retriever with {len(documents)} documents")
                     self.keyword_retriever = BM25Retriever.from_documents(documents)
                     self.keyword_retriever.k = settings.BM25_TOP_K
+                    
+                    # Initialize multi-strategy retriever with all documents
+                    try:
+                        self.multi_strategy_retriever = MultiStrategyRetriever(
+                            vector_store=self.vector_store,
+                            all_documents=documents
+                        )
+                        logger.info("Multi-strategy retriever initialized successfully")
+                    except Exception as e:
+                        logger.error(f"Failed to initialize multi-strategy retriever: {str(e)}")
+                        self.multi_strategy_retriever = None
                     
                     # Choose retriever type based on configuration
                     if settings.USE_FIELD_AWARE_HYBRID:
@@ -492,6 +547,38 @@ class VectorStore:
                 embedding_function=self.embeddings
             )
             
+            # Check if preprint snippets are already in the store
+            test_result = self.vector_store.similarity_search("PRISMA methodology systematic review", k=1)
+            has_preprint = any("RID-PREP" in str(doc.metadata.get('rid', '')) for doc in test_result)
+            
+            if not has_preprint:
+                # CRITICAL: Load and add snippet documents to the existing store
+                snippets_path = Path(self.repository_path).parent / 'doc_snippets'
+                if snippets_path.exists():
+                    logger.info(f"Preprint snippets not found in store - loading from {snippets_path}")
+                    snippet_docs = []
+                    
+                    # Process RID-PREP files (preprint chunks)
+                    for snippet_file in snippets_path.glob('RID-PREP-*.txt'):
+                        try:
+                            docs = self._process_snippet_file(snippet_file)
+                            if docs:
+                                snippet_docs.extend(docs)
+                        except Exception as e:
+                            logger.error(f"Error processing snippet {snippet_file.name}: {str(e)}")
+                    
+                    if snippet_docs:
+                        logger.info(f"Adding {len(snippet_docs)} snippet documents to existing vector store")
+                        # Add documents to the existing store
+                        self.vector_store.add_documents(snippet_docs)
+                        logger.info("Snippet documents added successfully")
+                    else:
+                        logger.warning("No snippet documents found to add")
+                else:
+                    logger.warning(f"Snippets directory {snippets_path} does not exist")
+            else:
+                logger.info("Preprint snippets already present in vector store")
+            
             # Ensure complete initialization
             success = self._ensure_complete_initialization()
             if success:
@@ -513,8 +600,53 @@ class VectorStore:
             return self.document_processor.process_excel_file(file_path)
         elif file_extension == '.txt':
             return self._process_text_file(file_path)
+        elif file_extension == '.docx':
+            return self._process_docx_file(file_path)
         else:
             logger.warning(f"Unsupported file type: {file_extension}")
+            return []
+    
+    def _process_snippet_file(self, file_path: Path) -> List[Document]:
+        """Process snippet files from doc_snippets directory."""
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # Parse the snippet format
+            lines = content.split('\n')
+            metadata = {}
+            actual_content = []
+            in_content = False
+            
+            for line in lines:
+                if line.startswith('Repository ID:'):
+                    metadata['rid'] = line.split(':', 1)[1].strip()
+                elif line.startswith('Source:'):
+                    metadata['source'] = line.split(':', 1)[1].strip()
+                elif line.startswith('Section:'):
+                    metadata['section'] = line.split(':', 1)[1].strip()
+                elif line.startswith('Content Type:'):
+                    metadata['content_type'] = line.split(':', 1)[1].strip()
+                elif line.startswith('Content:'):
+                    in_content = True
+                elif in_content:
+                    actual_content.append(line)
+            
+            # Create document
+            doc = Document(
+                page_content='\n'.join(actual_content).strip(),
+                metadata={
+                    **metadata,
+                    'file_type': 'snippet',
+                    'file_name': file_path.name,
+                    'type': 'preprint' if 'PREP' in file_path.name else 'snippet'
+                }
+            )
+            
+            return [doc]
+            
+        except Exception as e:
+            logger.error(f"Error processing snippet file {file_path}: {str(e)}")
             return []
     
     def _process_text_file(self, file_path: Path) -> List[Document]:
@@ -543,6 +675,62 @@ class VectorStore:
             logger.error(f"Error processing text file {file_path}: {str(e)}")
             return []
     
+    def _process_docx_file(self, file_path: Path) -> List[Document]:
+        """Process DOCX files with RID assignment and proper chunking."""
+        try:
+            loader = Docx2txtLoader(str(file_path))
+            documents = loader.load()
+            
+            # Split the document into chunks for better retrieval
+            # Use a larger chunk size for research papers
+            if "preprint" in str(file_path).lower():
+                # For preprint, use specific chunking strategy
+                text_splitter = RecursiveCharacterTextSplitter(
+                    chunk_size=1500,
+                    chunk_overlap=200,
+                    separators=["\n\n", "\n", ". ", " ", ""]
+                )
+            else:
+                text_splitter = self.default_text_splitter
+            
+            # Split documents into chunks
+            split_docs = text_splitter.split_documents(documents)
+            
+            # Add metadata and assign RIDs to each chunk
+            processed_docs = []
+            for i, doc in enumerate(split_docs):
+                doc.metadata.update({
+                    "file_type": "docx",
+                    "document_type": "research_paper" if "preprint" in str(file_path).lower() else "document",
+                    "title": file_path.stem,
+                    "source": str(file_path),
+                    "chunk_index": i,
+                    "total_chunks": len(split_docs)
+                })
+                
+                # Add special metadata for preprint
+                if "preprint" in str(file_path).lower():
+                    doc.metadata.update({
+                        "type": "preprint",
+                        "year": "2024"  # Keep year but remove hardcoded authors
+                    })
+                
+                # Extract facts and enrich metadata (not hardcoded!)
+                doc = self.fact_extractor.enrich_document(doc)
+                
+                # Assign RID using DocumentProcessor
+                self.document_processor._assign_rid(doc)
+                processed_docs.append(doc)
+            
+            # Save RID registry after processing
+            self.document_processor._save_rid_registry()
+            
+            logger.info(f"Processed DOCX file {file_path.name}: {len(processed_docs)} chunks")
+            return processed_docs
+        except Exception as e:
+            logger.error(f"Error processing DOCX file {file_path}: {str(e)}")
+            return []
+    
     def get_relevant_documents(self, query: str, k: int = 5, domain: str = None) -> List[Document]:
         """Get relevant documents for a query with relevance threshold filtering."""
         # Check cache
@@ -553,6 +741,31 @@ class VectorStore:
                 return cached_docs
         
         try:
+            # Use multi-strategy retriever if available (prioritize for factual queries)
+            if self.multi_strategy_retriever:
+                # Check if this is a factual query that needs special handling
+                query_lower = query.lower()
+                is_factual = any(term in query_lower for term in [
+                    'how many', 'number', 'total', 'count',
+                    'who', 'author', 'wrote', 'created',
+                    'methodology', 'method', 'approach',
+                    'when', 'where', 'what year'
+                ])
+                
+                # Also check for numbers in query
+                import re
+                has_numbers = bool(re.search(r'\d+', query))
+                
+                if is_factual or has_numbers:
+                    logger.info(f"Using multi-strategy retriever for factual query: {query}")
+                    docs = self.multi_strategy_retriever.retrieve(query, k=k)
+                    
+                    # Cache and return
+                    self.query_cache[cache_key] = (time.time(), docs)
+                    return docs
+            
+            # Fall back to existing retrieval logic
+        
             # Detect domain if not provided
             if not domain:
                 domain = domain_classifier.classify_domain(query)
@@ -677,7 +890,11 @@ class VectorStore:
         """Get documents with scores from field-aware hybrid search."""
         try:
             # For field-aware hybrid search, we'll approximate scores with metadata boosts
-            docs = self.hybrid_retriever.get_relevant_documents(query)[:k]
+            try:
+                docs = self.hybrid_retriever.invoke(query)[:k]
+            except:
+                # Fallback to deprecated method if invoke not available
+                docs = self.hybrid_retriever.get_relevant_documents(query)[:k]
             # Assign decreasing scores based on rank with metadata boosting
             scored_docs = []
             for i, doc in enumerate(docs):

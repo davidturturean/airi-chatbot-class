@@ -1,0 +1,19 @@
+Repository ID: RID-05613
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+Title: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks
+Domain: 2. Privacy & Security
+Subdomain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information
+Risk Category: Privacy and security
+Entity: 2 - AI
+Intent: 3 - Other
+Timing: 2 - Post-deployment
+
+Content:
+Title: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks
+Domain: 2. Privacy & Security
+Sub-domain: 2.1 > Compromise of privacy by leaking or correctly inferring sensitive information
+Risk Category: Privacy and security
+Description: "Participants expressed worry about AI systems' possible misuse of personal information. They emphasized the importance of strong data security safeguards and increased openness in how AI systems acquire, store and use data. The increasing dependence on AI systems to manage sensitive personal information raises ethical questions about AI, data privacy and security. As AI technologies grow increasingly integrated into numerous areas of society, there is a greater danger of personal data exploitation or mistreatment. Participants in research frequently express concerns about the effectiveness of data protection safeguards and the transparency of AI systems in gathering, keeping and exploiting data (Table 1). "
+Entity: 2 - AI
+Intent: 3 - Other
+Timing: 2 - Post-deployment

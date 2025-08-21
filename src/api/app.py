@@ -12,6 +12,7 @@ from .routes.health import health_bp, init_health_routes
 from .routes.snippets import snippets_bp, init_snippet_routes
 from .routes.get_file_content import file_content_bp
 from .routes.language import language_bp, init_language_routes
+from .routes.features import features_bp, init_features_routes
 from ..core.services.chat_service import ChatService
 from ..core.models.gemini import GeminiModel
 from ..core.storage.vector_store import VectorStore
@@ -61,6 +62,7 @@ def create_app(config=None):
     init_health_routes(chat_service)
     init_snippet_routes(chat_service)
     init_language_routes(chat_service)
+    init_features_routes()  # Features don't need chat_service
     
     # Register blueprints
     app.register_blueprint(chat_bp)
@@ -68,6 +70,7 @@ def create_app(config=None):
     app.register_blueprint(snippets_bp)
     app.register_blueprint(file_content_bp)
     app.register_blueprint(language_bp)
+    app.register_blueprint(features_bp)
     
     # Add frontend routes
     _add_frontend_routes(app, logger)

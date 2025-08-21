@@ -1,0 +1,168 @@
+{
+  "test_date": "2025-08-21T06:40:00.463702",
+  "total_queries": 20,
+  "successful": 0,
+  "failed": 20,
+  "results": [
+    {
+      "id": 1,
+      "category": "enumeration",
+      "query": "List all 24 subdomains organized by domain",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 2,
+      "category": "comparison",
+      "query": "What's the difference between intentional and unintentional risks?",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 3,
+      "category": "enumeration",
+      "query": "Show me every domain in the AI risk taxonomy",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 4,
+      "category": "enumeration",
+      "query": "What are all the subdomains under Privacy & Security?",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 5,
+      "category": "statistics",
+      "query": "Give me complete statistics for all risk categories",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 6,
+      "category": "comparison",
+      "query": "Compare pre-deployment vs post-deployment risks",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 7,
+      "category": "comparison",
+      "query": "What is the difference between human and AI caused risks?",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 8,
+      "category": "comparison",
+      "query": "Compare the causal taxonomy with the domain taxonomy",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 9,
+      "category": "enumeration",
+      "query": "List the 3 dimensions of the causal taxonomy",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 10,
+      "category": "enumeration",
+      "query": "Show all subdomains related to AI System Safety",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 11,
+      "category": "mixed",
+      "query": "What are the main risk categories in the AI Risk Database v3?",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 12,
+      "category": "mixed",
+      "query": "Explain the complete structure of AI risk categorization",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 13,
+      "category": "detail",
+      "query": "Provide full details about the Discrimination & Toxicity domain",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 14,
+      "category": "detail",
+      "query": "Give me all information about timing in the causal taxonomy",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 15,
+      "category": "statistics",
+      "query": "How many risks are in each of the 7 domains?",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 16,
+      "category": "statistics",
+      "query": "What percentage of risks fall into each causal category?",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 17,
+      "category": "natural",
+      "query": "Tell me everything about how AI risks are organized",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 18,
+      "category": "natural",
+      "query": "I need a complete list of all risk subcategories",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 19,
+      "category": "edge",
+      "query": "Show the full breakdown of unintentional AI-caused post-deployment risks",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    },
+    {
+      "id": 20,
+      "category": "edge",
+      "query": "List every single subdomain across all 7 domains with their percentages",
+      "response": "Error: Status 405 - <!doctype html>\n<html lang=en>\n<title>405 Method Not Allowed</title>\n<h1>Method Not Allowed</h1>\n<p>The method is not allowed for the requested URL.</p>\n",
+      "status": "error",
+      "error_code": 405
+    }
+  ]
+}

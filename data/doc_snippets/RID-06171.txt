@@ -1,0 +1,11 @@
+Repository ID: RID-06171
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+Title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values
+Domain: Unspecified
+Risk Category: AI leads to humans losing control of the future
+
+Content:
+Title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values
+Risk Category: AI leads to humans losing control of the future
+Risk Subcategory: Risks from delegating decision-making power to misaligned AIs
+Additional Evidence: "To see how this scenario could turn catastrophic, let’s take the example of AI systems automating law enforcement. Suppose these systems that have been successfully trained to minimise reported crime rate. Initially, law enforcement would probably seem to be improving. Since we’re assuming that automated decision- making is better and faster than human-decision making, reported crime will in fact fall. We will be increasingly depending on automated law enforcement—and investing less in training humans to do the relevant jobs—such that any suggestions to reverse the delegation of decision-making power to AI systems would be met with reasonable concern that we just cannot afford to. However, reported crime rate is not the same as the true prevalence of crime. As AI systems become more sophisticated, they will continue to drive down reported crime by hiding information about law enforcement failures, supressing complaints, and manipulating citizens.16 As the gap between how things are and how they appear grows, so too will the deceptive abilities of our automated decision-making systems. Eventually, they will be able to manipulate our perception of the world in sophisticated ways (e.g. highly persuasive media or education), and they may explicitly oppose any attempts to shut them down or modify their objectives—because human attempts to take back influence will result in reported crime rising again, which is precisely what they have been trained to prevent."

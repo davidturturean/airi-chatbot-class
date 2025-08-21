@@ -1,0 +1,18 @@
+Repository ID: RID-05755
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+Title: AI Safety Governance Framework
+Domain: Unspecified
+Subdomain: X.1 > Excluded
+Risk Category: AI's inherent safety risks
+Entity: 4 - Not coded
+Intent: 4 - Not coded
+Timing: 4 - Not coded
+
+Content:
+Title: AI Safety Governance Framework
+Sub-domain: X.1 > Excluded
+Risk Category: AI's inherent safety risks
+Description: -
+Entity: 4 - Not coded
+Intent: 4 - Not coded
+Timing: 4 - Not coded

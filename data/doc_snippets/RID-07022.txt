@@ -1,0 +1,10 @@
+Repository ID: RID-07022
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/AI_Risk_Repository_Preprint.docx
+Title: AI_Risk_Repository_Preprint
+
+Content:
+Phase 1: Screen a random set of articles to create training data for active-learning model
+
+As per SAFE, the screening team each randomly screened and labeled 1% of the total search yield (264 records in total). Each member of the team then created separate projects in ASReview and uploaded their own files, which included all retrieved studies and the random screening data. The random screening data was automatically marked as prior knowledge, and the active-learning phase commenced. 
+
+Phase 2: Apply active learning during screening until stopping rule is reached

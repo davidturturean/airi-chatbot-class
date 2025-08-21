@@ -1,0 +1,15 @@
+Repository ID: RID-07428
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/preprint_raw.txt
+Title: preprint_raw.txt
+
+Content:
+The AI Risk Repository: A Comprehensive Meta-Review, Database, and Taxonomy of Risks From Artificial Intelligence
+
+
+Peter Slattery1,2, Alexander K. Saeri1,2 , Emily A. C. Grundy1,2, Jess Graham3, Michael Noetel2,3, Risto Uuk4,5, James Dao6, Soroush Pour6, Stephen Casper7, and Neil Thompson1.
+
+1MIT FutureTech, Massachusetts Institute of Technology, 2Ready Research, 3School of Psychology, The University of Queensland, 4Future of Life Institute, 5KU Leuven, 6Harmony Intelligence, 7Computer Science and Artificial Intelligence Laboratory, Massachusetts Institute of Technology. 
+
+Correspondence to pslat@mit.edu
+
+Abstract

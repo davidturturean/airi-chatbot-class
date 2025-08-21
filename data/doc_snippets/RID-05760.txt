@@ -1,0 +1,20 @@
+Repository ID: RID-05760
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+Title: AI Safety Governance Framework
+Domain: 3. Misinformation
+Subdomain: 3.1 > False or misleading information
+Risk Category: AI's inherent safety risks
+Entity: 2 - AI
+Intent: 2 - Unintentional
+Timing: 2 - Post-deployment
+
+Content:
+Title: AI Safety Governance Framework
+Domain: 3. Misinformation
+Sub-domain: 3.1 > False or misleading information
+Risk Category: AI's inherent safety risks
+Risk Subcategory: Risks from models and algorithms (Risks of unreliable output)
+Description: "Generative AI can cause hallucinations, meaning that an AI model generates untruthful or unreasonable content but presents it as if it were a fact, leading to biased and misleading information."
+Entity: 2 - AI
+Intent: 2 - Unintentional
+Timing: 2 - Post-deployment

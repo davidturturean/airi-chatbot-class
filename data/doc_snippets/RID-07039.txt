@@ -1,0 +1,20 @@
+Repository ID: RID-07039
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/AI_Risk_Repository_Preprint.docx
+Title: AI_Risk_Repository_Preprint
+
+Content:
+Ongoing expert consultation
+
+In the period May 2024-March 2025, we received recommendations to consider 44 documents. Of these, 22 met the eligibility criteria.
+
+Figure 3. PRISMA Flow Diagram for Systematic Literature Search, Ongoing Expert Consultation, and Screening
+
+
+
+Note. *The ASReview software was used to assist in screening titles and abstracts.
+
+Characteristics of included documents
+
+We included 65 documents: 25 peer-reviewed articles, 22 preprints, 6 conference papers, 12 reports. We mainly identified recent literature, with all but five (92%) of the included documents published later than 2020. 
+
+We coded the corresponding author’s country and found that most of the included documents were from the USA (n = 18), United Kingdom (n = 11), China (n = 9) and Germany (n = 8). Other countries included Australia, Singapore, Portugal, Canada, Iran, Lithuania, Scotland, Netherlands, India, Spain, Türkiye, Brazil and Switzerland.

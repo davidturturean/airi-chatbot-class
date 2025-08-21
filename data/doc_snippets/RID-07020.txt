@@ -1,0 +1,12 @@
+Repository ID: RID-07020
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/AI_Risk_Repository_Preprint.docx
+Title: AI_Risk_Repository_Preprint
+
+Content:
+Search strategy
+
+Our search strategy comprised two stages. In Stage 1 we conducted a systematic search of peer-reviewed and gray literature (i.e., non peer-reviewed materials) to identify relevant articles. We begin by explaining our search-term generation and strategy, followed by our database searches in Scopus and various preprint databases. We then describe our screening process, which utilizes active learning with ASReview. This process includes four phases: initial random screening for training data, application of active learning with specific stopping rules, model switching for comprehensive coverage, and quality evaluation. Finally, we outline our full-text screening and calibration procedures. In Stage 2 we conducted forwards (citation) and backwards (references) searching and expert consultation to identify additional eligible articles. The two stages are described below.
+
+Stage 1: Searching & screening peer reviewed and gray literature
+
+Searching

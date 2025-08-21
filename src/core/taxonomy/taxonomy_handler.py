@@ -6,6 +6,7 @@ Provides structured, complete responses for taxonomy questions based on the prep
 from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 from ...config.logging import get_logger
+from ..query.query_intent_analyzer import QueryIntentAnalyzer, QueryIntent
 
 logger = get_logger(__name__)
 
@@ -25,6 +26,7 @@ class TaxonomyHandler:
         """Initialize taxonomy data structures from the preprint."""
         self._init_causal_taxonomy()
         self._init_domain_taxonomy()
+        self.intent_analyzer = QueryIntentAnalyzer()
     
     def _init_causal_taxonomy(self):
         """Initialize the Causal Taxonomy structure."""
@@ -165,32 +167,44 @@ class TaxonomyHandler:
         """Handle a taxonomy-specific query and return structured response."""
         query_lower = query.lower()
         
-        # Analyze query semantically to determine intent
+        # Analyze query intent semantically
+        intent = self.intent_analyzer.analyze_query(query)
+        
+        # Analyze query focus for routing
         query_focus = self._analyze_query_focus(query_lower)
         
-        # Route to appropriate response generator
+        # Route based on both intent and focus analysis
         if query_focus['is_search']:
             return self._get_search_context_response(query_lower)
         elif query_focus['is_specific_domain']:
             return self._get_specific_domain_response(query_lower, query_focus['domain_id'])
+        elif intent.comparison_mode and self._is_intentionality_comparison(query_lower):
+            return self._get_intentionality_comparison_response(intent)
+        elif intent.enumeration_mode and 'subdomain' in query_lower:
+            return self._get_all_subdomains_response(intent)
         elif query_focus['is_timing_focused']:
             return self._get_timing_focused_response(query_lower)
         elif query_focus['is_statistical']:
             return self._get_statistical_response(query_lower)
         elif query_focus['is_causal']:
-            return self._get_causal_taxonomy_response(query_lower)
+            return self._get_adaptive_causal_response(query_lower, intent)
         elif query_focus['is_domain_list']:
-            return self._get_domain_taxonomy_response(query_lower)
+            return self._get_adaptive_domain_response(query_lower, intent)
         else:
-            # Intelligently decide based on query content
-            if any(term in query_lower for term in ['organize', 'structure', 'framework', 'categorize', 'classify']):
-                return self._get_both_taxonomies_response(query_lower)
-            elif any(term in query_lower for term in ['entity', 'intentional', 'timing', 'when', 'who']):
-                return self._get_causal_taxonomy_response(query_lower)
+            # Intelligent routing based on concepts mentioned
+            if 'intentional' in intent.concepts_mentioned or 'unintentional' in intent.concepts_mentioned:
+                if intent.comparison_mode:
+                    return self._get_intentionality_comparison_response(intent)
+                else:
+                    return self._get_adaptive_causal_response(query_lower, intent)
+            elif any(term in query_lower for term in ['organize', 'structure', 'framework', 'categorize', 'classify']):
+                return self._get_adaptive_both_response(query_lower, intent)
+            elif any(term in query_lower for term in ['entity', 'timing', 'when', 'who']):
+                return self._get_adaptive_causal_response(query_lower, intent)
             elif any(term in query_lower for term in ['domain', 'type', 'kind', 'category']):
-                return self._get_domain_taxonomy_response(query_lower)
+                return self._get_adaptive_domain_response(query_lower, intent)
             else:
-                return self._get_both_taxonomies_response(query_lower)
+                return self._get_adaptive_both_response(query_lower, intent)
     
     def _get_causal_taxonomy_response(self, query: str) -> TaxonomyResponse:
         """Generate response for causal taxonomy queries."""
@@ -539,3 +553,142 @@ The majority of risks ({self.causal_taxonomy['statistics']['timing']['Post-deplo
             taxonomy_type="statistical",
             source="AI Risk Repository Preprint"
         )
+    
+    def _is_intentionality_comparison(self, query: str) -> bool:
+        """Check if query is comparing intentional vs unintentional."""
+        return ('intentional' in query and 'unintentional' in query) or \
+               ('difference' in query and 'intentional' in query)
+    
+    def _get_intentionality_comparison_response(self, intent: QueryIntent) -> TaxonomyResponse:
+        """Provide comparison between intentional and unintentional risks."""
+        content = f"""## Intentional vs Unintentional Risks
+
+### Understanding the Intentionality Dimension
+
+The **Intentionality** dimension in the Causal Taxonomy distinguishes between risks based on whether harmful outcomes were expected or unexpected.
+
+### Key Differences:
+
+#### **Intentional Risks** ({self.causal_taxonomy['statistics']['intentionality']['Intentional']} of all risks)
+- **Definition**: Risk as an **expected outcome** of pursuing a goal
+- **Characteristics**:
+  - Actor knows harmful outcome is likely or certain
+  - Harm is accepted as cost of achieving objective
+  - Often involves trade-offs or calculated decisions
+- **Examples**:
+  - Using AI for surveillance despite privacy concerns
+  - Deploying biased systems for economic advantage
+  - Weaponizing AI capabilities
+  - Accepting job displacement as cost of automation
+
+#### **Unintentional Risks** ({self.causal_taxonomy['statistics']['intentionality']['Unintentional']} of all risks)
+- **Definition**: Risk as an **unexpected outcome**
+- **Characteristics**:
+  - Harm was not anticipated or desired
+  - Often results from oversight, error, or emergence
+  - May involve unforeseen consequences
+- **Examples**:
+  - Bias from incomplete training data
+  - Unexpected model behaviors in production
+  - System failures from edge cases
+  - Unintended discrimination from proxy variables
+
+### Distribution Analysis:
+- Nearly **equal split**: Intentional (34%) vs Unintentional (35%)
+- Remaining 31% are risks without clearly specified intentionality
+- This balance suggests AI risks arise equally from deliberate choices and unexpected consequences
+
+### Interaction with Other Dimensions:
+- **Timing**: Intentional risks more common post-deployment (misuse)
+- **Entity**: Both humans and AI can cause intentional/unintentional risks
+- **Domains**: Malicious use typically intentional; discrimination often unintentional
+
+*Source: The AI Risk Repository (Slattery et al., 2024)*"""
+        
+        return TaxonomyResponse(
+            content=content,
+            taxonomy_type="comparison",
+            source="AI Risk Repository Preprint"
+        )
+    
+    def _get_all_subdomains_response(self, intent: QueryIntent) -> TaxonomyResponse:
+        """Provide complete listing of all 24 subdomains."""
+        content = """## Complete List of 24 AI Risk Subdomains
+
+The AI Risk Repository organizes risks into **7 domains** containing **24 total subdomains**:
+
+"""
+        
+        for domain in self.domain_taxonomy['domains']:
+            content += f"### Domain {domain['id']}: {domain['name']} ({domain['percentage']})\n"
+            content += f"{domain['description']}\n\n"
+            content += "**Subdomains:**\n"
+            for i, subdomain in enumerate(domain['subdomains'], 1):
+                content += f"{i}. {subdomain}\n"
+            content += "\n"
+        
+        content += f"""### Summary:
+- **Total Subdomains:** 24
+- **Domains:** 7
+- **Risks Analyzed:** {self.domain_taxonomy['total_risks']}
+- **Documents:** {self.domain_taxonomy['documents_analyzed']}
+
+This complete enumeration covers all risk categories identified in the repository's comprehensive analysis.
+
+*Source: The AI Risk Repository (Slattery et al., 2024)*"""
+        
+        return TaxonomyResponse(
+            content=content,
+            taxonomy_type="enumeration",
+            source="AI Risk Repository Preprint"
+        )
+    
+    def _get_adaptive_causal_response(self, query: str, intent: QueryIntent) -> TaxonomyResponse:
+        """Generate adaptive causal taxonomy response based on intent."""
+        detail_level = self.intent_analyzer.get_response_detail_level(intent)
+        
+        if detail_level == 'exhaustive' or intent.completeness_level >= 0.7:
+            # Provide complete causal taxonomy with all details
+            return self._get_causal_taxonomy_response(query)
+        else:
+            # Provide standard or summary based on completeness
+            return self._get_causal_taxonomy_response(query)
+    
+    def _get_adaptive_domain_response(self, query: str, intent: QueryIntent) -> TaxonomyResponse:
+        """Generate adaptive domain taxonomy response based on intent."""
+        detail_level = self.intent_analyzer.get_response_detail_level(intent)
+        
+        # Check if asking for complete subdomain list
+        if intent.enumeration_mode and ('subdomain' in query or '24' in query):
+            return self._get_all_subdomains_response(intent)
+        elif detail_level == 'exhaustive' or intent.completeness_level >= 0.7:
+            # Provide complete domain taxonomy with all subdomains
+            return self._get_domain_taxonomy_response(query)
+        else:
+            # Provide overview
+            return self._get_both_taxonomies_response(query)
+    
+    def _get_adaptive_both_response(self, query: str, intent: QueryIntent) -> TaxonomyResponse:
+        """Generate adaptive response showing both taxonomies based on intent."""
+        detail_level = self.intent_analyzer.get_response_detail_level(intent)
+        
+        if detail_level == 'exhaustive':
+            # Combine full details from both taxonomies
+            causal_response = self._get_causal_taxonomy_response(query)
+            domain_response = self._get_domain_taxonomy_response(query)
+            
+            content = f"""## Complete AI Risk Repository Taxonomy Structure
+
+{causal_response.content}
+
+---
+
+{domain_response.content}"""
+            
+            return TaxonomyResponse(
+                content=content,
+                taxonomy_type="both_detailed",
+                source="AI Risk Repository Preprint"
+            )
+        else:
+            return self._get_both_taxonomies_response(query)

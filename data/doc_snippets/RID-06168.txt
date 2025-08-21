@@ -1,0 +1,11 @@
+Repository ID: RID-06168
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+Title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values
+Domain: Unspecified
+Risk Category: AI leads to humans losing control of the future
+
+Content:
+Title: A Survey of the Potential Long-term Impacts of AI: How AI Could Lead to Long-term Changes in Science, Cooperation, Power, Epistemics and Values
+Risk Category: AI leads to humans losing control of the future
+Risk Subcategory: Risks from AIs developing goals and values that are different from humans
+Additional Evidence: "The system could learn the objective “maximise the contents of the memory cell where the score is stored” which, over the long run, will lead it to fool the humans scoring its behaviour into thinking that it is doing what they intended, and eventually seize control over that memory cell, and eliminate actors who might try to interfere with this. When the intended task requiresperforming complex actions in the real world, this alternative strategy would probably allow the system to get much higher scores, much more easily, than successfully performing the task as intended. • Suppose that some system is being trained to further some company’s objective. This system could learn the objective “maximise quarterly revenue” which, over the long run, would lead it to (e.g.) collude with auditors valuing the company's output, fool the company’s directors, and eventually ensure no actor who might reduce the company's revenue can interfere."

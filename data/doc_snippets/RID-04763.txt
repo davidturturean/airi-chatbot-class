@@ -1,0 +1,23 @@
+Repository ID: RID-04763
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+Title: Navigating the Landscape of AI Ethics and Responsibility
+Domain: 6. Socioeconomic and Environmental
+Subdomain: 6.6 > Environmental harm
+Risk Category: Environmental and socioeconomic harms
+Entity: 2 - AI
+Intent: 2 - Unintentional
+Timing: 2 - Post-deployment
+
+Content:
+Title: Navigating the Landscape of AI Ethics and Responsibility
+Domain: 6. Socioeconomic and Environmental
+Sub-domain: 6.6 > Environmental harm
+Risk Category: Environmental and socioeconomic harms
+Description: "At a time of increasing climate urgency,
+energy consumption and the carbon footprint of AI applications are also matters of ethics
+and responsibility [68]. As with other energy-intensive technologies like proof-of-work
+blockchain, the call is to research more environmentally sustainable algorithms to offset
+the increasing use scale."
+Entity: 2 - AI
+Intent: 2 - Unintentional
+Timing: 2 - Post-deployment

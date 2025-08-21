@@ -3,19 +3,25 @@ import { Header } from '../../components/header';
 import { SnippetModal } from '../../components/snippet-modal';
 import { InfoTooltip } from '../../components/info-tooltip';
 import { LanguageSelector } from '../../components/language-selector';
+import { FeatureTogglePanel } from '../../components/feature-toggle-panel';
 import { useSidebar } from '@/context/SidebarContext';
 import { useChat } from '@/context/ChatContext';
+import { useFeatures } from '@/context/FeatureContext';
 import { useState, useEffect } from 'react';
-import { FEATURE_FLAGS, isSidebarEnabled } from '@/config/features';
+import { Settings } from 'lucide-react';
 
 export function FullChat() {
 
   const { previousMessages, currentMessage, handleSubmit, isLoading, sessionId, clearSession, sessionLanguage, setSessionLanguage } = useChat();
   const { domain, setDomain, relatedDocuments, suggestedUseCases, handleDomainSubmit } = useSidebar();
+  const { features, isSidebarEnabled: isSidebarEnabledFromBackend } = useFeatures();
   
   // Modal state for snippet display
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRid, setSelectedRid] = useState<string | null>(null);
+  
+  // Feature toggle panel state
+  const [isFeaturePanelOpen, setIsFeaturePanelOpen] = useState(false);
 
   const handleFileClick = async (url: string) => {
     // Extract RID or META ID from URL and open modal
@@ -43,6 +49,22 @@ export function FullChat() {
     }
   };
 
+  // Keyboard shortcut for feature panel (Cmd+Shift+F on Mac, Ctrl+Shift+F on Windows/Linux)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      const modifier = isMac ? e.metaKey : e.ctrlKey;
+      
+      if (modifier && e.shiftKey && e.key === 'F') {
+        e.preventDefault();
+        setIsFeaturePanelOpen(prev => !prev);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   // Listen for snippet modal events from chat component
   useEffect(() => {
     const handleOpenSnippetModal = (event: CustomEvent) => {
@@ -67,9 +89,9 @@ export function FullChat() {
     <div className="min-h-screen bg-gray-50 text-black flex flex-col">
       <Header />
 
-      <main className={`flex-1 p-6 xl:p-10 grid gap-6 ${isSidebarEnabled() ? 'grid-cols-1 xl:grid-cols-3' : 'grid-cols-1'}`}>
+      <main className={`flex-1 p-6 xl:p-10 grid gap-6 ${isSidebarEnabledFromBackend ? 'grid-cols-1 xl:grid-cols-3' : 'grid-cols-1'}`}>
         {/* Left Section – Text + Chat + Example Inputs */}
-        <div className={`${isSidebarEnabled() ? 'xl:col-span-2' : ''} space-y-6`}>
+        <div className={`${isSidebarEnabledFromBackend ? 'xl:col-span-2' : ''} space-y-6`}>
           {/* 0. Text Explainer */}
           <section className="space-y-2">
             <div className="flex items-start justify-between">
@@ -80,12 +102,23 @@ export function FullChat() {
                   ask about governance frameworks, benchmarks, mitigations, and more.
                 </p>
               </div>
-              <div className="ml-4">
-                <LanguageSelector
-                  sessionId={sessionId}
-                  currentLanguage={sessionLanguage}
-                  onLanguageChange={setSessionLanguage}
-                />
+              <div className="flex items-center gap-4 ml-4">
+                {features.SHOW_LANGUAGE_SELECTOR && (
+                  <LanguageSelector
+                    sessionId={sessionId}
+                    currentLanguage={sessionLanguage}
+                    onLanguageChange={setSessionLanguage}
+                  />
+                )}
+                {features.SHOW_FEATURE_TOGGLE_PANEL && (
+                  <button
+                    onClick={() => setIsFeaturePanelOpen(true)}
+                    className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+                    title={`Feature Settings (${navigator.platform.toUpperCase().indexOf('MAC') >= 0 ? 'Cmd' : 'Ctrl'}+Shift+F)`}
+                  >
+                    <Settings className="w-5 h-5 text-gray-600" />
+                  </button>
+                )}
               </div>
             </div>
               <div className="bg-white border rounded-xl p-4 shadow-sm">
@@ -102,10 +135,10 @@ export function FullChat() {
         </div>
 
         {/* 1. Right Panel – Related Docs, Frameworks, Benchmarks - Only show if any sidebar feature is enabled */}
-        {isSidebarEnabled() && (
+        {isSidebarEnabledFromBackend && (
           <aside className="space-y-6 hidden xl:block">
             {/* Related Documents Section - conditionally rendered */}
-            {FEATURE_FLAGS.SHOW_RELATED_DOCUMENTS && (
+            {features.SHOW_RELATED_DOCUMENTS && (
               <div className="bg-white border rounded-xl p-4 shadow-sm">
                 <h3 className="text-md font-semibold mb-2">Related Documents</h3>
                 <ul className="text-sm text-gray-600 space-y-2">
@@ -125,7 +158,7 @@ export function FullChat() {
             )}
 
             {/* Personalized Questions Section - conditionally rendered */}
-            {FEATURE_FLAGS.SHOW_PERSONALIZED_QUESTIONS && (
+            {features.SHOW_PERSONALIZED_QUESTIONS && (
               <div className="bg-white border-2 border-gray-200 rounded-xl p-5 shadow-sm">
                 <h3 className="text-md font-semibold mb-1 flex items-center gap-2">
                   Get Personalized Questions
@@ -193,7 +226,7 @@ export function FullChat() {
             )}
 
             {/* General Topics Section - conditionally rendered */}
-            {FEATURE_FLAGS.SHOW_GENERAL_TOPICS && (
+            {features.SHOW_GENERAL_TOPICS && (
               <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
                 <h3 className="text-md font-semibold mb-1 flex items-center gap-2">
                   Or Explore General Topics
@@ -215,7 +248,7 @@ export function FullChat() {
             )}
           
             {/* Session management - in sidebar when sidebar is enabled */}
-            {FEATURE_FLAGS.SHOW_SESSION_WINDOW && (
+            {features.SHOW_SESSION_WINDOW && (
               <div className="bg-white border rounded-xl p-4 shadow-sm">
                 <h3 className="text-md font-semibold mb-2">Session</h3>
                 <p className="text-xs text-gray-500 mb-2">ID: {sessionId.slice(0, 8)}...</p>
@@ -231,7 +264,7 @@ export function FullChat() {
         )}
         
         {/* Floating Session window - when sidebar is disabled */}
-        {!isSidebarEnabled() && FEATURE_FLAGS.SHOW_SESSION_WINDOW && (
+        {!isSidebarEnabledFromBackend && features.SHOW_SESSION_WINDOW && (
           <div className="fixed top-20 right-6 bg-white border rounded-xl p-4 shadow-lg z-10 min-w-[200px]">
             <h3 className="text-md font-semibold mb-2">Session</h3>
             <p className="text-xs text-gray-500 mb-2">ID: {sessionId.slice(0, 8)}...</p>
@@ -255,6 +288,14 @@ export function FullChat() {
         rid={selectedRid}
         sessionId={sessionId}
       />
+      
+      {/* Feature Toggle Panel */}
+      {features.SHOW_FEATURE_TOGGLE_PANEL && (
+        <FeatureTogglePanel
+          isOpen={isFeaturePanelOpen}
+          onClose={() => setIsFeaturePanelOpen(false)}
+        />
+      )}
     </div>
   );
 }

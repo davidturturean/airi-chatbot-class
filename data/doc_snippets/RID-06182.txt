@@ -1,0 +1,18 @@
+Repository ID: RID-06182
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+Title: Future Risks of Frontier AI
+Domain: 7. AI System Safety, Failures, & Limitations
+Subdomain: 7.3 > Lack of capability or robustness
+Risk Category: Poor performance of a model used for its intended purpose, for example leading to biased decisions
+Entity: 2 - AI
+Intent: 2 - Unintentional
+Timing: 2 - Post-deployment
+
+Content:
+Title: Future Risks of Frontier AI
+Domain: 7. AI System Safety, Failures, & Limitations
+Sub-domain: 7.3 > Lack of capability or robustness
+Risk Category: Poor performance of a model used for its intended purpose, for example leading to biased decisions
+Entity: 2 - AI
+Intent: 2 - Unintentional
+Timing: 2 - Post-deployment

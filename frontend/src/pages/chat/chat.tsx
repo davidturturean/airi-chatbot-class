@@ -4,8 +4,7 @@ import { useState } from "react";
 import { message } from "../../interfaces/interfaces";
 import ReactMarkdown from "react-markdown";
 
-const QUESTIONS = ["Find AI risk papers related to “Pre-deployment” timing",
-       "What are the main risk categories in the AI Risk Database v3?"];
+const QUESTIONS = ["What are the main risk categories in the AI Risk Database v3?"];
 
 interface ChatProps {
   previousMessages: message[];

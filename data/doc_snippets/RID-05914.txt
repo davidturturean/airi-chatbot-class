@@ -1,0 +1,11 @@
+Repository ID: RID-05914
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+Title: International Scientific Report on the Safety of Advanced AI
+Domain: Unspecified
+Risk Category: Risks from Malfunctions
+
+Content:
+Title: International Scientific Report on the Safety of Advanced AI
+Risk Category: Risks from Malfunctions
+Risk Subcategory: Risks from bias and underrepresentation
+Additional Evidence: "There are several well- documented cases of AI systems displaying discriminatory behaviour based on race, gender, age, and disability status, causing substantial harm. Given increasingly widespread adoption of AI systems across various sectors, such behaviour can perpetuate various types of bias, including race, gender, age, and disability. This can cause serious harm if these systems are entrusted with increasingly high- stakes decisions which can have severe consequences for individuals."

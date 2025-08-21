@@ -1,0 +1,19 @@
+Repository ID: RID-05614
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+Title: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks
+Domain: 1. Discrimination & Toxicity
+Subdomain: 1.1 > Unfair discrimination and misrepresentation
+Risk Category: Bias and fairness
+Entity: 2 - AI
+Intent: 2 - Unintentional
+Timing: 3 - Other
+
+Content:
+Title: Ethical Issues in the Development of Artificial Intelligence: Recognizing the Risks
+Domain: 1. Discrimination & Toxicity
+Sub-domain: 1.1 > Unfair discrimination and misrepresentation
+Risk Category: Bias and fairness
+Description: "Participants were concerned that AI systems might perpetuate current prejudices and discrimination, notably in hiring, lending and law enforcement. They stressed the importance of designers creating AI systems that favour justice and avoid biases. The possibility that AI systems may unwittingly perpetuate existing prejudices and discrimination, particularly in sensitive industries such as employment, lending and law enforcement, raises ethical concerns about AI as well as bias and justice issues (Table 1). Because AI systems are trained on historical data, they may inherit and reproduce biases from previous datasets. As a result, AI judgements may have an unjust impact on specific populations, increasing socioeconomic inequalities and fostering discriminatory practises. Participants in the research emphasize the need of AI developers creating systems that promote justice and actively seek to minimise biases."
+Entity: 2 - AI
+Intent: 2 - Unintentional
+Timing: 3 - Other

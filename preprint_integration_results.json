@@ -1,0 +1,85 @@
+{
+  "timestamp": "2025-08-19T18:57:52.908610",
+  "summary": {
+    "total_tests": 5,
+    "successful": 2,
+    "preprint_found": 2,
+    "success_rate": "40%"
+  },
+  "results": [
+    {
+      "query": "What systematic review methodology was used?",
+      "success": false,
+      "match_percentage": 33.33333333333333,
+      "found_terms": [
+        "systematic review"
+      ],
+      "expected_terms": [
+        "PRISMA",
+        "systematic review",
+        "screening"
+      ],
+      "preprint_content": true,
+      "description": "Should describe PRISMA methodology"
+    },
+    {
+      "query": "How many documents were analyzed in the AI Risk Repository?",
+      "success": false,
+      "match_percentage": 33.33333333333333,
+      "found_terms": [
+        "documents"
+      ],
+      "expected_terms": [
+        "777",
+        "documents",
+        "analyzed"
+      ],
+      "preprint_content": false,
+      "description": "Should mention 777 documents"
+    },
+    {
+      "query": "Who are the authors of the AI Risk Repository preprint?",
+      "success": true,
+      "match_percentage": 100.0,
+      "found_terms": [
+        "Slattery",
+        "authors"
+      ],
+      "expected_terms": [
+        "Slattery",
+        "authors"
+      ],
+      "preprint_content": true,
+      "description": "Should mention Slattery et al"
+    },
+    {
+      "query": "What are the limitations of the AI Risk Repository taxonomy?",
+      "success": true,
+      "match_percentage": 50.0,
+      "found_terms": [
+        "limitation"
+      ],
+      "expected_terms": [
+        "limitation",
+        "taxonomy"
+      ],
+      "preprint_content": false,
+      "description": "Should discuss taxonomy limitations"
+    },
+    {
+      "query": "What coverage did Gabriel et al provide in their review?",
+      "success": false,
+      "match_percentage": 33.33333333333333,
+      "found_terms": [
+        "review"
+      ],
+      "expected_terms": [
+        "Gabriel",
+        "coverage",
+        "review"
+      ],
+      "preprint_content": false,
+      "description": "Should mention Gabriel et al coverage"
+    }
+  ]
+}

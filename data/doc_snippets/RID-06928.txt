@@ -1,0 +1,15 @@
+Repository ID: RID-06928
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+Title: AI Risk Domain: 1.1 > Unfair discrimination and misrepresentation
+Domain: 1.1 > Unfair discrimination and misrepresentation
+
+Content:
+may involve demographic word prevalence and stereotypical contents. Concretely, in massive corpora, the prevalence of different pronouns and identities could influence an LLM’s tendency about gender, nationality, race, religion, and culture [4]. For instance, the pronoun He is over-represented compared with the pronoun She in the training corpora, leading LLMs to learn less context about She and thus generate He with a higher probability [4], [102]. Furthermore, stereotypical bias [103] which refers to overgeneralized beliefs about a particular group of people, usually keeps incorrect values and is hidden in the large-scale benign contents. In effect, defining what should be regarded as a stereotype in the corpora is still an open problem."
+Entity: 2 - AI
+Intent: 2 - Unintentional
+Timing: 1 - Pre-deployment
+
+Risk Entry 4:
+Title: Navigating the Landscape of AI Ethics and Responsibility
+Domain: 1. Discrimination & Toxicity
+Sub-domain: 1.1 > Unfair discrimination and

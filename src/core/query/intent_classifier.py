@@ -49,6 +49,9 @@ class IntentClassifier:
         # Cache for recent classifications
         self._cache = {}
         self._cache_max_size = 1000
+        
+        # Defer embedding initialization - will happen on first use
+        self._embeddings_initialized = False
     
     def _init_patterns(self):
         """Initialize semantic intent classification with reference embeddings."""
@@ -61,7 +64,16 @@ class IntentClassifier:
                 "Employment impacts and job displacement from automation",
                 "Privacy violations and security risks in AI systems",
                 "AI governance, regulation, and policy frameworks",
-                "Autonomous systems ethics and safety protocols",  
+                "Autonomous systems ethics and safety protocols",
+                # Add research methodology and academic queries
+                "PRISMA methodology systematic review process",
+                "Research limitations and future work directions",
+                "Comparative analysis with other frameworks",
+                "Screening criteria and document selection",
+                "Methodology for systematic literature review",
+                "How this research was conducted",
+                "Comparison with Weidinger Gabriel Yampolskiy frameworks",
+                "Study limitations and scope boundaries",  
                 "Corporate AI deployment assessments and audits",
                 "Government studies on AI impacts and risks",
                 "Cross-domain analysis of AI risks",
@@ -190,7 +202,13 @@ class IntentClassifier:
             'risk categories', 'ai risk database v3', 'taxonomy structure',
             'entity intentionality timing', 'pre-deployment post-deployment',
             'discrimination toxicity privacy security misinformation',
-            'human-computer interaction socioeconomic environmental'
+            'human-computer interaction socioeconomic environmental',
+            # Add more specific patterns for failing queries
+            'subdomains under', 'all the subdomains', 'privacy & security',
+            'discrimination & toxicity', 'ai system safety',
+            'complete structure', 'risk categorization',
+            'percentage of risks', 'each causal category',
+            'malicious actors', 'human-computer'
         ]
         
         # Metadata query patterns for quick detection - only specific terms
@@ -281,19 +299,50 @@ class IntentClassifier:
                     should_process=True
                 )
         
+        # Special check for subdomain queries
+        if 'subdomain' in query_lower and any(domain in query_lower for domain in 
+            ['privacy', 'security', 'discrimination', 'toxicity', 'misinformation', 
+             'malicious', 'human-computer', 'socioeconomic', 'environmental', 'ai system']):
+            return IntentResult(
+                category=IntentCategory.TAXONOMY_QUERY,
+                confidence=0.95,
+                reasoning="Query about specific domain subdomains",
+                should_process=True
+            )
+        
+        # Check for structure/categorization queries
+        if ('structure' in query_lower or 'categorization' in query_lower) and \
+           ('ai risk' in query_lower or 'risk' in query_lower):
+            return IntentResult(
+                category=IntentCategory.TAXONOMY_QUERY,
+                confidence=0.9,
+                reasoning="Query about AI risk structure/categorization",
+                should_process=True
+            )
+        
+        # Check for percentage/statistics about causal categories
+        if 'percentage' in query_lower and ('causal' in query_lower or 
+            any(term in query_lower for term in ['entity', 'intentionality', 'timing', 
+                                                   'human', 'ai caused', 'pre-deployment', 'post-deployment'])):
+            return IntentResult(
+                category=IntentCategory.TAXONOMY_QUERY,
+                confidence=0.9,
+                reasoning="Query about causal taxonomy statistics",
+                should_process=True
+            )
+        
         return None
     
     def check_taxonomy_relevance(self, query: str) -> float:
         """Calculate taxonomy relevance score for a query using semantic similarity."""
         try:
-            # Lazy load embeddings
-            if self._embedding_model is None:
-                self._initialize_embeddings()
+            # Initialize embeddings on first use if needed
+            if not self._embeddings_initialized:
+                self._ensure_embeddings_initialized()
             
-            # Check if embeddings are properly initialized
-            if self._embedding_model is None:
-                logger.warning("Embedding model not available for taxonomy relevance check")
-                # Fallback to keyword-based relevance
+            # Check if embeddings are available
+            if self._embedding_model is None or not self._category_embeddings:
+                # Use keyword-based relevance as primary fallback
                 return self._keyword_taxonomy_relevance(query)
             
             # Get query embedding
@@ -302,14 +351,25 @@ class IntentClassifier:
             # Calculate similarity to taxonomy reference examples
             if IntentCategory.TAXONOMY_QUERY in self._category_embeddings:
                 taxonomy_embeddings = self._category_embeddings[IntentCategory.TAXONOMY_QUERY]
-                similarities = self._cosine_similarity(query_embedding, taxonomy_embeddings)[0]
+                similarities = self._cosine_similarity(query_embedding, taxonomy_embeddings)
                 
-                # Return max similarity score
-                return float(max(similarities))
+                # Check if similarities were calculated successfully
+                if similarities is not None and similarities.size > 0:
+                    # Get max similarity score
+                    max_similarity = float(max(similarities[0]))
+                    
+                    # Boost score if query contains specific taxonomy concepts
+                    concept_boost = self._get_taxonomy_concept_boost(query.lower())
+                    
+                    # Combine semantic similarity with concept detection
+                    final_score = min(1.0, max_similarity + concept_boost)
+                    
+                    return final_score
             
-            return 0.0
+            # Fallback to keyword-based relevance
+            return self._keyword_taxonomy_relevance(query)
         except Exception as e:
-            logger.warning(f"Error in taxonomy relevance check: {e}")
+            logger.debug(f"Error in taxonomy relevance check (using fallback): {e}")
             # Fallback to keyword-based relevance
             return self._keyword_taxonomy_relevance(query)
     
@@ -336,11 +396,35 @@ class IntentClassifier:
         
         return min(score, 1.0)  # Cap at 1.0
     
+    def _get_taxonomy_concept_boost(self, query: str) -> float:
+        """Calculate boost score based on presence of taxonomy concepts."""
+        boost = 0.0
+        
+        # Strong taxonomy indicators
+        strong_concepts = [
+            'intentional', 'unintentional', 'entity', 'timing',
+            'pre-deployment', 'post-deployment', 'causal taxonomy',
+            'domain taxonomy', '7 domains', '24 subdomains'
+        ]
+        
+        # Check for strong concept pairs (e.g., "intentional vs unintentional")
+        if 'intentional' in query and 'unintentional' in query:
+            boost += 0.3
+        elif any(concept in query for concept in strong_concepts):
+            boost += 0.2
+        
+        # Check for comparison patterns with taxonomy terms
+        if ('difference' in query or 'compare' in query or 'vs' in query):
+            if any(term in query for term in ['intentional', 'entity', 'timing', 'domain']):
+                boost += 0.2
+        
+        return boost
+    
     def contains_taxonomy_concepts(self, query: str) -> bool:
-        """Check if query contains taxonomy-related concepts semantically."""
+        """Check if query contains taxonomy-related concepts."""
         query_lower = query.lower()
         
-        # Taxonomy concept keywords (used as fallback)
+        # Taxonomy concept keywords 
         taxonomy_concepts = [
             'domain', 'category', 'taxonomy', 'classification', 'organize',
             'pre-deployment', 'post-deployment', 'timing', 'entity',
@@ -355,9 +439,16 @@ class IntentClassifier:
             if concept in query_lower:
                 return True
         
-        # Also check semantic similarity if no direct match
-        relevance_score = self.check_taxonomy_relevance(query)
-        return relevance_score > 0.4  # Lower threshold for concept detection
+        # Only check semantic similarity if embeddings are available
+        # Avoid calling check_taxonomy_relevance to prevent potential recursion
+        if self._embedding_model is not None and self._category_embeddings:
+            try:
+                relevance_score = self._keyword_taxonomy_relevance(query)
+                return relevance_score > 0.3  # Lower threshold for concept detection
+            except:
+                pass
+        
+        return False
     
     def _check_security_patterns(self, query: str) -> Optional[IntentResult]:
         """Quick security and junk pattern check."""
@@ -456,9 +547,13 @@ class IntentClassifier:
     def _classify_by_semantics(self, query: str) -> IntentResult:
         """Classify intent using semantic similarity to reference texts."""
         try:
-            # Initialize embeddings if needed
-            if self._category_embeddings is None:
-                self._initialize_embeddings()
+            # Initialize embeddings on first use if needed
+            if not self._embeddings_initialized:
+                self._ensure_embeddings_initialized()
+            
+            # Check if embeddings are available
+            if not self._category_embeddings or self._embedding_model is None:
+                return self._fallback_classification(query)
             
             # Get query embedding
             query_embedding = self._get_embedding(query)
@@ -482,38 +577,76 @@ class IntentClassifier:
             logger.warning(f"Semantic classification failed: {e}")
             return self._fallback_classification(query)
     
-    def _initialize_embeddings(self):
-        """Initialize category reference embeddings."""
-        try:
-            # Try to use sentence-transformers for embeddings
+    def _ensure_embeddings_initialized(self):
+        """Ensure embeddings are initialized, but only once."""
+        if not self._embeddings_initialized:
+            logger.info("Initializing intent classifier embeddings on first use...")
+            self._initialize_embeddings_with_timeout()
+            self._embeddings_initialized = True
+    
+    def _initialize_embeddings_with_timeout(self, timeout: float = 10.0):
+        """Initialize embeddings with timeout protection."""
+        import concurrent.futures
+        import signal
+        
+        # Initialize to None first
+        self._embedding_model = None
+        self._category_embeddings = {}
+        
+        def init_embeddings():
+            """Inner function to initialize embeddings."""
             try:
+                # Try to use sentence-transformers for embeddings
                 from sentence_transformers import SentenceTransformer
-                self._embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
-                logger.info("Using SentenceTransformer for embeddings")
+                model = SentenceTransformer('all-MiniLM-L6-v2')
+                logger.info("SentenceTransformer model loaded successfully")
+                
+                category_embeddings = {}
+                for category, reference_texts in self.category_references.items():
+                    if reference_texts:
+                        # Get embeddings for all reference texts at once
+                        embeddings = model.encode(reference_texts)
+                        category_embeddings[category] = embeddings
+                
+                return model, category_embeddings
             except ImportError:
                 logger.warning("SentenceTransformer not available, embeddings disabled")
-                self._embedding_model = None
-                self._category_embeddings = {}
-                return
-            
-            self._category_embeddings = {}
-            
-            for category, reference_texts in self.category_references.items():
-                if reference_texts:
-                    # Get embeddings for all reference texts at once
-                    embeddings = self._embedding_model.encode(reference_texts)
-                    self._category_embeddings[category] = embeddings
-            
+                return None, {}
+            except Exception as e:
+                logger.error(f"Failed to initialize embeddings: {e}")
+                return None, {}
+        
+        try:
+            # Try to initialize with timeout
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                future = executor.submit(init_embeddings)
+                try:
+                    model, embeddings = future.result(timeout=timeout)
+                    self._embedding_model = model
+                    self._category_embeddings = embeddings
+                    if model:
+                        logger.info("Embeddings initialized successfully")
+                    else:
+                        logger.warning("Embeddings initialization returned None - using keyword fallback")
+                except concurrent.futures.TimeoutError:
+                    logger.warning(f"Embedding initialization timed out after {timeout}s - using keyword fallback")
+                    future.cancel()
         except Exception as e:
-            logger.error(f"Failed to initialize embeddings: {e}")
-            self._embedding_model = None
-            self._category_embeddings = {}
+            logger.error(f"Error during embedding initialization: {e}")
+            logger.info("Will use keyword-based classification as fallback")
+    
+    def _initialize_embeddings(self):
+        """Initialize category reference embeddings (legacy method for compatibility)."""
+        # This method is now called only if lazy initialization is still needed
+        # It delegates to the timeout-protected version
+        if self._embedding_model is None and self._category_embeddings == {}:
+            self._initialize_embeddings_with_timeout()
     
     def _get_embedding(self, text: str):
         """Get embedding for text."""
         try:
             if self._embedding_model:
-                return self._embedding_model.get_embedding(text)
+                return self._embedding_model.encode([text])
         except Exception as e:
             logger.warning(f"Failed to get embedding: {e}")
         return None

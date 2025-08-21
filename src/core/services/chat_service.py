@@ -9,6 +9,8 @@ from ..models.gemini import GeminiModel
 from ..storage.vector_store import VectorStore
 from ..query.processor import QueryProcessor
 from .citation_service import CitationService
+# Import intent classifier at module level to ensure it initializes at startup
+from ..query.intent_classifier import intent_classifier, IntentCategory
 # Import these locally to avoid import errors
 # from ..validation.response_validator import validation_chain
 # from ..metadata import metadata_service
@@ -87,7 +89,7 @@ class ChatService:
                 # No explicit selection, check session or detect
                 language_info = self._get_or_detect_language(message, session_id)
             # 1. Intent classification (Phase 2.1) - Using working version from copy folder
-            from ...core.query.intent_classifier import intent_classifier, IntentCategory
+            # Intent classifier is now imported at module level for proper initialization
             intent_result = intent_classifier.classify_intent(message)
             
             # 2. Route based on intent category
@@ -96,13 +98,19 @@ class ChatService:
                 logger.info(f"Processing taxonomy query (confidence: {intent_result.confidence:.2f})")
                 
                 try:
+                    logger.info("Attempting to import TaxonomyHandler...")
                     from ..taxonomy.taxonomy_handler import TaxonomyHandler
+                    logger.info("TaxonomyHandler imported successfully")
                     
                     # Create taxonomy handler instance
+                    logger.info("Creating TaxonomyHandler instance...")
                     taxonomy_handler = TaxonomyHandler()
+                    logger.info("TaxonomyHandler instance created successfully")
                     
                     # Get structured taxonomy response
+                    logger.info(f"Calling handle_taxonomy_query with message: {message[:100]}...")
                     taxonomy_response = taxonomy_handler.handle_taxonomy_query(message)
+                    logger.info("Taxonomy response generated successfully")
                     
                     # Handle language translation if needed
                     response_content = taxonomy_response.content
@@ -141,7 +149,10 @@ Translate technical terms appropriately for {language_name} speakers."""
                     return response_content, sources, language_info
                     
                 except Exception as e:
+                    import traceback
                     logger.error(f"Failed to handle taxonomy query: {e}")
+                    logger.error(f"Exception type: {type(e).__name__}")
+                    logger.error(f"Full traceback:\n{traceback.format_exc()}")
                     # Fall through to metadata handler as backup
                     intent_result.category = IntentCategory.METADATA_QUERY
             
@@ -277,7 +288,8 @@ Translate technical terms appropriately for {language_name} speakers."""
                 taxonomy_relevance = intent_classifier.check_taxonomy_relevance(message)
                 logger.info(f"Taxonomy relevance check: {taxonomy_relevance:.2f} for uncertain query")
                 
-                if taxonomy_relevance > 0.5:
+                # Lower threshold and add concept checking for better coverage
+                if taxonomy_relevance > 0.4 or intent_classifier.contains_taxonomy_concepts(message):
                     # Route to taxonomy handler
                     logger.info(f"Routing to taxonomy handler based on relevance score: {taxonomy_relevance:.2f}")
                     try:

@@ -1,0 +1,914 @@
+{
+  "metadata": {
+    "date": "2025-08-19T18:57:39.659569",
+    "total_tests": 20,
+    "passed": 18,
+    "pass_rate": 90.0,
+    "categories": {
+      "enumeration": {
+        "total": 5,
+        "passed": 5
+      },
+      "comparison": {
+        "total": 4,
+        "passed": 2
+      },
+      "statistics": {
+        "total": 3,
+        "passed": 3
+      },
+      "mixed": {
+        "total": 2,
+        "passed": 2
+      },
+      "detail": {
+        "total": 2,
+        "passed": 2
+      },
+      "natural": {
+        "total": 2,
+        "passed": 2
+      },
+      "edge": {
+        "total": 2,
+        "passed": 2
+      }
+    }
+  },
+  "results": [
+    {
+      "test_id": 1,
+      "category": "enumeration",
+      "query": "List all 24 subdomains organized by domain",
+      "description": "Should list ALL 24 subdomains, not just domain names",
+      "intent_analysis": {
+        "completeness_level": 1.0,
+        "expected_completeness": 0.9,
+        "completeness_met": true,
+        "query_type": "enumeration",
+        "enumeration_mode": true,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "ai",
+          "domain",
+          "subdomain"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 2163,
+        "preview": "## Complete List of 24 AI Risk Subdomains\n\nThe AI Risk Repository organizes risks into **7 domains** containing **24 total subdomains**:\n\n### Domain 1: Discrimination & Toxicity (16.2%)\nRisks related to AI systems producing discriminatory outputs or exposing users to toxic content\n\n**Subdomains:**\n1. Discrimination & bias\n2. Exposure to toxic content\n3. Aggression & violence\n\n### Domain 2: Privacy & Security (15.8%)\nRisks involving data privacy violations, security vulnerabilities, and unauthori...",
+        "full_text": "## Complete List of 24 AI Risk Subdomains\n\nThe AI Risk Repository organizes risks into **7 domains** containing **24 total subdomains**:\n\n### Domain 1: Discrimination & Toxicity (16.2%)\nRisks related to AI systems producing discriminatory outputs or exposing users to toxic content\n\n**Subdomains:**\n1. Discrimination & bias\n2. Exposure to toxic content\n3. Aggression & violence\n\n### Domain 2: Privacy & Security (15.8%)\nRisks involving data privacy violations, security vulnerabilities, and unauthorized access\n\n**Subdomains:**\n1. Privacy violations\n2. Security vulnerabilities & attacks\n3. Data leaks & unauthorized access\n\n### Domain 3: Misinformation (12.4%)\nRisks from AI generating or spreading false, misleading, or harmful information\n\n**Subdomains:**\n1. Generating or spreading misinformation\n2. Harmful content generation\n3. Information manipulation\n\n### Domain 4: Malicious Actors & Misuse (11.6%)\nRisks from intentional misuse of AI systems for harmful purposes\n\n**Subdomains:**\n1. Fraud & deception\n2. Malicious use\n3. Competitive & geopolitical risks\n\n### Domain 5: Human-Computer Interaction (14.9%)\nRisks arising from how humans interact with and are affected by AI systems\n\n**Subdomains:**\n1. Overreliance on AI\n2. Manipulation & anthropomorphism\n3. Automation & employment\n4. Degradation of human capabilities\n\n### Domain 6: Socioeconomic & Environmental (13.5%)\nBroader societal, economic, and environmental impacts of AI systems\n\n**Subdomains:**\n1. Concentration of power\n2. Environmental impacts\n3. Societal & cultural harms\n4. Economic harms\n\n### Domain 7: AI System Safety, Failures, & Limitations (15.6%)\nTechnical risks related to AI system performance, reliability, and safety\n\n**Subdomains:**\n1. Performance issues\n2. Safety & alignment problems\n3. Lack of transparency & explainability\n4. Weaponization & mass destruction\n5. Existential risks\n6. Other system risks\n\n### Summary:\n- **Total Subdomains:** 24\n- **Domains:** 7\n- **Risks Analyzed:** 1612\n- **Documents:** 65\n\nThis complete enumeration covers all risk categories identified in the repository's comprehensive analysis.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "Discrimination & bias",
+          "Privacy violations",
+          "Fraud & deception",
+          "Overreliance on AI",
+          "Environmental impacts",
+          "Performance issues",
+          "Existential risks"
+        ],
+        "found_elements": [
+          "Discrimination & bias",
+          "Privacy violations",
+          "Fraud & deception",
+          "Overreliance on AI",
+          "Environmental impacts",
+          "Performance issues",
+          "Existential risks"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 2,
+      "category": "comparison",
+      "query": "What's the difference between intentional and unintentional risks?",
+      "description": "Should explain both concepts with statistics",
+      "intent_analysis": {
+        "completeness_level": 0.45,
+        "expected_completeness": 0.4,
+        "completeness_met": true,
+        "query_type": "comparison",
+        "enumeration_mode": false,
+        "comparison_mode": true,
+        "concepts_mentioned": [
+          "unintentional",
+          "intentional"
+        ],
+        "detail_level": "moderate"
+      },
+      "response": {
+        "length": 1796,
+        "preview": "## Intentional vs Unintentional Risks\n\n### Understanding the Intentionality Dimension\n\nThe **Intentionality** dimension in the Causal Taxonomy distinguishes between risks based on whether harmful outcomes were expected or unexpected.\n\n### Key Differences:\n\n#### **Intentional Risks** (34% of all risks)\n- **Definition**: Risk as an **expected outcome** of pursuing a goal\n- **Characteristics**:\n  - Actor knows harmful outcome is likely or certain\n  - Harm is accepted as cost of achieving objective\n...",
+        "full_text": "## Intentional vs Unintentional Risks\n\n### Understanding the Intentionality Dimension\n\nThe **Intentionality** dimension in the Causal Taxonomy distinguishes between risks based on whether harmful outcomes were expected or unexpected.\n\n### Key Differences:\n\n#### **Intentional Risks** (34% of all risks)\n- **Definition**: Risk as an **expected outcome** of pursuing a goal\n- **Characteristics**:\n  - Actor knows harmful outcome is likely or certain\n  - Harm is accepted as cost of achieving objective\n  - Often involves trade-offs or calculated decisions\n- **Examples**:\n  - Using AI for surveillance despite privacy concerns\n  - Deploying biased systems for economic advantage\n  - Weaponizing AI capabilities\n  - Accepting job displacement as cost of automation\n\n#### **Unintentional Risks** (35% of all risks)\n- **Definition**: Risk as an **unexpected outcome**\n- **Characteristics**:\n  - Harm was not anticipated or desired\n  - Often results from oversight, error, or emergence\n  - May involve unforeseen consequences\n- **Examples**:\n  - Bias from incomplete training data\n  - Unexpected model behaviors in production\n  - System failures from edge cases\n  - Unintended discrimination from proxy variables\n\n### Distribution Analysis:\n- Nearly **equal split**: Intentional (34%) vs Unintentional (35%)\n- Remaining 31% are risks without clearly specified intentionality\n- This balance suggests AI risks arise equally from deliberate choices and unexpected consequences\n\n### Interaction with Other Dimensions:\n- **Timing**: Intentional risks more common post-deployment (misuse)\n- **Entity**: Both humans and AI can cause intentional/unintentional risks\n- **Domains**: Malicious use typically intentional; discrimination often unintentional\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "Intentional",
+          "Unintentional",
+          "expected outcome",
+          "unexpected outcome",
+          "34%",
+          "35%"
+        ],
+        "found_elements": [
+          "Intentional",
+          "Unintentional",
+          "expected outcome",
+          "unexpected outcome",
+          "34%",
+          "35%"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 3,
+      "category": "enumeration",
+      "query": "Show me every domain in the AI risk taxonomy",
+      "description": "Should list all 7 domains with details",
+      "intent_analysis": {
+        "completeness_level": 1.0,
+        "expected_completeness": 0.8,
+        "completeness_met": true,
+        "query_type": "enumeration",
+        "enumeration_mode": true,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "ai",
+          "domain",
+          "taxonomy"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 2330,
+        "preview": "## Domain Taxonomy of AI Risks\n\nThe AI Risk Repository organizes risks into **7 domains** and **24 subdomains** based on analysis of 1612 risks from 65 documents:\n\n\n### 1. **Discrimination & Toxicity** (16.2% of risks)\nRisks related to AI systems producing discriminatory outputs or exposing users to toxic content\n\n**Subdomains:**\n   - Discrimination & bias\n   - Exposure to toxic content\n   - Aggression & violence\n### 2. **Privacy & Security** (15.8% of risks)\nRisks involving data privacy violati...",
+        "full_text": "## Domain Taxonomy of AI Risks\n\nThe AI Risk Repository organizes risks into **7 domains** and **24 subdomains** based on analysis of 1612 risks from 65 documents:\n\n\n### 1. **Discrimination & Toxicity** (16.2% of risks)\nRisks related to AI systems producing discriminatory outputs or exposing users to toxic content\n\n**Subdomains:**\n   - Discrimination & bias\n   - Exposure to toxic content\n   - Aggression & violence\n### 2. **Privacy & Security** (15.8% of risks)\nRisks involving data privacy violations, security vulnerabilities, and unauthorized access\n\n**Subdomains:**\n   - Privacy violations\n   - Security vulnerabilities & attacks\n   - Data leaks & unauthorized access\n### 3. **Misinformation** (12.4% of risks)\nRisks from AI generating or spreading false, misleading, or harmful information\n\n**Subdomains:**\n   - Generating or spreading misinformation\n   - Harmful content generation\n   - Information manipulation\n### 4. **Malicious Actors & Misuse** (11.6% of risks)\nRisks from intentional misuse of AI systems for harmful purposes\n\n**Subdomains:**\n   - Fraud & deception\n   - Malicious use\n   - Competitive & geopolitical risks\n### 5. **Human-Computer Interaction** (14.9% of risks)\nRisks arising from how humans interact with and are affected by AI systems\n\n**Subdomains:**\n   - Overreliance on AI\n   - Manipulation & anthropomorphism\n   - Automation & employment\n   - Degradation of human capabilities\n### 6. **Socioeconomic & Environmental** (13.5% of risks)\nBroader societal, economic, and environmental impacts of AI systems\n\n**Subdomains:**\n   - Concentration of power\n   - Environmental impacts\n   - Societal & cultural harms\n   - Economic harms\n### 7. **AI System Safety, Failures, & Limitations** (15.6% of risks)\nTechnical risks related to AI system performance, reliability, and safety\n\n**Subdomains:**\n   - Performance issues\n   - Safety & alignment problems\n   - Lack of transparency & explainability\n   - Weaponization & mass destruction\n   - Existential risks\n   - Other system risks\n\n### Summary Statistics:\n- **Total Domains:** 7\n- **Total Subdomains:** 24  \n- **Total Risks Analyzed:** 1612\n- **Documents Reviewed:** 65\n\nThis comprehensive taxonomy provides a structured framework for understanding and categorizing the full spectrum of AI risks.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "Discrimination & Toxicity",
+          "Privacy & Security",
+          "Misinformation",
+          "Malicious Actors",
+          "Human-Computer Interaction",
+          "Socioeconomic",
+          "AI System Safety"
+        ],
+        "found_elements": [
+          "Discrimination & Toxicity",
+          "Privacy & Security",
+          "Misinformation",
+          "Malicious Actors",
+          "Human-Computer Interaction",
+          "Socioeconomic",
+          "AI System Safety"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 4,
+      "category": "enumeration",
+      "query": "What are all the subdomains under Privacy & Security?",
+      "description": "Should list all subdomains for specific domain",
+      "intent_analysis": {
+        "completeness_level": 1.0,
+        "expected_completeness": 0.7,
+        "completeness_met": true,
+        "query_type": "enumeration",
+        "enumeration_mode": true,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "domain",
+          "security",
+          "ai",
+          "privacy",
+          "subdomain"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 712,
+        "preview": "## Domain 2: Privacy & Security\n\nRisks involving data privacy violations, security vulnerabilities, and unauthorized access\n\n### Key Statistics:\n- **Percentage of all risks**: 15.8%\n- **Number of subdomains**: 3\n\n### Subdomains:\n   - Privacy violations\n   - Security vulnerabilities & attacks\n   - Data leaks & unauthorized access\n\n### Context in Repository:\nThis is one of 7 domains in the AI Risk Repository's Domain Taxonomy, which organizes 1612 risks from 65 documents.\n\n### Related Domains:\n- *...",
+        "full_text": "## Domain 2: Privacy & Security\n\nRisks involving data privacy violations, security vulnerabilities, and unauthorized access\n\n### Key Statistics:\n- **Percentage of all risks**: 15.8%\n- **Number of subdomains**: 3\n\n### Subdomains:\n   - Privacy violations\n   - Security vulnerabilities & attacks\n   - Data leaks & unauthorized access\n\n### Context in Repository:\nThis is one of 7 domains in the AI Risk Repository's Domain Taxonomy, which organizes 1612 risks from 65 documents.\n\n### Related Domains:\n- **Misinformation** (Domain 3): Privacy breaches can enable misinformation\n- **Malicious Actors** (Domain 4): Security vulnerabilities exploited maliciously\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "Privacy violations",
+          "Security vulnerabilities",
+          "Data leaks"
+        ],
+        "found_elements": [
+          "Privacy violations",
+          "Security vulnerabilities",
+          "Data leaks"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 5,
+      "category": "statistics",
+      "query": "Give me complete statistics for all risk categories",
+      "description": "Should provide all percentage statistics",
+      "intent_analysis": {
+        "completeness_level": 1.0,
+        "expected_completeness": 0.8,
+        "completeness_met": true,
+        "query_type": "specific",
+        "enumeration_mode": false,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "statistics"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 1129,
+        "preview": "## AI Risk Repository Statistics\n\n### Overall Repository:\n- **Total Risks Documented**: 1612\n- **Documents Analyzed**: 65\n- **Domains**: 7\n- **Subdomains**: 24\n\n### Causal Taxonomy Distribution:\n\n#### By Entity (Who causes the risk?):\n- **AI-caused**: 41%\n- **Human-caused**: 39%\n- **Other/Unspecified**: 20%\n\n#### By Intentionality:\n- **Intentional**: 34%\n- **Unintentional**: 35%\n- **Other/Unspecified**: 31%\n\n#### By Timing:\n- **Pre-deployment**: 13%\n- **Post-deployment**: 62%\n- **Other/Unspecifi...",
+        "full_text": "## AI Risk Repository Statistics\n\n### Overall Repository:\n- **Total Risks Documented**: 1612\n- **Documents Analyzed**: 65\n- **Domains**: 7\n- **Subdomains**: 24\n\n### Causal Taxonomy Distribution:\n\n#### By Entity (Who causes the risk?):\n- **AI-caused**: 41%\n- **Human-caused**: 39%\n- **Other/Unspecified**: 20%\n\n#### By Intentionality:\n- **Intentional**: 34%\n- **Unintentional**: 35%\n- **Other/Unspecified**: 31%\n\n#### By Timing:\n- **Pre-deployment**: 13%\n- **Post-deployment**: 62%\n- **Other/Unspecified**: 25%\n\n### Domain Taxonomy Distribution:\n\n1. **Discrimination & Toxicity**: 16.2% of risks\n2. **Privacy & Security**: 15.8% of risks\n3. **Misinformation**: 12.4% of risks\n4. **Malicious Actors & Misuse**: 11.6% of risks\n5. **Human-Computer Interaction**: 14.9% of risks\n6. **Socioeconomic & Environmental**: 13.5% of risks\n7. **AI System Safety, Failures, & Limitations**: 15.6% of risks\n\n### Key Findings:\n- Post-deployment risks are most common (62%)\n- AI and humans cause roughly equal proportions of risks\n- Discrimination & Toxicity is the largest domain (16.2%)\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "16.2%",
+          "15.8%",
+          "12.4%",
+          "11.6%",
+          "14.9%",
+          "13.5%",
+          "15.6%"
+        ],
+        "found_elements": [
+          "16.2%",
+          "15.8%",
+          "12.4%",
+          "11.6%",
+          "14.9%",
+          "13.5%",
+          "15.6%"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 6,
+      "category": "comparison",
+      "query": "Compare pre-deployment vs post-deployment risks",
+      "description": "Should compare timing categories with stats",
+      "intent_analysis": {
+        "completeness_level": 0.45,
+        "expected_completeness": 0.5,
+        "completeness_met": true,
+        "query_type": "comparison",
+        "enumeration_mode": false,
+        "comparison_mode": true,
+        "concepts_mentioned": [
+          "pre-deployment",
+          "post-deployment"
+        ],
+        "detail_level": "moderate"
+      },
+      "response": {
+        "length": 1343,
+        "preview": "## Timing in the AI Risk Causal Taxonomy\n\nThe **Timing** dimension is one of three key factors in the Causal Taxonomy, categorizing when risks occur in the AI lifecycle.\n\n### Timing Categories:\n\n#### 1. **Pre-deployment** (13% of risks)\n- **Definition**: Risks occurring before the AI model is deployed to production\n- **Examples**: \n  - Biased training data collection\n  - Flawed model architecture decisions\n  - Inadequate testing procedures\n  - Misalignment during training\n\n#### 2. **Post-deploym...",
+        "full_text": "## Timing in the AI Risk Causal Taxonomy\n\nThe **Timing** dimension is one of three key factors in the Causal Taxonomy, categorizing when risks occur in the AI lifecycle.\n\n### Timing Categories:\n\n#### 1. **Pre-deployment** (13% of risks)\n- **Definition**: Risks occurring before the AI model is deployed to production\n- **Examples**: \n  - Biased training data collection\n  - Flawed model architecture decisions\n  - Inadequate testing procedures\n  - Misalignment during training\n\n#### 2. **Post-deployment** (62% of risks)\n- **Definition**: Risks occurring after the AI model has been trained and deployed\n- **Examples**:\n  - Misuse by end users\n  - Emergent behaviors in production\n  - Adversarial attacks\n  - Drift from original training distribution\n\n#### 3. **Other** (25% of risks)\n- **Definition**: Risks without clearly specified timing\n- **Examples**: Systemic or ongoing risks that span the lifecycle\n\n### Interaction with Other Causal Factors:\n- **Entity**: Both humans and AI can cause risks at either timing stage\n- **Intentionality**: Pre-deployment often involves unintentional oversights; post-deployment sees more intentional misuse\n\n### Key Insight:\nThe majority of risks (62%) occur **post-deployment**, highlighting the importance of ongoing monitoring and governance.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "Pre-deployment",
+          "13%",
+          "Post-deployment",
+          "62%"
+        ],
+        "found_elements": [
+          "Pre-deployment",
+          "13%",
+          "Post-deployment",
+          "62%"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 7,
+      "category": "comparison",
+      "query": "What is the difference between human and AI caused risks?",
+      "description": "Should compare entity types with percentages",
+      "intent_analysis": {
+        "completeness_level": 0.45,
+        "expected_completeness": 0.5,
+        "completeness_met": true,
+        "query_type": "comparison",
+        "enumeration_mode": false,
+        "comparison_mode": true,
+        "concepts_mentioned": [
+          "ai",
+          "human"
+        ],
+        "detail_level": "moderate"
+      },
+      "response": {
+        "length": 1196,
+        "preview": "## AI Risk Repository Taxonomy Structure\n\nThe AI Risk Repository uses two complementary taxonomies to classify AI risks:\n\n### 1. **Causal Taxonomy** - How risks emerge\nClassifies risks by three causal factors:\n- **Entity**: Human, AI, or Other\n- **Intentionality**: Intentional, Unintentional, or Other  \n- **Timing**: Pre-deployment, Post-deployment, or Other\n\n### 2. **Domain Taxonomy** - Types of risks\nOrganizes risks into 7 domains and 24 subdomains:\n\n1. Discrimination & Toxicity\n2. Privacy & S...",
+        "full_text": "## AI Risk Repository Taxonomy Structure\n\nThe AI Risk Repository uses two complementary taxonomies to classify AI risks:\n\n### 1. **Causal Taxonomy** - How risks emerge\nClassifies risks by three causal factors:\n- **Entity**: Human, AI, or Other\n- **Intentionality**: Intentional, Unintentional, or Other  \n- **Timing**: Pre-deployment, Post-deployment, or Other\n\n### 2. **Domain Taxonomy** - Types of risks\nOrganizes risks into 7 domains and 24 subdomains:\n\n1. Discrimination & Toxicity\n2. Privacy & Security\n3. Misinformation\n4. Malicious Actors & Misuse\n5. Human-Computer Interaction\n6. Socioeconomic & Environmental\n7. AI System Safety, Failures, & Limitations\n\nEach domain is further divided into specific subdomains, totaling 24 subcategories.\n\n### Key Statistics:\n- **Total Risks Catalogued:** 1612\n- **Documents Analyzed:** 65\n- **Most Common Timing:** Post-deployment (62% of risks)\n- **Most Common Entity:** AI-caused (41% of risks)\n\nThese taxonomies work together to provide comprehensive classification - the Causal Taxonomy explains *how and when* risks occur, while the Domain Taxonomy categorizes *what types* of risks exist.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": false,
+        "coverage": 0.75,
+        "expected_elements": [
+          "Human",
+          "39%",
+          "AI",
+          "41%"
+        ],
+        "found_elements": [
+          "Human",
+          "AI",
+          "41%"
+        ],
+        "missing_elements": [
+          "39%"
+        ]
+      }
+    },
+    {
+      "test_id": 8,
+      "category": "comparison",
+      "query": "Compare the causal taxonomy with the domain taxonomy",
+      "description": "Should explain both taxonomy systems",
+      "intent_analysis": {
+        "completeness_level": 0.45,
+        "expected_completeness": 0.5,
+        "completeness_met": true,
+        "query_type": "comparison",
+        "enumeration_mode": false,
+        "comparison_mode": true,
+        "concepts_mentioned": [
+          "ai",
+          "causal",
+          "domain",
+          "taxonomy"
+        ],
+        "detail_level": "moderate"
+      },
+      "response": {
+        "length": 1177,
+        "preview": "## Causal Taxonomy of AI Risks\n\nThe AI Risk Repository uses a **Causal Taxonomy** that classifies risks based on three key dimensions:\n\n### 1. **Entity** (Who/what causes the risk?)\n- **Human** (39% of risks): Risks caused by human decisions or actions\n- **AI** (41% of risks): Risks caused by AI system decisions or actions  \n- **Other** (20% of risks): Risks without clearly specified causal entity\n\n### 2. **Intentionality** (Was it intended?)\n- **Intentional** (34% of risks): Risk as expected ou...",
+        "full_text": "## Causal Taxonomy of AI Risks\n\nThe AI Risk Repository uses a **Causal Taxonomy** that classifies risks based on three key dimensions:\n\n### 1. **Entity** (Who/what causes the risk?)\n- **Human** (39% of risks): Risks caused by human decisions or actions\n- **AI** (41% of risks): Risks caused by AI system decisions or actions  \n- **Other** (20% of risks): Risks without clearly specified causal entity\n\n### 2. **Intentionality** (Was it intended?)\n- **Intentional** (34% of risks): Risk as expected outcome of pursuing a goal\n- **Unintentional** (35% of risks): Risk as unexpected outcome\n- **Other** (31% of risks): Risk without clearly specified intentionality\n\n### 3. **Timing** (When does it occur?)\n- **Pre-deployment** (13% of risks): Risk occurs before the AI model is deployed\n- **Post-deployment** (62% of risks): Risk occurs after the AI model has been trained and deployed\n- **Other** (25% of risks): Risk without clearly specified timing\n\nThis taxonomy allows systematic classification of any AI risk by identifying the causal entity, whether the harm was intentional, and when in the AI lifecycle it occurs.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": false,
+        "coverage": 0.4,
+        "expected_elements": [
+          "Causal",
+          "Entity",
+          "Domain",
+          "7 domains",
+          "24 subdomains"
+        ],
+        "found_elements": [
+          "Causal",
+          "Entity"
+        ],
+        "missing_elements": [
+          "Domain",
+          "7 domains",
+          "24 subdomains"
+        ]
+      }
+    },
+    {
+      "test_id": 9,
+      "category": "enumeration",
+      "query": "List the 3 dimensions of the causal taxonomy",
+      "description": "Should list all 3 causal dimensions",
+      "intent_analysis": {
+        "completeness_level": 0.7,
+        "expected_completeness": 0.7,
+        "completeness_met": true,
+        "query_type": "enumeration",
+        "enumeration_mode": true,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "causal",
+          "taxonomy"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 1177,
+        "preview": "## Causal Taxonomy of AI Risks\n\nThe AI Risk Repository uses a **Causal Taxonomy** that classifies risks based on three key dimensions:\n\n### 1. **Entity** (Who/what causes the risk?)\n- **Human** (39% of risks): Risks caused by human decisions or actions\n- **AI** (41% of risks): Risks caused by AI system decisions or actions  \n- **Other** (20% of risks): Risks without clearly specified causal entity\n\n### 2. **Intentionality** (Was it intended?)\n- **Intentional** (34% of risks): Risk as expected ou...",
+        "full_text": "## Causal Taxonomy of AI Risks\n\nThe AI Risk Repository uses a **Causal Taxonomy** that classifies risks based on three key dimensions:\n\n### 1. **Entity** (Who/what causes the risk?)\n- **Human** (39% of risks): Risks caused by human decisions or actions\n- **AI** (41% of risks): Risks caused by AI system decisions or actions  \n- **Other** (20% of risks): Risks without clearly specified causal entity\n\n### 2. **Intentionality** (Was it intended?)\n- **Intentional** (34% of risks): Risk as expected outcome of pursuing a goal\n- **Unintentional** (35% of risks): Risk as unexpected outcome\n- **Other** (31% of risks): Risk without clearly specified intentionality\n\n### 3. **Timing** (When does it occur?)\n- **Pre-deployment** (13% of risks): Risk occurs before the AI model is deployed\n- **Post-deployment** (62% of risks): Risk occurs after the AI model has been trained and deployed\n- **Other** (25% of risks): Risk without clearly specified timing\n\nThis taxonomy allows systematic classification of any AI risk by identifying the causal entity, whether the harm was intentional, and when in the AI lifecycle it occurs.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "Entity",
+          "Intentionality",
+          "Timing"
+        ],
+        "found_elements": [
+          "Entity",
+          "Intentionality",
+          "Timing"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 10,
+      "category": "enumeration",
+      "query": "Show all subdomains related to AI System Safety",
+      "description": "Should list all 6 subdomains for domain 7",
+      "intent_analysis": {
+        "completeness_level": 1.0,
+        "expected_completeness": 0.7,
+        "completeness_met": true,
+        "query_type": "enumeration",
+        "enumeration_mode": true,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "ai",
+          "safety",
+          "domain",
+          "subdomain"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 643,
+        "preview": "## Domain 7: AI System Safety, Failures, & Limitations\n\nTechnical risks related to AI system performance, reliability, and safety\n\n### Key Statistics:\n- **Percentage of all risks**: 15.6%\n- **Number of subdomains**: 6\n\n### Subdomains:\n   - Performance issues\n   - Safety & alignment problems\n   - Lack of transparency & explainability\n   - Weaponization & mass destruction\n   - Existential risks\n   - Other system risks\n\n### Context in Repository:\nThis is one of 7 domains in the AI Risk Repository's...",
+        "full_text": "## Domain 7: AI System Safety, Failures, & Limitations\n\nTechnical risks related to AI system performance, reliability, and safety\n\n### Key Statistics:\n- **Percentage of all risks**: 15.6%\n- **Number of subdomains**: 6\n\n### Subdomains:\n   - Performance issues\n   - Safety & alignment problems\n   - Lack of transparency & explainability\n   - Weaponization & mass destruction\n   - Existential risks\n   - Other system risks\n\n### Context in Repository:\nThis is one of 7 domains in the AI Risk Repository's Domain Taxonomy, which organizes 1612 risks from 65 documents.\n\n### Related Domains:\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "Performance issues",
+          "Safety & alignment",
+          "transparency",
+          "Weaponization",
+          "Existential risks"
+        ],
+        "found_elements": [
+          "Performance issues",
+          "Safety & alignment",
+          "transparency",
+          "Weaponization",
+          "Existential risks"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 11,
+      "category": "mixed",
+      "query": "What are the main risk categories in the AI Risk Database v3?",
+      "description": "Should provide overview of both taxonomies",
+      "intent_analysis": {
+        "completeness_level": 0.7,
+        "expected_completeness": 0.6,
+        "completeness_met": true,
+        "query_type": "enumeration",
+        "enumeration_mode": true,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "ai"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 3565,
+        "preview": "## Complete AI Risk Repository Taxonomy Structure\n\n## Causal Taxonomy of AI Risks\n\nThe AI Risk Repository uses a **Causal Taxonomy** that classifies risks based on three key dimensions:\n\n### 1. **Entity** (Who/what causes the risk?)\n- **Human** (39% of risks): Risks caused by human decisions or actions\n- **AI** (41% of risks): Risks caused by AI system decisions or actions  \n- **Other** (20% of risks): Risks without clearly specified causal entity\n\n### 2. **Intentionality** (Was it intended?)\n- ...",
+        "full_text": "## Complete AI Risk Repository Taxonomy Structure\n\n## Causal Taxonomy of AI Risks\n\nThe AI Risk Repository uses a **Causal Taxonomy** that classifies risks based on three key dimensions:\n\n### 1. **Entity** (Who/what causes the risk?)\n- **Human** (39% of risks): Risks caused by human decisions or actions\n- **AI** (41% of risks): Risks caused by AI system decisions or actions  \n- **Other** (20% of risks): Risks without clearly specified causal entity\n\n### 2. **Intentionality** (Was it intended?)\n- **Intentional** (34% of risks): Risk as expected outcome of pursuing a goal\n- **Unintentional** (35% of risks): Risk as unexpected outcome\n- **Other** (31% of risks): Risk without clearly specified intentionality\n\n### 3. **Timing** (When does it occur?)\n- **Pre-deployment** (13% of risks): Risk occurs before the AI model is deployed\n- **Post-deployment** (62% of risks): Risk occurs after the AI model has been trained and deployed\n- **Other** (25% of risks): Risk without clearly specified timing\n\nThis taxonomy allows systematic classification of any AI risk by identifying the causal entity, whether the harm was intentional, and when in the AI lifecycle it occurs.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*\n\n---\n\n## Domain Taxonomy of AI Risks\n\nThe AI Risk Repository organizes risks into **7 domains** and **24 subdomains** based on analysis of 1612 risks from 65 documents:\n\n\n### 1. **Discrimination & Toxicity** (16.2% of risks)\nRisks related to AI systems producing discriminatory outputs or exposing users to toxic content\n\n**Subdomains:**\n   - Discrimination & bias\n   - Exposure to toxic content\n   - Aggression & violence\n### 2. **Privacy & Security** (15.8% of risks)\nRisks involving data privacy violations, security vulnerabilities, and unauthorized access\n\n**Subdomains:**\n   - Privacy violations\n   - Security vulnerabilities & attacks\n   - Data leaks & unauthorized access\n### 3. **Misinformation** (12.4% of risks)\nRisks from AI generating or spreading false, misleading, or harmful information\n\n**Subdomains:**\n   - Generating or spreading misinformation\n   - Harmful content generation\n   - Information manipulation\n### 4. **Malicious Actors & Misuse** (11.6% of risks)\nRisks from intentional misuse of AI systems for harmful purposes\n\n**Subdomains:**\n   - Fraud & deception\n   - Malicious use\n   - Competitive & geopolitical risks\n### 5. **Human-Computer Interaction** (14.9% of risks)\nRisks arising from how humans interact with and are affected by AI systems\n\n**Subdomains:**\n   - Overreliance on AI\n   - Manipulation & anthropomorphism\n   - Automation & employment\n   - Degradation of human capabilities\n### 6. **Socioeconomic & Environmental** (13.5% of risks)\nBroader societal, economic, and environmental impacts of AI systems\n\n**Subdomains:**\n   - Concentration of power\n   - Environmental impacts\n   - Societal & cultural harms\n   - Economic harms\n### 7. **AI System Safety, Failures, & Limitations** (15.6% of risks)\nTechnical risks related to AI system performance, reliability, and safety\n\n**Subdomains:**\n   - Performance issues\n   - Safety & alignment problems\n   - Lack of transparency & explainability\n   - Weaponization & mass destruction\n   - Existential risks\n   - Other system risks\n\n### Summary Statistics:\n- **Total Domains:** 7\n- **Total Subdomains:** 24  \n- **Total Risks Analyzed:** 1612\n- **Documents Reviewed:** 65\n\nThis comprehensive taxonomy provides a structured framework for understanding and categorizing the full spectrum of AI risks.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "Causal Taxonomy",
+          "Domain Taxonomy",
+          "7 domains"
+        ],
+        "found_elements": [
+          "Causal Taxonomy",
+          "Domain Taxonomy",
+          "7 domains"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 12,
+      "category": "mixed",
+      "query": "Explain the complete structure of AI risk categorization",
+      "description": "Should provide comprehensive taxonomy overview",
+      "intent_analysis": {
+        "completeness_level": 0.8,
+        "expected_completeness": 0.8,
+        "completeness_met": true,
+        "query_type": "specific",
+        "enumeration_mode": false,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "ai",
+          "structure",
+          "categorization"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 3565,
+        "preview": "## Complete AI Risk Repository Taxonomy Structure\n\n## Causal Taxonomy of AI Risks\n\nThe AI Risk Repository uses a **Causal Taxonomy** that classifies risks based on three key dimensions:\n\n### 1. **Entity** (Who/what causes the risk?)\n- **Human** (39% of risks): Risks caused by human decisions or actions\n- **AI** (41% of risks): Risks caused by AI system decisions or actions  \n- **Other** (20% of risks): Risks without clearly specified causal entity\n\n### 2. **Intentionality** (Was it intended?)\n- ...",
+        "full_text": "## Complete AI Risk Repository Taxonomy Structure\n\n## Causal Taxonomy of AI Risks\n\nThe AI Risk Repository uses a **Causal Taxonomy** that classifies risks based on three key dimensions:\n\n### 1. **Entity** (Who/what causes the risk?)\n- **Human** (39% of risks): Risks caused by human decisions or actions\n- **AI** (41% of risks): Risks caused by AI system decisions or actions  \n- **Other** (20% of risks): Risks without clearly specified causal entity\n\n### 2. **Intentionality** (Was it intended?)\n- **Intentional** (34% of risks): Risk as expected outcome of pursuing a goal\n- **Unintentional** (35% of risks): Risk as unexpected outcome\n- **Other** (31% of risks): Risk without clearly specified intentionality\n\n### 3. **Timing** (When does it occur?)\n- **Pre-deployment** (13% of risks): Risk occurs before the AI model is deployed\n- **Post-deployment** (62% of risks): Risk occurs after the AI model has been trained and deployed\n- **Other** (25% of risks): Risk without clearly specified timing\n\nThis taxonomy allows systematic classification of any AI risk by identifying the causal entity, whether the harm was intentional, and when in the AI lifecycle it occurs.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*\n\n---\n\n## Domain Taxonomy of AI Risks\n\nThe AI Risk Repository organizes risks into **7 domains** and **24 subdomains** based on analysis of 1612 risks from 65 documents:\n\n\n### 1. **Discrimination & Toxicity** (16.2% of risks)\nRisks related to AI systems producing discriminatory outputs or exposing users to toxic content\n\n**Subdomains:**\n   - Discrimination & bias\n   - Exposure to toxic content\n   - Aggression & violence\n### 2. **Privacy & Security** (15.8% of risks)\nRisks involving data privacy violations, security vulnerabilities, and unauthorized access\n\n**Subdomains:**\n   - Privacy violations\n   - Security vulnerabilities & attacks\n   - Data leaks & unauthorized access\n### 3. **Misinformation** (12.4% of risks)\nRisks from AI generating or spreading false, misleading, or harmful information\n\n**Subdomains:**\n   - Generating or spreading misinformation\n   - Harmful content generation\n   - Information manipulation\n### 4. **Malicious Actors & Misuse** (11.6% of risks)\nRisks from intentional misuse of AI systems for harmful purposes\n\n**Subdomains:**\n   - Fraud & deception\n   - Malicious use\n   - Competitive & geopolitical risks\n### 5. **Human-Computer Interaction** (14.9% of risks)\nRisks arising from how humans interact with and are affected by AI systems\n\n**Subdomains:**\n   - Overreliance on AI\n   - Manipulation & anthropomorphism\n   - Automation & employment\n   - Degradation of human capabilities\n### 6. **Socioeconomic & Environmental** (13.5% of risks)\nBroader societal, economic, and environmental impacts of AI systems\n\n**Subdomains:**\n   - Concentration of power\n   - Environmental impacts\n   - Societal & cultural harms\n   - Economic harms\n### 7. **AI System Safety, Failures, & Limitations** (15.6% of risks)\nTechnical risks related to AI system performance, reliability, and safety\n\n**Subdomains:**\n   - Performance issues\n   - Safety & alignment problems\n   - Lack of transparency & explainability\n   - Weaponization & mass destruction\n   - Existential risks\n   - Other system risks\n\n### Summary Statistics:\n- **Total Domains:** 7\n- **Total Subdomains:** 24  \n- **Total Risks Analyzed:** 1612\n- **Documents Reviewed:** 65\n\nThis comprehensive taxonomy provides a structured framework for understanding and categorizing the full spectrum of AI risks.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "Causal",
+          "Domain",
+          "7 domains",
+          "24 subdomains",
+          "Entity"
+        ],
+        "found_elements": [
+          "Causal",
+          "Domain",
+          "7 domains",
+          "24 subdomains",
+          "Entity"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 13,
+      "category": "detail",
+      "query": "Provide full details about the Discrimination & Toxicity domain",
+      "description": "Should provide complete domain details",
+      "intent_analysis": {
+        "completeness_level": 1.0,
+        "expected_completeness": 0.8,
+        "completeness_met": true,
+        "query_type": "enumeration",
+        "enumeration_mode": true,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "ai",
+          "toxicity",
+          "domain",
+          "discrimination"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 698,
+        "preview": "## Domain 1: Discrimination & Toxicity\n\nRisks related to AI systems producing discriminatory outputs or exposing users to toxic content\n\n### Key Statistics:\n- **Percentage of all risks**: 16.2%\n- **Number of subdomains**: 3\n\n### Subdomains:\n   - Discrimination & bias\n   - Exposure to toxic content\n   - Aggression & violence\n\n### Context in Repository:\nThis is one of 7 domains in the AI Risk Repository's Domain Taxonomy, which organizes 1612 risks from 65 documents.\n\n### Related Domains:\n- **Huma...",
+        "full_text": "## Domain 1: Discrimination & Toxicity\n\nRisks related to AI systems producing discriminatory outputs or exposing users to toxic content\n\n### Key Statistics:\n- **Percentage of all risks**: 16.2%\n- **Number of subdomains**: 3\n\n### Subdomains:\n   - Discrimination & bias\n   - Exposure to toxic content\n   - Aggression & violence\n\n### Context in Repository:\nThis is one of 7 domains in the AI Risk Repository's Domain Taxonomy, which organizes 1612 risks from 65 documents.\n\n### Related Domains:\n- **Human-Computer Interaction** (Domain 5): Biased AI affects user interactions\n- **Socioeconomic** (Domain 6): Discrimination has societal impacts\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "16.2%",
+          "Discrimination & bias",
+          "toxic content",
+          "Aggression"
+        ],
+        "found_elements": [
+          "16.2%",
+          "Discrimination & bias",
+          "toxic content",
+          "Aggression"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 14,
+      "category": "detail",
+      "query": "Give me all information about timing in the causal taxonomy",
+      "description": "Should provide all timing details and stats",
+      "intent_analysis": {
+        "completeness_level": 0.8,
+        "expected_completeness": 0.8,
+        "completeness_met": true,
+        "query_type": "specific",
+        "enumeration_mode": false,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "timing",
+          "causal",
+          "taxonomy"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 1343,
+        "preview": "## Timing in the AI Risk Causal Taxonomy\n\nThe **Timing** dimension is one of three key factors in the Causal Taxonomy, categorizing when risks occur in the AI lifecycle.\n\n### Timing Categories:\n\n#### 1. **Pre-deployment** (13% of risks)\n- **Definition**: Risks occurring before the AI model is deployed to production\n- **Examples**: \n  - Biased training data collection\n  - Flawed model architecture decisions\n  - Inadequate testing procedures\n  - Misalignment during training\n\n#### 2. **Post-deploym...",
+        "full_text": "## Timing in the AI Risk Causal Taxonomy\n\nThe **Timing** dimension is one of three key factors in the Causal Taxonomy, categorizing when risks occur in the AI lifecycle.\n\n### Timing Categories:\n\n#### 1. **Pre-deployment** (13% of risks)\n- **Definition**: Risks occurring before the AI model is deployed to production\n- **Examples**: \n  - Biased training data collection\n  - Flawed model architecture decisions\n  - Inadequate testing procedures\n  - Misalignment during training\n\n#### 2. **Post-deployment** (62% of risks)\n- **Definition**: Risks occurring after the AI model has been trained and deployed\n- **Examples**:\n  - Misuse by end users\n  - Emergent behaviors in production\n  - Adversarial attacks\n  - Drift from original training distribution\n\n#### 3. **Other** (25% of risks)\n- **Definition**: Risks without clearly specified timing\n- **Examples**: Systemic or ongoing risks that span the lifecycle\n\n### Interaction with Other Causal Factors:\n- **Entity**: Both humans and AI can cause risks at either timing stage\n- **Intentionality**: Pre-deployment often involves unintentional oversights; post-deployment sees more intentional misuse\n\n### Key Insight:\nThe majority of risks (62%) occur **post-deployment**, highlighting the importance of ongoing monitoring and governance.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "Pre-deployment",
+          "13%",
+          "Post-deployment",
+          "62%",
+          "Other",
+          "25%"
+        ],
+        "found_elements": [
+          "Pre-deployment",
+          "13%",
+          "Post-deployment",
+          "62%",
+          "Other",
+          "25%"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 15,
+      "category": "statistics",
+      "query": "How many risks are in each of the 7 domains?",
+      "description": "Should list percentages for all domains",
+      "intent_analysis": {
+        "completeness_level": 0.9,
+        "expected_completeness": 0.7,
+        "completeness_met": true,
+        "query_type": "enumeration",
+        "enumeration_mode": true,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "ai",
+          "domain",
+          "how many"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 1129,
+        "preview": "## AI Risk Repository Statistics\n\n### Overall Repository:\n- **Total Risks Documented**: 1612\n- **Documents Analyzed**: 65\n- **Domains**: 7\n- **Subdomains**: 24\n\n### Causal Taxonomy Distribution:\n\n#### By Entity (Who causes the risk?):\n- **AI-caused**: 41%\n- **Human-caused**: 39%\n- **Other/Unspecified**: 20%\n\n#### By Intentionality:\n- **Intentional**: 34%\n- **Unintentional**: 35%\n- **Other/Unspecified**: 31%\n\n#### By Timing:\n- **Pre-deployment**: 13%\n- **Post-deployment**: 62%\n- **Other/Unspecifi...",
+        "full_text": "## AI Risk Repository Statistics\n\n### Overall Repository:\n- **Total Risks Documented**: 1612\n- **Documents Analyzed**: 65\n- **Domains**: 7\n- **Subdomains**: 24\n\n### Causal Taxonomy Distribution:\n\n#### By Entity (Who causes the risk?):\n- **AI-caused**: 41%\n- **Human-caused**: 39%\n- **Other/Unspecified**: 20%\n\n#### By Intentionality:\n- **Intentional**: 34%\n- **Unintentional**: 35%\n- **Other/Unspecified**: 31%\n\n#### By Timing:\n- **Pre-deployment**: 13%\n- **Post-deployment**: 62%\n- **Other/Unspecified**: 25%\n\n### Domain Taxonomy Distribution:\n\n1. **Discrimination & Toxicity**: 16.2% of risks\n2. **Privacy & Security**: 15.8% of risks\n3. **Misinformation**: 12.4% of risks\n4. **Malicious Actors & Misuse**: 11.6% of risks\n5. **Human-Computer Interaction**: 14.9% of risks\n6. **Socioeconomic & Environmental**: 13.5% of risks\n7. **AI System Safety, Failures, & Limitations**: 15.6% of risks\n\n### Key Findings:\n- Post-deployment risks are most common (62%)\n- AI and humans cause roughly equal proportions of risks\n- Discrimination & Toxicity is the largest domain (16.2%)\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "16.2%",
+          "15.8%",
+          "12.4%",
+          "11.6%",
+          "14.9%",
+          "13.5%",
+          "15.6%"
+        ],
+        "found_elements": [
+          "16.2%",
+          "15.8%",
+          "12.4%",
+          "11.6%",
+          "14.9%",
+          "13.5%",
+          "15.6%"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 16,
+      "category": "statistics",
+      "query": "What percentage of risks fall into each causal category?",
+      "description": "Should provide all causal taxonomy statistics",
+      "intent_analysis": {
+        "completeness_level": 1.0,
+        "expected_completeness": 0.7,
+        "completeness_met": true,
+        "query_type": "specific",
+        "enumeration_mode": false,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "causal",
+          "percentage"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 1129,
+        "preview": "## AI Risk Repository Statistics\n\n### Overall Repository:\n- **Total Risks Documented**: 1612\n- **Documents Analyzed**: 65\n- **Domains**: 7\n- **Subdomains**: 24\n\n### Causal Taxonomy Distribution:\n\n#### By Entity (Who causes the risk?):\n- **AI-caused**: 41%\n- **Human-caused**: 39%\n- **Other/Unspecified**: 20%\n\n#### By Intentionality:\n- **Intentional**: 34%\n- **Unintentional**: 35%\n- **Other/Unspecified**: 31%\n\n#### By Timing:\n- **Pre-deployment**: 13%\n- **Post-deployment**: 62%\n- **Other/Unspecifi...",
+        "full_text": "## AI Risk Repository Statistics\n\n### Overall Repository:\n- **Total Risks Documented**: 1612\n- **Documents Analyzed**: 65\n- **Domains**: 7\n- **Subdomains**: 24\n\n### Causal Taxonomy Distribution:\n\n#### By Entity (Who causes the risk?):\n- **AI-caused**: 41%\n- **Human-caused**: 39%\n- **Other/Unspecified**: 20%\n\n#### By Intentionality:\n- **Intentional**: 34%\n- **Unintentional**: 35%\n- **Other/Unspecified**: 31%\n\n#### By Timing:\n- **Pre-deployment**: 13%\n- **Post-deployment**: 62%\n- **Other/Unspecified**: 25%\n\n### Domain Taxonomy Distribution:\n\n1. **Discrimination & Toxicity**: 16.2% of risks\n2. **Privacy & Security**: 15.8% of risks\n3. **Misinformation**: 12.4% of risks\n4. **Malicious Actors & Misuse**: 11.6% of risks\n5. **Human-Computer Interaction**: 14.9% of risks\n6. **Socioeconomic & Environmental**: 13.5% of risks\n7. **AI System Safety, Failures, & Limitations**: 15.6% of risks\n\n### Key Findings:\n- Post-deployment risks are most common (62%)\n- AI and humans cause roughly equal proportions of risks\n- Discrimination & Toxicity is the largest domain (16.2%)\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "39%",
+          "41%",
+          "34%",
+          "35%",
+          "13%",
+          "62%"
+        ],
+        "found_elements": [
+          "39%",
+          "41%",
+          "34%",
+          "35%",
+          "13%",
+          "62%"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 17,
+      "category": "natural",
+      "query": "Tell me everything about how AI risks are organized",
+      "description": "Should provide comprehensive taxonomy explanation",
+      "intent_analysis": {
+        "completeness_level": 0.8,
+        "expected_completeness": 0.7,
+        "completeness_met": true,
+        "query_type": "specific",
+        "enumeration_mode": false,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "ai"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 3565,
+        "preview": "## Complete AI Risk Repository Taxonomy Structure\n\n## Causal Taxonomy of AI Risks\n\nThe AI Risk Repository uses a **Causal Taxonomy** that classifies risks based on three key dimensions:\n\n### 1. **Entity** (Who/what causes the risk?)\n- **Human** (39% of risks): Risks caused by human decisions or actions\n- **AI** (41% of risks): Risks caused by AI system decisions or actions  \n- **Other** (20% of risks): Risks without clearly specified causal entity\n\n### 2. **Intentionality** (Was it intended?)\n- ...",
+        "full_text": "## Complete AI Risk Repository Taxonomy Structure\n\n## Causal Taxonomy of AI Risks\n\nThe AI Risk Repository uses a **Causal Taxonomy** that classifies risks based on three key dimensions:\n\n### 1. **Entity** (Who/what causes the risk?)\n- **Human** (39% of risks): Risks caused by human decisions or actions\n- **AI** (41% of risks): Risks caused by AI system decisions or actions  \n- **Other** (20% of risks): Risks without clearly specified causal entity\n\n### 2. **Intentionality** (Was it intended?)\n- **Intentional** (34% of risks): Risk as expected outcome of pursuing a goal\n- **Unintentional** (35% of risks): Risk as unexpected outcome\n- **Other** (31% of risks): Risk without clearly specified intentionality\n\n### 3. **Timing** (When does it occur?)\n- **Pre-deployment** (13% of risks): Risk occurs before the AI model is deployed\n- **Post-deployment** (62% of risks): Risk occurs after the AI model has been trained and deployed\n- **Other** (25% of risks): Risk without clearly specified timing\n\nThis taxonomy allows systematic classification of any AI risk by identifying the causal entity, whether the harm was intentional, and when in the AI lifecycle it occurs.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*\n\n---\n\n## Domain Taxonomy of AI Risks\n\nThe AI Risk Repository organizes risks into **7 domains** and **24 subdomains** based on analysis of 1612 risks from 65 documents:\n\n\n### 1. **Discrimination & Toxicity** (16.2% of risks)\nRisks related to AI systems producing discriminatory outputs or exposing users to toxic content\n\n**Subdomains:**\n   - Discrimination & bias\n   - Exposure to toxic content\n   - Aggression & violence\n### 2. **Privacy & Security** (15.8% of risks)\nRisks involving data privacy violations, security vulnerabilities, and unauthorized access\n\n**Subdomains:**\n   - Privacy violations\n   - Security vulnerabilities & attacks\n   - Data leaks & unauthorized access\n### 3. **Misinformation** (12.4% of risks)\nRisks from AI generating or spreading false, misleading, or harmful information\n\n**Subdomains:**\n   - Generating or spreading misinformation\n   - Harmful content generation\n   - Information manipulation\n### 4. **Malicious Actors & Misuse** (11.6% of risks)\nRisks from intentional misuse of AI systems for harmful purposes\n\n**Subdomains:**\n   - Fraud & deception\n   - Malicious use\n   - Competitive & geopolitical risks\n### 5. **Human-Computer Interaction** (14.9% of risks)\nRisks arising from how humans interact with and are affected by AI systems\n\n**Subdomains:**\n   - Overreliance on AI\n   - Manipulation & anthropomorphism\n   - Automation & employment\n   - Degradation of human capabilities\n### 6. **Socioeconomic & Environmental** (13.5% of risks)\nBroader societal, economic, and environmental impacts of AI systems\n\n**Subdomains:**\n   - Concentration of power\n   - Environmental impacts\n   - Societal & cultural harms\n   - Economic harms\n### 7. **AI System Safety, Failures, & Limitations** (15.6% of risks)\nTechnical risks related to AI system performance, reliability, and safety\n\n**Subdomains:**\n   - Performance issues\n   - Safety & alignment problems\n   - Lack of transparency & explainability\n   - Weaponization & mass destruction\n   - Existential risks\n   - Other system risks\n\n### Summary Statistics:\n- **Total Domains:** 7\n- **Total Subdomains:** 24  \n- **Total Risks Analyzed:** 1612\n- **Documents Reviewed:** 65\n\nThis comprehensive taxonomy provides a structured framework for understanding and categorizing the full spectrum of AI risks.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "Causal",
+          "Domain",
+          "taxonomy",
+          "7 domains",
+          "24 subdomains"
+        ],
+        "found_elements": [
+          "Causal",
+          "Domain",
+          "taxonomy",
+          "7 domains",
+          "24 subdomains"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 18,
+      "category": "natural",
+      "query": "I need a complete list of all risk subcategories",
+      "description": "Should list all 24 subdomains",
+      "intent_analysis": {
+        "completeness_level": 1.0,
+        "expected_completeness": 0.9,
+        "completeness_met": true,
+        "query_type": "enumeration",
+        "enumeration_mode": true,
+        "comparison_mode": false,
+        "concepts_mentioned": [],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 3565,
+        "preview": "## Complete AI Risk Repository Taxonomy Structure\n\n## Causal Taxonomy of AI Risks\n\nThe AI Risk Repository uses a **Causal Taxonomy** that classifies risks based on three key dimensions:\n\n### 1. **Entity** (Who/what causes the risk?)\n- **Human** (39% of risks): Risks caused by human decisions or actions\n- **AI** (41% of risks): Risks caused by AI system decisions or actions  \n- **Other** (20% of risks): Risks without clearly specified causal entity\n\n### 2. **Intentionality** (Was it intended?)\n- ...",
+        "full_text": "## Complete AI Risk Repository Taxonomy Structure\n\n## Causal Taxonomy of AI Risks\n\nThe AI Risk Repository uses a **Causal Taxonomy** that classifies risks based on three key dimensions:\n\n### 1. **Entity** (Who/what causes the risk?)\n- **Human** (39% of risks): Risks caused by human decisions or actions\n- **AI** (41% of risks): Risks caused by AI system decisions or actions  \n- **Other** (20% of risks): Risks without clearly specified causal entity\n\n### 2. **Intentionality** (Was it intended?)\n- **Intentional** (34% of risks): Risk as expected outcome of pursuing a goal\n- **Unintentional** (35% of risks): Risk as unexpected outcome\n- **Other** (31% of risks): Risk without clearly specified intentionality\n\n### 3. **Timing** (When does it occur?)\n- **Pre-deployment** (13% of risks): Risk occurs before the AI model is deployed\n- **Post-deployment** (62% of risks): Risk occurs after the AI model has been trained and deployed\n- **Other** (25% of risks): Risk without clearly specified timing\n\nThis taxonomy allows systematic classification of any AI risk by identifying the causal entity, whether the harm was intentional, and when in the AI lifecycle it occurs.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*\n\n---\n\n## Domain Taxonomy of AI Risks\n\nThe AI Risk Repository organizes risks into **7 domains** and **24 subdomains** based on analysis of 1612 risks from 65 documents:\n\n\n### 1. **Discrimination & Toxicity** (16.2% of risks)\nRisks related to AI systems producing discriminatory outputs or exposing users to toxic content\n\n**Subdomains:**\n   - Discrimination & bias\n   - Exposure to toxic content\n   - Aggression & violence\n### 2. **Privacy & Security** (15.8% of risks)\nRisks involving data privacy violations, security vulnerabilities, and unauthorized access\n\n**Subdomains:**\n   - Privacy violations\n   - Security vulnerabilities & attacks\n   - Data leaks & unauthorized access\n### 3. **Misinformation** (12.4% of risks)\nRisks from AI generating or spreading false, misleading, or harmful information\n\n**Subdomains:**\n   - Generating or spreading misinformation\n   - Harmful content generation\n   - Information manipulation\n### 4. **Malicious Actors & Misuse** (11.6% of risks)\nRisks from intentional misuse of AI systems for harmful purposes\n\n**Subdomains:**\n   - Fraud & deception\n   - Malicious use\n   - Competitive & geopolitical risks\n### 5. **Human-Computer Interaction** (14.9% of risks)\nRisks arising from how humans interact with and are affected by AI systems\n\n**Subdomains:**\n   - Overreliance on AI\n   - Manipulation & anthropomorphism\n   - Automation & employment\n   - Degradation of human capabilities\n### 6. **Socioeconomic & Environmental** (13.5% of risks)\nBroader societal, economic, and environmental impacts of AI systems\n\n**Subdomains:**\n   - Concentration of power\n   - Environmental impacts\n   - Societal & cultural harms\n   - Economic harms\n### 7. **AI System Safety, Failures, & Limitations** (15.6% of risks)\nTechnical risks related to AI system performance, reliability, and safety\n\n**Subdomains:**\n   - Performance issues\n   - Safety & alignment problems\n   - Lack of transparency & explainability\n   - Weaponization & mass destruction\n   - Existential risks\n   - Other system risks\n\n### Summary Statistics:\n- **Total Domains:** 7\n- **Total Subdomains:** 24  \n- **Total Risks Analyzed:** 1612\n- **Documents Reviewed:** 65\n\nThis comprehensive taxonomy provides a structured framework for understanding and categorizing the full spectrum of AI risks.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "Discrimination & bias",
+          "Privacy violations",
+          "Fraud & deception",
+          "Performance issues",
+          "Environmental impacts"
+        ],
+        "found_elements": [
+          "Discrimination & bias",
+          "Privacy violations",
+          "Fraud & deception",
+          "Performance issues",
+          "Environmental impacts"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 19,
+      "category": "edge",
+      "query": "Show the full breakdown of unintentional AI-caused post-deployment risks",
+      "description": "Should handle complex multi-dimensional query",
+      "intent_analysis": {
+        "completeness_level": 1.0,
+        "expected_completeness": 0.6,
+        "completeness_met": true,
+        "query_type": "enumeration",
+        "enumeration_mode": true,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "ai",
+          "unintentional",
+          "post-deployment",
+          "intentional"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 1343,
+        "preview": "## Timing in the AI Risk Causal Taxonomy\n\nThe **Timing** dimension is one of three key factors in the Causal Taxonomy, categorizing when risks occur in the AI lifecycle.\n\n### Timing Categories:\n\n#### 1. **Pre-deployment** (13% of risks)\n- **Definition**: Risks occurring before the AI model is deployed to production\n- **Examples**: \n  - Biased training data collection\n  - Flawed model architecture decisions\n  - Inadequate testing procedures\n  - Misalignment during training\n\n#### 2. **Post-deploym...",
+        "full_text": "## Timing in the AI Risk Causal Taxonomy\n\nThe **Timing** dimension is one of three key factors in the Causal Taxonomy, categorizing when risks occur in the AI lifecycle.\n\n### Timing Categories:\n\n#### 1. **Pre-deployment** (13% of risks)\n- **Definition**: Risks occurring before the AI model is deployed to production\n- **Examples**: \n  - Biased training data collection\n  - Flawed model architecture decisions\n  - Inadequate testing procedures\n  - Misalignment during training\n\n#### 2. **Post-deployment** (62% of risks)\n- **Definition**: Risks occurring after the AI model has been trained and deployed\n- **Examples**:\n  - Misuse by end users\n  - Emergent behaviors in production\n  - Adversarial attacks\n  - Drift from original training distribution\n\n#### 3. **Other** (25% of risks)\n- **Definition**: Risks without clearly specified timing\n- **Examples**: Systemic or ongoing risks that span the lifecycle\n\n### Interaction with Other Causal Factors:\n- **Entity**: Both humans and AI can cause risks at either timing stage\n- **Intentionality**: Pre-deployment often involves unintentional oversights; post-deployment sees more intentional misuse\n\n### Key Insight:\nThe majority of risks (62%) occur **post-deployment**, highlighting the importance of ongoing monitoring and governance.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "Unintentional",
+          "AI",
+          "Post-deployment"
+        ],
+        "found_elements": [
+          "Unintentional",
+          "AI",
+          "Post-deployment"
+        ],
+        "missing_elements": []
+      }
+    },
+    {
+      "test_id": 20,
+      "category": "edge",
+      "query": "List every single subdomain across all 7 domains with their percentages",
+      "description": "Should provide exhaustive enumeration with statistics",
+      "intent_analysis": {
+        "completeness_level": 1.0,
+        "expected_completeness": 1.0,
+        "completeness_met": true,
+        "query_type": "enumeration",
+        "enumeration_mode": true,
+        "comparison_mode": false,
+        "concepts_mentioned": [
+          "ai",
+          "domain",
+          "subdomain",
+          "percentage"
+        ],
+        "detail_level": "exhaustive"
+      },
+      "response": {
+        "length": 2163,
+        "preview": "## Complete List of 24 AI Risk Subdomains\n\nThe AI Risk Repository organizes risks into **7 domains** containing **24 total subdomains**:\n\n### Domain 1: Discrimination & Toxicity (16.2%)\nRisks related to AI systems producing discriminatory outputs or exposing users to toxic content\n\n**Subdomains:**\n1. Discrimination & bias\n2. Exposure to toxic content\n3. Aggression & violence\n\n### Domain 2: Privacy & Security (15.8%)\nRisks involving data privacy violations, security vulnerabilities, and unauthori...",
+        "full_text": "## Complete List of 24 AI Risk Subdomains\n\nThe AI Risk Repository organizes risks into **7 domains** containing **24 total subdomains**:\n\n### Domain 1: Discrimination & Toxicity (16.2%)\nRisks related to AI systems producing discriminatory outputs or exposing users to toxic content\n\n**Subdomains:**\n1. Discrimination & bias\n2. Exposure to toxic content\n3. Aggression & violence\n\n### Domain 2: Privacy & Security (15.8%)\nRisks involving data privacy violations, security vulnerabilities, and unauthorized access\n\n**Subdomains:**\n1. Privacy violations\n2. Security vulnerabilities & attacks\n3. Data leaks & unauthorized access\n\n### Domain 3: Misinformation (12.4%)\nRisks from AI generating or spreading false, misleading, or harmful information\n\n**Subdomains:**\n1. Generating or spreading misinformation\n2. Harmful content generation\n3. Information manipulation\n\n### Domain 4: Malicious Actors & Misuse (11.6%)\nRisks from intentional misuse of AI systems for harmful purposes\n\n**Subdomains:**\n1. Fraud & deception\n2. Malicious use\n3. Competitive & geopolitical risks\n\n### Domain 5: Human-Computer Interaction (14.9%)\nRisks arising from how humans interact with and are affected by AI systems\n\n**Subdomains:**\n1. Overreliance on AI\n2. Manipulation & anthropomorphism\n3. Automation & employment\n4. Degradation of human capabilities\n\n### Domain 6: Socioeconomic & Environmental (13.5%)\nBroader societal, economic, and environmental impacts of AI systems\n\n**Subdomains:**\n1. Concentration of power\n2. Environmental impacts\n3. Societal & cultural harms\n4. Economic harms\n\n### Domain 7: AI System Safety, Failures, & Limitations (15.6%)\nTechnical risks related to AI system performance, reliability, and safety\n\n**Subdomains:**\n1. Performance issues\n2. Safety & alignment problems\n3. Lack of transparency & explainability\n4. Weaponization & mass destruction\n5. Existential risks\n6. Other system risks\n\n### Summary:\n- **Total Subdomains:** 24\n- **Domains:** 7\n- **Risks Analyzed:** 1612\n- **Documents:** 65\n\nThis complete enumeration covers all risk categories identified in the repository's comprehensive analysis.\n\n*Source: The AI Risk Repository (Slattery et al., 2024)*"
+      },
+      "validation": {
+        "passed": true,
+        "coverage": 1.0,
+        "expected_elements": [
+          "24",
+          "Discrimination & bias",
+          "Existential risks",
+          "16.2%",
+          "15.6%"
+        ],
+        "found_elements": [
+          "24",
+          "Discrimination & bias",
+          "Existential risks",
+          "16.2%",
+          "15.6%"
+        ],
+        "missing_elements": []
+      }
+    }
+  ]
+}

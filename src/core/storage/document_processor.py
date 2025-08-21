@@ -95,6 +95,9 @@ class DocumentProcessor:
             # For Excel files, the URL is the file path
             if file_path.endswith(".xlsx") or file_path.endswith(".xls"):
                 metadata["url"] = file_path
+            # For DOCX files, the URL is the file path
+            elif file_path.endswith(".docx"):
+                metadata["url"] = file_path
             # For text files, check for a URL in the content
             elif file_path.endswith(".txt"):
                 with open(file_path, "r") as f:

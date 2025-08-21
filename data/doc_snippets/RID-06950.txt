@@ -1,0 +1,27 @@
+Repository ID: RID-06950
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/The_AI_Risk_Repository_V3_26_03_2025.xlsx
+Title: AI Risk Domain: 7.0 > AI system safety, failures, & limitations
+Domain: 7.0 > AI system safety, failures, & limitations
+
+Content:
+AI Risk Domain: 7.0 > AI system safety, failures, & limitations
+
+This domain contains 19 risk entries from the AI Risk Repository:
+
+Risk Entry 1:
+Title: The Risks of Machine Learning Systems
+Domain: 7. AI System Safety, Failures, & Limitations
+Sub-domain: 7.0 > AI system safety, failures, & limitations
+Risk Category: First-Order Risks
+Description: "First-order risks can be generally broken down into risks arising from intended and unintended use, system design and implementation choices, and properties of the chosen dataset and learning components."
+Entity: 3 - Other
+Intent: 3 - Other
+Timing: 3 - Other
+
+Risk Entry 2:
+Title: The Risks of Machine Learning Systems
+Domain: 7. AI System Safety, Failures, & Limitations
+Sub-domain: 7.0 > AI system safety, failures, & limitations
+Risk Category: First-Order Risks
+Risk Subcategory: Application
+Description: "This is the risk posed by the intended application or use case. It is intuitive that some use cases will be inherently

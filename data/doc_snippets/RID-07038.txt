@@ -1,0 +1,16 @@
+Repository ID: RID-07038
+Source: /Users/davidturturean/Documents/Codingprojects/airi-chatbot-class/data/info_files/AI_Risk_Repository_Preprint.docx
+Title: AI_Risk_Repository_Preprint
+
+Content:
+When we included new documents in the AI Risk Repository, we emailed the authors of those documents to identify additional relevant documents
+
+On the AI Risk Repository website, we provided a public form for proposal of relevant documents
+
+In personal communications, presentations, and other interactions with experts (e.g., when invited to a roundtable on AI risks), we informally asked attendees if they were aware of additional relevant documents.
+
+Approximately every 3 months, we screened the proposed documents. For included documents, we extracted and coded the risks as described above.
+
+Results
+
+Systematic literature search

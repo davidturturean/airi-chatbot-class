@@ -130,6 +130,21 @@ class FlexibleMetadataService:
         if not self._initialized:
             self.initialize()
         
+        # Safety check: Detect if this is actually a taxonomy query
+        query_lower = natural_query.lower()
+        taxonomy_indicators = [
+            'subdomain', 'causal taxonomy', 'domain taxonomy', '7 domains', '24 subdomains',
+            'risk categories', 'ai risk database v3', 'taxonomy structure',
+            'privacy & security', 'discrimination & toxicity', 'ai system safety',
+            'complete structure', 'risk categorization', 'percentage of risks',
+            'each causal category', 'entity intentionality timing'
+        ]
+        
+        if any(indicator in query_lower for indicator in taxonomy_indicators):
+            # This looks like a taxonomy query that shouldn't be here
+            logger.warning(f"Detected probable taxonomy query in metadata service: {natural_query[:100]}")
+            return "This appears to be a taxonomy query. Please try rephrasing your question about the AI Risk Repository taxonomy.", []
+        
         start_time = time.time()
         
         try:
