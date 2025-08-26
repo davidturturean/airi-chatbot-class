@@ -102,7 +102,6 @@ def stream_message():
                     if stage:
                         status_data["stage"] = stage
                     status_json = json.dumps(status_data) + '\n'
-                    status_messages.append(message)
                     return status_json
                 
                 # Initial status update
