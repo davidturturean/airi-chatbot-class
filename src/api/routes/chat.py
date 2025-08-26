@@ -94,9 +94,19 @@ def stream_message():
                 query_type = "general"
                 domain = None
                 docs = []
+                status_messages = []
                 
-                # Initial status update with system info
-                yield json.dumps("Processing your query...") + '\n'
+                # Helper function to send status updates
+                def send_status(message: str, stage: str = None):
+                    status_data = {"status": message, "type": "status"}
+                    if stage:
+                        status_data["stage"] = stage
+                    status_json = json.dumps(status_data) + '\n'
+                    status_messages.append(message)
+                    return status_json
+                
+                # Initial status update
+                yield send_status("Initializing query processing...", "init")
                 
                 # Add system version info to logs
                 from ...config.settings import settings
@@ -106,11 +116,26 @@ def stream_message():
                         retriever_class = chat_service.vector_store.hybrid_retriever.__class__.__name__
                         logger.info(f"🎯 Using retriever: {retriever_class}")
                 
-                time.sleep(0.3)
+                time.sleep(0.1)
+                
+                # Send initial analyzing status
+                yield send_status("Analyzing your query...", "analysis")
+                time.sleep(0.1)
+                
+                # Check query type first
+                yield send_status("Classifying intent...", "classification") 
+                time.sleep(0.1)
                 
                 # 1. Process the query through chat service
                 # Process query and get language info
+                yield send_status("Searching the AI Risk Repository...", "retrieval")
+                time.sleep(0.1)
+                
                 result = chat_service.process_query(message, conversation_id, session_id, language_code)
+                
+                # After processing, indicate we're formatting the response
+                yield send_status("Generating response...", "generation")
+                time.sleep(0.1)
                 
                 # Handle both old (2-tuple) and new (3-tuple) return formats
                 if len(result) == 3:

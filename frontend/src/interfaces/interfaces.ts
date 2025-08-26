@@ -2,6 +2,7 @@ export interface message {
     content:string;
     role:string;
     id:string;
+    isStatus?: boolean;
 }
 export interface ChatInputProps {
     question: string;

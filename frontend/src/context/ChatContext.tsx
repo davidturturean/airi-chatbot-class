@@ -83,8 +83,21 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     setPreviousMessages((prev) => [...prev, userMessage]);
     setIsLoading(true);
 
-    const loadingMessage: message = { content: 'Loading...', role: 'assistant', id: 'loading' };
+    const loadingMessage: message = { content: '⏳ Initializing...', role: 'assistant', id: 'loading', isStatus: true };
     setCurrentMessage(loadingMessage);
+    
+    // Set up a timeout to show a message if processing takes too long
+    const timeoutId = setTimeout(() => {
+      if (isLoading) {
+        const timeoutMsg: message = { 
+          content: '⏳ This is taking longer than expected. The system is still processing your query...', 
+          role: 'assistant', 
+          id: 'timeout',
+          isStatus: true 
+        };
+        setCurrentMessage(timeoutMsg);
+      }
+    }, 10000); // 10 seconds
 
     try {
       const stream = await fetch(`${API_URL}api/v1/stream`, {
@@ -121,6 +134,21 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
             try {
               const parsed = JSON.parse(line);
 
+              // Check if it's a new-style status message object
+              if (parsed && typeof parsed === 'object' && parsed.type === 'status' && parsed.status) {
+                // Display the status message with special formatting
+                const statusText = `⏳ ${parsed.status}`;
+                const currMess: message = { 
+                  content: statusText, 
+                  role: 'assistant', 
+                  id: 'status-' + (parsed.stage || 'update'),
+                  isStatus: true 
+                };
+                setCurrentMessage(currMess);
+                continue;
+              }
+
+              // Legacy status message handling (backward compatibility)
               const isStatusMessage =
                 typeof parsed === "string" &&
                 (
@@ -132,12 +160,21 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
                   parsed.startsWith("Retrieving") ||
                   parsed.startsWith("Using") ||
                   parsed.startsWith("No specific documents") ||
-                  parsed.startsWith("Using general knowledge")
+                  parsed.startsWith("Using general knowledge") ||
+                  parsed.startsWith("Classifying") ||
+                  parsed.startsWith("Initializing") ||
+                  parsed.startsWith("Validating") ||
+                  parsed.startsWith("Enhancing")
                 );
 
               if (isStatusMessage) {
-                // Optionally show this briefly in the UI via some loading bar/spinner
-                const currMess: message = { content: parsed, role: 'assistant', id: uuidv4() };
+                // Show legacy status messages
+                const currMess: message = { 
+                  content: `⏳ ${parsed}`, 
+                  role: 'assistant', 
+                  id: uuidv4(),
+                  isStatus: true 
+                };
                 setCurrentMessage(currMess);
                 continue;
               }
@@ -177,6 +214,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       setPreviousMessages((prev) => [...prev, errorMessage]);
       setCurrentMessage(null);
     } finally {
+      clearTimeout(timeoutId);
       setIsLoading(false);
       cleanupMessageHandler();
     }

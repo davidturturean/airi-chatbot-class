@@ -80,82 +80,80 @@ class TaxonomyHandler:
                     "name": "Discrimination & Toxicity",
                     "description": "Risks related to AI systems producing discriminatory outputs or exposing users to toxic content",
                     "subdomains": [
-                        "Discrimination & bias",
+                        "Unfair discrimination and misrepresentation",
                         "Exposure to toxic content",
-                        "Aggression & violence"
+                        "Unequal performance across groups"
                     ],
-                    "percentage": "16.2%"
+                    "percentage": "15%"
                 },
                 {
                     "id": 2,
                     "name": "Privacy & Security",
                     "description": "Risks involving data privacy violations, security vulnerabilities, and unauthorized access",
                     "subdomains": [
-                        "Privacy violations",
-                        "Security vulnerabilities & attacks",
-                        "Data leaks & unauthorized access"
+                        "Compromise of privacy by obtaining, leaking, or correctly inferring sensitive information",
+                        "AI system security vulnerabilities and attacks"
                     ],
-                    "percentage": "15.8%"
+                    "percentage": "12%"
                 },
                 {
                     "id": 3,
                     "name": "Misinformation",
                     "description": "Risks from AI generating or spreading false, misleading, or harmful information",
                     "subdomains": [
-                        "Generating or spreading misinformation",
-                        "Harmful content generation",
-                        "Information manipulation"
+                        "False or misleading information",
+                        "Pollution of information ecosystem and loss of consensus reality"
                     ],
-                    "percentage": "12.4%"
+                    "percentage": "4%"
                 },
                 {
                     "id": 4,
                     "name": "Malicious Actors & Misuse",
                     "description": "Risks from intentional misuse of AI systems for harmful purposes",
                     "subdomains": [
-                        "Fraud & deception",
-                        "Malicious use",
-                        "Competitive & geopolitical risks"
+                        "Disinformation, surveillance, and influence at scale",
+                        "Cyberattacks, weapon development or use, and mass harm",
+                        "Fraud, scams, and targeted manipulation"
                     ],
-                    "percentage": "11.6%"
+                    "percentage": "16%"
                 },
                 {
                     "id": 5,
                     "name": "Human-Computer Interaction",
                     "description": "Risks arising from how humans interact with and are affected by AI systems",
                     "subdomains": [
-                        "Overreliance on AI",
-                        "Manipulation & anthropomorphism",
-                        "Automation & employment",
-                        "Degradation of human capabilities"
+                        "Overreliance and unsafe use",
+                        "Loss of human agency and autonomy"
                     ],
-                    "percentage": "14.9%"
+                    "percentage": "7%"
                 },
                 {
                     "id": 6,
                     "name": "Socioeconomic & Environmental",
                     "description": "Broader societal, economic, and environmental impacts of AI systems",
                     "subdomains": [
-                        "Concentration of power",
-                        "Environmental impacts",
-                        "Societal & cultural harms",
-                        "Economic harms"
+                        "Power centralization and unfair distribution of benefits",
+                        "Increased inequality and decline in employment quality",
+                        "Economic and cultural devaluation of human effort",
+                        "Competitive dynamics",
+                        "Governance failure",
+                        "Environmental harm"
                     ],
-                    "percentage": "13.5%"
+                    "percentage": "19%"
                 },
                 {
                     "id": 7,
                     "name": "AI System Safety, Failures, & Limitations",
                     "description": "Technical risks related to AI system performance, reliability, and safety",
                     "subdomains": [
-                        "Performance issues",
-                        "Safety & alignment problems",
-                        "Lack of transparency & explainability",
-                        "Weaponization & mass destruction",
-                        "Existential risks",
-                        "Other system risks"
+                        "AI pursuing its own goals in conflict with human goals or values",
+                        "AI possessing dangerous capabilities",
+                        "Lack of capability or robustness",
+                        "Lack of transparency or interpretability",
+                        "AI welfare and rights",
+                        "Multi-agent risks"
                     ],
-                    "percentage": "15.6%"
+                    "percentage": "26%"
                 }
             ],
             "total_subdomains": 24,
@@ -544,7 +542,7 @@ The majority of risks ({self.causal_taxonomy['statistics']['timing']['Post-deplo
         content += """\n\n### Key Findings:
 - Post-deployment risks are most common (62%)
 - AI and humans cause roughly equal proportions of risks
-- Discrimination & Toxicity is the largest domain (16.2%)
+- AI System Safety, Failures, & Limitations is the largest domain (26%)
 
 *Source: The AI Risk Repository (Slattery et al., 2024)*"""
         
