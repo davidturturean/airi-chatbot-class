@@ -1,0 +1,482 @@
+<!-- AI Risk Repository Chatbot - Floating Widget Implementation -->
+<!-- Add this to Webflow Custom Code (Before </body> tag) -->
+
+<style>
+  /* Chatbot Widget Styles */
+  #airisk-chatbot-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+
+  /* Widget Button (Collapsed State) */
+  .chatbot-widget-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    border: none;
+    position: relative;
+  }
+
+  .chatbot-widget-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+  }
+
+  .chatbot-widget-button svg {
+    width: 30px;
+    height: 30px;
+    fill: white;
+  }
+
+  /* Notification Badge */
+  .chatbot-notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 20px;
+    height: 20px;
+    background: #ef4444;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .chatbot-notification-badge.active {
+    display: flex;
+  }
+
+  /* Widget Container (Expanded State) */
+  .chatbot-widget-container {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 400px;
+    height: 600px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    animation: slideUp 0.3s ease;
+  }
+
+  .chatbot-widget-container.active {
+    display: flex;
+  }
+
+  /* Widget Header */
+  .chatbot-widget-header {
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .chatbot-widget-title {
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .chatbot-widget-subtitle {
+    font-size: 12px;
+    opacity: 0.9;
+    margin-top: 4px;
+  }
+
+  /* Close and Expand Buttons */
+  .chatbot-widget-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .chatbot-action-button {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease;
+  }
+
+  .chatbot-action-button:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .chatbot-action-button svg {
+    width: 18px;
+    height: 18px;
+    fill: white;
+  }
+
+  /* Widget Body (iframe container) */
+  .chatbot-widget-body {
+    flex: 1;
+    position: relative;
+    background: #f9fafb;
+  }
+
+  .chatbot-widget-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* Loading State */
+  .chatbot-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .chatbot-loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f4f6;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  /* Animations */
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Mobile Responsiveness */
+  @media (max-width: 480px) {
+    .chatbot-widget-container {
+      width: calc(100vw - 20px);
+      height: calc(100vh - 100px);
+      right: 10px;
+      bottom: 80px;
+    }
+
+    .chatbot-widget-button {
+      width: 56px;
+      height: 56px;
+    }
+  }
+
+  /* Full Screen Mode */
+  .chatbot-widget-container.fullscreen {
+    width: calc(100vw - 40px);
+    height: calc(100vh - 40px);
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    top: 20px;
+  }
+</style>
+
+<div id="airisk-chatbot-widget">
+  <!-- Collapsed Widget Button -->
+  <button class="chatbot-widget-button" id="chatbot-toggle-button" aria-label="Open AI Risk Chatbot">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-11c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2zm2 8c2.21 0 4-1.79 4-4h-8c0 2.21 1.79 4 4 4z"/>
+    </svg>
+    <span class="chatbot-notification-badge" id="chatbot-notification">1</span>
+  </button>
+
+  <!-- Expanded Widget Container -->
+  <div class="chatbot-widget-container" id="chatbot-widget-container">
+    <!-- Header -->
+    <div class="chatbot-widget-header">
+      <div>
+        <div class="chatbot-widget-title">AI Risk Repository</div>
+        <div class="chatbot-widget-subtitle">Ask about AI risks and safety</div>
+      </div>
+      <div class="chatbot-widget-actions">
+        <button class="chatbot-action-button" id="chatbot-expand-button" aria-label="Expand to full screen">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+          </svg>
+        </button>
+        <button class="chatbot-action-button" id="chatbot-close-button" aria-label="Close chatbot">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Body (iframe) -->
+    <div class="chatbot-widget-body">
+      <div class="chatbot-loading" id="chatbot-loading">
+        <div class="chatbot-loading-spinner"></div>
+        <p style="margin-top: 16px; color: #6b7280;">Loading chatbot...</p>
+      </div>
+      <iframe 
+        id="chatbot-iframe"
+        class="chatbot-widget-iframe"
+        src=""
+        title="AI Risk Repository Chatbot"
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Configuration
+  const CHATBOT_URL = 'https://airisk.mit.edu/chat'; // Update with your actual chatbot URL
+  const ENABLE_POSTHOG = true; // Set to false to disable PostHog tracking
+  
+  // DOM Elements
+  const toggleButton = document.getElementById('chatbot-toggle-button');
+  const container = document.getElementById('chatbot-widget-container');
+  const closeButton = document.getElementById('chatbot-close-button');
+  const expandButton = document.getElementById('chatbot-expand-button');
+  const iframe = document.getElementById('chatbot-iframe');
+  const loading = document.getElementById('chatbot-loading');
+  const notification = document.getElementById('chatbot-notification');
+  
+  // State
+  let isOpen = false;
+  let isFullscreen = false;
+  let iframeLoaded = false;
+  
+  // Initialize
+  function init() {
+    // Set up event listeners
+    toggleButton.addEventListener('click', toggleWidget);
+    closeButton.addEventListener('click', closeWidget);
+    expandButton.addEventListener('click', toggleFullscreen);
+    
+    // Listen for messages from iframe
+    window.addEventListener('message', handleIframeMessage);
+    
+    // Check if should auto-open (e.g., from URL parameter)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('openchat') === 'true') {
+      setTimeout(openWidget, 1000);
+    }
+    
+    // Show notification badge initially (remove after first open)
+    setTimeout(() => {
+      notification.classList.add('active');
+    }, 3000);
+  }
+  
+  // Toggle widget open/close
+  function toggleWidget() {
+    if (isOpen) {
+      closeWidget();
+    } else {
+      openWidget();
+    }
+  }
+  
+  // Open widget
+  function openWidget() {
+    if (!iframeLoaded) {
+      // Load iframe on first open
+      iframe.src = CHATBOT_URL;
+      iframeLoaded = true;
+      
+      // Hide loading after iframe loads
+      iframe.addEventListener('load', function() {
+        loading.style.display = 'none';
+      }, { once: true });
+    }
+    
+    container.classList.add('active');
+    isOpen = true;
+    
+    // Hide notification badge
+    notification.classList.remove('active');
+    
+    // Track opening if PostHog is available
+    if (ENABLE_POSTHOG && typeof posthog !== 'undefined') {
+      posthog.capture('chatbot_widget_opened', {
+        timestamp: new Date().toISOString()
+      });
+    }
+    
+    // Change button icon to close
+    toggleButton.innerHTML = `
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
+    `;
+  }
+  
+  // Close widget
+  function closeWidget() {
+    container.classList.remove('active');
+    isOpen = false;
+    
+    // Track closing if PostHog is available
+    if (ENABLE_POSTHOG && typeof posthog !== 'undefined') {
+      posthog.capture('chatbot_widget_closed', {
+        timestamp: new Date().toISOString()
+      });
+    }
+    
+    // Change button icon back to chat
+    toggleButton.innerHTML = `
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-11c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2zm2 8c2.21 0 4-1.79 4-4h-8c0 2.21 1.79 4 4 4z"/>
+      </svg>
+    `;
+  }
+  
+  // Toggle fullscreen
+  function toggleFullscreen() {
+    isFullscreen = !isFullscreen;
+    
+    if (isFullscreen) {
+      container.classList.add('fullscreen');
+      expandButton.innerHTML = `
+        <svg viewBox="0 0 24 24">
+          <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
+        </svg>
+      `;
+    } else {
+      container.classList.remove('fullscreen');
+      expandButton.innerHTML = `
+        <svg viewBox="0 0 24 24">
+          <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+        </svg>
+      `;
+    }
+    
+    // Track fullscreen toggle
+    if (ENABLE_POSTHOG && typeof posthog !== 'undefined') {
+      posthog.capture('chatbot_widget_fullscreen', {
+        fullscreen: isFullscreen,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
+  
+  // Handle messages from iframe
+  function handleIframeMessage(event) {
+    // Security: Verify origin
+    // if (event.origin !== CHATBOT_URL.split('/').slice(0, 3).join('/')) {
+    //   return;
+    // }
+    
+    if (event.data && event.data.type) {
+      switch(event.data.type) {
+        case 'chatbot_ready':
+          console.log('Chatbot is ready');
+          loading.style.display = 'none';
+          break;
+          
+        case 'new_message':
+          // Show notification if widget is closed
+          if (!isOpen) {
+            notification.textContent = event.data.count || '1';
+            notification.classList.add('active');
+          }
+          break;
+          
+        case 'close_widget':
+          closeWidget();
+          break;
+          
+        default:
+          // Forward to PostHog if available
+          if (ENABLE_POSTHOG && typeof posthog !== 'undefined') {
+            posthog.capture('chatbot_event', event.data);
+          }
+      }
+    }
+  }
+  
+  // Initialize when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+<!-- 
+IMPLEMENTATION INSTRUCTIONS:
+
+1. Add this entire code to Webflow:
+   - Go to Page Settings > Custom Code
+   - Add to "Before </body> tag" section
+
+2. Update Configuration:
+   - Change CHATBOT_URL to your actual chatbot URL
+   - Set ENABLE_POSTHOG to true/false based on your needs
+
+3. Customization Options:
+   - Adjust colors in the CSS gradient (currently purple)
+   - Change widget position (bottom/right values)
+   - Modify size of expanded container
+   - Update text in header
+
+4. Testing:
+   - Test on desktop and mobile
+   - Verify iframe loads correctly
+   - Check PostHog events if enabled
+   - Test fullscreen mode
+
+5. Optional Features:
+   - Add sound notification for new messages
+   - Save open/closed state to localStorage
+   - Add minimize option (in addition to close)
+   - Add typing indicators
+   - Add unread message counter
+
+6. Integration with Main Chatbot:
+   The main chatbot page should post messages to parent:
+   
+   // In your chatbot code:
+   window.parent.postMessage({
+     type: 'chatbot_ready'
+   }, '*');
+   
+   window.parent.postMessage({
+     type: 'new_message',
+     count: unreadCount
+   }, '*');
+
+BENEFITS OF THIS WIDGET:
+- Non-intrusive: Users can browse while chatting
+- Persistent: Stays available across page navigation
+- Mobile-friendly: Responsive design
+- Fullscreen option: For detailed conversations
+- Loading states: Better UX
+- Analytics ready: PostHog integration included
+-->

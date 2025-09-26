@@ -1,0 +1,1071 @@
+<!-- AI Risk Repository Chatbot Widget - RESIZABLE BRANDED VERSION -->
+<!-- Matches AI Risk Repository visual identity + Drag-to-resize functionality -->
+<!-- 
+INSTALLATION:
+1. Copy this ENTIRE code
+2. In Webflow: Site Settings → Custom Code → Footer Code
+3. Publish your site
+
+FEATURES:
+- Drag edges/corners to resize
+- Remembers size during session
+- Double-click edge to reset size
+- Min/max size constraints
+-->
+
+<style>
+  /* Import Figtree font */
+  @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&display=swap');
+
+  /* Chatbot Widget Styles - Branded for AI Risk Repository */
+  #airisk-chatbot-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    font-family: 'Figtree', 'Ubuntu', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* Widget Button - Burgundy Theme */
+  .chatbot-widget-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #A32035;
+    box-shadow: 0 3px 10px rgba(163, 32, 53, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    border: none;
+    position: relative;
+  }
+
+  .chatbot-widget-button:hover {
+    transform: translateY(-2px);
+    background: #8B1A2B;
+    box-shadow: 0 5px 15px rgba(163, 32, 53, 0.4);
+  }
+
+  .chatbot-widget-button svg {
+    width: 28px;
+    height: 28px;
+    fill: white;
+  }
+
+  /* Notification Badge */
+  .chatbot-notification-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    background: #DC2626;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    border: 2px solid white;
+  }
+
+  .chatbot-notification-badge.active {
+    display: flex;
+  }
+
+  /* Widget Container - Resizable */
+  .chatbot-widget-container {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 380px;
+    height: 580px;
+    min-width: 320px;
+    min-height: 400px;
+    max-width: 90vw;
+    max-height: 90vh;
+    background: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(163, 32, 53, 0.1);
+    animation: slideUp 0.25s ease-out;
+  }
+
+  .chatbot-widget-container.active {
+    display: flex;
+  }
+
+  /* Resize Handles */
+  .resize-handle {
+    position: absolute;
+    background: transparent;
+    z-index: 10;
+  }
+
+  /* Corner handles */
+  .resize-handle.nw {
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    cursor: nw-resize;
+  }
+
+  .resize-handle.ne {
+    top: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    cursor: ne-resize;
+  }
+
+  .resize-handle.sw {
+    bottom: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    cursor: sw-resize;
+  }
+
+  .resize-handle.se {
+    bottom: 0;
+    right: 0;
+    width: 10px;
+    height: 10px;
+    cursor: se-resize;
+  }
+
+  /* Edge handles */
+  .resize-handle.n {
+    top: 0;
+    left: 10px;
+    right: 10px;
+    height: 4px;
+    cursor: n-resize;
+  }
+
+  .resize-handle.s {
+    bottom: 0;
+    left: 10px;
+    right: 10px;
+    height: 4px;
+    cursor: s-resize;
+  }
+
+  .resize-handle.e {
+    top: 10px;
+    bottom: 10px;
+    right: 0;
+    width: 4px;
+    cursor: e-resize;
+  }
+
+  .resize-handle.w {
+    top: 10px;
+    bottom: 10px;
+    left: 0;
+    width: 4px;
+    cursor: w-resize;
+  }
+
+  /* Visual feedback on hover */
+  .chatbot-widget-container:hover .resize-handle {
+    background: rgba(163, 32, 53, 0.1);
+  }
+
+  .resize-handle:hover {
+    background: rgba(163, 32, 53, 0.2) !important;
+  }
+
+  /* Resize grip indicator */
+  .resize-handle.se::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #A32035;
+    border-bottom: 2px solid #A32035;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .chatbot-widget-container:hover .resize-handle.se::after {
+    opacity: 0.3;
+  }
+
+  .resize-handle.se:hover::after {
+    opacity: 0.6;
+  }
+
+  /* Widget Header */
+  .chatbot-widget-header {
+    padding: 14px 18px;
+    background: #A32035;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    user-select: none;
+    flex-shrink: 0;
+    min-height: 48px;
+  }
+
+  .chatbot-widget-title {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+
+  .chatbot-widget-subtitle {
+    font-size: 12px;
+    opacity: 0.85;
+    margin-top: 2px;
+    font-weight: 400;
+  }
+  
+  /* Minimal header when only title */
+  .chatbot-widget-header:has(.chatbot-widget-subtitle:not([style*="display: none"])) {
+    padding: 18px 20px;
+  }
+
+  /* Header Buttons */
+  .chatbot-widget-actions {
+    display: flex;
+    gap: 4px;
+    margin-left: 12px;
+  }
+
+  .chatbot-action-button {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+  }
+
+  .chatbot-action-button:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .chatbot-action-button svg {
+    width: 16px;
+    height: 16px;
+    fill: white;
+  }
+
+  /* Widget Body */
+  .chatbot-widget-body {
+    flex: 1;
+    position: relative;
+    background: #FAFAFA;
+    overflow: hidden;
+  }
+
+  .chatbot-widget-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* Loading State */
+  .chatbot-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .chatbot-loading-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #E5E7EB;
+    border-top: 3px solid #A32035;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .chatbot-loading p {
+    margin-top: 14px;
+    color: #6B7280;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* Animations */
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Mobile - Disable resize on small screens */
+  @media (max-width: 768px) {
+    .resize-handle {
+      display: none !important;
+    }
+    
+    .chatbot-widget-container {
+      width: calc(100vw - 24px) !important;
+      height: calc(100vh - 100px) !important;
+      right: 12px !important;
+      bottom: 80px !important;
+    }
+
+    .chatbot-widget-button {
+      width: 56px;
+      height: 56px;
+    }
+  }
+
+  /* Resizing state */
+  .chatbot-widget-container.resizing {
+    transition: none !important;
+    user-select: none;
+  }
+
+  .chatbot-widget-container.resizing .chatbot-widget-iframe {
+    pointer-events: none;
+  }
+
+  /* Size indicator tooltip */
+  .size-indicator {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    display: none;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .chatbot-widget-container.resizing .size-indicator {
+    display: block;
+  }
+</style>
+
+<div id="airisk-chatbot-widget">
+  <!-- Collapsed Widget Button -->
+  <button class="chatbot-widget-button" id="chatbot-toggle-button" aria-label="Open AI Risk Repository Assistant">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+      <path d="M7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/>
+    </svg>
+    <span class="chatbot-notification-badge" id="chatbot-notification">1</span>
+  </button>
+
+  <!-- Expanded Widget Container -->
+  <div class="chatbot-widget-container" id="chatbot-widget-container">
+    <!-- Resize Handles -->
+    <div class="resize-handle nw" data-resize="nw"></div>
+    <div class="resize-handle n" data-resize="n"></div>
+    <div class="resize-handle ne" data-resize="ne"></div>
+    <div class="resize-handle e" data-resize="e"></div>
+    <div class="resize-handle se" data-resize="se"></div>
+    <div class="resize-handle s" data-resize="s"></div>
+    <div class="resize-handle sw" data-resize="sw"></div>
+    <div class="resize-handle w" data-resize="w"></div>
+
+    <!-- Size Indicator -->
+    <div class="size-indicator" id="size-indicator"></div>
+
+    <!-- Header -->
+    <div class="chatbot-widget-header">
+      <div>
+        <div class="chatbot-widget-title" id="widget-title">Chat</div>
+        <div class="chatbot-widget-subtitle" id="widget-subtitle" style="display: none;">Research Assistant</div>
+      </div>
+      <div class="chatbot-widget-actions">
+        <button class="chatbot-action-button" id="chatbot-reset-button" aria-label="Reset size" title="Double-click to reset size">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+          </svg>
+        </button>
+        <button class="chatbot-action-button" id="chatbot-fullpage-button" aria-label="Open in full page" title="Continue in full page">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+          </svg>
+        </button>
+        <button class="chatbot-action-button" id="chatbot-expand-button" aria-label="Maximize">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+          </svg>
+        </button>
+        <button class="chatbot-action-button" id="chatbot-close-button" aria-label="Close">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Body (iframe) -->
+    <div class="chatbot-widget-body">
+      <div class="chatbot-loading" id="chatbot-loading">
+        <div class="chatbot-loading-spinner"></div>
+        <p>Loading assistant...</p>
+      </div>
+      <iframe 
+        id="chatbot-iframe"
+        class="chatbot-widget-iframe"
+        src=""
+        title="AI Risk Repository Research Assistant"
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // CONFIGURATION
+  const CHATBOT_URL = 'https://airi-chatbot-class-production.up.railway.app/chat';
+  const ENABLE_POSTHOG = true;
+  const DEFAULT_WIDTH = 380;
+  const DEFAULT_HEIGHT = 580;
+  const MIN_WIDTH = 320;
+  const MIN_HEIGHT = 400;
+  
+  // WIDGET HEADER CONFIGURATION
+  const WIDGET_TITLE = 'Chat';  // Set to '' for no title
+  const SHOW_SUBTITLE = false;   // Set to true to show 'Research Assistant'
+  const HIDE_IFRAME_HEADERS = true; // Attempt to hide redundant iframe headers
+  
+  // Hide widget on dedicated chatbot page
+  if (window.location.pathname === '/chatbot' || window.location.pathname === '/chatbot/') {
+    return;
+  }
+  
+  // DOM Elements
+  const widget = document.getElementById('airisk-chatbot-widget');
+  const toggleButton = document.getElementById('chatbot-toggle-button');
+  const container = document.getElementById('chatbot-widget-container');
+  const closeButton = document.getElementById('chatbot-close-button');
+  const expandButton = document.getElementById('chatbot-expand-button');
+  const resetButton = document.getElementById('chatbot-reset-button');
+  const fullpageButton = document.getElementById('chatbot-fullpage-button');
+  const iframe = document.getElementById('chatbot-iframe');
+  const loading = document.getElementById('chatbot-loading');
+  const notification = document.getElementById('chatbot-notification');
+  const sizeIndicator = document.getElementById('size-indicator');
+  
+  // State
+  let isOpen = false;
+  let isMaximized = false;
+  let iframeLoaded = false;
+  let isResizing = false;
+  let startX, startY, startWidth, startHeight, startLeft, startTop;
+  let resizeDirection = null;
+  let savedSize = null;
+  
+  // Initialize
+  function init() {
+    // Configure header based on settings
+    configureHeader();
+    
+    // Event listeners
+    toggleButton.addEventListener('click', toggleWidget);
+    closeButton.addEventListener('click', closeWidget);
+    expandButton.addEventListener('click', toggleMaximize);
+    resetButton.addEventListener('click', resetSize);
+    resetButton.addEventListener('dblclick', resetSize);
+    fullpageButton.addEventListener('click', openInFullPage);
+    
+    // Resize handlers
+    initializeResize();
+    
+    // Load saved size
+    loadSavedSize();
+    
+    // Message handling
+    window.addEventListener('message', handleIframeMessage);
+    
+    // Auto-open from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('openchat') === 'true') {
+      setTimeout(openWidget, 1000);
+    }
+    
+    // Notification for first-time visitors
+    if (!sessionStorage.getItem('airisk_widget_seen')) {
+      setTimeout(() => {
+        notification.classList.add('active');
+        setTimeout(() => {
+          if (!isOpen) {
+            notification.classList.remove('active');
+          }
+        }, 10000);
+      }, 5000);
+    }
+  }
+  
+  // Initialize resize functionality
+  function initializeResize() {
+    // Only on desktop
+    if (window.innerWidth <= 768) return;
+    
+    // Add mousedown listeners to all resize handles
+    const handles = document.querySelectorAll('.resize-handle');
+    handles.forEach(handle => {
+      handle.addEventListener('mousedown', startResize);
+    });
+    
+    // Global mouse events for resizing
+    document.addEventListener('mousemove', doResize);
+    document.addEventListener('mouseup', stopResize);
+  }
+  
+  // Start resize
+  function startResize(e) {
+    e.preventDefault();
+    isResizing = true;
+    resizeDirection = e.target.dataset.resize;
+    
+    startX = e.clientX;
+    startY = e.clientY;
+    
+    const rect = container.getBoundingClientRect();
+    startWidth = rect.width;
+    startHeight = rect.height;
+    startLeft = rect.left;
+    startTop = rect.top;
+    
+    container.classList.add('resizing');
+    document.body.style.cursor = window.getComputedStyle(e.target).cursor;
+  }
+  
+  // Do resize
+  function doResize(e) {
+    if (!isResizing) return;
+    
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    
+    let newWidth = startWidth;
+    let newHeight = startHeight;
+    let newLeft = startLeft;
+    let newTop = startTop;
+    
+    // Calculate new dimensions based on resize direction
+    switch(resizeDirection) {
+      case 'e':
+        newWidth = startWidth + dx;
+        break;
+      case 'w':
+        newWidth = startWidth - dx;
+        newLeft = startLeft + dx;
+        break;
+      case 's':
+        newHeight = startHeight + dy;
+        break;
+      case 'n':
+        newHeight = startHeight - dy;
+        newTop = startTop + dy;
+        break;
+      case 'se':
+        newWidth = startWidth + dx;
+        newHeight = startHeight + dy;
+        break;
+      case 'sw':
+        newWidth = startWidth - dx;
+        newHeight = startHeight + dy;
+        newLeft = startLeft + dx;
+        break;
+      case 'ne':
+        newWidth = startWidth + dx;
+        newHeight = startHeight - dy;
+        newTop = startTop + dy;
+        break;
+      case 'nw':
+        newWidth = startWidth - dx;
+        newHeight = startHeight - dy;
+        newLeft = startLeft + dx;
+        newTop = startTop + dy;
+        break;
+    }
+    
+    // Apply constraints
+    newWidth = Math.max(MIN_WIDTH, Math.min(newWidth, window.innerWidth * 0.9));
+    newHeight = Math.max(MIN_HEIGHT, Math.min(newHeight, window.innerHeight * 0.9));
+    
+    // Prevent moving off screen
+    if (newLeft < 10) newLeft = 10;
+    if (newTop < 10) newTop = 10;
+    if (newLeft + newWidth > window.innerWidth - 10) {
+      newLeft = window.innerWidth - newWidth - 10;
+    }
+    if (newTop + newHeight > window.innerHeight - 10) {
+      newTop = window.innerHeight - newHeight - 10;
+    }
+    
+    // Apply new dimensions
+    container.style.width = newWidth + 'px';
+    container.style.height = newHeight + 'px';
+    
+    // Update position for west/north resize
+    if (resizeDirection.includes('w')) {
+      container.style.left = newLeft + 'px';
+      container.style.right = 'auto';
+    }
+    if (resizeDirection.includes('n')) {
+      container.style.top = newTop + 'px';
+      container.style.bottom = 'auto';
+    }
+    
+    // Show size indicator
+    sizeIndicator.textContent = `${Math.round(newWidth)} × ${Math.round(newHeight)}`;
+  }
+  
+  // Stop resize
+  function stopResize(e) {
+    if (!isResizing) return;
+    
+    isResizing = false;
+    resizeDirection = null;
+    container.classList.remove('resizing');
+    document.body.style.cursor = '';
+    
+    // Save size
+    saveSize();
+  }
+  
+  // Save current size
+  function saveSize() {
+    const rect = container.getBoundingClientRect();
+    const size = {
+      width: rect.width,
+      height: rect.height,
+      left: rect.left,
+      top: rect.top,
+      right: window.innerWidth - rect.right,
+      bottom: window.innerHeight - rect.bottom
+    };
+    sessionStorage.setItem('airisk_widget_size', JSON.stringify(size));
+  }
+  
+  // Load saved size
+  function loadSavedSize() {
+    const saved = sessionStorage.getItem('airisk_widget_size');
+    if (saved) {
+      try {
+        savedSize = JSON.parse(saved);
+        applySize(savedSize);
+      } catch(e) {
+        console.error('Failed to load saved size:', e);
+      }
+    }
+  }
+  
+  // Apply size
+  function applySize(size) {
+    if (!size) return;
+    
+    container.style.width = size.width + 'px';
+    container.style.height = size.height + 'px';
+    
+    // Position from bottom-right by default
+    if (size.right !== undefined) {
+      container.style.right = size.right + 'px';
+      container.style.left = 'auto';
+    }
+    if (size.bottom !== undefined) {
+      container.style.bottom = size.bottom + 'px';
+      container.style.top = 'auto';
+    }
+  }
+  
+  // Reset to default size
+  function resetSize() {
+    container.style.width = DEFAULT_WIDTH + 'px';
+    container.style.height = DEFAULT_HEIGHT + 'px';
+    container.style.right = '20px';
+    container.style.bottom = '90px';
+    container.style.left = 'auto';
+    container.style.top = 'auto';
+    
+    sessionStorage.removeItem('airisk_widget_size');
+    
+    // Flash indicator
+    sizeIndicator.textContent = `Reset to ${DEFAULT_WIDTH} × ${DEFAULT_HEIGHT}`;
+    sizeIndicator.style.display = 'block';
+    setTimeout(() => {
+      sizeIndicator.style.display = 'none';
+    }, 1500);
+  }
+  
+  // Toggle maximize
+  function toggleMaximize() {
+    isMaximized = !isMaximized;
+    
+    if (isMaximized) {
+      // Save current size before maximizing
+      saveSize();
+      
+      // Maximize
+      container.style.width = 'calc(100vw - 40px)';
+      container.style.height = 'calc(100vh - 40px)';
+      container.style.top = '20px';
+      container.style.left = '20px';
+      container.style.right = 'auto';
+      container.style.bottom = 'auto';
+      
+      expandButton.innerHTML = `
+        <svg viewBox="0 0 24 24">
+          <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/>
+        </svg>
+      `;
+    } else {
+      // Restore saved size
+      if (savedSize) {
+        applySize(savedSize);
+      } else {
+        resetSize();
+      }
+      
+      expandButton.innerHTML = `
+        <svg viewBox="0 0 24 24">
+          <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+        </svg>
+      `;
+    }
+  }
+  
+  // Toggle widget
+  function toggleWidget() {
+    if (isOpen) {
+      closeWidget();
+    } else {
+      openWidget();
+    }
+  }
+  
+  // Open widget
+  function openWidget() {
+    if (!iframeLoaded) {
+      iframe.src = CHATBOT_URL;
+      iframeLoaded = true;
+      
+      iframe.addEventListener('load', function() {
+        loading.style.display = 'none';
+        hideIframeHeaders(); // Try to hide redundant headers
+      }, { once: true });
+    }
+    
+    container.classList.add('active');
+    isOpen = true;
+    
+    notification.classList.remove('active');
+    sessionStorage.setItem('airisk_widget_seen', 'true');
+    
+    if (ENABLE_POSTHOG && typeof posthog !== 'undefined') {
+      posthog.capture('chatbot_widget_opened', {
+        page: window.location.pathname,
+        timestamp: new Date().toISOString()
+      });
+    }
+    
+    toggleButton.innerHTML = `
+      <svg viewBox="0 0 24 24">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
+    `;
+  }
+  
+  // Close widget
+  function closeWidget() {
+    container.classList.remove('active');
+    isOpen = false;
+    isMaximized = false;
+    
+    if (ENABLE_POSTHOG && typeof posthog !== 'undefined') {
+      posthog.capture('chatbot_widget_closed', {
+        page: window.location.pathname,
+        timestamp: new Date().toISOString()
+      });
+    }
+    
+    toggleButton.innerHTML = `
+      <svg viewBox="0 0 24 24">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+        <path d="M7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/>
+      </svg>
+    `;
+  }
+  
+  // Handle iframe messages
+  function handleIframeMessage(event) {
+    if (!event.origin.includes('railway.app')) {
+      return;
+    }
+    
+    if (event.data && event.data.type) {
+      switch(event.data.type) {
+        case 'chatbot_ready':
+          loading.style.display = 'none';
+          break;
+          
+        case 'new_message':
+          if (!isOpen) {
+            notification.textContent = event.data.count || '1';
+            notification.classList.add('active');
+          }
+          break;
+          
+        case 'close_widget':
+          closeWidget();
+          break;
+          
+        case 'conversation_data':
+          // Received conversation data from iframe
+          handleConversationTransfer(event.data.conversation);
+          break;
+          
+        default:
+          if (ENABLE_POSTHOG && typeof posthog !== 'undefined') {
+            posthog.capture('chatbot_event', event.data);
+          }
+      }
+    }
+  }
+  
+  // Open in full page with conversation transfer
+  function openInFullPage() {
+    // Request conversation data from iframe
+    if (iframe && iframe.contentWindow) {
+      // Try to get conversation from iframe
+      iframe.contentWindow.postMessage({
+        type: 'request_conversation',
+        timestamp: Date.now()
+      }, '*');
+      
+      // Set up one-time listener for response
+      const transferTimeout = setTimeout(() => {
+        // If no response in 500ms, just navigate without transfer
+        navigateToFullPage();
+      }, 500);
+      
+      // Store the timeout ID to clear if we get data
+      window.pendingTransferTimeout = transferTimeout;
+    } else {
+      // No iframe loaded, just navigate
+      navigateToFullPage();
+    }
+  }
+  
+  // Handle conversation transfer
+  function handleConversationTransfer(conversation) {
+    // Clear pending timeout if exists
+    if (window.pendingTransferTimeout) {
+      clearTimeout(window.pendingTransferTimeout);
+      delete window.pendingTransferTimeout;
+    }
+    
+    // Store conversation data
+    const transferData = {
+      conversation: conversation,
+      timestamp: Date.now(),
+      sessionId: generateSessionId(),
+      transferType: 'widget_to_fullpage',
+      widgetSize: {
+        width: container.style.width,
+        height: container.style.height
+      }
+    };
+    
+    try {
+      sessionStorage.setItem('airisk_conversation_transfer', JSON.stringify(transferData));
+      console.log('Conversation stored for transfer');
+    } catch (e) {
+      console.error('Failed to store conversation:', e);
+    }
+    
+    // Navigate to full page
+    navigateToFullPage();
+  }
+  
+  // Navigate to full page chatbot
+  function navigateToFullPage() {
+    // Track the transition
+    if (ENABLE_POSTHOG && typeof posthog !== 'undefined') {
+      posthog.capture('chatbot_fullpage_transition', {
+        from: 'widget',
+        timestamp: new Date().toISOString()
+      });
+    }
+    
+    // Navigate to chatbot page
+    window.location.href = '/chatbot';
+  }
+  
+  // Generate unique session ID
+  function generateSessionId() {
+    return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  }
+  
+  // Clean up old transfer data (5 minute expiry)
+  function cleanupOldTransfers() {
+    try {
+      const stored = sessionStorage.getItem('airisk_conversation_transfer');
+      if (stored) {
+        const data = JSON.parse(stored);
+        const fiveMinutes = 5 * 60 * 1000;
+        if (Date.now() - data.timestamp > fiveMinutes) {
+          sessionStorage.removeItem('airisk_conversation_transfer');
+          console.log('Cleaned up expired transfer data');
+        }
+      }
+    } catch (e) {
+      // Silently handle errors
+    }
+  }
+  
+  // Configure header based on settings
+  function configureHeader() {
+    const titleElement = document.getElementById('widget-title');
+    const subtitleElement = document.getElementById('widget-subtitle');
+    
+    // Set title
+    if (titleElement) {
+      if (WIDGET_TITLE) {
+        titleElement.textContent = WIDGET_TITLE;
+      } else {
+        titleElement.style.display = 'none';
+      }
+    }
+    
+    // Show/hide subtitle
+    if (subtitleElement) {
+      subtitleElement.style.display = SHOW_SUBTITLE ? 'block' : 'none';
+    }
+  }
+  
+  // Inject CSS to hide iframe headers if configured
+  function hideIframeHeaders() {
+    if (!HIDE_IFRAME_HEADERS) return;
+    
+    try {
+      // Create style element to inject into iframe
+      const hideHeadersCSS = `
+        /* Hide redundant headers in chatbot iframe */
+        .header, .navigation, .nav-bar, #header, #navigation,
+        h1:first-of-type, h2:first-of-type,
+        div[class*="title"]:first-of-type,
+        div[class*="header"]:first-of-type,
+        div[class*="nav"]:first-of-type {
+          display: none !important;
+        }
+        
+        /* Also hide specific text content */
+        *:contains("AIRI Assistant"),
+        *:contains("AI Risk Assistant") {
+          display: none !important;
+        }
+        
+        /* Adjust top padding if needed */
+        .chat-container, .message-container, #chat-messages {
+          padding-top: 10px !important;
+        }
+      `;
+      
+      // Wait for iframe to load then inject
+      iframe.addEventListener('load', function() {
+        try {
+          // Method 1: Try postMessage
+          iframe.contentWindow.postMessage({
+            type: 'inject_css',
+            css: hideHeadersCSS
+          }, '*');
+          
+          // Method 2: Create style element in parent
+          const style = document.createElement('style');
+          style.textContent = `
+            /* Target iframe content from parent */
+            #chatbot-iframe {
+              margin-top: -50px; /* Adjust if headers are visible */
+            }
+          `;
+          document.head.appendChild(style);
+        } catch (e) {
+          console.log('Could not hide iframe headers:', e);
+        }
+      });
+    } catch (e) {
+      console.log('Error setting up iframe header hiding:', e);
+    }
+  }
+  
+  // Run cleanup on init
+  cleanupOldTransfers();
+  
+  // Initialize when DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+<!-- 
+✅ RESIZABLE WIDGET - Full Feature List
+
+HOW TO RESIZE:
+1. Hover near any edge or corner
+2. Click and drag to resize
+3. Double-click reset button to restore default size
+4. Click maximize button for full screen
+
+FEATURES:
+- 8 resize handles (4 corners + 4 edges)
+- Visual feedback on hover
+- Size indicator during resize
+- Remembers size during session
+- Min/max size constraints
+- Reset to default size
+- Maximize/restore
+- Mobile: Auto-disabled (uses full width)
+
+CUSTOMIZATION:
+- Default size: Lines 386-387 (DEFAULT_WIDTH, DEFAULT_HEIGHT)
+- Min size: Lines 388-389 (MIN_WIDTH, MIN_HEIGHT)
+- Colors: Still burgundy #A32035 theme
+- Position: Bottom-right by default
+
+TESTING:
+1. Add to Webflow
+2. Open widget
+3. Drag any edge to resize
+4. Check size persists on close/reopen
+5. Test maximize button
+6. Test reset button (double-click)
+-->

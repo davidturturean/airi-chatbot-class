@@ -1,0 +1,594 @@
+<!-- AI Risk Repository Chatbot Widget - SESSION-BASED VERSION -->
+<!-- Maintains conversation continuity using backend session persistence -->
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&display=swap');
+
+  /* Main Widget Container */
+  #airisk-chatbot-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    font-family: 'Figtree', 'Ubuntu', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* Floating Button */
+  .chatbot-widget-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #A32035;
+    box-shadow: 0 3px 10px rgba(163, 32, 53, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    border: none;
+    position: relative;
+  }
+
+  .chatbot-widget-button:hover {
+    transform: translateY(-2px);
+    background: #8B1A2B;
+    box-shadow: 0 5px 15px rgba(163, 32, 53, 0.4);
+  }
+
+  .chatbot-widget-button svg {
+    width: 28px;
+    height: 28px;
+    fill: white;
+  }
+
+  /* Notification Badge */
+  .chatbot-notification-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    background: #DC2626;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    border: 2px solid white;
+  }
+
+  .chatbot-notification-badge.active {
+    display: flex;
+  }
+
+  /* Widget Container */
+  .chatbot-widget-container {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 380px;
+    height: 580px;
+    min-width: 320px;
+    min-height: 400px;
+    max-width: 90vw;
+    max-height: 90vh;
+    background: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(163, 32, 53, 0.1);
+    animation: slideUp 0.25s ease-out;
+  }
+
+  .chatbot-widget-container.active {
+    display: flex;
+  }
+
+  /* Clean Minimal Header */
+  .chatbot-widget-header {
+    padding: 12px 16px;
+    background: #A32035;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    user-select: none;
+    flex-shrink: 0;
+    min-height: 44px;
+  }
+
+  .chatbot-widget-title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    opacity: 0.95;
+  }
+
+  /* Session Indicator */
+  .session-indicator {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #4ade80;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: monospace;
+    display: none;
+    z-index: 100;
+  }
+
+  .session-indicator.active {
+    display: block;
+  }
+
+  /* Header Actions */
+  .chatbot-widget-actions {
+    display: flex;
+    gap: 2px;
+    margin-left: 12px;
+  }
+
+  .chatbot-action-button {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    position: relative;
+  }
+
+  .chatbot-action-button:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  .chatbot-action-button svg {
+    width: 14px;
+    height: 14px;
+    fill: white;
+  }
+
+  /* Widget Body */
+  .chatbot-widget-body {
+    flex: 1;
+    position: relative;
+    background: #FAFAFA;
+    overflow: hidden;
+  }
+
+  .chatbot-widget-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* Hide iframe headers */
+  .chatbot-widget-iframe.headers-hidden {
+    height: calc(100% + 60px);
+    margin-top: -60px;
+  }
+
+  /* Loading State */
+  .chatbot-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .chatbot-loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #E5E7EB;
+    border-top: 3px solid #A32035;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  /* Animations */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Resize handles omitted for brevity - add if needed */
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .chatbot-widget-container {
+      width: calc(100vw - 24px) !important;
+      height: calc(100vh - 100px) !important;
+      right: 12px !important;
+      bottom: 80px !important;
+    }
+  }
+</style>
+
+<div id="airisk-chatbot-widget">
+  <!-- Floating Button -->
+  <button class="chatbot-widget-button" id="chatbot-toggle-button" aria-label="Open chat">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+      <path d="M7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/>
+    </svg>
+    <span class="chatbot-notification-badge" id="chatbot-notification"></span>
+  </button>
+
+  <!-- Expanded Widget -->
+  <div class="chatbot-widget-container" id="chatbot-widget-container">
+    <!-- Session Indicator -->
+    <div class="session-indicator" id="session-indicator"></div>
+
+    <!-- Minimal Header -->
+    <div class="chatbot-widget-header">
+      <div class="chatbot-widget-title">CHAT</div>
+      <div class="chatbot-widget-actions">
+        <button class="chatbot-action-button" id="chatbot-fullpage-button" aria-label="Open in full page" title="Continue in full page">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+          </svg>
+        </button>
+        <button class="chatbot-action-button" id="chatbot-close-button" aria-label="Close">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Body (iframe) -->
+    <div class="chatbot-widget-body">
+      <div class="chatbot-loading" id="chatbot-loading">
+        <div class="chatbot-loading-spinner"></div>
+        <p>Loading...</p>
+      </div>
+      <iframe 
+        id="chatbot-iframe"
+        class="chatbot-widget-iframe"
+        src=""
+        title="AI Risk Chat"
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ============ CONFIGURATION ============
+  const CONFIG = {
+    // URLs
+    CHATBOT_BASE_URL: 'https://airi-chatbot-class-production.up.railway.app',
+    API_BASE_URL: 'https://airi-chatbot-class-production.up.railway.app',
+    
+    // Widget settings
+    WIDGET_TITLE: 'CHAT',
+    HIDE_IFRAME_TOP: 60,
+    ENABLE_POSTHOG: true,
+    SHOW_SESSION_ID: true, // Show session ID for debugging
+    
+    // Session settings
+    SESSION_STORAGE_KEY: 'airisk_widget_session',
+    SESSION_COOKIE_NAME: 'airisk_session_id'
+  };
+  
+  // ============ SESSION MANAGEMENT ============
+  let currentSessionId = null;
+  
+  // Get or create session ID
+  async function initializeSession() {
+    // Check localStorage for existing session
+    currentSessionId = localStorage.getItem(CONFIG.SESSION_STORAGE_KEY);
+    
+    if (!currentSessionId) {
+      // Create new session via API
+      try {
+        const response = await fetch(`${CONFIG.API_BASE_URL}/api/session/create`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            metadata: {
+              source: 'widget',
+              page: window.location.pathname,
+              timestamp: new Date().toISOString()
+            }
+          })
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          currentSessionId = data.session_id;
+          localStorage.setItem(CONFIG.SESSION_STORAGE_KEY, currentSessionId);
+          console.log('New session created:', currentSessionId);
+        } else {
+          // Fallback to client-generated ID
+          currentSessionId = generateLocalSessionId();
+          localStorage.setItem(CONFIG.SESSION_STORAGE_KEY, currentSessionId);
+          console.log('Using local session:', currentSessionId);
+        }
+      } catch (error) {
+        console.error('Failed to create session:', error);
+        // Fallback to client-generated ID
+        currentSessionId = generateLocalSessionId();
+        localStorage.setItem(CONFIG.SESSION_STORAGE_KEY, currentSessionId);
+      }
+    } else {
+      // Verify session still exists on backend
+      try {
+        const response = await fetch(`${CONFIG.API_BASE_URL}/api/session/${currentSessionId}/exists`);
+        const data = await response.json();
+        
+        if (!data.exists) {
+          // Session expired, create new one
+          localStorage.removeItem(CONFIG.SESSION_STORAGE_KEY);
+          await initializeSession();
+        } else {
+          console.log('Using existing session:', currentSessionId);
+        }
+      } catch (error) {
+        console.log('Session verification failed, using existing:', currentSessionId);
+      }
+    }
+    
+    // Show session indicator if enabled
+    if (CONFIG.SHOW_SESSION_ID) {
+      const indicator = document.getElementById('session-indicator');
+      if (indicator) {
+        indicator.textContent = `Session: ${currentSessionId.substring(0, 12)}...`;
+        indicator.classList.add('active');
+      }
+    }
+    
+    return currentSessionId;
+  }
+  
+  // Generate local session ID as fallback
+  function generateLocalSessionId() {
+    return 'local_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  }
+  
+  // ============ DOM ELEMENTS ============
+  const toggleButton = document.getElementById('chatbot-toggle-button');
+  const container = document.getElementById('chatbot-widget-container');
+  const closeButton = document.getElementById('chatbot-close-button');
+  const fullpageButton = document.getElementById('chatbot-fullpage-button');
+  const iframe = document.getElementById('chatbot-iframe');
+  const loading = document.getElementById('chatbot-loading');
+  const notification = document.getElementById('chatbot-notification');
+  
+  // State
+  let isOpen = false;
+  let iframeLoaded = false;
+  
+  // ============ INITIALIZATION ============
+  async function init() {
+    // Hide on /chatbot page
+    if (window.location.pathname === '/chatbot' || window.location.pathname === '/chatbot/') {
+      return;
+    }
+    
+    // Initialize session
+    await initializeSession();
+    
+    // Event listeners
+    toggleButton.addEventListener('click', toggleWidget);
+    closeButton.addEventListener('click', closeWidget);
+    fullpageButton.addEventListener('click', openInFullPage);
+    
+    // Listen for iframe messages
+    window.addEventListener('message', handleIframeMessage);
+    
+    // Auto-open from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('openchat') === 'true') {
+      setTimeout(openWidget, 1000);
+    }
+  }
+  
+  // ============ WIDGET CONTROLS ============
+  function toggleWidget() {
+    isOpen ? closeWidget() : openWidget();
+  }
+  
+  function openWidget() {
+    if (!iframeLoaded && currentSessionId) {
+      // Load iframe with session ID
+      const chatUrl = `${CONFIG.CHATBOT_BASE_URL}/chat?session=${currentSessionId}&source=widget`;
+      iframe.src = chatUrl;
+      iframeLoaded = true;
+      
+      // Hide iframe headers if configured
+      if (CONFIG.HIDE_IFRAME_TOP > 0) {
+        iframe.classList.add('headers-hidden');
+      }
+      
+      iframe.addEventListener('load', function() {
+        loading.style.display = 'none';
+        
+        // Send session info to iframe
+        iframe.contentWindow.postMessage({
+          type: 'session_info',
+          session_id: currentSessionId,
+          source: 'widget'
+        }, CONFIG.CHATBOT_BASE_URL);
+      }, { once: true });
+    }
+    
+    container.classList.add('active');
+    isOpen = true;
+    notification.classList.remove('active');
+    
+    // Track with PostHog
+    if (CONFIG.ENABLE_POSTHOG && typeof posthog !== 'undefined') {
+      posthog.capture('chatbot_widget_opened', {
+        session_id: currentSessionId,
+        page: window.location.pathname
+      });
+    }
+    
+    // Update button icon
+    toggleButton.innerHTML = '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+  }
+  
+  function closeWidget() {
+    container.classList.remove('active');
+    isOpen = false;
+    
+    // Track with PostHog
+    if (CONFIG.ENABLE_POSTHOG && typeof posthog !== 'undefined') {
+      posthog.capture('chatbot_widget_closed', {
+        session_id: currentSessionId,
+        page: window.location.pathname
+      });
+    }
+    
+    // Restore button icon
+    toggleButton.innerHTML = `
+      <svg viewBox="0 0 24 24">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+        <path d="M7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/>
+      </svg>
+    `;
+  }
+  
+  // ============ FULL PAGE NAVIGATION ============
+  function openInFullPage() {
+    if (currentSessionId) {
+      // Navigate to full page with same session ID
+      const fullPageUrl = `/chatbot?session=${currentSessionId}&from=widget`;
+      
+      // Track transition
+      if (CONFIG.ENABLE_POSTHOG && typeof posthog !== 'undefined') {
+        posthog.capture('chatbot_fullpage_transition', {
+          session_id: currentSessionId,
+          from: 'widget'
+        });
+      }
+      
+      // Navigate
+      window.location.href = fullPageUrl;
+    } else {
+      // No session, just navigate
+      window.location.href = '/chatbot';
+    }
+  }
+  
+  // ============ MESSAGE HANDLING ============
+  function handleIframeMessage(event) {
+    // Verify origin
+    if (!event.origin.includes('railway.app') && !event.origin.includes('localhost')) {
+      return;
+    }
+    
+    if (event.data && event.data.type) {
+      switch(event.data.type) {
+        case 'chatbot_ready':
+          loading.style.display = 'none';
+          console.log('Chatbot ready with session:', currentSessionId);
+          break;
+          
+        case 'new_message':
+          // Save message to backend
+          if (currentSessionId && event.data.message) {
+            saveMessageToSession(event.data.message, event.data.role || 'user');
+          }
+          
+          // Show notification if closed
+          if (!isOpen) {
+            notification.textContent = '1';
+            notification.classList.add('active');
+          }
+          break;
+          
+        case 'request_session':
+          // Iframe requesting session info
+          iframe.contentWindow.postMessage({
+            type: 'session_info',
+            session_id: currentSessionId,
+            source: 'widget'
+          }, CONFIG.CHATBOT_BASE_URL);
+          break;
+      }
+    }
+  }
+  
+  // ============ SESSION PERSISTENCE ============
+  async function saveMessageToSession(message, role) {
+    if (!currentSessionId) return;
+    
+    try {
+      await fetch(`${CONFIG.API_BASE_URL}/api/session/${currentSessionId}/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: message,
+          role: role,
+          metadata: {
+            source: 'widget',
+            timestamp: new Date().toISOString()
+          }
+        })
+      });
+    } catch (error) {
+      console.error('Failed to save message:', error);
+    }
+  }
+  
+  // ============ START ============
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+<!-- 
+SESSION-BASED WIDGET IMPLEMENTATION
+
+How it works:
+1. Widget creates/retrieves session ID on load
+2. Session ID passed to iframe URL: /chat?session=abc123
+3. All messages saved to backend with session ID
+4. "Open Full Page" navigates to: /chatbot?session=abc123
+5. Full page loads conversation history from backend
+
+Backend Requirements:
+- /api/session/create - Create new session
+- /api/session/{id}/messages - Get/add messages
+- /api/session/{id}/exists - Check if valid
+
+The chatbot backend needs to:
+1. Read session parameter from URL
+2. Call API to get previous messages
+3. Display conversation history
+4. Continue using same session ID
+
+Benefits:
+✓ Works across domains (no iframe restrictions)
+✓ Conversation persists even after page refresh
+✓ Can view conversation from multiple devices
+✓ Backend has full conversation history
+-->

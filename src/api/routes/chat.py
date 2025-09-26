@@ -7,6 +7,7 @@ import os
 from flask import Blueprint, request, jsonify, Response, stream_with_context
 
 from ...core.services.chat_service import ChatService
+from ...core.services.metrics_service import metrics_service
 from ...config.logging import get_logger
 
 logger = get_logger(__name__)
@@ -24,7 +25,9 @@ def init_chat_routes(chat_service_instance: ChatService):
 
 @chat_bp.route('/api/v1/sendMessage', methods=['POST'])
 def send_message():
-    """Non-streaming chat endpoint."""
+    """Non-streaming chat endpoint with metrics logging."""
+    start_time = time.time()
+    
     try:
         data = request.json
         
@@ -37,8 +40,12 @@ def send_message():
             return jsonify({"error": "Message is required"}), 400
         
         # Get session ID and language from request
-        session_id = data.get('session_id') or request.headers.get('X-Session-ID')
+        session_id = data.get('session_id') or request.headers.get('X-Session-ID') or 'default'
         language_code = data.get('language_code')  # Get manually selected language
+        
+        # Get user identifiers for privacy-preserving tracking
+        user_ip = request.remote_addr
+        user_agent = request.headers.get('User-Agent')
         
         # Process the query
         result = chat_service.process_query(message, conversation_id, session_id, language_code)
@@ -50,10 +57,31 @@ def send_message():
             response_text, docs = result
             language_info = None
         
+        # Calculate processing time
+        latency_ms = int((time.time() - start_time) * 1000)
+        
+        # Log metrics
+        query_metrics = metrics_service.log_query(
+            session_id=session_id,
+            query=message,
+            response=response_text,
+            latency_ms=latency_ms,
+            docs_retrieved=docs,
+            intent=data.get('intent', 'general'),
+            language=language_code or (language_info.get('code') if language_info else 'en'),
+            user_ip=user_ip,
+            user_agent=user_agent
+        )
+        
         response_data = {
             "id": conversation_id,
             "response": response_text,
-            "status": "complete"
+            "status": "complete",
+            "metrics": {
+                "latency_ms": latency_ms,
+                "citations_count": query_metrics.citations_count,
+                "query_number": len(metrics_service.session_metrics.get(session_id, {}).get("queries", []))
+            }
         }
         
         # Add language info if available
@@ -69,11 +97,26 @@ def send_message():
         
     except Exception as e:
         logger.error(f"Error in send_message: {str(e)}")
+        
+        # Log error metrics
+        latency_ms = int((time.time() - start_time) * 1000)
+        metrics_service.log_query(
+            session_id=session_id if 'session_id' in locals() else 'error',
+            query=message if 'message' in locals() else 'unknown',
+            response="",
+            latency_ms=latency_ms,
+            error=e,
+            user_ip=request.remote_addr,
+            user_agent=request.headers.get('User-Agent')
+        )
+        
         return jsonify({"error": f"Internal server error: {str(e)}"}), 500
 
 @chat_bp.route('/api/v1/stream', methods=['POST'])
 def stream_message():
-    """Streaming chat endpoint."""
+    """Streaming chat endpoint with metrics logging."""
+    start_time = time.time()
+    
     try:
         data = request.json
         
@@ -83,6 +126,10 @@ def stream_message():
         conversation_id = data.get('conversationId', 'default')
         session_id = data.get('session_id') or request.headers.get('X-Session-ID') or 'default'
         language_code = data.get('language_code')  # Get manually selected language
+        
+        # Get user identifiers for metrics
+        user_ip = request.remote_addr
+        user_agent = request.headers.get('User-Agent')
         
         if not message:
             return jsonify({"error": "Message is required"}), 400
@@ -249,8 +296,44 @@ def stream_message():
                         "category": language_info.get('category', 'major')
                     }}) + '\n'
                 
+                # Calculate and log metrics after streaming completes
+                latency_ms = int((time.time() - start_time) * 1000)
+                
+                # Log metrics
+                query_metrics = metrics_service.log_query(
+                    session_id=session_id,
+                    query=message,
+                    response=response_text if 'response_text' in locals() else "",
+                    latency_ms=latency_ms,
+                    docs_retrieved=docs if 'docs' in locals() else [],
+                    intent=query_type,
+                    language=language_code or (language_info.get('code') if language_info else 'en'),
+                    user_ip=user_ip,
+                    user_agent=user_agent
+                )
+                
+                # Send metrics as final message
+                yield json.dumps({"metrics": {
+                    "latency_ms": latency_ms,
+                    "citations_count": query_metrics.citations_count,
+                    "query_number": len(metrics_service.session_metrics.get(session_id, {}).get("queries", []))
+                }}) + '\n'
+                
             except Exception as e:
                 logger.error(f"Error in streaming generator: {str(e)}")
+                
+                # Log error metrics
+                latency_ms = int((time.time() - start_time) * 1000)
+                metrics_service.log_query(
+                    session_id=session_id,
+                    query=message,
+                    response="",
+                    latency_ms=latency_ms,
+                    error=e,
+                    user_ip=user_ip,
+                    user_agent=user_agent
+                )
+                
                 yield json.dumps(f"An error occurred: {str(e)}") + '\n'
         
         # Set proper headers for SSE

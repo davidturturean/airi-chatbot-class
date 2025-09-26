@@ -1,0 +1,780 @@
+<!-- AI Risk Repository Chatbot Widget - FINAL CLEAN VERSION -->
+<!-- All features: Resizable, Branded, Full Page Transfer, Clean Headers -->
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&display=swap');
+
+  /* Main Widget Container */
+  #airisk-chatbot-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    font-family: 'Figtree', 'Ubuntu', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+
+  /* Floating Button */
+  .chatbot-widget-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #A32035;
+    box-shadow: 0 3px 10px rgba(163, 32, 53, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    border: none;
+    position: relative;
+  }
+
+  .chatbot-widget-button:hover {
+    transform: translateY(-2px);
+    background: #8B1A2B;
+    box-shadow: 0 5px 15px rgba(163, 32, 53, 0.4);
+  }
+
+  .chatbot-widget-button svg {
+    width: 28px;
+    height: 28px;
+    fill: white;
+  }
+
+  /* Notification Badge */
+  .chatbot-notification-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 18px;
+    height: 18px;
+    background: #DC2626;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    border: 2px solid white;
+  }
+
+  .chatbot-notification-badge.active {
+    display: flex;
+  }
+
+  /* Widget Container */
+  .chatbot-widget-container {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 380px;
+    height: 580px;
+    min-width: 320px;
+    min-height: 400px;
+    max-width: 90vw;
+    max-height: 90vh;
+    background: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid rgba(163, 32, 53, 0.1);
+    animation: slideUp 0.25s ease-out;
+  }
+
+  .chatbot-widget-container.active {
+    display: flex;
+  }
+
+  /* Clean Minimal Header */
+  .chatbot-widget-header {
+    padding: 12px 16px;
+    background: #A32035;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    user-select: none;
+    flex-shrink: 0;
+    min-height: 44px;
+  }
+
+  .chatbot-widget-title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    opacity: 0.95;
+  }
+
+  /* Header Actions - Compact */
+  .chatbot-widget-actions {
+    display: flex;
+    gap: 2px;
+    margin-left: 12px;
+  }
+
+  .chatbot-action-button {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    position: relative;
+  }
+
+  .chatbot-action-button:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  .chatbot-action-button svg {
+    width: 14px;
+    height: 14px;
+    fill: white;
+  }
+
+  /* Tooltip on hover */
+  .chatbot-action-button::after {
+    content: attr(aria-label);
+    position: absolute;
+    bottom: -28px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 1000;
+  }
+
+  .chatbot-action-button:hover::after {
+    opacity: 1;
+  }
+
+  /* Widget Body */
+  .chatbot-widget-body {
+    flex: 1;
+    position: relative;
+    background: #FAFAFA;
+    overflow: hidden;
+  }
+
+  .chatbot-widget-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* Hide iframe headers with negative margin trick */
+  .chatbot-widget-iframe.headers-hidden {
+    height: calc(100% + 60px);
+    margin-top: -60px;
+  }
+
+  /* Loading State */
+  .chatbot-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  .chatbot-loading-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #E5E7EB;
+    border-top: 3px solid #A32035;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .chatbot-loading p {
+    margin-top: 12px;
+    color: #6B7280;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* Resize Handles */
+  .resize-handle {
+    position: absolute;
+    background: transparent;
+    z-index: 10;
+  }
+
+  .resize-handle.nw { top: 0; left: 0; width: 10px; height: 10px; cursor: nw-resize; }
+  .resize-handle.ne { top: 0; right: 0; width: 10px; height: 10px; cursor: ne-resize; }
+  .resize-handle.sw { bottom: 0; left: 0; width: 10px; height: 10px; cursor: sw-resize; }
+  .resize-handle.se { bottom: 0; right: 0; width: 10px; height: 10px; cursor: se-resize; }
+  .resize-handle.n { top: 0; left: 10px; right: 10px; height: 4px; cursor: n-resize; }
+  .resize-handle.s { bottom: 0; left: 10px; right: 10px; height: 4px; cursor: s-resize; }
+  .resize-handle.e { top: 10px; bottom: 10px; right: 0; width: 4px; cursor: e-resize; }
+  .resize-handle.w { top: 10px; bottom: 10px; left: 0; width: 4px; cursor: w-resize; }
+
+  .chatbot-widget-container:hover .resize-handle {
+    background: rgba(163, 32, 53, 0.05);
+  }
+
+  .resize-handle:hover {
+    background: rgba(163, 32, 53, 0.15) !important;
+  }
+
+  .resize-handle.se::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid #A32035;
+    border-bottom: 2px solid #A32035;
+    opacity: 0.3;
+  }
+
+  /* Size Indicator */
+  .size-indicator {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 3px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 500;
+    display: none;
+    z-index: 100;
+    pointer-events: none;
+  }
+
+  .chatbot-widget-container.resizing .size-indicator {
+    display: block;
+  }
+
+  .chatbot-widget-container.resizing {
+    transition: none !important;
+    user-select: none;
+  }
+
+  .chatbot-widget-container.resizing .chatbot-widget-iframe {
+    pointer-events: none;
+  }
+
+  /* Animations */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  /* Mobile - Disable resize */
+  @media (max-width: 768px) {
+    .resize-handle { display: none !important; }
+    .chatbot-widget-container {
+      width: calc(100vw - 24px) !important;
+      height: calc(100vh - 100px) !important;
+      right: 12px !important;
+      bottom: 80px !important;
+    }
+    .chatbot-widget-button {
+      width: 56px;
+      height: 56px;
+    }
+  }
+</style>
+
+<div id="airisk-chatbot-widget">
+  <!-- Floating Button -->
+  <button class="chatbot-widget-button" id="chatbot-toggle-button" aria-label="Open chat">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+      <path d="M7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/>
+    </svg>
+    <span class="chatbot-notification-badge" id="chatbot-notification"></span>
+  </button>
+
+  <!-- Expanded Widget -->
+  <div class="chatbot-widget-container" id="chatbot-widget-container">
+    <!-- Resize Handles -->
+    <div class="resize-handle nw" data-resize="nw"></div>
+    <div class="resize-handle n" data-resize="n"></div>
+    <div class="resize-handle ne" data-resize="ne"></div>
+    <div class="resize-handle e" data-resize="e"></div>
+    <div class="resize-handle se" data-resize="se"></div>
+    <div class="resize-handle s" data-resize="s"></div>
+    <div class="resize-handle sw" data-resize="sw"></div>
+    <div class="resize-handle w" data-resize="w"></div>
+
+    <!-- Size Indicator -->
+    <div class="size-indicator" id="size-indicator"></div>
+
+    <!-- Minimal Header -->
+    <div class="chatbot-widget-header">
+      <div class="chatbot-widget-title" id="widget-title"></div>
+      <div class="chatbot-widget-actions">
+        <button class="chatbot-action-button" id="chatbot-reset-button" aria-label="Reset size">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+          </svg>
+        </button>
+        <button class="chatbot-action-button" id="chatbot-fullpage-button" aria-label="Full page">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+          </svg>
+        </button>
+        <button class="chatbot-action-button" id="chatbot-expand-button" aria-label="Maximize">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+          </svg>
+        </button>
+        <button class="chatbot-action-button" id="chatbot-close-button" aria-label="Close">
+          <svg viewBox="0 0 24 24">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Body (iframe) -->
+    <div class="chatbot-widget-body">
+      <div class="chatbot-loading" id="chatbot-loading">
+        <div class="chatbot-loading-spinner"></div>
+        <p>Loading...</p>
+      </div>
+      <iframe 
+        id="chatbot-iframe"
+        class="chatbot-widget-iframe"
+        src=""
+        title="AI Risk Chat"
+        loading="lazy"
+      ></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ============ CONFIGURATION ============
+  // Edit these values to customize the widget
+  
+  const CONFIG = {
+    // Chatbot URL
+    CHATBOT_URL: 'https://airi-chatbot-class-production.up.railway.app/chat',
+    
+    // Widget Header Options - Choose one:
+    // Option 1: Minimal
+    WIDGET_TITLE: 'CHAT',  // Short and clean
+    
+    // Option 2: Action-oriented (uncomment to use)
+    // WIDGET_TITLE: 'ASK A QUESTION',
+    
+    // Option 3: No title at all (uncomment to use)
+    // WIDGET_TITLE: '',
+    
+    // Option 4: Context-specific (uncomment to use)
+    // WIDGET_TITLE: 'HELP',
+    
+    // Iframe header hiding
+    HIDE_IFRAME_TOP: 60,  // Pixels to hide from top of iframe (0 to disable)
+    
+    // Analytics
+    ENABLE_POSTHOG: true,
+    
+    // Widget sizing
+    DEFAULT_WIDTH: 380,
+    DEFAULT_HEIGHT: 580,
+    MIN_WIDTH: 320,
+    MIN_HEIGHT: 400
+  };
+  
+  // ============ END CONFIGURATION ============
+  
+  // Hide on /chatbot page
+  if (window.location.pathname === '/chatbot' || window.location.pathname === '/chatbot/') {
+    return;
+  }
+  
+  // DOM Elements
+  const toggleButton = document.getElementById('chatbot-toggle-button');
+  const container = document.getElementById('chatbot-widget-container');
+  const closeButton = document.getElementById('chatbot-close-button');
+  const expandButton = document.getElementById('chatbot-expand-button');
+  const resetButton = document.getElementById('chatbot-reset-button');
+  const fullpageButton = document.getElementById('chatbot-fullpage-button');
+  const iframe = document.getElementById('chatbot-iframe');
+  const loading = document.getElementById('chatbot-loading');
+  const notification = document.getElementById('chatbot-notification');
+  const sizeIndicator = document.getElementById('size-indicator');
+  const titleElement = document.getElementById('widget-title');
+  
+  // State
+  let isOpen = false;
+  let isMaximized = false;
+  let iframeLoaded = false;
+  let isResizing = false;
+  let startX, startY, startWidth, startHeight, startLeft, startTop;
+  let resizeDirection = null;
+  let savedSize = null;
+  
+  // Initialize
+  function init() {
+    // Set title
+    if (titleElement) {
+      titleElement.textContent = CONFIG.WIDGET_TITLE || '';
+      if (!CONFIG.WIDGET_TITLE) {
+        titleElement.style.display = 'none';
+      }
+    }
+    
+    // Event listeners
+    toggleButton.addEventListener('click', toggleWidget);
+    closeButton.addEventListener('click', closeWidget);
+    expandButton.addEventListener('click', toggleMaximize);
+    resetButton.addEventListener('click', resetSize);
+    resetButton.addEventListener('dblclick', resetSize);
+    fullpageButton.addEventListener('click', openInFullPage);
+    
+    // Initialize resize
+    initializeResize();
+    
+    // Load saved size
+    loadSavedSize();
+    
+    // Message handling
+    window.addEventListener('message', handleIframeMessage);
+    
+    // Clean old transfers
+    cleanupOldTransfers();
+    
+    // Auto-open from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('openchat') === 'true') {
+      setTimeout(openWidget, 1000);
+    }
+  }
+  
+  // Initialize resize functionality
+  function initializeResize() {
+    if (window.innerWidth <= 768) return;
+    
+    const handles = document.querySelectorAll('.resize-handle');
+    handles.forEach(handle => {
+      handle.addEventListener('mousedown', startResize);
+    });
+    
+    document.addEventListener('mousemove', doResize);
+    document.addEventListener('mouseup', stopResize);
+  }
+  
+  // Resize functions
+  function startResize(e) {
+    e.preventDefault();
+    isResizing = true;
+    resizeDirection = e.target.dataset.resize;
+    
+    startX = e.clientX;
+    startY = e.clientY;
+    
+    const rect = container.getBoundingClientRect();
+    startWidth = rect.width;
+    startHeight = rect.height;
+    startLeft = rect.left;
+    startTop = rect.top;
+    
+    container.classList.add('resizing');
+    document.body.style.cursor = window.getComputedStyle(e.target).cursor;
+  }
+  
+  function doResize(e) {
+    if (!isResizing) return;
+    
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    
+    let newWidth = startWidth;
+    let newHeight = startHeight;
+    let newLeft = startLeft;
+    let newTop = startTop;
+    
+    switch(resizeDirection) {
+      case 'e': newWidth = startWidth + dx; break;
+      case 'w': newWidth = startWidth - dx; newLeft = startLeft + dx; break;
+      case 's': newHeight = startHeight + dy; break;
+      case 'n': newHeight = startHeight - dy; newTop = startTop + dy; break;
+      case 'se': newWidth = startWidth + dx; newHeight = startHeight + dy; break;
+      case 'sw': newWidth = startWidth - dx; newHeight = startHeight + dy; newLeft = startLeft + dx; break;
+      case 'ne': newWidth = startWidth + dx; newHeight = startHeight - dy; newTop = startTop + dy; break;
+      case 'nw': newWidth = startWidth - dx; newHeight = startHeight - dy; newLeft = startLeft + dx; newTop = startTop + dy; break;
+    }
+    
+    // Apply constraints
+    newWidth = Math.max(CONFIG.MIN_WIDTH, Math.min(newWidth, window.innerWidth * 0.9));
+    newHeight = Math.max(CONFIG.MIN_HEIGHT, Math.min(newHeight, window.innerHeight * 0.9));
+    
+    // Prevent moving off screen
+    if (newLeft < 10) newLeft = 10;
+    if (newTop < 10) newTop = 10;
+    if (newLeft + newWidth > window.innerWidth - 10) newLeft = window.innerWidth - newWidth - 10;
+    if (newTop + newHeight > window.innerHeight - 10) newTop = window.innerHeight - newHeight - 10;
+    
+    container.style.width = newWidth + 'px';
+    container.style.height = newHeight + 'px';
+    
+    if (resizeDirection.includes('w')) {
+      container.style.left = newLeft + 'px';
+      container.style.right = 'auto';
+    }
+    if (resizeDirection.includes('n')) {
+      container.style.top = newTop + 'px';
+      container.style.bottom = 'auto';
+    }
+    
+    sizeIndicator.textContent = `${Math.round(newWidth)} × ${Math.round(newHeight)}`;
+  }
+  
+  function stopResize(e) {
+    if (!isResizing) return;
+    isResizing = false;
+    resizeDirection = null;
+    container.classList.remove('resizing');
+    document.body.style.cursor = '';
+    saveSize();
+  }
+  
+  // Size management
+  function saveSize() {
+    const rect = container.getBoundingClientRect();
+    sessionStorage.setItem('airisk_widget_size', JSON.stringify({
+      width: rect.width, height: rect.height,
+      left: rect.left, top: rect.top,
+      right: window.innerWidth - rect.right,
+      bottom: window.innerHeight - rect.bottom
+    }));
+  }
+  
+  function loadSavedSize() {
+    const saved = sessionStorage.getItem('airisk_widget_size');
+    if (saved) {
+      try {
+        savedSize = JSON.parse(saved);
+        applySize(savedSize);
+      } catch(e) {}
+    }
+  }
+  
+  function applySize(size) {
+    if (!size) return;
+    container.style.width = size.width + 'px';
+    container.style.height = size.height + 'px';
+    if (size.right !== undefined) {
+      container.style.right = size.right + 'px';
+      container.style.left = 'auto';
+    }
+    if (size.bottom !== undefined) {
+      container.style.bottom = size.bottom + 'px';
+      container.style.top = 'auto';
+    }
+  }
+  
+  function resetSize() {
+    container.style.width = CONFIG.DEFAULT_WIDTH + 'px';
+    container.style.height = CONFIG.DEFAULT_HEIGHT + 'px';
+    container.style.right = '20px';
+    container.style.bottom = '90px';
+    container.style.left = 'auto';
+    container.style.top = 'auto';
+    sessionStorage.removeItem('airisk_widget_size');
+  }
+  
+  function toggleMaximize() {
+    isMaximized = !isMaximized;
+    if (isMaximized) {
+      saveSize();
+      container.style.width = 'calc(100vw - 40px)';
+      container.style.height = 'calc(100vh - 40px)';
+      container.style.top = '20px';
+      container.style.left = '20px';
+      container.style.right = 'auto';
+      container.style.bottom = 'auto';
+      expandButton.innerHTML = '<svg viewBox="0 0 24 24"><path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z"/></svg>';
+    } else {
+      if (savedSize) applySize(savedSize);
+      else resetSize();
+      expandButton.innerHTML = '<svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>';
+    }
+  }
+  
+  // Widget controls
+  function toggleWidget() {
+    isOpen ? closeWidget() : openWidget();
+  }
+  
+  function openWidget() {
+    if (!iframeLoaded) {
+      iframe.src = CONFIG.CHATBOT_URL;
+      iframeLoaded = true;
+      
+      // Hide top of iframe if configured
+      if (CONFIG.HIDE_IFRAME_TOP > 0) {
+        iframe.classList.add('headers-hidden');
+        iframe.style.height = `calc(100% + ${CONFIG.HIDE_IFRAME_TOP}px)`;
+        iframe.style.marginTop = `-${CONFIG.HIDE_IFRAME_TOP}px`;
+      }
+      
+      iframe.addEventListener('load', function() {
+        loading.style.display = 'none';
+      }, { once: true });
+    }
+    
+    container.classList.add('active');
+    isOpen = true;
+    notification.classList.remove('active');
+    sessionStorage.setItem('airisk_widget_seen', 'true');
+    
+    if (CONFIG.ENABLE_POSTHOG && typeof posthog !== 'undefined') {
+      posthog.capture('chatbot_widget_opened', {
+        page: window.location.pathname
+      });
+    }
+    
+    toggleButton.innerHTML = '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+  }
+  
+  function closeWidget() {
+    container.classList.remove('active');
+    isOpen = false;
+    isMaximized = false;
+    
+    if (CONFIG.ENABLE_POSTHOG && typeof posthog !== 'undefined') {
+      posthog.capture('chatbot_widget_closed', {
+        page: window.location.pathname
+      });
+    }
+    
+    toggleButton.innerHTML = '<svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/><path d="M7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z"/></svg>';
+  }
+  
+  // Full page transfer
+  function openInFullPage() {
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ type: 'request_conversation', timestamp: Date.now() }, '*');
+      setTimeout(() => navigateToFullPage(), 500);
+    } else {
+      navigateToFullPage();
+    }
+  }
+  
+  function handleConversationTransfer(conversation) {
+    const transferData = {
+      conversation: conversation,
+      timestamp: Date.now(),
+      sessionId: 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+      transferType: 'widget_to_fullpage'
+    };
+    
+    try {
+      sessionStorage.setItem('airisk_conversation_transfer', JSON.stringify(transferData));
+    } catch (e) {}
+    
+    navigateToFullPage();
+  }
+  
+  function navigateToFullPage() {
+    if (CONFIG.ENABLE_POSTHOG && typeof posthog !== 'undefined') {
+      posthog.capture('chatbot_fullpage_transition', { from: 'widget' });
+    }
+    window.location.href = '/chatbot';
+  }
+  
+  // Message handling
+  function handleIframeMessage(event) {
+    if (!event.origin.includes('railway.app')) return;
+    
+    if (event.data && event.data.type) {
+      switch(event.data.type) {
+        case 'chatbot_ready':
+          loading.style.display = 'none';
+          break;
+        case 'conversation_data':
+          handleConversationTransfer(event.data.conversation);
+          break;
+        case 'new_message':
+          if (!isOpen && event.data.count) {
+            notification.textContent = event.data.count;
+            notification.classList.add('active');
+          }
+          break;
+        case 'close_widget':
+          closeWidget();
+          break;
+      }
+    }
+  }
+  
+  // Cleanup
+  function cleanupOldTransfers() {
+    try {
+      const stored = sessionStorage.getItem('airisk_conversation_transfer');
+      if (stored) {
+        const data = JSON.parse(stored);
+        if (Date.now() - data.timestamp > 5 * 60 * 1000) {
+          sessionStorage.removeItem('airisk_conversation_transfer');
+        }
+      }
+    } catch (e) {}
+  }
+  
+  // Initialize when DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+<!-- 
+✅ FINAL CLEAN VERSION - ALL FEATURES
+
+TITLE OPTIONS (Edit CONFIG.WIDGET_TITLE):
+- 'CHAT' - Simple and clean (default)
+- 'ASK A QUESTION' - Action-oriented
+- 'HELP' - Support-focused
+- '' - No title at all
+
+IFRAME HEADER HIDING:
+- Set CONFIG.HIDE_IFRAME_TOP to number of pixels to hide
+- Default: 60px (hides most redundant headers)
+- Set to 0 to disable
+
+FEATURES:
+✓ Clean minimal header (no redundancy)
+✓ Resizable by dragging edges
+✓ Full page transfer with conversation
+✓ Session size memory
+✓ Mobile responsive
+✓ PostHog analytics
+✓ Branded burgundy theme
+
+INSTALLATION:
+1. Copy entire code
+2. Paste in Webflow Site Settings → Footer Code
+3. Publish
+-->

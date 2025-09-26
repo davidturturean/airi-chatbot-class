@@ -13,6 +13,8 @@ from .routes.snippets import snippets_bp, init_snippet_routes
 from .routes.get_file_content import file_content_bp
 from .routes.language import language_bp, init_language_routes
 from .routes.features import features_bp, init_features_routes
+from .routes.metrics import metrics_bp
+from .routes.session import session_bp
 from ..core.services.chat_service import ChatService
 from ..core.models.gemini import GeminiModel
 from ..core.storage.vector_store import VectorStore
@@ -71,6 +73,8 @@ def create_app(config=None):
     app.register_blueprint(file_content_bp)
     app.register_blueprint(language_bp)
     app.register_blueprint(features_bp)
+    app.register_blueprint(metrics_bp)
+    app.register_blueprint(session_bp)
     
     # Add frontend routes
     _add_frontend_routes(app, logger)
@@ -244,6 +248,28 @@ def _log_system_configuration(logger, chat_service):
 
 def _add_frontend_routes(app, logger):
     """Add routes for serving the frontend."""
+    
+    # Dashboard route
+    @app.route('/dashboard')
+    @app.route('/dashboard/')
+    @app.route('/dashboard/<path:filename>')
+    def serve_dashboard(filename=None):
+        """Serve the metrics dashboard."""
+        from pathlib import Path
+        dashboard_dir = Path(__file__).parent.parent.parent / 'dashboard'
+        
+        if filename:
+            # Serve specific file (dashboard.js, etc)
+            if (dashboard_dir / filename).exists():
+                return send_from_directory(str(dashboard_dir), filename)
+            else:
+                return f"Dashboard file not found: {filename}", 404
+        else:
+            # Serve index.html
+            if (dashboard_dir / 'index.html').exists():
+                return send_from_directory(str(dashboard_dir), 'index.html')
+            else:
+                return "Dashboard not found", 404
     
     @app.route('/', defaults={'path': ''})
     @app.route('/<path:path>')

@@ -1,0 +1,146 @@
+{
+  "category": "multilingual",
+  "description": "Multilingual queries to test language support",
+  "queries": [
+    {
+      "id": "multi_001",
+      "query": "¿Cuáles son los riesgos de la inteligencia artificial?",
+      "language": "es",
+      "english": "What are the risks of artificial intelligence?",
+      "expected_behavior": "respond_in_spanish"
+    },
+    {
+      "id": "multi_002",
+      "query": "人工智能的风险是什么？",
+      "language": "zh-CN",
+      "english": "What are the risks of artificial intelligence?",
+      "expected_behavior": "respond_in_chinese"
+    },
+    {
+      "id": "multi_003",
+      "query": "Quels sont les risques de l'intelligence artificielle?",
+      "language": "fr",
+      "english": "What are the risks of artificial intelligence?",
+      "expected_behavior": "respond_in_french"
+    },
+    {
+      "id": "multi_004",
+      "query": "Was sind die Risiken der künstlichen Intelligenz?",
+      "language": "de",
+      "english": "What are the risks of artificial intelligence?",
+      "expected_behavior": "respond_in_german"
+    },
+    {
+      "id": "multi_005",
+      "query": "人工知能のリスクは何ですか？",
+      "language": "ja",
+      "english": "What are the risks of artificial intelligence?",
+      "expected_behavior": "respond_in_japanese"
+    },
+    {
+      "id": "multi_006",
+      "query": "인공지능의 위험은 무엇입니까?",
+      "language": "ko",
+      "english": "What are the risks of artificial intelligence?",
+      "expected_behavior": "respond_in_korean"
+    },
+    {
+      "id": "multi_007",
+      "query": "What are the risks of AI? Por favor, responde en español.",
+      "language": "mixed_en_es",
+      "english": "What are the risks of AI? Please respond in Spanish.",
+      "expected_behavior": "detect_language_request"
+    },
+    {
+      "id": "multi_008",
+      "query": "AI risks में privacy और security शामिल हैं?",
+      "language": "hi_en_mixed",
+      "english": "Are privacy and security included in AI risks?",
+      "expected_behavior": "handle_code_mixing"
+    },
+    {
+      "id": "multi_009",
+      "query": "Quali sono i rischi dell'intelligenza artificiale?",
+      "language": "it",
+      "english": "What are the risks of artificial intelligence?",
+      "expected_behavior": "respond_in_italian"
+    },
+    {
+      "id": "multi_010",
+      "query": "Каковы риски искусственного интеллекта?",
+      "language": "ru",
+      "english": "What are the risks of artificial intelligence?",
+      "expected_behavior": "respond_in_russian"
+    },
+    {
+      "id": "multi_011",
+      "query": "ما هي مخاطر الذكاء الاصطناعي؟",
+      "language": "ar",
+      "english": "What are the risks of artificial intelligence?",
+      "expected_behavior": "handle_rtl_language"
+    },
+    {
+      "id": "multi_012",
+      "query": "AI의 privacy 리스크는 무엇입니까?",
+      "language": "ko_en_mixed",
+      "english": "What are the privacy risks of AI?",
+      "expected_behavior": "handle_mixed_scripts"
+    },
+    {
+      "id": "multi_013",
+      "query": "Les risques de l'IA include-ils le chômage?",
+      "language": "fr_en_mixed",
+      "english": "Do AI risks include unemployment?",
+      "expected_behavior": "handle_mixed_languages"
+    },
+    {
+      "id": "multi_014",
+      "query": "人工智能 (AI) risks क्या हैं?",
+      "language": "multilingual_mix",
+      "english": "What are artificial intelligence (AI) risks?",
+      "expected_behavior": "handle_three_languages"
+    },
+    {
+      "id": "multi_015",
+      "query": "Explique los riesgos de privacidad en IA",
+      "language": "es",
+      "english": "Explain privacy risks in AI",
+      "expected_behavior": "domain_specific_spanish"
+    },
+    {
+      "id": "multi_016",
+      "query": "请告诉我关于AI偏见的信息",
+      "language": "zh-CN",
+      "english": "Please tell me about AI bias",
+      "expected_behavior": "technical_chinese"
+    },
+    {
+      "id": "multi_017",
+      "query": "Was ist 'algorithmic bias' auf Deutsch?",
+      "language": "de",
+      "english": "What is 'algorithmic bias' in German?",
+      "expected_behavior": "translation_request"
+    },
+    {
+      "id": "multi_018",
+      "query": "AI risks... wait, puedes responder en español?",
+      "language": "en_to_es",
+      "english": "AI risks... wait, can you respond in Spanish?",
+      "expected_behavior": "mid_query_language_switch"
+    },
+    {
+      "id": "multi_019",
+      "query": "मुझे AI के खतरों के बारे में बताएं",
+      "language": "hi",
+      "english": "Tell me about the dangers of AI",
+      "expected_behavior": "respond_in_hindi"
+    },
+    {
+      "id": "multi_020",
+      "query": "🇪🇸 Riesgos de IA 🇬🇧 AI risks 🇫🇷 Risques IA",
+      "language": "emoji_flags",
+      "english": "AI risks in multiple languages with flags",
+      "expected_behavior": "handle_flag_emojis"
+    }
+  ]
+}

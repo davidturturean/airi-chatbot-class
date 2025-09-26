@@ -98,8 +98,8 @@ export function FullChat() {
               <div className="flex-1">
                 <h2 className="text-2xl font-bold text-gray-800">AI Risk Assistant</h2>
                 <p className="text-sm text-gray-600 leading-relaxed mt-2">
-                  This assistant helps you explore and assess AI risk factors, drawing from the AI Risk Index. You can
-                  ask about governance frameworks, benchmarks, mitigations, and more.
+                  This assistant helps you explore and assess AI risk factors, drawing from the AI Risk Repository. You can
+                  explore AI risks by domain, entity, timing, and other dimensions from our comprehensive database.
                 </p>
               </div>
               <div className="flex items-center gap-4 ml-4">
@@ -230,11 +230,11 @@ export function FullChat() {
               <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
                 <h3 className="text-md font-semibold mb-1 flex items-center gap-2">
                   Or Explore General Topics
-                  <InfoTooltip content="Explore different types of AI risk information: Risk Taxonomies (how we categorize risks), Benchmarks (evaluation criteria), and Mitigations (strategies to reduce risks)." />
+                  <InfoTooltip content="Explore AI risks organized by different categories: domains (e.g., Privacy, Safety), entities affected (e.g., Individuals, Organizations), and timing (immediate vs long-term impacts)." />
                 </h3>
                 <p className="text-xs text-gray-500 mb-2">Find out more about our repository's structure by category</p>
                 <div className="flex flex-wrap gap-2">
-                  {['Risk Taxonomies', 'Benchmarks', 'Mitigations'].map((type) => (
+                  {['Risk Domains', 'Risk Categories', 'Entity Types'].map((type) => (
                     <button
                       key={type}
                       onClick={() => handleSubmit(type)}
@@ -252,12 +252,15 @@ export function FullChat() {
               <div className="bg-white border rounded-xl p-4 shadow-sm">
                 <h3 className="text-md font-semibold mb-2">Session</h3>
                 <p className="text-xs text-gray-500 mb-2">ID: {sessionId.slice(0, 8)}...</p>
-                <button
-                  onClick={clearSession}
-                  className="text-sm text-red-600 hover:text-red-800"
-                >
-                  Clear Session Data
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={clearSession}
+                    className="text-sm text-red-600 hover:text-red-800"
+                  >
+                    Clear Session Data
+                  </button>
+                  <InfoTooltip content="This will clear your current conversation history and start a fresh session. Your previous messages will be permanently deleted." />
+                </div>
               </div>
             )}
           </aside>
@@ -268,12 +271,15 @@ export function FullChat() {
           <div className="fixed top-20 right-6 bg-white border rounded-xl p-4 shadow-lg z-10 min-w-[200px]">
             <h3 className="text-md font-semibold mb-2">Session</h3>
             <p className="text-xs text-gray-500 mb-2">ID: {sessionId.slice(0, 8)}...</p>
-            <button
-              onClick={clearSession}
-              className="text-sm text-red-600 hover:text-red-800"
-            >
-              Clear Session Data
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={clearSession}
+                className="text-sm text-red-600 hover:text-red-800"
+              >
+                Clear Session Data
+              </button>
+              <InfoTooltip content="This will clear your current conversation history and start a fresh session. Your previous messages will be permanently deleted." />
+            </div>
           </div>
         )}
       </main>

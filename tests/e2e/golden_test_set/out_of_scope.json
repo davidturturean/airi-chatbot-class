@@ -1,0 +1,126 @@
+{
+  "category": "out_of_scope",
+  "description": "Out-of-scope queries that should be politely declined or redirected",
+  "queries": [
+    {
+      "id": "oos_001",
+      "query": "How can I mitigate AI bias in my machine learning model?",
+      "expected_behavior": "decline_solutions",
+      "reason": "Repository documents risks, not solutions"
+    },
+    {
+      "id": "oos_002",
+      "query": "What happened with OpenAI yesterday?",
+      "expected_behavior": "decline_current_events",
+      "reason": "No access to real-time news"
+    },
+    {
+      "id": "oos_003",
+      "query": "Should I invest in AI companies?",
+      "expected_behavior": "decline_financial_advice",
+      "reason": "Cannot provide investment advice"
+    },
+    {
+      "id": "oos_004",
+      "query": "Write Python code to detect AI-generated text",
+      "expected_behavior": "decline_code_generation",
+      "reason": "Not a code generation service"
+    },
+    {
+      "id": "oos_005",
+      "query": "What will AI look like in 2050?",
+      "expected_behavior": "decline_speculation",
+      "reason": "Cannot predict future"
+    },
+    {
+      "id": "oos_006",
+      "query": "Is Gemini better than GPT-4?",
+      "expected_behavior": "decline_comparison",
+      "reason": "Not a model comparison service"
+    },
+    {
+      "id": "oos_007",
+      "query": "How do I build a chatbot like you?",
+      "expected_behavior": "decline_implementation",
+      "reason": "Focus on risks, not implementation"
+    },
+    {
+      "id": "oos_008",
+      "query": "What's the weather today?",
+      "expected_behavior": "decline_unrelated",
+      "reason": "Completely unrelated to AI risks"
+    },
+    {
+      "id": "oos_009",
+      "query": "Can you help me debug my neural network?",
+      "expected_behavior": "decline_technical_support",
+      "reason": "Not a debugging service"
+    },
+    {
+      "id": "oos_010",
+      "query": "What are the best practices for responsible AI?",
+      "expected_behavior": "decline_best_practices",
+      "reason": "Documents risks, not practices"
+    },
+    {
+      "id": "oos_011",
+      "query": "Tell me a joke about AI",
+      "expected_behavior": "decline_entertainment",
+      "reason": "Not an entertainment service"
+    },
+    {
+      "id": "oos_012",
+      "query": "What's your opinion on AGI?",
+      "expected_behavior": "decline_opinion",
+      "reason": "Provides facts, not opinions"
+    },
+    {
+      "id": "oos_013",
+      "query": "Can AI replace doctors?",
+      "expected_behavior": "redirect_to_risks",
+      "reason": "Redirect to employment/automation risks"
+    },
+    {
+      "id": "oos_014",
+      "query": "How much does Claude API cost?",
+      "expected_behavior": "decline_pricing",
+      "reason": "Not a pricing information service"
+    },
+    {
+      "id": "oos_015",
+      "query": "Translate this to French: AI is dangerous",
+      "expected_behavior": "decline_translation",
+      "reason": "Not a translation service"
+    },
+    {
+      "id": "oos_016",
+      "query": "What company created you?",
+      "expected_behavior": "decline_meta",
+      "reason": "Focus on repository content"
+    },
+    {
+      "id": "oos_017",
+      "query": "How do I get a job in AI safety?",
+      "expected_behavior": "decline_career_advice",
+      "reason": "Not a career counseling service"
+    },
+    {
+      "id": "oos_018",
+      "query": "Explain quantum computing",
+      "expected_behavior": "decline_off_topic",
+      "reason": "Not related to AI risks"
+    },
+    {
+      "id": "oos_019",
+      "query": "What are the lottery numbers for tomorrow?",
+      "expected_behavior": "decline_absurd",
+      "reason": "Cannot predict random events"
+    },
+    {
+      "id": "oos_020",
+      "query": "How do I report an AI safety issue I discovered?",
+      "expected_behavior": "decline_action_request",
+      "reason": "Cannot facilitate reporting, only document risks"
+    }
+  ]
+}

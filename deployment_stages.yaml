@@ -1,0 +1,128 @@
+# AI Risk Repository Chatbot - Deployment Stages Configuration
+# Based on Running Lean methodology and gradual release strategy
+
+stages:
+  1_internal:
+    name: "Internal Testing"
+    description: "Password-protected testing with FutureTech team and stakeholders"
+    access:
+      type: "Password-protected Webflow page"
+      password: "MITai2024test"  # Suggested password
+    users:
+      target: "6-10 people"
+      composition:
+        - "4 FutureTech team members"
+        - "3 AI/ML researchers"
+        - "3 policy/governance professionals"
+    duration: "1 week"
+    metrics_requirements:
+      gates_passing: "6/10 minimum"
+      user_satisfaction: "70% positive"
+      critical_bugs: "0 allowed"
+      median_latency: "< 5 seconds"
+    activities:
+      - "Structured user testing sessions (45 min each)"
+      - "Screen recording with commentary"
+      - "Post-session surveys"
+      - "Bug tracking and fixing"
+    exit_criteria:
+      - "All critical bugs fixed"
+      - "6/10 deployment gates passing"
+      - "Testing feedback incorporated"
+      - "Dashboard metrics stabilized"
+
+  2_canary:
+    name: "Canary Release"
+    description: "Limited release to 5-10% of traffic with close monitoring"
+    access:
+      type: "Traffic split"
+      percentage: "5-10%"
+      method: "A/B testing via Webflow"
+    users:
+      target: "Selected researchers and early adopters"
+      selection: "Opt-in or randomized"
+    duration: "2 weeks"
+    metrics_requirements:
+      gates_passing: "8/10 minimum"
+      user_satisfaction: "75% positive"
+      containment_rate: "60% minimum"
+      error_rate: "< 5%"
+      cost_per_query: "< $0.40"
+    activities:
+      - "Real-world usage monitoring"
+      - "Performance optimization"
+      - "A/B testing different UI elements"
+      - "Support ticket analysis"
+      - "Cost tracking"
+    exit_criteria:
+      - "8/10 deployment gates passing consistently"
+      - "No performance degradation"
+      - "Positive user feedback trend"
+      - "Demonstrated value (ticket deflection)"
+
+  3_production:
+    name: "Full Production Release"
+    description: "Public release to all airisk.mit.edu visitors"
+    access:
+      type: "Public"
+      percentage: "100%"
+      announcement: "Blog post and email announcement"
+    users:
+      target: "All website visitors"
+      expected_volume: "1000+ queries/day"
+    duration: "Ongoing"
+    metrics_requirements:
+      gates_passing: "10/10 target, 8/10 minimum"
+      user_satisfaction: "80% positive"
+      containment_rate: "75% target"
+      ticket_deflection: "30% minimum"
+      cost_per_query: "< $0.30"
+      uptime: "99.9%"
+    activities:
+      - "24/7 monitoring"
+      - "Regular performance reviews"
+      - "Feature updates based on feedback"
+      - "Scaling infrastructure as needed"
+      - "Regular content updates"
+    maintenance:
+      - "Weekly metrics review"
+      - "Monthly feature releases"
+      - "Quarterly user surveys"
+      - "Annual comprehensive review"
+
+rollback_triggers:
+  # Automatic rollback conditions
+  critical:
+    - "Groundedness < 90% (was 95%)"
+    - "Hallucination rate > 5% (was 2%)"
+    - "Safety violations > 0"
+    - "Cost per query > $1.00"
+    - "System downtime > 1 hour"
+  
+  warning:
+    - "User satisfaction < 60%"
+    - "Latency P95 > 10 seconds"
+    - "Error rate > 10%"
+    - "Containment rate < 40%"
+
+monitoring:
+  tools:
+    - "Custom metrics dashboard (/dashboard)"
+    - "PostHog analytics (user behavior)"
+    - "Railway logs (backend monitoring)"
+    - "Webflow analytics (traffic patterns)"
+  
+  alerts:
+    email: "pslat@mit.edu, davidct@mit.edu"
+    frequency: "Real-time for critical, daily digest for warnings"
+    
+communication_plan:
+  internal:
+    - "Slack channel: #ai-risk-chatbot"
+    - "Weekly status meetings"
+    - "Daily metrics review during testing"
+  
+  external:
+    - "User feedback form on website"
+    - "Support email: airisk-chatbot@mit.edu"
+    - "Status page for outages"

@@ -171,8 +171,8 @@ Translate technical terms appropriately for {language_name} speakers."""
                     if self.gemini_model:
                         metadata_service.gemini_model = self.gemini_model
                     
-                    # Execute metadata query with language info
-                    response, raw_results = metadata_service.query(message, language_info)
+                    # Execute metadata query
+                    response, raw_results = metadata_service.query(message)
                 except ImportError as e:
                     logger.error(f"Failed to import metadata service: {e}")
                     response = "Metadata service is currently unavailable."
@@ -220,8 +220,8 @@ Translate technical terms appropriately for {language_name} speakers."""
                     if self.gemini_model:
                         metadata_service.gemini_model = self.gemini_model
                     
-                    # First, try to get structured data from metadata service with language info
-                    metadata_response, raw_results = metadata_service.query(message, language_info)
+                    # First, try to get structured data from metadata service
+                    metadata_response, raw_results = metadata_service.query(message)
                 except ImportError as e:
                     logger.error(f"Failed to import metadata service: {e}")
                     metadata_response = "Metadata service is currently unavailable."

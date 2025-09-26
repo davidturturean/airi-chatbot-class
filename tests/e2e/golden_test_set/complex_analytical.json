@@ -1,0 +1,126 @@
+{
+  "category": "complex_analytical",
+  "description": "Complex analytical queries requiring synthesis and comparison",
+  "queries": [
+    {
+      "id": "complex_001", 
+      "query": "Compare the privacy risks of AI versus the security risks. Which category has more documented incidents?",
+      "expected_behavior": "comparative_analysis",
+      "requires": ["comparison", "statistics"]
+    },
+    {
+      "id": "complex_002",
+      "query": "What is the trend in AI bias risks from 2020 to 2024? Are they increasing or decreasing?",
+      "expected_behavior": "temporal_analysis",
+      "requires": ["trend_analysis", "temporal_data"]
+    },
+    {
+      "id": "complex_003",
+      "query": "Rank the top 5 AI risk categories by severity and explain your ranking methodology",
+      "expected_behavior": "ranking_with_methodology",
+      "requires": ["ranking", "explanation"]
+    },
+    {
+      "id": "complex_004",
+      "query": "What percentage of AI risks are related to employment? Break it down by sector if possible.",
+      "expected_behavior": "statistical_breakdown",
+      "requires": ["statistics", "categorization"]
+    },
+    {
+      "id": "complex_005",
+      "query": "How do AI risks in healthcare differ from AI risks in finance? Provide a detailed comparison.",
+      "expected_behavior": "domain_comparison",
+      "requires": ["domain_knowledge", "comparison"]
+    },
+    {
+      "id": "complex_006",
+      "query": "What is the correlation between model size and bias risks? Do larger models have more bias issues?",
+      "expected_behavior": "correlation_analysis",
+      "requires": ["correlation", "technical_analysis"]
+    },
+    {
+      "id": "complex_007",
+      "query": "Analyze the geographic distribution of AI safety research. Which countries contribute most?",
+      "expected_behavior": "geographic_analysis",
+      "requires": ["geographic_data", "research_analysis"]
+    },
+    {
+      "id": "complex_008",
+      "query": "What are the intersections between privacy risks and security risks in AI systems?",
+      "expected_behavior": "intersection_analysis",
+      "requires": ["set_operations", "relationship_mapping"]
+    },
+    {
+      "id": "complex_009",
+      "query": "Calculate the average number of citations per risk category and identify outliers",
+      "expected_behavior": "statistical_calculation",
+      "requires": ["statistics", "outlier_detection"]
+    },
+    {
+      "id": "complex_010",
+      "query": "How has the definition of 'AI alignment' evolved over time according to the repository?",
+      "expected_behavior": "concept_evolution",
+      "requires": ["temporal_analysis", "definition_tracking"]
+    },
+    {
+      "id": "complex_011",
+      "query": "What is the ratio of technical risks to societal risks in the repository? Show the breakdown.",
+      "expected_behavior": "ratio_calculation",
+      "requires": ["categorization", "ratio_analysis"]
+    },
+    {
+      "id": "complex_012",
+      "query": "Identify patterns in AI incidents. What are the common failure modes?",
+      "expected_behavior": "pattern_recognition",
+      "requires": ["pattern_analysis", "incident_analysis"]
+    },
+    {
+      "id": "complex_013",
+      "query": "Cross-reference employment risks with automation risks. What's the overlap?",
+      "expected_behavior": "cross_reference",
+      "requires": ["set_operations", "relationship_analysis"]
+    },
+    {
+      "id": "complex_014",
+      "query": "What is the distribution of risk severity levels across different AI application domains?",
+      "expected_behavior": "distribution_analysis",
+      "requires": ["statistics", "domain_categorization"]
+    },
+    {
+      "id": "complex_015",
+      "query": "Analyze the co-occurrence of risks. Which risks commonly appear together?",
+      "expected_behavior": "co_occurrence_analysis",
+      "requires": ["correlation", "pattern_recognition"]
+    },
+    {
+      "id": "complex_016",
+      "query": "What is the median, mean, and mode of risk citations? Interpret the distribution.",
+      "expected_behavior": "statistical_measures",
+      "requires": ["statistics", "interpretation"]
+    },
+    {
+      "id": "complex_017",
+      "query": "How do short-term AI risks differ from long-term AI risks in terms of research focus?",
+      "expected_behavior": "temporal_comparison",
+      "requires": ["temporal_categorization", "research_analysis"]
+    },
+    {
+      "id": "complex_018",
+      "query": "Map the causal relationships between different AI risks. Which risks lead to others?",
+      "expected_behavior": "causal_mapping",
+      "requires": ["causality", "relationship_mapping"]
+    },
+    {
+      "id": "complex_019",
+      "query": "What is the Pareto distribution of AI risks? Do 20% of categories account for 80% of incidents?",
+      "expected_behavior": "pareto_analysis",
+      "requires": ["distribution_analysis", "80_20_rule"]
+    },
+    {
+      "id": "complex_020",
+      "query": "Synthesize a meta-analysis of AI governance risks across different regulatory frameworks",
+      "expected_behavior": "meta_analysis",
+      "requires": ["synthesis", "regulatory_analysis"]
+    }
+  ]
+}

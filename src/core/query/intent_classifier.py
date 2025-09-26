@@ -231,6 +231,7 @@ class IntentClassifier:
     
     def classify_intent(self, query: str) -> IntentResult:
         """Classify the intent of a user query."""
+        logger.debug(f"Classifying intent for query: {query[:100]}...")
         start_time = time.time()
         
         try:
@@ -240,14 +241,33 @@ class IntentClassifier:
                 self._log_performance(time.time() - start_time, "security")
                 return security_result
             
-            # 2. Check for taxonomy patterns first (high priority)
+            # 2. FAST PATH: Check for obvious AI risk queries
+            query_lower = query.lower()
+            ai_risk_keywords = ['ai', 'artificial intelligence', 'machine learning', 'ml', 'algorithm']
+            risk_keywords = ['risk', 'danger', 'harm', 'threat', 'concern', 'safety', 'impact', 'bias', 'privacy', 'employment']
+            
+            has_ai_term = any(term in query_lower for term in ai_risk_keywords)
+            has_risk_term = any(term in query_lower for term in risk_keywords)
+            
+            if has_ai_term and has_risk_term:
+                # This is clearly an AI risk query - skip embeddings entirely
+                logger.info(f"Fast path: Query contains AI and risk terms, classifying as REPOSITORY_RELATED")
+                return IntentResult(
+                    category=IntentCategory.REPOSITORY_RELATED,
+                    confidence=0.95,
+                    reasoning="Query contains AI and risk-related terms",
+                    should_process=True
+                )
+            
+            # 3. Check for taxonomy patterns (high priority)
             taxonomy_result = self._check_taxonomy_patterns(query)
             if taxonomy_result:
                 self._log_performance(time.time() - start_time, "taxonomy")
                 return taxonomy_result
             
-            # 3. Semantic similarity classification
+            # 4. Semantic similarity classification
             semantic_result = self._classify_by_semantics(query)
+            logger.info(f"Semantic classification result: {semantic_result.category} (confidence: {semantic_result.confidence:.2f}, reasoning: {semantic_result.reasoning})")
             
             # If semantic classification is confident, return it
             if semantic_result.confidence >= 0.7:
@@ -563,8 +583,13 @@ class IntentClassifier:
             # Calculate similarities to each category
             similarities = {}
             for category, category_embedding in self._category_embeddings.items():
-                similarity = self._cosine_similarity(query_embedding, category_embedding)
-                similarities[category] = similarity
+                try:
+                    similarity = self._cosine_similarity(query_embedding, category_embedding)
+                    similarities[category] = float(similarity)  # Ensure it's a scalar
+                    logger.debug(f"Similarity to {category}: {similarity:.3f}")
+                except Exception as e:
+                    logger.warning(f"Failed to compute similarity for {category}: {e}")
+                    similarities[category] = 0.0
             
             # Find best match
             best_category = max(similarities, key=similarities.get)
@@ -584,7 +609,7 @@ class IntentClassifier:
             self._initialize_embeddings_with_timeout()
             self._embeddings_initialized = True
     
-    def _initialize_embeddings_with_timeout(self, timeout: float = 10.0):
+    def _initialize_embeddings_with_timeout(self, timeout: float = 5.0):
         """Initialize embeddings with timeout protection."""
         import concurrent.futures
         import signal
@@ -606,7 +631,9 @@ class IntentClassifier:
                     if reference_texts:
                         # Get embeddings for all reference texts at once
                         embeddings = model.encode(reference_texts)
-                        category_embeddings[category] = embeddings
+                        # Store the average embedding for the category (centroid approach)
+                        import numpy as np
+                        category_embeddings[category] = np.mean(embeddings, axis=0)
                 
                 return model, category_embeddings
             except ImportError:
@@ -643,36 +670,73 @@ class IntentClassifier:
             self._initialize_embeddings_with_timeout()
     
     def _get_embedding(self, text: str):
-        """Get embedding for text."""
+        """Get embedding for text.
+        
+        Args:
+            text: Input text to encode
+            
+        Returns:
+            numpy.ndarray: 1D embedding vector, or None if failed
+        """
         try:
             if self._embedding_model:
-                return self._embedding_model.encode([text])
+                # Encode returns a 2D array [1, embedding_dim]
+                embeddings = self._embedding_model.encode([text])
+                # Return 1D vector
+                if embeddings is not None and len(embeddings) > 0:
+                    return embeddings[0]
+                else:
+                    logger.warning(f"Empty embedding returned for text: {text[:50]}...")
+                    return None
         except Exception as e:
-            logger.warning(f"Failed to get embedding: {e}")
+            logger.warning(f"Failed to get embedding for text: {e}")
         return None
     
-    def _cosine_similarity(self, query_embedding, reference_embeddings):
-        """Calculate cosine similarity between query and reference embeddings."""
+    def _cosine_similarity(self, query_embedding, reference_embedding):
+        """Calculate cosine similarity between query and reference embeddings.
+        
+        Args:
+            query_embedding: Query embedding vector (can be 1D or 2D)
+            reference_embedding: Reference embedding vector (can be 1D or 2D)
+        
+        Returns:
+            float: Cosine similarity score between -1 and 1
+        """
         import numpy as np
         
-        # Handle single vector vs matrix
-        if len(query_embedding.shape) == 1:
-            query_embedding = query_embedding.reshape(1, -1)
+        # Handle None inputs
+        if query_embedding is None or reference_embedding is None:
+            return 0.0
         
-        if len(reference_embeddings.shape) == 1:
-            reference_embeddings = reference_embeddings.reshape(1, -1)
+        # Convert to numpy arrays if needed
+        if not isinstance(query_embedding, np.ndarray):
+            query_embedding = np.array(query_embedding)
+        if not isinstance(reference_embedding, np.ndarray):
+            reference_embedding = np.array(reference_embedding)
         
-        # Calculate cosine similarities
-        similarities = []
-        for ref_emb in reference_embeddings:
-            dot_product = np.dot(query_embedding[0], ref_emb)
-            norm_product = np.linalg.norm(query_embedding[0]) * np.linalg.norm(ref_emb)
-            if norm_product > 0:
-                similarities.append(dot_product / norm_product)
-            else:
-                similarities.append(0.0)
+        # Flatten to 1D vectors
+        if len(query_embedding.shape) > 1:
+            query_embedding = query_embedding.flatten()
+        if len(reference_embedding.shape) > 1:
+            reference_embedding = reference_embedding.flatten()
         
-        return np.array(similarities).reshape(1, -1)
+        # Verify same dimensions
+        if query_embedding.shape[0] != reference_embedding.shape[0]:
+            logger.error(f"Embedding dimension mismatch: query={query_embedding.shape[0]}, ref={reference_embedding.shape[0]}")
+            return 0.0
+        
+        # Calculate cosine similarity
+        dot_product = np.dot(query_embedding, reference_embedding)
+        query_norm = np.linalg.norm(query_embedding)
+        ref_norm = np.linalg.norm(reference_embedding)
+        
+        # Handle zero vectors
+        if query_norm == 0 or ref_norm == 0:
+            return 0.0
+        
+        # Compute similarity (clamp to [-1, 1] to handle numerical errors)
+        similarity = dot_product / (query_norm * ref_norm)
+        return np.clip(similarity, -1.0, 1.0)
     
     def _similarity_to_intent_result(self, query: str, best_category: IntentCategory, 
                                    best_score: float, all_similarities: dict) -> IntentResult:
@@ -718,7 +782,28 @@ class IntentClassifier:
             )
         
         # Check for chit-chat
-        elif best_category == IntentCategory.CHIT_CHAT and confidence >= 0.7:
+        elif best_category == IntentCategory.CHIT_CHAT and confidence >= 0.85:
+            # Additional validation: don't classify as chit-chat if it contains AI risk terms
+            query_lower = query.lower()
+            if 'ai' in query_lower and any(term in query_lower for term in ['risk', 'danger', 'harm', 'threat', 'safety']):
+                # Override chit-chat classification - this is about AI risks
+                return IntentResult(
+                    category=IntentCategory.REPOSITORY_RELATED,
+                    confidence=0.8,
+                    reasoning="Query mentions AI risks despite greeting - treating as repository query",
+                    should_process=True
+                )
+            
+            # Only classify as chit-chat if it's short and doesn't contain technical terms
+            if len(query.split()) > 20 or any(term in query_lower for term in ['privacy', 'bias', 'employment', 'security', 'algorithm']):
+                # Too long or contains technical terms - not chit-chat
+                return IntentResult(
+                    category=IntentCategory.REPOSITORY_RELATED,
+                    confidence=0.6,
+                    reasoning="Query too complex for chit-chat - defaulting to repository",
+                    should_process=True
+                )
+            
             return IntentResult(
                 category=IntentCategory.CHIT_CHAT,
                 confidence=confidence,
@@ -758,11 +843,37 @@ class IntentClassifier:
             )
     
     def _fallback_classification(self, query: str) -> IntentResult:
-        """Simple fallback when semantic classification fails."""
+        """Fallback classification using keyword matching when semantic classification fails."""
         query_lower = query.lower()
+        import re
         
-        # Simple chit-chat detection
-        if any(word in query_lower for word in ['hello', 'hi', 'thanks', 'goodbye']):
+        # Check for AI risk related keywords FIRST - highest priority
+        ai_risk_keywords = ['ai risk', 'artificial intelligence risk', 'ai danger', 
+                           'ai safety', 'ai harm', 'ai threat', 'machine learning risk',
+                           'what are ai', 'what is ai', 'ai impact', 'ai affect',
+                           'risks', 'dangers', 'threats', 'harms']
+        if any(keyword in query_lower for keyword in ai_risk_keywords):
+            return IntentResult(
+                category=IntentCategory.REPOSITORY_RELATED,
+                confidence=0.85,
+                reasoning="Contains AI risk keywords (fallback)",
+                should_process=True
+            )
+        
+        # Check for greetings with context
+        greeting_patterns = [r'\bhello\b', r'\bhi\b', r'\bhey\b', r'\bgood (morning|afternoon|evening)\b']
+        has_greeting = any(re.search(pattern, query_lower) for pattern in greeting_patterns)
+        
+        if has_greeting:
+            # Check if greeting ALSO contains AI risk content
+            if 'ai' in query_lower or 'risk' in query_lower or 'artificial' in query_lower:
+                return IntentResult(
+                    category=IntentCategory.REPOSITORY_RELATED,
+                    confidence=0.75,
+                    reasoning="Greeting with AI risk content - treating as repository query",
+                    should_process=True
+                )
+            # Pure greeting only
             return IntentResult(
                 category=IntentCategory.CHIT_CHAT,
                 confidence=0.8,
@@ -771,11 +882,21 @@ class IntentClassifier:
                 suggested_response="Hello! I'm here to help you understand AI risks. What would you like to know about AI safety, employment impacts, privacy concerns, or bias issues?"
             )
         
-        # Assume repository-related for anything else
+        # Check for farewell/thanks
+        if any(word in query_lower for word in ['goodbye', 'bye', 'thanks', 'thank you']):
+            return IntentResult(
+                category=IntentCategory.CHIT_CHAT,
+                confidence=0.8,
+                reasoning="Farewell or thanks detected",
+                should_process=False,
+                suggested_response="You're welcome! Feel free to ask any questions about AI risks."
+            )
+        
+        # Default to repository-related for safety - we'd rather attempt to answer than reject
         return IntentResult(
             category=IntentCategory.REPOSITORY_RELATED,
             confidence=0.5,
-            reasoning="Fallback classification - assuming repository query",
+            reasoning="Fallback classification - defaulting to repository query for safety",
             should_process=True
         )
     

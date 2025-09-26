@@ -208,7 +208,7 @@ class CitationService:
                     if any(next_sent.startswith(word) for word in 
                            ['Furthermore', 'Additionally', 'However', 'Moreover', 
                             'Therefore', 'Meanwhile', 'This includes', 'This raises',
-                            'Given', 'To ensure', 'Mitigation']):
+                            'Given', 'To ensure']):
                         # Break before transition
                         paragraphs.append(' '.join(current))
                         current = []
@@ -349,6 +349,9 @@ class CitationService:
             filename = os.path.basename(source)
             if 'AI_Risk' in filename:
                 citation_text = "AI Risk Repository Document"
+            elif 'preprint' in filename.lower():
+                # Special handling for preprint documents
+                citation_text = "AI Risk Repository"
             else:
                 citation_text = filename.replace('_', ' ').replace('-', ' ')[:30]
         
@@ -397,7 +400,8 @@ class CitationService:
                 title = title.replace('\\n', ' ').strip()
             
             # If no title in metadata, try to extract from content
-            if not title or title == rid:
+            # Also fix if title is just the filename like "preprint_raw.txt"
+            if not title or title == rid or 'preprint_raw.txt' in title:
                 lines = content.split('\n') if content else []
                 
                 # Look for "Title:" prefix first
@@ -406,8 +410,8 @@ class CitationService:
                         title = line.replace('Title:', '').strip()
                         break
                 
-                # If no "Title:" found, try to extract from first meaningful line
-                if not title or title == rid:
+                # If no "Title:" found or still have preprint_raw.txt, try to extract from first meaningful line
+                if not title or title == rid or 'preprint_raw.txt' in title:
                     for line in lines:
                         # Skip metadata lines and empty lines
                         line = line.strip()

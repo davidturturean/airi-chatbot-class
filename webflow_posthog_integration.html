@@ -1,0 +1,237 @@
+<!-- PostHog Integration for Webflow - Add to Custom Code (Head) -->
+
+<!-- PostHog Script -->
+<script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+  
+  // Initialize PostHog with your API key
+  posthog.init('phx_pa5zpKS0q1DTprlpwAaInqlYFIqY2u8iWCKL2C4m2FF5S7M', {
+    api_host: 'https://us.posthog.com',
+    loaded: function(posthog) {
+      console.log('PostHog loaded successfully');
+    }
+  });
+</script>
+
+<!-- Chatbot Analytics Integration -->
+<script>
+(function() {
+  // Configuration
+  const CHATBOT_IFRAME_ID = 'chatbot-iframe'; // Update this to match your iframe's ID
+  const ENABLE_DEBUG = true; // Set to true for console logging during testing
+  const RAILWAY_URL = 'https://airi-chatbot-class-production.up.railway.app';
+  
+  // Helper function for debug logging
+  function debugLog(message, data) {
+    if (ENABLE_DEBUG) {
+      console.log(`[Chatbot Analytics] ${message}`, data || '');
+    }
+  }
+  
+  // Track page view with chatbot presence
+  posthog.capture('chatbot_page_viewed', {
+    page_url: window.location.href,
+    page_title: document.title,
+    chatbot_present: true,
+    stage: 'internal_testing',
+    timestamp: new Date().toISOString()
+  });
+  
+  // Listen for messages from the chatbot iframe
+  window.addEventListener('message', function(event) {
+    // Security: Only accept messages from your domain
+    const ALLOWED_ORIGINS = [
+      RAILWAY_URL,
+      'https://airi-chatbot-class-production.up.railway.app',
+      'http://localhost:3000', // For development
+      'http://localhost:5173', // Vite dev server
+      'http://localhost:5000'
+    ];
+    
+    // Check if origin is allowed (comment out for testing, but use in production)
+    // if (!ALLOWED_ORIGINS.includes(event.origin)) {
+    //   debugLog('Rejected message from unauthorized origin:', event.origin);
+    //   return;
+    // }
+    
+    // Handle different message types from the chatbot
+    if (event.data && event.data.type) {
+      const { type, data } = event.data;
+      
+      switch(type) {
+        case 'chatbot_opened':
+          debugLog('Chatbot opened');
+          posthog.capture('chatbot_opened', {
+            session_id: data.session_id,
+            timestamp: new Date().toISOString()
+          });
+          break;
+          
+        case 'query_submitted':
+          debugLog('Query submitted', data);
+          posthog.capture('query_submitted', {
+            session_id: data.session_id,
+            query_number: data.query_number,
+            query_length: data.query_length,
+            language: data.language || 'en'
+          });
+          break;
+          
+        case 'response_received':
+          debugLog('Response received', data);
+          posthog.capture('response_received', {
+            session_id: data.session_id,
+            latency_ms: data.latency_ms,
+            citations_count: data.citations_count,
+            response_length: data.response_length,
+            query_number: data.query_number
+          });
+          break;
+          
+        case 'feedback_given':
+          debugLog('Feedback given', data);
+          posthog.capture('feedback_given', {
+            session_id: data.session_id,
+            feedback_type: data.feedback_type, // 'thumbs_up', 'thumbs_down'
+            query_number: data.query_number,
+            found_answer: data.found_answer, // 'yes', 'partial', 'no'
+            would_recommend: data.would_recommend // 1-10
+          });
+          break;
+          
+        case 'citation_clicked':
+          debugLog('Citation clicked', data);
+          posthog.capture('citation_clicked', {
+            session_id: data.session_id,
+            citation_id: data.citation_id,
+            citation_type: data.citation_type // 'RID', 'META', etc.
+          });
+          break;
+          
+        case 'error_occurred':
+          debugLog('Error occurred', data);
+          posthog.capture('error_occurred', {
+            session_id: data.session_id,
+            error_type: data.error_type,
+            error_message: data.error_message
+          });
+          break;
+          
+        case 'session_ended':
+          debugLog('Session ended', data);
+          posthog.capture('session_ended', {
+            session_id: data.session_id,
+            total_queries: data.total_queries,
+            session_duration_ms: data.session_duration_ms,
+            total_cost: data.total_cost
+          });
+          break;
+          
+        case 'chatbot_metrics':
+          // General metrics update
+          debugLog('Metrics update', data);
+          posthog.capture('chatbot_metrics', data);
+          break;
+          
+        default:
+          debugLog('Unknown message type:', type);
+      }
+    }
+  });
+  
+  // Track chatbot visibility changes
+  let chatbotVisible = false;
+  const chatbotObserver = new IntersectionObserver(
+    function(entries) {
+      entries.forEach(function(entry) {
+        const wasVisible = chatbotVisible;
+        chatbotVisible = entry.isIntersecting;
+        
+        if (!wasVisible && chatbotVisible) {
+          debugLog('Chatbot became visible');
+          posthog.capture('Chatbot Scrolled Into View', {
+            timestamp: new Date().toISOString()
+          });
+        } else if (wasVisible && !chatbotVisible) {
+          debugLog('Chatbot scrolled out of view');
+          posthog.capture('Chatbot Scrolled Out Of View', {
+            timestamp: new Date().toISOString()
+          });
+        }
+      });
+    },
+    { threshold: 0.5 } // Trigger when 50% visible
+  );
+  
+  // Start observing the chatbot iframe when DOM is ready
+  document.addEventListener('DOMContentLoaded', function() {
+    const chatbotIframe = document.getElementById(CHATBOT_IFRAME_ID);
+    if (chatbotIframe) {
+      chatbotObserver.observe(chatbotIframe);
+      debugLog('Started observing chatbot iframe');
+      
+      // Track initial load
+      posthog.capture('Chatbot Iframe Loaded', {
+        iframe_src: chatbotIframe.src,
+        timestamp: new Date().toISOString()
+      });
+    } else {
+      console.warn('[Chatbot Analytics] Chatbot iframe not found with ID:', CHATBOT_IFRAME_ID);
+    }
+  });
+  
+  // Track page unload with session summary
+  window.addEventListener('beforeunload', function() {
+    // Send final metrics if available
+    const chatbotIframe = document.getElementById(CHATBOT_IFRAME_ID);
+    if (chatbotIframe && chatbotIframe.contentWindow) {
+      // Request final metrics from iframe
+      chatbotIframe.contentWindow.postMessage({
+        type: 'request_final_metrics'
+      }, '*');
+    }
+    
+    posthog.capture('Chatbot Page Unload', {
+      timestamp: new Date().toISOString()
+    });
+  });
+  
+  // Optional: Set up custom user properties
+  if (typeof WEBFLOW_USER_EMAIL !== 'undefined') {
+    posthog.identify(WEBFLOW_USER_EMAIL, {
+      email: WEBFLOW_USER_EMAIL,
+      chatbot_user: true
+    });
+  }
+  
+  console.log('[Chatbot Analytics] PostHog integration initialized');
+})();
+</script>
+
+<!-- 
+SETUP INSTRUCTIONS:
+
+1. Sign up for PostHog (https://posthog.com) if you haven't already
+2. Get your API key from PostHog project settings
+3. Replace 'YOUR_POSTHOG_API_KEY' with your actual API key
+4. Replace 'YOUR_POSTHOG_HOST' with 'https://app.posthog.com' or your self-hosted instance URL
+5. Update CHATBOT_IFRAME_ID to match your iframe's ID in Webflow
+6. Update ALLOWED_ORIGINS with your Railway deployment URL
+7. Add this entire code to Webflow Project Settings > Custom Code > Head Code
+8. Publish your Webflow site
+
+TESTING:
+- Set ENABLE_DEBUG to true to see console logs
+- Check PostHog dashboard for incoming events
+- Test all interaction types (queries, feedback, citations)
+
+DASHBOARD SETUP IN POSTHOG:
+1. Create a new dashboard called "Chatbot Performance"
+2. Add these insights:
+   - Total Queries Over Time (filter by event: "Chatbot Query Submitted")
+   - Average Response Time (filter by event: "Chatbot Response Received", aggregate by avg(latency_ms))
+   - User Satisfaction (filter by event: "Chatbot Feedback Given", breakdown by feedback_type)
+   - Error Rate (filter by event: "Chatbot Error", calculate as percentage of total queries)
+   - Session Duration Distribution
+   - Most Common Query Types (if you track query categories)
+-->

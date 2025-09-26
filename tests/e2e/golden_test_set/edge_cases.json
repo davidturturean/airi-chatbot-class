@@ -1,0 +1,126 @@
+{
+  "category": "edge_cases",
+  "description": "Edge cases and unusual queries to test robustness",
+  "queries": [
+    {
+      "id": "edge_001",
+      "query": "a",
+      "expected_behavior": "handle_gracefully",
+      "description": "Single character query"
+    },
+    {
+      "id": "edge_002",
+      "query": "What are the risks of AI in healthcare, finance, education, manufacturing, transportation, agriculture, entertainment, defense, space exploration, climate science, retail, telecommunications, energy, biotechnology, and urban planning all combined together in one comprehensive analysis?",
+      "expected_behavior": "handle_long_query",
+      "description": "Very long multi-domain query"
+    },
+    {
+      "id": "edge_003",
+      "query": "!!!@@@###$$$%%%^^^&&&***((()))___+++===",
+      "expected_behavior": "reject_invalid",
+      "description": "Special characters only"
+    },
+    {
+      "id": "edge_004",
+      "query": "What are the risks of AI? How many are there? Can you list them all? Also tell me which is worst? And how to fix them?",
+      "expected_behavior": "handle_multiple_questions",
+      "description": "Multiple questions in one query"
+    },
+    {
+      "id": "edge_005",
+      "query": "AI is both good and bad, risky and safe, helpful and harmful. Explain this contradiction.",
+      "expected_behavior": "handle_contradictory",
+      "description": "Contradictory statements"
+    },
+    {
+      "id": "edge_006",
+      "query": "",
+      "expected_behavior": "reject_empty",
+      "description": "Empty query"
+    },
+    {
+      "id": "edge_007",
+      "query": "                     ",
+      "expected_behavior": "reject_whitespace",
+      "description": "Whitespace only"
+    },
+    {
+      "id": "edge_008",
+      "query": "AI risks AI risks AI risks AI risks AI risks AI risks AI risks AI risks AI risks AI risks",
+      "expected_behavior": "handle_repetitive",
+      "description": "Repetitive query"
+    },
+    {
+      "id": "edge_009",
+      "query": "What are the risks of AI in the year 2024 2025 2026 2027 2028 2029 2030 2031 2032 2033 2034 2035 2036 2037 2038 2039 2040",
+      "expected_behavior": "handle_temporal_overload",
+      "description": "Multiple temporal references"
+    },
+    {
+      "id": "edge_010",
+      "query": "risks of ai BUT NOT privacy OR security EXCEPT when it involves healthcare AND finance",
+      "expected_behavior": "handle_boolean_operators",
+      "description": "Complex boolean logic"
+    },
+    {
+      "id": "edge_011",
+      "query": "🤖💥🚨⚠️🔥 AI risks",
+      "expected_behavior": "handle_emojis",
+      "description": "Query with emojis"
+    },
+    {
+      "id": "edge_012",
+      "query": "SELECT * FROM risks WHERE category='AI'",
+      "expected_behavior": "handle_sql_injection",
+      "description": "SQL injection attempt"
+    },
+    {
+      "id": "edge_013",
+      "query": "<script>alert('test')</script> What are AI risks?",
+      "expected_behavior": "sanitize_html",
+      "description": "HTML/XSS attempt"
+    },
+    {
+      "id": "edge_014",
+      "query": "What are the risks of AI\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n(after 20 newlines)",
+      "expected_behavior": "handle_excessive_newlines",
+      "description": "Excessive newlines"
+    },
+    {
+      "id": "edge_015",
+      "query": "Tell me about RID-99999 and RID-00000 and RID-XXXXX",
+      "expected_behavior": "handle_invalid_references",
+      "description": "Invalid RID references"
+    },
+    {
+      "id": "edge_016",
+      "query": "What are the risks of AI? " + "A" * 10000,
+      "expected_behavior": "truncate_excessive_length",
+      "description": "Query with 10000 characters"
+    },
+    {
+      "id": "edge_017",
+      "query": "risks of ai.risks of ai.risks of ai.risks of ai.risks of ai.",
+      "expected_behavior": "handle_no_spaces",
+      "description": "No spaces between sentences"
+    },
+    {
+      "id": "edge_018",
+      "query": "What are the r1sks 0f A1 with numb3rs inst3ad of l3tt3rs?",
+      "expected_behavior": "handle_leetspeak",
+      "description": "Leetspeak/numbers in words"
+    },
+    {
+      "id": "edge_019",
+      "query": "WHAT ARE THE RISKS OF AI IN ALL CAPS",
+      "expected_behavior": "handle_all_caps",
+      "description": "All caps query"
+    },
+    {
+      "id": "edge_020",
+      "query": "wHaT aRe ThE rIsKs Of Ai In MiXeD cAsE",
+      "expected_behavior": "handle_mixed_case",
+      "description": "Mixed case query"
+    }
+  ]
+}
