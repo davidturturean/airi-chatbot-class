@@ -65,6 +65,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const messageHandlerRef = useRef<((event: MessageEvent) => void) | null>(null);
   const [sessionId] = useState<string>(getSessionId());
   const [sessionLanguage, setSessionLanguage] = useState<LanguageInfo | null>(null);
+  const [welcomeSaved, setWelcomeSaved] = useState(false);
 
   // Load existing messages if coming from widget with session
   useEffect(() => {
@@ -90,8 +91,37 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       } else {
         console.log('Session already initialized, skipping load');
       }
+    } else {
+      // New session - save welcome message to backend
+      saveWelcomeMessage();
     }
   }, []);
+
+  const saveWelcomeMessage = async () => {
+    if (welcomeSaved) return; // Only save once
+
+    try {
+      await fetch(`${API_URL}api/session/${sessionId}/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: WELCOME.content,
+          role: 'assistant',
+          metadata: {
+            source: 'system',
+            timestamp: new Date().toISOString(),
+            is_welcome: true
+          }
+        })
+      });
+      setWelcomeSaved(true);
+      console.log('Welcome message saved to session');
+    } catch (error) {
+      console.error('Failed to save welcome message:', error);
+    }
+  };
 
   const loadSessionMessages = async (sessionId: string) => {
     try {
@@ -106,7 +136,11 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
             id: msg.id || uuidv4()
           }));
           setPreviousMessages(messages);
+          setWelcomeSaved(true); // Mark welcome as saved since we loaded it from backend
           console.log(`Loaded ${messages.length} messages from session`);
+        } else {
+          // No messages in session, save welcome message
+          saveWelcomeMessage();
         }
       }
     } catch (error) {
