@@ -71,12 +71,25 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
     const urlParams = new URLSearchParams(window.location.search);
     const fromWidget = urlParams.get('from') === 'widget';
     const sessionFromUrl = urlParams.get('session');
-    
-    if (fromWidget && sessionFromUrl && !localStorage.getItem('airi_session_initialized')) {
-      // Load messages from backend for this session
-      loadSessionMessages(sessionFromUrl);
-      // Mark as initialized to avoid duplicate loads
-      localStorage.setItem('airi_session_initialized', 'true');
+
+    console.log('Session transfer check:', {
+      fromWidget,
+      sessionFromUrl,
+      initialized: localStorage.getItem('airi_session_initialized')
+    });
+
+    if (fromWidget && sessionFromUrl) {
+      const initKey = `airi_session_init_${sessionFromUrl}`;
+
+      // Check if THIS specific session has been initialized
+      if (!localStorage.getItem(initKey)) {
+        console.log('Loading messages from session:', sessionFromUrl);
+        loadSessionMessages(sessionFromUrl);
+        // Mark THIS session as initialized
+        localStorage.setItem(initKey, 'true');
+      } else {
+        console.log('Session already initialized, skipping load');
+      }
     }
   }, []);
 
@@ -112,13 +125,32 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
       await fetch(`${API_URL}api/session/${sessionId}/clear`, {
         method: 'DELETE',
       });
-      
-      // Clear local storage and reset
+
+      // Clear all session-related storage
       localStorage.removeItem('airi_session_id');
+      localStorage.removeItem(`airi_session_init_${sessionId}`);
+      // Clean up old key format too
       localStorage.removeItem('airi_session_initialized');
       window.location.reload();
     } catch (error) {
       console.error('Failed to clear session:', error);
+    }
+  };
+
+  // Helper to notify parent widget of new messages
+  const notifyParentWidget = (message: string, role: string) => {
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({
+          type: 'new_message',
+          message: message,
+          role: role,
+          sessionId: sessionId
+        }, '*');
+        console.log('Notified parent widget of new message');
+      }
+    } catch (error) {
+      console.error('Failed to notify parent widget:', error);
     }
   };
 
@@ -129,6 +161,10 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
     const userMessage: message = { content: messageText, role: 'user', id: uuidv4() };
     setPreviousMessages((prev) => [...prev, userMessage]);
+
+    // Notify parent widget to save message
+    notifyParentWidget(messageText, 'user');
+
     setIsLoading(true);
     
     // Track query submission
@@ -330,6 +366,9 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         role: 'assistant',
         id: uuidv4(),
       };
+
+      // Notify parent widget to save assistant response
+      notifyParentWidget(accumulatedText, 'assistant');
 
       setPreviousMessages((prev) => [...prev, botMessage]);
       setCurrentMessage(null);
