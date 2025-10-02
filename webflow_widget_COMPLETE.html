@@ -688,8 +688,16 @@ FEATURES INCLUDED:
   // INITIALIZATION
   // ============================================
   async function init() {
-    // Hide widget on dedicated chatbot page
+    // Hide widget completely on dedicated chatbot page
     if (window.location.pathname === '/chatbot' || window.location.pathname === '/chatbot/') {
+      // Hide all widget elements
+      const container = document.getElementById('chatbot-container');
+      const toggleBtn = document.getElementById('chatbot-toggle');
+
+      if (container) container.style.display = 'none';
+      if (toggleBtn) toggleBtn.style.display = 'none';
+
+      console.log('Widget hidden on /chatbot page');
       return;
     }
     
