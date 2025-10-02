@@ -253,6 +253,7 @@ export function FullChat() {
               <SessionPopup
                 sessionId={sessionId}
                 onClearSession={clearSession}
+                inSidebar={true}
               />
             )}
           </aside>

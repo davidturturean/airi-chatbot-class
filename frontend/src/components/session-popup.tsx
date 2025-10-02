@@ -4,9 +4,10 @@ import { InfoTooltip } from './info-tooltip';
 interface SessionPopupProps {
   sessionId: string;
   onClearSession: () => void;
+  inSidebar?: boolean;
 }
 
-export const SessionPopup = ({ sessionId, onClearSession }: SessionPopupProps) => {
+export const SessionPopup = ({ sessionId, onClearSession, inSidebar = false }: SessionPopupProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
 
@@ -16,19 +17,24 @@ export const SessionPopup = ({ sessionId, onClearSession }: SessionPopupProps) =
     setTimeout(() => setShowCopied(false), 2000);
   };
 
+  // Different styling for sidebar vs floating
+  const containerClass = inSidebar
+    ? "bg-white border rounded-xl shadow-sm transition-all"
+    : "fixed bottom-6 right-6 bg-white border rounded-xl shadow-lg z-10 transition-all";
+
   return (
-    <div className="fixed top-20 right-6 bg-white border rounded-xl shadow-lg z-10 transition-all">
+    <div className={containerClass}>
       {/* Collapsed view - just a small button */}
       {!isExpanded ? (
         <button
           onClick={() => setIsExpanded(true)}
-          className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-xl flex items-center gap-2 transition"
+          className="px-3 py-2 text-xs text-gray-600 hover:bg-gray-50 rounded-xl flex items-center gap-1.5 transition"
           title="Show session info"
         >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          Session
+          <span className="text-xs">Session</span>
         </button>
       ) : (
         /* Expanded view - full session details */
