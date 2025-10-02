@@ -2,6 +2,7 @@
 Flexible metadata service that works with any data format.
 """
 import time
+import threading
 from typing import Dict, List, Any, Optional, Tuple
 from pathlib import Path
 from .metadata_loader_v2 import FlexibleMetadataLoader
@@ -16,11 +17,11 @@ logger = get_logger(__name__)
 
 class FlexibleMetadataService:
     """Service for handling metadata queries across dynamically loaded data."""
-    
+
     def __init__(self):
         self.loader = FlexibleMetadataLoader()
         self.query_generator = QueryGenerator()
-        
+
         # Initialize Gemini model for response formatting
         try:
             from ...core.models.gemini import GeminiModel
@@ -29,11 +30,13 @@ class FlexibleMetadataService:
         except Exception as e:
             logger.warning(f"Failed to initialize Gemini for formatter: {e}")
             self.response_formatter = ResponseFormatter(mode=ResponseMode.STANDARD)
-        
+
         self._initialized = False
         self._total_rows = 0
         self._data_context = None  # Cached data context
         self._context_builder = None
+        self._initialization_lock = threading.Lock()  # Thread safety for lazy loading
+        self._initialization_error = None  # Track initialization errors
     
     def initialize(self, data_directories: Optional[List[str]] = None, force_reload: bool = False):
         """
@@ -88,7 +91,32 @@ class FlexibleMetadataService:
         
         elapsed = time.time() - start_time
         logger.info(f"Metadata service initialized: {total_tables} tables, {total_rows} total rows in {elapsed:.2f}s")
-    
+
+    def ensure_initialized(self) -> bool:
+        """
+        Ensure metadata is initialized. Thread-safe lazy loading.
+
+        Returns:
+            True if initialization successful, False otherwise
+        """
+        if self._initialized:
+            return True
+
+        logger.info("Lazy loading metadata on first query...")
+
+        with self._initialization_lock:
+            # Double-check after acquiring lock
+            if self._initialized:
+                return True
+
+            try:
+                self.initialize()
+                return True
+            except Exception as e:
+                self._initialization_error = str(e)
+                logger.error(f"Lazy initialization failed: {e}")
+                return False
+
     def _build_data_context(self):
         """Build comprehensive data context for query generation."""
         logger.info("Building data context for query generation...")
@@ -113,22 +141,24 @@ class FlexibleMetadataService:
         """Load a specific file into the metadata service."""
         return self.loader.load_file(file_path)
     
-    def query(self, natural_query: str, mode: Optional[ResponseMode] = None, 
+    def query(self, natural_query: str, mode: Optional[ResponseMode] = None,
               debug: bool = False) -> Tuple[str, List[Dict[str, Any]]]:
         """
         Execute a natural language query against the metadata.
-        
+
         Args:
             natural_query: User's natural language query
             mode: Response formatting mode (defaults to service's mode)
             debug: Whether to include debug information
-            
+
         Returns:
             Tuple of (formatted_response, raw_results)
         """
-        # Ensure initialized
-        if not self._initialized:
-            self.initialize()
+        # Ensure initialized with lazy loading
+        if not self.ensure_initialized():
+            error_msg = self._initialization_error or "Metadata service initialization failed"
+            logger.error(f"Query blocked: {error_msg}")
+            return f"The metadata service is not ready: {error_msg}", []
         
         # Safety check: Detect if this is actually a taxonomy query
         query_lower = natural_query.lower()

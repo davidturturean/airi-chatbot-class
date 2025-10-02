@@ -101,12 +101,38 @@ def status():
             "error": str(e)
         }), 500
 
+@health_bp.route('/api/loading-status', methods=['GET'])
+def loading_status():
+    """Check metadata service loading status for lazy loading."""
+    try:
+        from ...core.metadata import metadata_service
+
+        stats = metadata_service.get_statistics()
+
+        loading_info = {
+            "metadata_loaded": metadata_service._initialized,
+            "table_count": stats.get('table_count', 0),
+            "total_rows": stats.get('total_rows', 0)
+        }
+
+        if metadata_service._initialization_error:
+            loading_info["initialization_error"] = metadata_service._initialization_error
+
+        return jsonify(loading_info)
+
+    except Exception as e:
+        logger.error(f"Error checking loading status: {str(e)}")
+        return jsonify({
+            "metadata_loaded": False,
+            "error": str(e)
+        }), 500
+
 @health_bp.route('/api/version', methods=['GET'])
 def version():
     """Version and configuration endpoint to verify current system."""
     try:
         from ...config.settings import settings
-        
+
         version_info = {
             "service": "AIRI Chatbot API",
             "version": "2.0.0",
@@ -116,10 +142,11 @@ def version():
                 "hybrid_search": settings.USE_HYBRID_SEARCH,
                 "multi_model_fallback": True,
                 "semantic_intent_classification": True,
-                "rid_citation_consistency": True
+                "rid_citation_consistency": True,
+                "lazy_metadata_loading": True
             }
         }
-        
+
         # Add actual retriever type if available
         if chat_service and chat_service.vector_store:
             if hasattr(chat_service.vector_store, 'hybrid_retriever') and chat_service.vector_store.hybrid_retriever:
@@ -127,14 +154,14 @@ def version():
                 version_info["active_retriever"] = retriever_class
             else:
                 version_info["active_retriever"] = "vector_only"
-        
+
         # Add model chain info
         if chat_service and chat_service.gemini_model:
             if hasattr(chat_service.gemini_model, 'model_chain'):
                 version_info["model_chain"] = chat_service.gemini_model.model_chain
-        
+
         return jsonify(version_info)
-        
+
     except Exception as e:
         logger.error(f"Error in version check: {str(e)}")
         return jsonify({

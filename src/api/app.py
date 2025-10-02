@@ -88,14 +88,14 @@ def create_app(config=None):
 def _initialize_services(logger):
     """Initialize all services and components."""
     try:
-        # Initialize metadata service FIRST (for Railway)
-        logger.info("Initializing metadata service...")
+        # Defer metadata service initialization for faster startup (lazy loading)
+        logger.info("Metadata service will initialize on first query (lazy loading)")
         try:
             from ..core.metadata import metadata_service
-            metadata_service.initialize()
-            logger.info(f"Metadata service initialized with {metadata_service.get_statistics()['total_rows']} rows")
+            # Do NOT call initialize() - let ensure_initialized() handle it on first query
+            logger.info("Metadata service ready for lazy initialization")
         except Exception as e:
-            logger.warning(f"Metadata service initialization failed: {str(e)}")
+            logger.warning(f"Metadata service import failed: {str(e)}")
         
         # Initialize vector store
         logger.info("Initializing vector store...")
