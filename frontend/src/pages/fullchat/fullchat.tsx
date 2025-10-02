@@ -1,6 +1,7 @@
 import { Chat } from '../../components/chat';
 import { Header } from '../../components/header';
 import { SnippetModal } from '../../components/snippet-modal';
+import { SessionPopup } from '../../components/session-popup';
 import { InfoTooltip } from '../../components/info-tooltip';
 import { LanguageSelector } from '../../components/language-selector';
 import { FeatureTogglePanel } from '../../components/feature-toggle-panel';
@@ -249,38 +250,20 @@ export function FullChat() {
           
             {/* Session management - in sidebar when sidebar is enabled */}
             {features.SHOW_SESSION_WINDOW && (
-              <div className="bg-white border rounded-xl p-4 shadow-sm">
-                <h3 className="text-md font-semibold mb-2">Session</h3>
-                <p className="text-xs text-gray-500 mb-2">ID: {sessionId.slice(0, 8)}...</p>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={clearSession}
-                    className="text-sm text-red-600 hover:text-red-800"
-                  >
-                    Clear Session Data
-                  </button>
-                  <InfoTooltip content="This will clear your current conversation history and start a fresh session. Your previous messages will be permanently deleted." />
-                </div>
-              </div>
+              <SessionPopup
+                sessionId={sessionId}
+                onClearSession={clearSession}
+              />
             )}
           </aside>
         )}
         
         {/* Floating Session window - when sidebar is disabled */}
         {!isSidebarEnabledFromBackend && features.SHOW_SESSION_WINDOW && (
-          <div className="fixed top-20 right-6 bg-white border rounded-xl p-4 shadow-lg z-10 min-w-[200px]">
-            <h3 className="text-md font-semibold mb-2">Session</h3>
-            <p className="text-xs text-gray-500 mb-2">ID: {sessionId.slice(0, 8)}...</p>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={clearSession}
-                className="text-sm text-red-600 hover:text-red-800"
-              >
-                Clear Session Data
-              </button>
-              <InfoTooltip content="This will clear your current conversation history and start a fresh session. Your previous messages will be permanently deleted." />
-            </div>
-          </div>
+          <SessionPopup
+            sessionId={sessionId}
+            onClearSession={clearSession}
+          />
         )}
       </main>
       

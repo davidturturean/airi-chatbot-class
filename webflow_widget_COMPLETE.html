@@ -106,109 +106,113 @@ FEATURES INCLUDED:
     display: flex;
   }
 
-  /* Resize Handles - All 8 Directions */
+  /* Resize Handles - All 8 Directions - MORE VISIBLE */
   .resize-handle {
     position: absolute;
-    background: transparent;
+    background: rgba(163, 32, 53, 0.1);
     z-index: 10;
-    transition: background 0.2s ease;
+    transition: all 0.2s ease;
   }
 
-  /* Corner handles */
+  /* Corner handles - BIGGER for easier grabbing */
   .resize-handle.nw {
     top: 0;
     left: 0;
-    width: 10px;
-    height: 10px;
+    width: 16px;
+    height: 16px;
     cursor: nw-resize;
+    border-top-left-radius: 12px;
   }
 
   .resize-handle.ne {
     top: 0;
     right: 0;
-    width: 10px;
-    height: 10px;
+    width: 16px;
+    height: 16px;
     cursor: ne-resize;
+    border-top-right-radius: 12px;
   }
 
   .resize-handle.sw {
     bottom: 0;
     left: 0;
-    width: 10px;
-    height: 10px;
+    width: 16px;
+    height: 16px;
     cursor: sw-resize;
+    border-bottom-left-radius: 12px;
   }
 
   .resize-handle.se {
     bottom: 0;
     right: 0;
-    width: 10px;
-    height: 10px;
+    width: 16px;
+    height: 16px;
     cursor: se-resize;
+    border-bottom-right-radius: 12px;
   }
 
-  /* Edge handles */
+  /* Edge handles - THICKER for easier grabbing */
   .resize-handle.n {
     top: 0;
-    left: 10px;
-    right: 10px;
-    height: 4px;
+    left: 16px;
+    right: 16px;
+    height: 8px;
     cursor: n-resize;
   }
 
   .resize-handle.s {
     bottom: 0;
-    left: 10px;
-    right: 10px;
-    height: 4px;
+    left: 16px;
+    right: 16px;
+    height: 8px;
     cursor: s-resize;
   }
 
   .resize-handle.e {
-    top: 10px;
-    bottom: 10px;
+    top: 16px;
+    bottom: 16px;
     right: 0;
-    width: 4px;
+    width: 8px;
     cursor: e-resize;
   }
 
   .resize-handle.w {
-    top: 10px;
-    bottom: 10px;
+    top: 16px;
+    bottom: 16px;
     left: 0;
-    width: 4px;
+    width: 8px;
     cursor: w-resize;
   }
 
-  /* Visual feedback on hover */
+  /* Visual feedback on hover - MORE VISIBLE */
   .chatbot-widget-container:hover .resize-handle {
-    background: rgba(163, 32, 53, 0.05);
+    background: rgba(163, 32, 53, 0.15);
   }
 
   .resize-handle:hover {
-    background: rgba(163, 32, 53, 0.15) !important;
+    background: rgba(163, 32, 53, 0.3) !important;
   }
 
-  /* Resize grip indicator (SE corner) */
+  /* Resize grip indicator (SE corner) - ALWAYS VISIBLE */
   .resize-handle.se::after {
     content: '';
     position: absolute;
-    bottom: 3px;
-    right: 3px;
-    width: 6px;
-    height: 6px;
+    bottom: 4px;
+    right: 4px;
+    width: 8px;
+    height: 8px;
     border-right: 2px solid #A32035;
     border-bottom: 2px solid #A32035;
-    opacity: 0;
+    opacity: 0.4;
     transition: opacity 0.2s;
   }
 
   .chatbot-widget-container:hover .resize-handle.se::after {
-    opacity: 0.3;
+    opacity: 0.6;
   }
 
   .resize-handle.se:hover::after {
-    opacity: 0.6;
+    opacity: 1;
   }
 
   /* Size Indicator */
