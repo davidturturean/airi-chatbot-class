@@ -1,0 +1,53 @@
+<!-- PostHog Analytics -->
+<!-- Add this to: Webflow → Project Settings → Custom Code → Head Code -->
+<script>
+  !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.async=!0,p.src=s.api_host+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+
+  posthog.init('phx_pa5zpKS0q1DTprlpwAaInqlYFIqY2u8iWCKL2C4m2FF5S7M', {
+    api_host: 'https://us.i.posthog.com',
+    person_profiles: 'identified_only',
+    autocapture: true,
+    capture_pageview: true,
+    capture_pageleave: true
+  })
+</script>
+
+<!--
+INSTRUCTIONS:
+1. Open Webflow → Your Project
+2. Click "Project Settings" (gear icon in left sidebar)
+3. Go to "Custom Code" tab
+4. Scroll to "Head Code" section
+5. Paste this entire script above
+6. Click "Save Changes"
+7. Click "Publish" (top right)
+8. Publish to your production domain
+
+VERIFICATION:
+1. Open your live site: https://futuretech.mit.edu
+2. Open browser DevTools (F12 or right-click → Inspect)
+3. Go to Console tab
+4. Type: posthog
+5. Press Enter
+6. You should see a PostHog object (not "undefined")
+
+EVENTS TRACKED:
+- Page views ($pageview)
+- Page leaves ($pageleave)
+- Button clicks ($autocapture)
+- Widget opens (chatbot_widget_opened)
+- Widget closes (chatbot_widget_closed)
+- Full page transitions (chatbot_fullpage_transition)
+
+VIEW EVENTS:
+1. Go to https://posthog.com
+2. Log in with your account
+3. Navigate to Activity → Live events
+4. You should see events appearing in real-time
+
+API KEY:
+phx_pa5zpKS0q1DTprlpwAaInqlYFIqY2u8iWCKL2C4m2FF5S7M
+
+This tracks anonymous usage data to help improve the chatbot.
+No personal information is collected by default.
+-->

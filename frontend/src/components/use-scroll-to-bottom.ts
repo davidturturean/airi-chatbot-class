@@ -13,12 +13,16 @@ export function useScrollToBottom<T extends HTMLElement>(): [
 
     if (container && end) {
       const observer = new MutationObserver(() => {
-        // Scroll only within the container, not the entire page
-        end.scrollIntoView({
-          behavior: "smooth",
-          block: "end",
-          inline: "nearest"
-        });
+        // Use scrollTop instead of scrollIntoView to avoid parent page scroll
+        if (container && end) {
+          const containerRect = container.getBoundingClientRect();
+          const endRect = end.getBoundingClientRect();
+          const scrollOffset = endRect.bottom - containerRect.bottom;
+
+          if (scrollOffset > 0) {
+            container.scrollTop += scrollOffset;
+          }
+        }
       });
 
       observer.observe(container, {

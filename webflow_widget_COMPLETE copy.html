@@ -1095,10 +1095,9 @@ FEATURES INCLUDED:
 
   function openInFullPage() {
     if (currentSessionId) {
-      // Build full page URL with session - use Railway URL directly since we're in a Webflow iframe
-      const railwayBaseUrl = CONFIG.CHATBOT_BASE_URL.replace('/chat', '');
-      const fullPageUrl = `${railwayBaseUrl}/chatbot?session=${currentSessionId}&from=widget`;
-
+      // Build full page URL with session
+      const fullPageUrl = `/chatbot?session=${currentSessionId}&from=widget`;
+      
       // Track transition
       if (CONFIG.ENABLE_POSTHOG && typeof posthog !== 'undefined') {
         posthog.capture('chatbot_fullpage_transition', {
@@ -1107,13 +1106,12 @@ FEATURES INCLUDED:
           timestamp: new Date().toISOString()
         });
       }
-
-      // Open in new tab to avoid Webflow iframe wrapper
-      window.open(fullPageUrl, '_blank', 'noopener,noreferrer');
+      
+      // Navigate to full page
+      window.location.href = fullPageUrl;
     } else {
       // No session, just navigate
-      const railwayBaseUrl = CONFIG.CHATBOT_BASE_URL.replace('/chat', '');
-      window.open(`${railwayBaseUrl}/chatbot`, '_blank', 'noopener,noreferrer');
+      window.location.href = '/chatbot';
     }
   }
 

@@ -72,4 +72,4 @@ node_modules/
 frontend/node_modules/
 
 # Time tracking analysis
-time_tracking_analysis/
+time_tracking_analysis/.git-credentials
