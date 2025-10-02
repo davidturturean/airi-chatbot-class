@@ -1,0 +1,130 @@
+<!--
+============================================
+WEBFLOW /CHATBOT PAGE - SESSION TRANSFER SCRIPT
+============================================
+
+INSTALLATION:
+1. Go to Webflow → /chatbot page
+2. Add an Embed element ABOVE your iframe
+3. Paste this code into the embed
+4. Make sure your iframe has id="chatbot-iframe"
+5. Publish
+
+WHAT IT DOES:
+- Reads session parameter from URL (e.g., /chatbot?session=abc123&from=widget)
+- Updates iframe src to include session parameter
+- Passes session to Railway app so conversation history loads
+
+============================================
+-->
+
+<script>
+(function() {
+  // Wait for DOM to be ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSessionTransfer);
+  } else {
+    initSessionTransfer();
+  }
+
+  function initSessionTransfer() {
+    console.log('Initializing session transfer for /chatbot page');
+
+    // Get the iframe element (adjust selector if needed)
+    const iframe = document.getElementById('chatbot-iframe') ||
+                   document.querySelector('iframe[src*="railway.app"]') ||
+                   document.querySelector('iframe');
+
+    if (!iframe) {
+      console.error('Chatbot iframe not found! Make sure your iframe has id="chatbot-iframe"');
+      return;
+    }
+
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session');
+    const fromWidget = urlParams.get('from');
+
+    console.log('URL Parameters:', {
+      sessionId: sessionId,
+      from: fromWidget,
+      fullURL: window.location.href
+    });
+
+    // If session parameter exists, update iframe src
+    if (sessionId) {
+      // Build Railway URL with session
+      const railwayBaseUrl = 'https://airi-chatbot-class-production.up.railway.app';
+      const iframeSrc = `${railwayBaseUrl}/chat?session=${sessionId}&from=${fromWidget || 'webflow'}`;
+
+      console.log('Updating iframe src to:', iframeSrc);
+
+      // Update iframe src
+      iframe.src = iframeSrc;
+
+      // Add loading indicator (optional)
+      iframe.addEventListener('load', function() {
+        console.log('Chatbot loaded with session:', sessionId);
+      }, { once: true });
+
+    } else {
+      console.log('No session parameter found, using default iframe src');
+
+      // Make sure iframe has a default src if not already set
+      if (!iframe.src || iframe.src === window.location.href) {
+        iframe.src = 'https://airi-chatbot-class-production.up.railway.app/chat';
+      }
+    }
+
+    // Optional: Track page view with session info
+    if (typeof posthog !== 'undefined' && sessionId) {
+      posthog.capture('chatbot_fullpage_loaded', {
+        session_id: sessionId,
+        from: fromWidget,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
+})();
+</script>
+
+<!--
+============================================
+ALTERNATIVE: If your iframe doesn't have an ID
+============================================
+
+If your iframe doesn't have id="chatbot-iframe", you have 2 options:
+
+OPTION 1: Add ID to your iframe
+In Webflow, select the iframe and in the settings panel,
+add ID: chatbot-iframe
+
+OPTION 2: Use a different selector
+Replace this line:
+    const iframe = document.getElementById('chatbot-iframe')
+
+With one of these:
+    const iframe = document.querySelector('iframe')  // First iframe on page
+    const iframe = document.querySelector('.your-iframe-class')  // By class name
+
+============================================
+TESTING:
+============================================
+
+1. Open widget on main page
+2. Send a message in widget
+3. Click "Full Page" button
+4. Check browser console for logs:
+   - "Initializing session transfer for /chatbot page"
+   - "URL Parameters: {sessionId: 'session_...', from: 'widget'}"
+   - "Updating iframe src to: ..."
+   - "Chatbot loaded with session: ..."
+5. Verify conversation history appears
+
+If session doesn't transfer:
+- Check console for errors
+- Verify iframe has correct ID
+- Verify widget is passing session parameter in URL
+
+============================================
+-->

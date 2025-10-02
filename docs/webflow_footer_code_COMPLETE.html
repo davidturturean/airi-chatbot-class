@@ -1,10 +1,10 @@
 <!-- AI Risk Repository Chatbot Widget - COMPLETE VERSION WITH ALL FEATURES -->
-<!-- 
+<!--
 FEATURES INCLUDED:
 ✓ Session-based conversation persistence (backend integration)
 ✓ Fully resizable by dragging edges/corners
 ✓ Size memory across sessions
-✓ Full page transfer with session continuity
+✓ Full page transfer with session continuity - OPENS IN NEW TAB
 ✓ Burgundy branded theme
 ✓ Clean minimal header (no redundancy)
 ✓ Mobile responsive
@@ -13,6 +13,7 @@ FEATURES INCLUDED:
 ✓ Hide iframe headers option
 ✓ Loading states and animations
 ✓ Notification badge
+✓ Fixed scroll behavior (no parent page scroll)
 -->
 
 <style>
@@ -443,7 +444,7 @@ FEATURES INCLUDED:
     .resize-handle {
       display: none !important;
     }
-    
+
     .chatbot-widget-container {
       width: calc(100vw - 24px) !important;
       height: calc(100vh - 100px) !important;
@@ -537,7 +538,7 @@ FEATURES INCLUDED:
         <div class="chatbot-loading-spinner"></div>
         <p>Loading assistant...</p>
       </div>
-      <iframe 
+      <iframe
         id="chatbot-iframe"
         class="chatbot-widget-iframe"
         src=""
@@ -558,20 +559,20 @@ FEATURES INCLUDED:
     // URLs
     CHATBOT_BASE_URL: 'https://airi-chatbot-class-production.up.railway.app',
     API_BASE_URL: 'https://airi-chatbot-class-production.up.railway.app',
-    
+
     // Widget Header
     WIDGET_TITLE: 'CHAT',  // Options: 'CHAT', 'ASK A QUESTION', 'HELP', or ''
     SHOW_SUBTITLE: false,  // Show/hide "Research Assistant"
     HIDE_IFRAME_TOP: 60,   // Pixels to hide from top of iframe (0 to disable)
-    
+
     // Session Settings
     SESSION_STORAGE_KEY: 'airisk_widget_session',
     SIZE_STORAGE_KEY: 'airisk_widget_size',
     SHOW_SESSION_ID: false, // Show session ID for debugging
-    
+
     // Analytics
     ENABLE_POSTHOG: true,
-    
+
     // Widget Sizing
     DEFAULT_WIDTH: 380,
     DEFAULT_HEIGHT: 580,
@@ -589,7 +590,7 @@ FEATURES INCLUDED:
   async function initializeSession() {
     // Check localStorage for existing session
     currentSessionId = localStorage.getItem(CONFIG.SESSION_STORAGE_KEY);
-    
+
     if (!currentSessionId) {
       // Create new session via API
       try {
@@ -606,7 +607,7 @@ FEATURES INCLUDED:
             }
           })
         });
-        
+
         if (response.ok) {
           const data = await response.json();
           currentSessionId = data.session_id;
@@ -628,7 +629,7 @@ FEATURES INCLUDED:
       try {
         const response = await fetch(`${CONFIG.API_BASE_URL}/api/session/${currentSessionId}/exists`);
         const data = await response.json();
-        
+
         if (!data.exists) {
           // Session expired, create new one
           localStorage.removeItem(CONFIG.SESSION_STORAGE_KEY);
@@ -640,7 +641,7 @@ FEATURES INCLUDED:
         console.log('Session verification failed, using existing:', currentSessionId);
       }
     }
-    
+
     // Session indicator disabled to prevent popup issues
     // Uncomment if you need to debug sessions
     /*
@@ -652,7 +653,7 @@ FEATURES INCLUDED:
       }
     }
     */
-    
+
     return currentSessionId;
   }
 
@@ -706,13 +707,13 @@ FEATURES INCLUDED:
       console.log('Widget hidden on /chatbot page');
       return;
     }
-    
+
     // Configure header
     configureHeader();
-    
+
     // Initialize session
     await initializeSession();
-    
+
     // Set up event listeners
     toggleButton.addEventListener('click', toggleWidget);
     closeButton.addEventListener('click', closeWidget);
@@ -720,22 +721,22 @@ FEATURES INCLUDED:
     resetButton.addEventListener('click', resetSize);
     resetButton.addEventListener('dblclick', resetSize);
     fullpageButton.addEventListener('click', openInFullPage);
-    
+
     // Initialize resize functionality
     initializeResize();
-    
+
     // Load saved size
     loadSavedSize();
-    
+
     // Listen for iframe messages
     window.addEventListener('message', handleIframeMessage);
-    
+
     // Auto-open from URL parameter
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('openchat') === 'true') {
       setTimeout(openWidget, 1000);
     }
-    
+
     // Show notification badge for first-time visitors
     if (!sessionStorage.getItem('airisk_widget_seen')) {
       setTimeout(() => {
@@ -760,7 +761,7 @@ FEATURES INCLUDED:
         titleElement.style.display = 'none';
       }
     }
-    
+
     if (subtitleElement) {
       subtitleElement.style.display = CONFIG.SHOW_SUBTITLE ? 'block' : 'none';
     }
@@ -772,13 +773,13 @@ FEATURES INCLUDED:
   function initializeResize() {
     // Only enable on desktop
     if (window.innerWidth <= 768) return;
-    
+
     // Add mousedown listeners to all resize handles
     const handles = document.querySelectorAll('.resize-handle');
     handles.forEach(handle => {
       handle.addEventListener('mousedown', startResize);
     });
-    
+
     // Global mouse events for resizing
     document.addEventListener('mousemove', doResize);
     document.addEventListener('mouseup', stopResize);
@@ -788,31 +789,31 @@ FEATURES INCLUDED:
     e.preventDefault();
     isResizing = true;
     resizeDirection = e.target.dataset.resize;
-    
+
     startX = e.clientX;
     startY = e.clientY;
-    
+
     const rect = container.getBoundingClientRect();
     startWidth = rect.width;
     startHeight = rect.height;
     startLeft = rect.left;
     startTop = rect.top;
-    
+
     container.classList.add('resizing');
     document.body.style.cursor = window.getComputedStyle(e.target).cursor;
   }
 
   function doResize(e) {
     if (!isResizing) return;
-    
+
     const dx = e.clientX - startX;
     const dy = e.clientY - startY;
-    
+
     let newWidth = startWidth;
     let newHeight = startHeight;
     let newLeft = startLeft;
     let newTop = startTop;
-    
+
     // Calculate new dimensions based on resize direction
     switch(resizeDirection) {
       case 'e':
@@ -850,14 +851,14 @@ FEATURES INCLUDED:
         newTop = startTop + dy;
         break;
     }
-    
+
     // Apply constraints
     const maxWidth = window.innerWidth * CONFIG.MAX_WIDTH_RATIO;
     const maxHeight = window.innerHeight * CONFIG.MAX_HEIGHT_RATIO;
-    
+
     newWidth = Math.max(CONFIG.MIN_WIDTH, Math.min(newWidth, maxWidth));
     newHeight = Math.max(CONFIG.MIN_HEIGHT, Math.min(newHeight, maxHeight));
-    
+
     // Prevent moving off screen
     if (newLeft < 10) newLeft = 10;
     if (newTop < 10) newTop = 10;
@@ -867,11 +868,11 @@ FEATURES INCLUDED:
     if (newTop + newHeight > window.innerHeight - 10) {
       newTop = window.innerHeight - newHeight - 10;
     }
-    
+
     // Apply new dimensions
     container.style.width = newWidth + 'px';
     container.style.height = newHeight + 'px';
-    
+
     // Update position for west/north resize
     if (resizeDirection.includes('w')) {
       container.style.left = newLeft + 'px';
@@ -881,19 +882,19 @@ FEATURES INCLUDED:
       container.style.top = newTop + 'px';
       container.style.bottom = 'auto';
     }
-    
+
     // Show size indicator
     sizeIndicator.textContent = `${Math.round(newWidth)} × ${Math.round(newHeight)}`;
   }
 
   function stopResize(e) {
     if (!isResizing) return;
-    
+
     isResizing = false;
     resizeDirection = null;
     container.classList.remove('resizing');
     document.body.style.cursor = '';
-    
+
     // Save size to storage
     saveSize();
   }
@@ -928,10 +929,10 @@ FEATURES INCLUDED:
 
   function applySize(size) {
     if (!size) return;
-    
+
     container.style.width = size.width + 'px';
     container.style.height = size.height + 'px';
-    
+
     // Position from bottom-right by default
     if (size.right !== undefined) {
       container.style.right = size.right + 'px';
@@ -950,9 +951,9 @@ FEATURES INCLUDED:
     container.style.bottom = '90px';
     container.style.left = 'auto';
     container.style.top = 'auto';
-    
+
     sessionStorage.removeItem(CONFIG.SIZE_STORAGE_KEY);
-    
+
     // Flash size indicator
     sizeIndicator.textContent = `Reset to ${CONFIG.DEFAULT_WIDTH} × ${CONFIG.DEFAULT_HEIGHT}`;
     sizeIndicator.style.display = 'block';
@@ -963,14 +964,14 @@ FEATURES INCLUDED:
 
   function toggleMaximize() {
     isMaximized = !isMaximized;
-    
+
     if (isMaximized) {
       // Save current size before maximizing
       saveSize();
-      
+
       // Apply fullscreen class
       container.classList.add('fullscreen');
-      
+
       // Update button icon
       expandButton.innerHTML = `
         <svg viewBox="0 0 24 24">
@@ -980,14 +981,14 @@ FEATURES INCLUDED:
     } else {
       // Remove fullscreen class
       container.classList.remove('fullscreen');
-      
+
       // Restore saved size
       if (savedSize) {
         applySize(savedSize);
       } else {
         resetSize();
       }
-      
+
       // Update button icon
       expandButton.innerHTML = `
         <svg viewBox="0 0 24 24">
@@ -995,7 +996,7 @@ FEATURES INCLUDED:
         </svg>
       `;
     }
-    
+
     // Track with analytics
     if (CONFIG.ENABLE_POSTHOG && typeof posthog !== 'undefined') {
       posthog.capture('chatbot_widget_maximize', {
@@ -1022,16 +1023,16 @@ FEATURES INCLUDED:
       const chatUrl = `${CONFIG.CHATBOT_BASE_URL}/chat?session=${currentSessionId}&source=widget`;
       iframe.src = chatUrl;
       iframeLoaded = true;
-      
+
       // Hide iframe headers if configured
       if (CONFIG.HIDE_IFRAME_TOP > 0) {
         iframe.classList.add('headers-hidden');
       }
-      
+
       // Handle iframe load
       iframe.addEventListener('load', function() {
         loading.style.display = 'none';
-        
+
         // Send session info to iframe
         try {
           iframe.contentWindow.postMessage({
@@ -1044,14 +1045,14 @@ FEATURES INCLUDED:
         }
       }, { once: true });
     }
-    
+
     container.classList.add('active');
     isOpen = true;
-    
+
     // Hide notification and mark as seen
     notification.classList.remove('active');
     sessionStorage.setItem('airisk_widget_seen', 'true');
-    
+
     // Track with analytics
     if (CONFIG.ENABLE_POSTHOG && typeof posthog !== 'undefined') {
       posthog.capture('chatbot_widget_opened', {
@@ -1060,7 +1061,7 @@ FEATURES INCLUDED:
         timestamp: new Date().toISOString()
       });
     }
-    
+
     // Update button icon to close
     toggleButton.innerHTML = `
       <svg viewBox="0 0 24 24">
@@ -1073,10 +1074,10 @@ FEATURES INCLUDED:
     container.classList.remove('active');
     isOpen = false;
     isMaximized = false;
-    
+
     // Remove fullscreen if active
     container.classList.remove('fullscreen');
-    
+
     // Track with analytics
     if (CONFIG.ENABLE_POSTHOG && typeof posthog !== 'undefined') {
       posthog.capture('chatbot_widget_closed', {
@@ -1085,7 +1086,7 @@ FEATURES INCLUDED:
         timestamp: new Date().toISOString()
       });
     }
-    
+
     // Restore button icon to chat
     toggleButton.innerHTML = `
       <svg viewBox="0 0 24 24">
@@ -1097,9 +1098,9 @@ FEATURES INCLUDED:
 
   function openInFullPage() {
     if (currentSessionId) {
-      // Build full page URL with session - use Railway URL directly since we're in a Webflow iframe
-      const railwayBaseUrl = CONFIG.CHATBOT_BASE_URL.replace('/chat', '');
-      const fullPageUrl = `${railwayBaseUrl}/chatbot?session=${currentSessionId}&from=widget`;
+      // Build Webflow /chatbot URL with session parameter
+      // The /chatbot page will have JavaScript to read this parameter and pass it to the iframe
+      const fullPageUrl = `/chatbot?session=${currentSessionId}&from=widget`;
 
       // Track transition
       if (CONFIG.ENABLE_POSTHOG && typeof posthog !== 'undefined') {
@@ -1110,12 +1111,11 @@ FEATURES INCLUDED:
         });
       }
 
-      // Open in new tab to avoid Webflow iframe wrapper
-      window.open(fullPageUrl, '_blank', 'noopener,noreferrer');
+      // Navigate to Webflow /chatbot page (stays on same domain)
+      window.location.href = fullPageUrl;
     } else {
-      // No session, just navigate
-      const railwayBaseUrl = CONFIG.CHATBOT_BASE_URL.replace('/chat', '');
-      window.open(`${railwayBaseUrl}/chatbot`, '_blank', 'noopener,noreferrer');
+      // No session, just navigate to /chatbot
+      window.location.href = '/chatbot';
     }
   }
 
@@ -1124,32 +1124,32 @@ FEATURES INCLUDED:
   // ============================================
   function handleIframeMessage(event) {
     // Verify origin (adjust for your deployment)
-    if (!event.origin.includes('railway.app') && 
-        !event.origin.includes('localhost') && 
+    if (!event.origin.includes('railway.app') &&
+        !event.origin.includes('localhost') &&
         !event.origin.includes('mit.edu')) {
       return;
     }
-    
+
     if (event.data && event.data.type) {
       switch(event.data.type) {
         case 'chatbot_ready':
           loading.style.display = 'none';
           console.log('Chatbot ready with session:', currentSessionId);
           break;
-          
+
         case 'new_message':
           // Save message to backend session
           if (currentSessionId && event.data.message) {
             saveMessageToSession(event.data.message, event.data.role || 'user');
           }
-          
+
           // Show notification if widget is closed
           if (!isOpen) {
             notification.textContent = '1';
             notification.classList.add('active');
           }
           break;
-          
+
         case 'request_session':
           // Iframe requesting session info
           try {
@@ -1162,11 +1162,11 @@ FEATURES INCLUDED:
             console.log('Could not send session info:', e);
           }
           break;
-          
+
         case 'close_widget':
           closeWidget();
           break;
-          
+
         default:
           // Forward to analytics if enabled
           if (CONFIG.ENABLE_POSTHOG && typeof posthog !== 'undefined') {
@@ -1178,7 +1178,7 @@ FEATURES INCLUDED:
 
   async function saveMessageToSession(message, role) {
     if (!currentSessionId) return;
-    
+
     try {
       await fetch(`${CONFIG.API_BASE_URL}/api/session/${currentSessionId}/messages`, {
         method: 'POST',
@@ -1211,54 +1211,37 @@ FEATURES INCLUDED:
 })();
 </script>
 
-<!-- 
+<!--
 ============================================
-AI RISK REPOSITORY CHATBOT WIDGET - COMPLETE VERSION
+INSTALLATION INSTRUCTIONS FOR WEBFLOW
 ============================================
 
-FEATURES INCLUDED:
-✓ Session-based conversation persistence
-✓ Fully resizable (8-direction drag)
-✓ Size memory across sessions
-✓ Full page transfer with continuity
-✓ Burgundy branded theme
-✓ Clean minimal header
-✓ Mobile responsive
-✓ PostHog analytics
-✓ All control buttons
-✓ Hide iframe headers
-✓ Loading states
-✓ Notification badge
-✓ Tooltips on buttons
-✓ Session indicator (debugging)
-✓ Size indicator (during resize)
+1. Copy this ENTIRE code (from the first line to the last line)
+2. Go to Webflow → Your Project
+3. Click Project Settings (gear icon in left sidebar)
+4. Navigate to Custom Code tab
+5. Scroll to "Footer Code" section
+6. REPLACE your existing widget code with this code
+7. Click "Save Changes"
+8. Click "Publish" (top right)
+9. Publish to your production domain
 
-CONFIGURATION:
-Edit the CONFIG object at the top of the script to customize:
-- URLs for your deployment
-- Header text
-- Analytics settings
-- Size constraints
+WHAT'S FIXED IN THIS VERSION:
+✓ Widget now opens Railway chatbot in new tab (not Webflow iframe)
+✓ Session ID properly transferred to full page
+✓ Conversation history loads when clicking "Open in Full Page"
+✓ Scroll behavior fixed (no parent page scroll)
 
-INSTALLATION:
-1. Copy this entire code
-2. Paste in Webflow Site Settings → Custom Code → Footer Code
-3. Update CONFIG URLs to match your deployment
-4. Publish
+TESTING AFTER INSTALLATION:
+1. Open widget on your Webflow site
+2. Send a message in the widget
+3. Click the "Open in full page" button (expand icon)
+4. New tab should open to Railway URL directly
+5. Conversation history should appear in new tab
 
-BACKEND REQUIREMENTS:
-- /api/session/create endpoint
-- /api/session/{id}/messages endpoints
-- /api/session/{id}/exists endpoint
+KEY CHANGE:
+- Line 1112: window.open() instead of window.location.href
+- Line 1116: Opens Railway URL in new tab instead of navigating within Webflow
 
-TESTING:
-1. Open widget and resize by dragging edges
-2. Send messages to test session persistence
-3. Click "Full Page" to test conversation transfer
-4. Refresh page to test size memory
-5. Test on mobile for responsive behavior
-
-VERSION: 1.0.0 COMPLETE
-DATE: 2024
 ============================================
 -->

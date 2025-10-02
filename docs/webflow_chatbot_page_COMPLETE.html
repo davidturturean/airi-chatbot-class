@@ -1,0 +1,79 @@
+<script>
+(function() {
+  // Wait for DOM to be ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSessionTransfer);
+  } else {
+    initSessionTransfer();
+  }
+
+  function initSessionTransfer() {
+    console.log('Initializing session transfer for /chatbot page');
+
+    // Get the iframe element
+    const iframe = document.querySelector('iframe[src*="railway.app"]') ||
+                   document.querySelector('iframe');
+
+    if (!iframe) {
+      console.error('Chatbot iframe not found!');
+      return;
+    }
+
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionId = urlParams.get('session');
+    const fromWidget = urlParams.get('from');
+
+    console.log('URL Parameters:', {
+      sessionId: sessionId,
+      from: fromWidget,
+      fullURL: window.location.href
+    });
+
+    // If session parameter exists, update iframe src
+    if (sessionId) {
+      // Build Railway URL with session
+      const railwayBaseUrl = 'https://airi-chatbot-class-production.up.railway.app';
+      const iframeSrc = `${railwayBaseUrl}/chat?session=${sessionId}&from=${fromWidget || 'webflow'}`;
+
+      console.log('Updating iframe src to:', iframeSrc);
+
+      // Update iframe src
+      iframe.src = iframeSrc;
+
+      // Add loading indicator (optional)
+      iframe.addEventListener('load', function() {
+        console.log('Chatbot loaded with session:', sessionId);
+      }, { once: true });
+
+    } else {
+      console.log('No session parameter found, using default iframe src');
+
+      // Make sure iframe has a default src if not already set
+      if (!iframe.src || iframe.src === window.location.href) {
+        iframe.src = 'https://airi-chatbot-class-production.up.railway.app/chat';
+      }
+    }
+
+    // Optional: Track page view with session info
+    if (typeof posthog !== 'undefined' && sessionId) {
+      posthog.capture('chatbot_fullpage_loaded', {
+        session_id: sessionId,
+        from: fromWidget,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
+})();
+</script>
+
+<div style="position:relative;width:100%;min-height:100dvh;">
+  <iframe
+    src="https://airi-chatbot-class-production.up.railway.app/chat"
+    title="AIRisk Chatbot"
+    style="position:absolute;inset:0;border:0;width:100%;height:100%;z-index:9999;"
+    loading="lazy"
+    allow="clipboard-read; clipboard-write; microphone; camera"
+    referrerpolicy="strict-origin-when-cross-origin">
+  </iframe>
+</div>

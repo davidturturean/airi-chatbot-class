@@ -11,10 +11,17 @@ export const SessionPopup = ({ sessionId, onClearSession, inSidebar = false }: S
   const [isExpanded, setIsExpanded] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
 
-  const copySessionId = () => {
-    navigator.clipboard.writeText(sessionId);
-    setShowCopied(true);
-    setTimeout(() => setShowCopied(false), 2000);
+  const copySessionId = async () => {
+    try {
+      await navigator.clipboard.writeText(sessionId);
+      setShowCopied(true);
+      setTimeout(() => setShowCopied(false), 2000);
+      console.log('Session ID copied to clipboard:', sessionId);
+    } catch (err) {
+      console.error('Failed to copy session ID:', err);
+      // Fallback: select text for manual copy
+      alert(`Copy failed. Session ID: ${sessionId}`);
+    }
   };
 
   // Different styling for sidebar vs floating
