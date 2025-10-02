@@ -19,8 +19,33 @@ export const SessionPopup = ({ sessionId, onClearSession, inSidebar = false }: S
       console.log('Session ID copied to clipboard:', sessionId);
     } catch (err) {
       console.error('Failed to copy session ID:', err);
-      // Fallback: select text for manual copy
-      alert(`Copy failed. Session ID: ${sessionId}`);
+
+      // Fallback: Create temporary textarea and select text
+      const textArea = document.createElement('textarea');
+      textArea.value = sessionId;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-999999px';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        // Try old-school execCommand as fallback
+        const successful = document.execCommand('copy');
+        if (successful) {
+          setShowCopied(true);
+          setTimeout(() => setShowCopied(false), 2000);
+          console.log('Session ID copied using fallback method');
+        } else {
+          // If that fails too, prompt user to copy manually
+          prompt('Copy this Session ID (Ctrl+C or Cmd+C):', sessionId);
+        }
+      } catch (execErr) {
+        // Last resort: show prompt dialog
+        prompt('Copy this Session ID (Ctrl+C or Cmd+C):', sessionId);
+      } finally {
+        document.body.removeChild(textArea);
+      }
     }
   };
 
