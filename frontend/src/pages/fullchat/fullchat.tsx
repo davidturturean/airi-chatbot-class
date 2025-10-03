@@ -16,13 +16,16 @@ export function FullChat() {
   const { previousMessages, currentMessage, handleSubmit, isLoading, sessionId, clearSession, sessionLanguage, setSessionLanguage } = useChat();
   const { domain, setDomain, relatedDocuments, suggestedUseCases, handleDomainSubmit } = useSidebar();
   const { features, isSidebarEnabled: isSidebarEnabledFromBackend } = useFeatures();
-  
+
   // Modal state for snippet display
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRid, setSelectedRid] = useState<string | null>(null);
-  
+
   // Feature toggle panel state
   const [isFeaturePanelOpen, setIsFeaturePanelOpen] = useState(false);
+
+  // Check if user is admin (has ?admin in URL)
+  const isAdmin = new URLSearchParams(window.location.search).has('admin');
 
   const handleFileClick = async (url: string) => {
     // Extract RID or META ID from URL and open modal
@@ -51,20 +54,23 @@ export function FullChat() {
   };
 
   // Keyboard shortcut for feature panel (Cmd+Shift+F on Mac, Ctrl+Shift+F on Windows/Linux)
+  // Only available for admin users
   useEffect(() => {
+    if (!isAdmin) return; // Don't set up keyboard shortcut for non-admins
+
     const handleKeyDown = (e: KeyboardEvent) => {
       const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
       const modifier = isMac ? e.metaKey : e.ctrlKey;
-      
+
       if (modifier && e.shiftKey && e.key === 'F') {
         e.preventDefault();
         setIsFeaturePanelOpen(prev => !prev);
       }
     };
-    
+
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [isAdmin]);
 
   // Listen for snippet modal events from chat component
   useEffect(() => {
@@ -111,7 +117,7 @@ export function FullChat() {
                     onLanguageChange={setSessionLanguage}
                   />
                 )}
-                {features.SHOW_FEATURE_TOGGLE_PANEL && (
+                {features.SHOW_FEATURE_TOGGLE_PANEL && isAdmin && (
                   <button
                     onClick={() => setIsFeaturePanelOpen(true)}
                     className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
