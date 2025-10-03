@@ -210,12 +210,6 @@ class FeatureFlags:
                 "category": "core",
                 "requiresRestart": False
             },
-            "SHOW_LANGUAGE_SELECTOR": {
-                "label": "Language Selector",
-                "description": "Show language selection dropdown",
-                "category": "core",
-                "requiresRestart": False
-            },
             "SHOW_FEATURE_TOGGLE_PANEL": {
                 "label": "Feature Toggle Panel",
                 "description": "Show admin feature control panel",

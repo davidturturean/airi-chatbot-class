@@ -122,15 +122,15 @@ export const FeatureTogglePanel: React.FC<FeatureTogglePanelProps> = ({ isOpen, 
                             onClick={() => handleToggle(feature.flagName, features[feature.flagName])}
                             disabled={saving}
                             className={`
-                              relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent 
+                              relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full
                               transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
-                              ${features[feature.flagName] ? 'bg-red-500' : 'bg-gray-200'}
+                              ${features[feature.flagName] ? 'bg-red-500' : 'bg-gray-300'}
                               ${saving ? 'opacity-50 cursor-not-allowed' : ''}
                             `}
                           >
                             <span
                               className={`
-                                inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 
+                                pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow
                                 transition duration-200 ease-in-out
                                 ${features[feature.flagName] ? 'translate-x-5' : 'translate-x-0'}
                               `}
