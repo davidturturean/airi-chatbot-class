@@ -156,6 +156,9 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearSession = async () => {
     try {
+      console.log('Starting session clear process...');
+      console.log('Current session ID:', sessionId);
+
       // Clear UI state immediately for instant feedback
       setPreviousMessages([]);
       setCurrentMessage({
@@ -169,6 +172,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         method: 'DELETE',
       });
 
+      console.log('Backend response status:', response.status);
+
       if (response.ok) {
         const data = await response.json();
         const newSessionId = data.new_session_id;
@@ -178,26 +183,34 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
           new: newSessionId
         });
 
-        // Clear all old session-related storage
-        localStorage.removeItem('airi_session_id');
-        localStorage.removeItem(`airi_session_init_${sessionId}`);
-        localStorage.removeItem('airi_session_initialized');
+        if (!newSessionId) {
+          throw new Error('Backend did not return a new session ID');
+        }
+
+        // Clear ALL session-related localStorage items
+        Object.keys(localStorage).forEach(key => {
+          if (key.startsWith('airi_session')) {
+            localStorage.removeItem(key);
+          }
+        });
 
         // Store new session ID
         localStorage.setItem('airi_session_id', newSessionId);
+        console.log('Stored new session ID in localStorage:', newSessionId);
 
-        // Redirect to clean URL without session parameters to avoid re-initializing with old session
-        const cleanUrl = window.location.pathname; // Remove all query parameters
-        window.location.href = cleanUrl; // Navigate to clean URL which will trigger reload
+        // Redirect to clean URL without session parameters
+        // Use replace() instead of href to avoid keeping the old URL in history
+        window.location.replace(window.location.pathname);
       } else {
-        throw new Error('Failed to clear session');
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(`Failed to clear session: ${response.status} - ${errorData.error || response.statusText}`);
       }
     } catch (error) {
       console.error('Failed to clear session:', error);
       // Show error message
       setPreviousMessages([]);
       setCurrentMessage({
-        content: "Failed to clear session. Please refresh the page manually.",
+        content: `Failed to clear session: ${error instanceof Error ? error.message : 'Unknown error'}. Please refresh the page manually.`,
         role: 'assistant',
         id: 'error',
       });
