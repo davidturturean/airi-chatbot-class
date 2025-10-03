@@ -172,25 +172,38 @@ def add_session_message(session_id: str):
 @session_bp.route('/api/session/<session_id>/clear', methods=['DELETE'])
 def clear_session(session_id: str):
     """
-    Clear all messages in a session.
-    Useful for starting fresh while maintaining session ID.
+    Delete the current session and create a new one.
+    Returns a new session ID for the frontend to use.
     """
     try:
-        if session_id not in session_store:
-            return jsonify({
-                'success': False,
-                'error': 'Session not found'
-            }), 404
-        
-        session_store[session_id]['messages'] = []
-        session_store[session_id]['last_accessed'] = datetime.now()
-        
+        # Delete old session entirely (not just clear messages)
+        if session_id in session_store:
+            del session_store[session_id]
+            print(f"Deleted session: {session_id}")
+
+        # Generate a new session ID
+        new_session_id = generate_session_id()
+
+        # Create new empty session
+        session_store[new_session_id] = {
+            'messages': [],
+            'created_at': datetime.now(),
+            'last_accessed': datetime.now(),
+            'metadata': {
+                'cleared_from': session_id,
+                'timestamp': datetime.now().isoformat()
+            }
+        }
+
+        print(f"Created new session: {new_session_id}")
+
         return jsonify({
             'success': True,
-            'session_id': session_id,
-            'message': 'Session cleared'
+            'old_session_id': session_id,
+            'new_session_id': new_session_id,
+            'message': 'Session deleted and new session created'
         }), 200
-        
+
     except Exception as e:
         return jsonify({
             'success': False,

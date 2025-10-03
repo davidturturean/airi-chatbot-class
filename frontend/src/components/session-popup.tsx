@@ -10,6 +10,25 @@ interface SessionPopupProps {
 export const SessionPopup = ({ sessionId, onClearSession, inSidebar = false }: SessionPopupProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
+
+  const handleClearSession = async () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete your session?\n\n' +
+      'This will permanently delete your current conversation history and start a fresh session.\n\n' +
+      'This action cannot be undone.'
+    );
+
+    if (confirmed) {
+      setIsClearing(true);
+      try {
+        await onClearSession();
+      } catch (error) {
+        console.error('Failed to clear session:', error);
+        setIsClearing(false);
+      }
+    }
+  };
 
   const copySessionId = async () => {
     try {
@@ -113,12 +132,25 @@ export const SessionPopup = ({ sessionId, onClearSession, inSidebar = false }: S
           {/* Clear Session Button */}
           <div className="flex items-center gap-2">
             <button
-              onClick={onClearSession}
-              className="text-sm text-red-600 hover:text-red-800 hover:bg-red-50 px-3 py-1 rounded transition"
+              onClick={handleClearSession}
+              disabled={isClearing}
+              className={`text-sm px-3 py-1 rounded transition flex items-center gap-2 ${
+                isClearing
+                  ? 'text-gray-400 bg-gray-100 cursor-not-allowed'
+                  : 'text-red-600 hover:text-red-800 hover:bg-red-50'
+              }`}
             >
-              Clear Session Data
+              {isClearing && (
+                <svg className="animate-spin h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+              )}
+              {isClearing ? 'Clearing...' : 'Clear Session Data'}
             </button>
-            <InfoTooltip content="This will clear your current conversation history and start a fresh session. Your previous messages will be permanently deleted." />
+            {!isClearing && (
+              <InfoTooltip content="This will clear your current conversation history and start a fresh session. Your previous messages will be permanently deleted." />
+            )}
           </div>
         </div>
       )}

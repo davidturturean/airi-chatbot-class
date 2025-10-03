@@ -156,18 +156,50 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearSession = async () => {
     try {
-      await fetch(`${API_URL}api/session/${sessionId}/clear`, {
+      // Clear UI state immediately for instant feedback
+      setPreviousMessages([]);
+      setCurrentMessage({
+        content: "Clearing session...",
+        role: 'assistant',
+        id: 'clearing',
+      });
+
+      // Call backend to delete old session and create new one
+      const response = await fetch(`${API_URL}api/session/${sessionId}/clear`, {
         method: 'DELETE',
       });
 
-      // Clear all session-related storage
-      localStorage.removeItem('airi_session_id');
-      localStorage.removeItem(`airi_session_init_${sessionId}`);
-      // Clean up old key format too
-      localStorage.removeItem('airi_session_initialized');
-      window.location.reload();
+      if (response.ok) {
+        const data = await response.json();
+        const newSessionId = data.new_session_id;
+
+        console.log('Session cleared:', {
+          old: sessionId,
+          new: newSessionId
+        });
+
+        // Clear all old session-related storage
+        localStorage.removeItem('airi_session_id');
+        localStorage.removeItem(`airi_session_init_${sessionId}`);
+        localStorage.removeItem('airi_session_initialized');
+
+        // Store new session ID
+        localStorage.setItem('airi_session_id', newSessionId);
+
+        // Reload page to reinitialize with new session
+        window.location.reload();
+      } else {
+        throw new Error('Failed to clear session');
+      }
     } catch (error) {
       console.error('Failed to clear session:', error);
+      // Show error message
+      setPreviousMessages([]);
+      setCurrentMessage({
+        content: "Failed to clear session. Please refresh the page manually.",
+        role: 'assistant',
+        id: 'error',
+      });
     }
   };
 
