@@ -1,0 +1,153 @@
+<!--
+============================================
+WEBFLOW /CHATBOT PAGE - CONVERSATION TRANSFER SCRIPT
+============================================
+
+INSTALLATION:
+1. Go to Webflow → /chatbot page
+2. Click Page Settings (gear icon) → Custom Code
+3. Paste this ENTIRE code into "Before </body> tag" section
+4. Make sure it includes the opening <script> and closing </script> tags
+5. Save and Publish
+
+WHAT IT DOES:
+- Checks sessionStorage for transferred conversation data from widget
+- Shows notification "Conversation continued from widget"
+- Loads conversation history into the chatbot iframe
+- Auto-expires transfer data after 5 minutes for security
+
+IMPORTANT:
+- This code should be wrapped in <script> tags
+- No text should appear before <script> or after </script>
+- If code appears as visible text on page, the script tags are broken
+
+============================================
+-->
+
+<script>
+(function() {
+  'use strict';
+
+  const STORAGE_KEY = 'airisk_conversation_transfer';
+  const EXPIRY_TIME = 5 * 60 * 1000;
+  const DEBUG = false;
+
+  function log(message, data) {
+    if (DEBUG) {
+      console.log(`[Conversation Transfer] ${message}`, data || '');
+    }
+  }
+
+  function checkForTransfer() {
+    try {
+      const stored = sessionStorage.getItem(STORAGE_KEY);
+      if (!stored) {
+        log('No transfer data found');
+        return null;
+      }
+
+      const transferData = JSON.parse(stored);
+      log('Transfer data found:', transferData);
+
+      const age = Date.now() - transferData.timestamp;
+      if (age > EXPIRY_TIME) {
+        log('Transfer data expired');
+        sessionStorage.removeItem(STORAGE_KEY);
+        return null;
+      }
+
+      if (transferData.transferType !== 'widget_to_fullpage') {
+        log('Invalid transfer type');
+        return null;
+      }
+
+      sessionStorage.removeItem(STORAGE_KEY);
+      log('Transfer data retrieved and cleared');
+
+      return transferData;
+    } catch (e) {
+      console.error('[Conversation Transfer] Error:', e);
+      try {
+        sessionStorage.removeItem(STORAGE_KEY);
+      } catch (cleanupError) {}
+      return null;
+    }
+  }
+
+  function showTransferNotification() {
+    const notification = document.createElement('div');
+    notification.id = 'transfer-notification';
+    notification.innerHTML = '<style>#transfer-notification{position:fixed;top:20px;right:20px;background:#A32035;color:white;padding:12px 20px;border-radius:8px;font-family:Figtree,Ubuntu,sans-serif;font-size:14px;box-shadow:0 4px 12px rgba(163,32,53,0.3);z-index:10000;animation:slideIn 0.3s ease-out;display:flex;align-items:center;gap:10px}@keyframes slideIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}@keyframes slideOut{from{transform:translateX(0);opacity:1}to{transform:translateX(120%);opacity:0}}#transfer-notification.hiding{animation:slideOut 0.3s ease-out forwards}#transfer-notification svg{width:18px;height:18px;fill:white}</style><svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg><span>Conversation continued from widget</span>';
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.classList.add('hiding');
+      setTimeout(() => notification.remove(), 300);
+    }, 3000);
+  }
+
+  function loadConversation(transferData) {
+    log('Loading conversation into chatbot');
+
+    const checkInterval = setInterval(() => {
+      const chatFrame = document.querySelector('iframe[src*="chat"], iframe#chat-frame');
+
+      if (chatFrame) {
+        clearInterval(checkInterval);
+        showTransferNotification();
+
+        if (transferData.conversation && transferData.conversation.messages) {
+          if (chatFrame.contentWindow) {
+            chatFrame.contentWindow.postMessage({
+              type: 'load_conversation',
+              conversation: transferData.conversation,
+              sessionId: transferData.sessionId
+            }, '*');
+            log('Sent conversation via postMessage');
+          }
+
+          window.transferredConversation = transferData.conversation;
+          window.transferredSessionId = transferData.sessionId;
+          log('Stored conversation in window object');
+        }
+
+        if (typeof posthog !== 'undefined') {
+          posthog.capture('conversation_transfer_completed', {
+            sessionId: transferData.sessionId,
+            messageCount: transferData.conversation?.messages?.length || 0,
+            timestamp: new Date().toISOString()
+          });
+        }
+      }
+    }, 100);
+
+    setTimeout(() => clearInterval(checkInterval), 10000);
+  }
+
+  function init() {
+    log('Initializing conversation transfer receiver');
+
+    const transferData = checkForTransfer();
+
+    if (transferData) {
+      log('Transfer data detected, loading conversation');
+      loadConversation(transferData);
+    } else {
+      log('No transfer data, starting fresh conversation');
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  window.checkConversationTransfer = function() {
+    const data = checkForTransfer();
+    console.log('Manual check - Transfer data:', data);
+    return data;
+  };
+})();
+</script>
