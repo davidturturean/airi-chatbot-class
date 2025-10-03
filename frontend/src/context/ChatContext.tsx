@@ -176,15 +176,18 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (response.ok) {
         const data = await response.json();
+        console.log('Backend response data:', data);
         const newSessionId = data.new_session_id;
 
         console.log('Session cleared:', {
           old: sessionId,
-          new: newSessionId
+          new: newSessionId,
+          rawData: data
         });
 
         if (!newSessionId) {
-          throw new Error('Backend did not return a new session ID');
+          console.error('Response missing new_session_id. Full response:', data);
+          throw new Error(`Backend did not return a new session ID. Response: ${JSON.stringify(data)}`);
         }
 
         // Clear ALL session-related localStorage items
