@@ -186,8 +186,9 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         // Store new session ID
         localStorage.setItem('airi_session_id', newSessionId);
 
-        // Reload page to reinitialize with new session
-        window.location.reload();
+        // Redirect to clean URL without session parameters to avoid re-initializing with old session
+        const cleanUrl = window.location.pathname; // Remove all query parameters
+        window.location.href = cleanUrl; // Navigate to clean URL which will trigger reload
       } else {
         throw new Error('Failed to clear session');
       }
