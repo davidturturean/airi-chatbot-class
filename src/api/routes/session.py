@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 import uuid
 from typing import Dict, List, Optional
 import json
+from src.core.storage.snippet_database import snippet_db
 
 session_bp = Blueprint('session', __name__)
 
@@ -173,9 +174,14 @@ def add_session_message(session_id: str):
 def clear_session(session_id: str):
     """
     Delete the current session and create a new one.
+    Also clears associated snippets.
     Returns a new session ID for the frontend to use.
     """
     try:
+        # Clear snippets for this session
+        snippet_db.clear_session(session_id)
+        print(f"Cleared snippets for session: {session_id}")
+
         # Delete old session entirely (not just clear messages)
         if session_id in session_store:
             del session_store[session_id]

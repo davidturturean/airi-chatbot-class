@@ -108,14 +108,14 @@ def create_session():
     session_id = snippet_db.generate_session_id()
     return jsonify({"session_id": session_id})
 
-@snippets_bp.route('/api/session/<session_id>/clear', methods=['DELETE'])
-def clear_session(session_id):
+@snippets_bp.route('/api/session/<session_id>/snippets/clear', methods=['DELETE'])
+def clear_session_snippets(session_id):
     """Clear all snippets for a session."""
     success = snippet_db.clear_session(session_id)
     if success:
-        return jsonify({"message": "Session cleared successfully"})
+        return jsonify({"message": "Session snippets cleared successfully"})
     else:
-        return jsonify({"error": "Failed to clear session"}), 500
+        return jsonify({"error": "Failed to clear session snippets"}), 500
 
 @snippets_bp.route('/api/session/<session_id>/snippets', methods=['GET'])
 def get_session_snippets(session_id):
