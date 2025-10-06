@@ -3,6 +3,7 @@ venv/
 .venv/
 env/
 ENV/
+temp_venv/
 
 # Python cache files
 __pycache__/
@@ -27,24 +28,37 @@ coverage.xml
 
 # Database files
 chroma_db/
+data/chroma_db/
 *.pkl
 simple_store.pkl
 simple_store_data.json
+*.db
+*.sqlite
+*.sqlite3
 
 # Environment files
 .env
 .env.*
+!.env.example
 
-# Logs
+# Logs (keep structure, ignore content)
 *.log
+server.log
+test_results/logs/*.log
 
-# Test outputs
-tests/results/
-tests/debug/
+# Test Results (keep structure, ignore new timestamped results)
+test_results/**/*.json
+test_results/**/*.log
+!test_results/README.md
+!test_results/**/README.md
+
+# Temporary test outputs (deprecated, now in test_results/)
 test_results_*.json
 debug_*.log
 extracted_prompts_responses.json
 extracted_prompts_responses.md
+taxonomy_*.json
+taxonomy_*.md
 
 # Backup files
 backup_*/
@@ -66,10 +80,72 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+*~
 
 # Node modules
 node_modules/
 frontend/node_modules/
 
+# Frontend build
+frontend/dist/
+frontend/build/
+
+# Word/Office temporary files
+~$*.docx
+~$*.xlsx
+~$*.pptx
+
+# Archive directory (deprecated files)
+.archive/
+
 # Time tracking analysis
 time_tracking_analysis/.git-credentials
+
+# Claude Code
+.claude/
+.agents/
+
+# Python virtual environments (additional patterns)
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Celery
+celerybeat-schedule
+
+# dotenv
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# macOS
+.AppleDouble
+.LSOverride
+
+# Windows
+desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+.fuse_hidden*
+.directory
+.Trash-*
+
+# Credentials and secrets
+*credentials.json
+*secret*.json
+*.pem
+*.key
+!public.key
+
+# Large files that shouldn't be committed
+*.mp4
+*.mov
+*.avi
+*.large
