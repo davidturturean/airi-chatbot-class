@@ -71,17 +71,27 @@ Review [Testing Brief](testing/testing_brief.md) and [Pre-Testing Checklist](tes
 ### I want to understand how messages are processed
 Read [Message Processing Logic](architecture/MESSAGE_PROCESSING_LOGIC.md)
 
-## Contributing to Documentation
+## Maintenance and Contribution
+
+### For Maintainers
+- [Maintenance Guide](MAINTENANCE.md) - How to keep the codebase organized
+- [Cleanup Summary](CLEANUP_SUMMARY.md) - What was reorganized and why
+
+### Contributing to Documentation
 
 When adding new documentation:
 - Place it in the appropriate subdirectory
 - Update this README.md with a link
 - Use clear, descriptive filenames
 - Include a brief summary at the top of each document
+- Follow the maintenance guide rules
+
+See [Maintenance Guide](MAINTENANCE.md) for detailed file organization rules.
 
 ## Need Help?
 
 If you can't find what you're looking for:
 1. Check the [Main README](../README.md)
 2. Review the [Implementation Status](architecture/implementation_status.md)
-3. Search for keywords across all documentation files
+3. Check the [Maintenance Guide](MAINTENANCE.md) for file organization
+4. Search for keywords across all documentation files
