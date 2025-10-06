@@ -73,6 +73,23 @@ class FeatureFlags:
                         if key in self._flags:
                             self._flags[key] = value
                 logger.info(f"Loaded feature flags from {self.config_file}")
+            else:
+                # If no config exists, try to copy from default config in repo
+                default_config = Path(__file__).parent / "default_feature_flags.json"
+                if default_config.exists():
+                    # Ensure directory exists
+                    self.config_file.parent.mkdir(parents=True, exist_ok=True)
+                    # Copy default config
+                    with open(default_config, 'r') as src:
+                        default_flags = json.load(src)
+                        for key, value in default_flags.items():
+                            if key in self._flags:
+                                self._flags[key] = value
+                    # Save to persistent location
+                    self._save_config()
+                    logger.info(f"Initialized feature flags from default config")
+                else:
+                    logger.info(f"No saved config found, using hardcoded defaults")
         except Exception as e:
             logger.error(f"Failed to load feature flags: {e}")
     
