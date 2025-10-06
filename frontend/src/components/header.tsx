@@ -6,18 +6,19 @@ export const Header = () => {
   // Check if we're inside an iframe
   const isInIframe = window.self !== window.top;
 
-  // Detect if we're embedded in Webflow (check parent domain)
-  const isInWebflow = isInIframe && (
+  // Detect if we're embedded in Webflow or coming from widget
+  const isInWebflow = isInIframe ||
     window.location.search.includes('from=webflow') ||
-    window.location.search.includes('source=widget')
-  );
+    window.location.search.includes('from=widget') ||
+    window.location.search.includes('source=widget');
 
-  const handleNavigation = (path: string, webflowPath: string) => {
+  const handleNavigation = (e: React.MouseEvent, path: string, webflowPath: string) => {
+    e.preventDefault();
     if (isInWebflow) {
       // Navigate parent window to Webflow page
       try {
         window.top!.location.href = `https://ai-risk-repository-601932-8fac479478ab1.webflow.io${webflowPath}`;
-      } catch (e) {
+      } catch (err) {
         // Fallback if cross-origin prevents access
         window.open(`https://ai-risk-repository-601932-8fac479478ab1.webflow.io${webflowPath}`, '_blank');
       }
@@ -33,18 +34,20 @@ export const Header = () => {
       <nav className="space-x-4 text-sm text-gray-600">
         {isInWebflow ? (
           <>
-            <button
-              onClick={() => handleNavigation('/', '/')}
-              className="hover:text-black transition-colors cursor-pointer bg-transparent border-none text-gray-600"
+            <a
+              href="https://ai-risk-repository-601932-8fac479478ab1.webflow.io/"
+              onClick={(e) => handleNavigation(e, '/', '/')}
+              className="hover:text-black transition-colors cursor-pointer"
             >
               Home
-            </button>
-            <button
-              onClick={() => handleNavigation('/chat', '/chatbot')}
-              className="hover:text-black transition-colors cursor-pointer bg-transparent border-none text-gray-600"
+            </a>
+            <a
+              href="https://ai-risk-repository-601932-8fac479478ab1.webflow.io/chatbot"
+              onClick={(e) => handleNavigation(e, '/chat', '/chatbot')}
+              className="hover:text-black transition-colors cursor-pointer"
             >
               Chat
-            </button>
+            </a>
           </>
         ) : (
           <>
