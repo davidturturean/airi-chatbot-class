@@ -115,13 +115,11 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
 
     const formatting = currentSheetData.formatting || {};
 
-    // Debug: Log formatting object on sheet change
+    // Debug: Log formatting summary on sheet change (not per-cell)
     if (Object.keys(formatting).length > 0) {
       console.log(`[ExcelViewer] ✅ Loaded ${Object.keys(formatting).length} formatted cells for sheet "${currentSheetData.sheet_name}"`);
-      console.log('[ExcelViewer] Sample formatting keys:', Object.keys(formatting).slice(0, 5));
-      console.log('[ExcelViewer] Sample formatting values:', Object.values(formatting).slice(0, 3));
     } else {
-      console.warn(`[ExcelViewer] ⚠️ NO cell formatting found for sheet "${currentSheetData.sheet_name}" - check backend extraction`);
+      console.log(`[ExcelViewer] No cell formatting found for sheet "${currentSheetData.sheet_name}"`);
     }
 
     // Custom cell renderer that applies formatting
@@ -141,23 +139,13 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
       const cellKey = `${rowIdx}_${excelColIdx}`;
       const fmt: CellFormatting | undefined = formatting[cellKey];
 
-      // Debug logging for cell formatting
-      if (fmt && rowIdx < 3 && excelColIdx <= 5) {
-        console.log(`📝 Cell ${cellKey} (row ${rowIdx}, col ${column.key}): Applying formatting`, fmt);
-      }
-
-      // Debug logging if NO formatting found for cells that might have it
-      if (!fmt && rowIdx < 3 && excelColIdx <= 5) {
-        console.log(`❌ Cell ${cellKey} (row ${rowIdx}, col ${column.key}): NO formatting found`);
-      }
-
       // Check if this cell should be highlighted (citation target or search match)
       const isCitationHighlight = highlightedCell === `${rowIdx}_citation`;
       const isSearchMatch = searchMatches.has(`${rowIdx}_${column.key}`);
 
-      // Debug logging for citation highlighting
+      // Debug logging for citation highlighting ONLY (rare, important event)
       if (isCitationHighlight && column.key !== '__row_id__') {
-        console.log(`🟡 Rendering gold highlight for row ${rowIdx}, column ${column.key}, className will be: 'citation-highlighted-cell'`);
+        console.log(`🟡 Rendering gold highlight for row ${rowIdx}, column ${column.key}`);
       }
 
       const style: React.CSSProperties = {
@@ -243,6 +231,14 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
 
     return rows;
   }, [currentSheetData, filters, sortColumns]);
+
+  // Track render completion (moved here after processedRows is defined)
+  useEffect(() => {
+    if (currentSheetData && processedRows.length > 0) {
+      // Simple completion log - render tracking removed to avoid complexity
+      console.log(`✅ Excel viewer displaying ${processedRows.length} rows, ${columns.length} columns`);
+    }
+  }, [processedRows.length, columns.length, currentSheetData]);
 
   const handleSheetChange = (sheetName: string) => {
     setActiveSheet(sheetName);

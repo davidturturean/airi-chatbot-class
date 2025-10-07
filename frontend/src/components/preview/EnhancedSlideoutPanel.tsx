@@ -115,7 +115,7 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
       previewCache.setExcelData(rid, data);
 
       const totalTime = performance.now() - startTime;
-      console.log(`Excel data fetched in ${totalTime.toFixed(2)}ms`);
+      console.log(`✅ Excel data loaded and ready to render in ${totalTime.toFixed(2)}ms`);
     } catch (err) {
       setError((err as Error).message);
     } finally {

@@ -431,9 +431,9 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                         cell_key = f"{datagrid_row_idx}_{col_idx}"
                         formatting[cell_key] = fmt
 
-                        # Debug logging for first few formatted cells
-                        if len(formatting) <= 5:
-                            logger.info(f"Cell formatting: Excel({row_idx},{col_idx}) -> DataGrid({datagrid_row_idx},{col_idx}) -> Key({cell_key}) -> {fmt}")
+                        # Debug logging for FIRST cell only to confirm extraction is working
+                        if len(formatting) == 1:
+                            logger.info(f"✅ Cell formatting extraction working. First cell: Excel({row_idx},{col_idx}) -> Key({cell_key}) -> {fmt}")
 
                 except Exception as cell_error:
                     # Skip cells that cause errors
