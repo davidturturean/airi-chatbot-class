@@ -304,6 +304,7 @@ export function FullChat() {
         sessionId={sessionId}
         onClose={panel.closePanel}
         onPin={panel.togglePin}
+        onNavigate={panel.openPanel}
       />
     </div>
   );

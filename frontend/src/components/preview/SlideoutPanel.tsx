@@ -94,9 +94,17 @@ export const SlideoutPanel: React.FC<SlideoutPanelProps> = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
 
-      // ESC to close (if not pinned)
-      if (e.key === 'Escape' && !isPinned) {
-        onClose();
+      // ESC to unpin first if pinned, then close if unpinned
+      if (e.key === 'Escape') {
+        if (isPinned) {
+          // First ESC press: unpin the panel
+          onPin(); // Toggle to unpin
+          setShowPinToast(true);
+          setTimeout(() => setShowPinToast(false), 2000);
+        } else {
+          // Second ESC press (or first if already unpinned): close the panel
+          onClose();
+        }
       }
 
       // Cmd/Ctrl + P to pin/unpin
@@ -219,10 +227,18 @@ ${previewData.metadata.source_file ? `\nSource: ${previewData.metadata.source_fi
     return contentLines.join('\n').trim();
   };
 
+  // Handle close action - unpins if pinned, then closes
+  const handleClose = () => {
+    if (isPinned) {
+      onPin(); // Unpin first
+    }
+    onClose(); // Then close
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
-        <Dialog.Root open={isOpen} onOpenChange={(open) => !open && !isPinned && onClose()}>
+        <Dialog.Root open={isOpen} modal={false}>
           <Dialog.Portal>
             {/* Backdrop */}
             <Dialog.Overlay asChild>
@@ -324,10 +340,10 @@ ${previewData.metadata.source_file ? `\nSource: ${previewData.metadata.source_fi
                       {/* Close button */}
                       <Dialog.Close asChild>
                         <button
-                          onClick={onClose}
+                          onClick={handleClose}
                           className="p-2 text-gray-400 hover:text-gray-600 rounded-md hover:bg-gray-100 transition-colors"
                           aria-label="Close panel"
-                          title={isPinned ? 'Close' : 'Close (Esc)'}
+                          title={isPinned ? 'Close and unpin' : 'Close (Esc)'}
                         >
                           <X className="h-5 w-5" />
                         </button>
@@ -483,7 +499,15 @@ ${previewData.metadata.source_file ? `\nSource: ${previewData.metadata.source_fi
                       <kbd className="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded">
                         ⌘P
                       </kbd>{' '}
-                      to pin
+                      to pin {isPinned && '• '}
+                      {isPinned && (
+                        <>
+                          <kbd className="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded">
+                            ESC
+                          </kbd>{' '}
+                          to unpin
+                        </>
+                      )}
                     </div>
                     <div className="flex space-x-2">
                       <button
