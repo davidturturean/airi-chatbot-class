@@ -12,6 +12,10 @@ class PreviewCacheManager {
   private wordData = new Map<string, CacheEntry<WordDocumentData>>();
   private gallery = new Map<string, CacheEntry<CitationGalleryData>>();
 
+  // Track in-flight requests to prevent duplicate prefetches
+  private inFlightExcelRequests = new Map<string, Promise<ExcelDocumentData | null>>();
+  private inFlightWordRequests = new Map<string, Promise<WordDocumentData | null>>();
+
   private sessionId: string | null = null;
   private readonly defaultExpiry = 30 * 60 * 1000; // 30 minutes
 
@@ -75,6 +79,75 @@ class PreviewCacheManager {
     });
   }
 
+  /**
+   * Prefetch Excel data in the background (non-blocking).
+   * Prevents duplicate requests for the same RID.
+   * Use when hover preview detects Excel type to pre-load data before user clicks.
+   */
+  async prefetchExcelData(rid: string): Promise<ExcelDocumentData | null> {
+    if (!this.sessionId) {
+      console.warn('Cannot prefetch Excel data: session ID not set');
+      return null;
+    }
+
+    const key = this.getCacheKey(rid);
+
+    // Check if already cached
+    const cached = this.getExcelData(rid);
+    if (cached) {
+      console.log(`Excel data already cached for ${rid}, skipping prefetch`);
+      return cached;
+    }
+
+    // Check if request already in flight
+    const inFlight = this.inFlightExcelRequests.get(key);
+    if (inFlight) {
+      console.log(`Excel prefetch already in progress for ${rid}, reusing promise`);
+      return inFlight;
+    }
+
+    // Start new prefetch request
+    const startTime = performance.now();
+    console.log(`Starting Excel prefetch for ${rid}...`);
+
+    const fetchPromise = (async () => {
+      try {
+        const response = await fetch(`/api/document/${rid}/excel?session_id=${this.sessionId}`);
+
+        if (!response.ok) {
+          throw new Error(`Failed to prefetch Excel data: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        // Enhance with source_location from preview cache if available
+        const preview = this.getPreview(rid);
+        if (preview && preview.source_location) {
+          data.source_location = preview.source_location;
+        }
+
+        // Store in cache
+        this.setExcelData(rid, data);
+
+        const duration = performance.now() - startTime;
+        console.log(`Excel prefetch completed for ${rid} in ${duration.toFixed(2)}ms`);
+
+        return data;
+      } catch (error) {
+        console.warn(`Excel prefetch failed for ${rid}:`, error);
+        return null;
+      } finally {
+        // Clean up in-flight tracking
+        this.inFlightExcelRequests.delete(key);
+      }
+    })();
+
+    // Track in-flight request
+    this.inFlightExcelRequests.set(key, fetchPromise);
+
+    return fetchPromise;
+  }
+
   // Word Data Cache
   getWordData(rid: string): WordDocumentData | null {
     const key = this.getCacheKey(rid);
@@ -97,6 +170,69 @@ class PreviewCacheManager {
       timestamp: Date.now(),
       expiry: Date.now() + (expiry || this.defaultExpiry)
     });
+  }
+
+  /**
+   * Prefetch Word data in the background (non-blocking).
+   * Prevents duplicate requests for the same RID.
+   * Use when hover preview detects Word type to pre-load data before user clicks.
+   */
+  async prefetchWordData(rid: string): Promise<WordDocumentData | null> {
+    if (!this.sessionId) {
+      console.warn('Cannot prefetch Word data: session ID not set');
+      return null;
+    }
+
+    const key = this.getCacheKey(rid);
+
+    // Check if already cached
+    const cached = this.getWordData(rid);
+    if (cached) {
+      console.log(`Word data already cached for ${rid}, skipping prefetch`);
+      return cached;
+    }
+
+    // Check if request already in flight
+    const inFlight = this.inFlightWordRequests.get(key);
+    if (inFlight) {
+      console.log(`Word prefetch already in progress for ${rid}, reusing promise`);
+      return inFlight;
+    }
+
+    // Start new prefetch request
+    const startTime = performance.now();
+    console.log(`Starting Word prefetch for ${rid}...`);
+
+    const fetchPromise = (async () => {
+      try {
+        const response = await fetch(`/api/document/${rid}/word?session_id=${this.sessionId}`);
+
+        if (!response.ok) {
+          throw new Error(`Failed to prefetch Word data: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        // Store in cache
+        this.setWordData(rid, data);
+
+        const duration = performance.now() - startTime;
+        console.log(`Word prefetch completed for ${rid} in ${duration.toFixed(2)}ms`);
+
+        return data;
+      } catch (error) {
+        console.warn(`Word prefetch failed for ${rid}:`, error);
+        return null;
+      } finally {
+        // Clean up in-flight tracking
+        this.inFlightWordRequests.delete(key);
+      }
+    })();
+
+    // Track in-flight request
+    this.inFlightWordRequests.set(key, fetchPromise);
+
+    return fetchPromise;
   }
 
   // Gallery Cache
@@ -134,6 +270,8 @@ class PreviewCacheManager {
     this.excelData.clear();
     this.wordData.clear();
     this.gallery.clear();
+    this.inFlightExcelRequests.clear();
+    this.inFlightWordRequests.clear();
   }
 
   // Performance Metrics

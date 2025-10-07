@@ -36,6 +36,11 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
     if (cached) {
       setPreview(cached);
       setError(null);
+
+      // Trigger background prefetch for Excel/Word documents
+      // This happens AFTER showing the preview (non-blocking)
+      triggerBackgroundPrefetch(cached);
+
       return;
     }
 
@@ -60,12 +65,40 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
 
       setPreview(data);
       previewCache.setPreview(rid, data);
+
+      // Trigger background prefetch for Excel/Word documents
+      // This happens AFTER showing the preview (non-blocking)
+      triggerBackgroundPrefetch(data);
     } catch (err) {
       setError((err as Error).message);
     } finally {
       setLoading(false);
     }
   }, [rid, sessionId]);
+
+  /**
+   * Trigger background prefetch for Excel/Word documents when hover preview loads.
+   * This is non-blocking and doesn't affect the hover preview display.
+   * By the time user clicks, data should already be loaded.
+   */
+  const triggerBackgroundPrefetch = (preview: DocumentPreview) => {
+    if (!preview || !rid) return;
+
+    // Only prefetch for document types that need heavy parsing
+    if (preview.preview_type === 'excel') {
+      console.log(`Hover preview detected Excel document, triggering background prefetch for ${rid}`);
+      // Don't await - let it run in background
+      previewCache.prefetchExcelData(rid).catch((err) => {
+        console.warn('Excel prefetch failed (non-critical):', err);
+      });
+    } else if (preview.preview_type === 'word') {
+      console.log(`Hover preview detected Word document, triggering background prefetch for ${rid}`);
+      // Don't await - let it run in background
+      previewCache.prefetchWordData(rid).catch((err) => {
+        console.warn('Word prefetch failed (non-critical):', err);
+      });
+    }
+  };
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);

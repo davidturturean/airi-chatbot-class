@@ -52,13 +52,15 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
       // Scroll to the row and highlight the cell
       const targetRow = sourceLocation.row;
 
-      // Highlight the cell for 3 seconds
+      // Highlight the ROW for 5 seconds (more visible, longer duration)
       const cellKey = `${targetRow}_citation`;
       setHighlightedCell(cellKey);
+      console.log(`🎯 Highlighting row ${targetRow} with gold background for 5 seconds`);
 
       setTimeout(() => {
         setHighlightedCell(null);
-      }, 3000);
+        console.log('✓ Gold highlight removed');
+      }, 5000);  // Increased from 3 to 5 seconds
 
       // Scroll to row (DataGrid uses 0-indexed row positions)
       // We want to show context, so scroll to a bit before the target
@@ -115,9 +117,11 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
 
     // Debug: Log formatting object on sheet change
     if (Object.keys(formatting).length > 0) {
-      console.log(`[ExcelViewer] Loaded ${Object.keys(formatting).length} formatted cells for sheet "${currentSheetData.sheet_name}"`);
+      console.log(`[ExcelViewer] ✅ Loaded ${Object.keys(formatting).length} formatted cells for sheet "${currentSheetData.sheet_name}"`);
       console.log('[ExcelViewer] Sample formatting keys:', Object.keys(formatting).slice(0, 5));
       console.log('[ExcelViewer] Sample formatting values:', Object.values(formatting).slice(0, 3));
+    } else {
+      console.warn(`[ExcelViewer] ⚠️ NO cell formatting found for sheet "${currentSheetData.sheet_name}" - check backend extraction`);
     }
 
     // Custom cell renderer that applies formatting
@@ -137,14 +141,24 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
       const cellKey = `${rowIdx}_${excelColIdx}`;
       const fmt: CellFormatting | undefined = formatting[cellKey];
 
-      // Debug logging (can be removed after verification)
-      if (fmt && rowIdx < 5 && excelColIdx <= 3) {
-        console.log(`Cell ${cellKey}: Found formatting`, fmt);
+      // Debug logging for cell formatting
+      if (fmt && rowIdx < 3 && excelColIdx <= 5) {
+        console.log(`📝 Cell ${cellKey} (row ${rowIdx}, col ${column.key}): Applying formatting`, fmt);
+      }
+
+      // Debug logging if NO formatting found for cells that might have it
+      if (!fmt && rowIdx < 3 && excelColIdx <= 5) {
+        console.log(`❌ Cell ${cellKey} (row ${rowIdx}, col ${column.key}): NO formatting found`);
       }
 
       // Check if this cell should be highlighted (citation target or search match)
       const isCitationHighlight = highlightedCell === `${rowIdx}_citation`;
       const isSearchMatch = searchMatches.has(`${rowIdx}_${column.key}`);
+
+      // Debug logging for citation highlighting
+      if (isCitationHighlight && column.key !== '__row_id__') {
+        console.log(`🟡 Rendering gold highlight for row ${rowIdx}, column ${column.key}`);
+      }
 
       const style: React.CSSProperties = {
         width: '100%',
@@ -154,7 +168,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         padding: '0 8px',
       };
 
-      // Apply cell formatting
+      // Apply cell formatting from Excel FIRST (so citation highlight can override)
       if (fmt) {
         if (fmt.bgColor) style.backgroundColor = fmt.bgColor;
         if (fmt.fontColor) style.color = fmt.fontColor;
@@ -164,10 +178,14 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         if (fmt.fontSize) style.fontSize = `${fmt.fontSize}px`;
       }
 
-      // Apply highlight for citation target (gold background)
+      // Apply highlight for citation target (OVERRIDES cell formatting background)
+      // This makes the entire row GOLD for maximum visibility
       if (isCitationHighlight) {
-        style.backgroundColor = '#ffd700';
-        style.animation = 'pulse 1s ease-in-out 3';
+        style.backgroundColor = '#FFD700';  // Bright gold
+        style.border = '2px solid #FFA500';  // Orange border for extra visibility
+        style.fontWeight = 'bold';  // Make text bold
+        style.animation = 'pulse 1.5s ease-in-out 3';  // Pulse animation
+        style.boxShadow = '0 0 10px rgba(255, 215, 0, 0.5)';  // Glow effect
       }
 
       // Apply highlight for search matches (yellow background)

@@ -81,13 +81,19 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
   };
 
   const loadExcelData = async (rid: string) => {
-    // Check cache
+    const startTime = performance.now();
+
+    // Check cache first - data may have been prefetched by hover preview
     const cached = previewCache.getExcelData(rid);
     if (cached) {
+      const cacheHitTime = performance.now() - startTime;
+      console.log(`Excel data loaded from cache in ${cacheHitTime.toFixed(2)}ms (instant load)`);
       setExcelData(cached);
       return;
     }
 
+    // Cache miss - need to fetch (will show loading spinner)
+    console.log('Excel data not cached, fetching from server...');
     setLoading(true);
     setError(null);
 
@@ -107,6 +113,9 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
 
       setExcelData(data);
       previewCache.setExcelData(rid, data);
+
+      const totalTime = performance.now() - startTime;
+      console.log(`Excel data fetched in ${totalTime.toFixed(2)}ms`);
     } catch (err) {
       setError((err as Error).message);
     } finally {
@@ -115,13 +124,19 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
   };
 
   const loadWordData = async (rid: string) => {
-    // Check cache
+    const startTime = performance.now();
+
+    // Check cache first - data may have been prefetched by hover preview
     const cached = previewCache.getWordData(rid);
     if (cached) {
+      const cacheHitTime = performance.now() - startTime;
+      console.log(`Word data loaded from cache in ${cacheHitTime.toFixed(2)}ms (instant load)`);
       setWordData(cached);
       return;
     }
 
+    // Cache miss - need to fetch (will show loading spinner)
+    console.log('Word data not cached, fetching from server...');
     setLoading(true);
     setError(null);
 
@@ -134,6 +149,9 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
       const data = await response.json();
       setWordData(data);
       previewCache.setWordData(rid, data);
+
+      const totalTime = performance.now() - startTime;
+      console.log(`Word data fetched in ${totalTime.toFixed(2)}ms`);
     } catch (err) {
       setError((err as Error).message);
     } finally {

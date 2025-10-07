@@ -8,6 +8,7 @@ import pandas as pd
 import openpyxl
 from datetime import datetime
 from pathlib import Path
+from cachetools import TTLCache
 from ...core.storage.snippet_database import snippet_db
 from ...config.logging import get_logger
 from ...config.settings import settings
@@ -17,6 +18,19 @@ logger = get_logger(__name__)
 # Create blueprint
 excel_viewer_bp = Blueprint('excel_viewer', __name__)
 
+# Session-scoped Excel data cache
+# Cache key format: "{session_id}:{rid}:{file_mtime}"
+# TTL: 1 hour (3600 seconds)
+# Max size: 100 entries
+excel_cache = TTLCache(maxsize=100, ttl=3600)
+
+# Cache statistics for monitoring
+cache_stats = {
+    'hits': 0,
+    'misses': 0,
+    'total_requests': 0
+}
+
 # This will be injected by the app factory
 chat_service = None
 
@@ -25,12 +39,29 @@ def init_excel_routes(chat_service_instance):
     global chat_service
     chat_service = chat_service_instance
 
+def _get_cache_key(session_id: str, rid: str, file_path: Path, sheet_name: str = None, max_rows: int = 1000, offset: int = 0) -> str:
+    """
+    Generate cache key based on session, RID, file modification time, and query params.
+    Format: "{session_id}:{rid}:{mtime}:{sheet}:{max_rows}:{offset}"
+    """
+    try:
+        mtime = file_path.stat().st_mtime
+        # Include sheet_name, max_rows, and offset to handle different views of the same file
+        sheet_key = sheet_name or 'default'
+        return f"{session_id}:{rid}:{mtime}:{sheet_key}:{max_rows}:{offset}"
+    except Exception as e:
+        logger.warning(f"Failed to get file mtime for cache key: {e}")
+        # Fallback to timestamp-based key (won't cache across requests, but won't break)
+        return f"{session_id}:{rid}:nocache:{datetime.now().timestamp()}"
+
 @excel_viewer_bp.route('/api/document/<rid>/excel', methods=['GET'])
 def get_excel_data(rid):
     """
     Parse and return Excel file data for interactive viewing.
-    Performance target: <500ms
+    With session-scoped TTL caching for performance optimization.
+    Performance target: <500ms first load, <100ms cached load
     """
+    global cache_stats
     try:
         start_time = datetime.now()
 
@@ -59,7 +90,27 @@ def get_excel_data(rid):
         if not file_path or not file_path.exists():
             return jsonify({"error": f"File not found: {source_file}"}), 404
 
-        # Parse Excel file
+        # Generate cache key
+        cache_key = _get_cache_key(session_id, rid, file_path, sheet_name, max_rows, offset)
+
+        # Update stats
+        cache_stats['total_requests'] += 1
+
+        # Check cache
+        if cache_key in excel_cache:
+            cache_stats['hits'] += 1
+            cached_data = excel_cache[cache_key]
+
+            duration_ms = (datetime.now() - start_time).total_seconds() * 1000
+            hit_rate = (cache_stats['hits'] / cache_stats['total_requests']) * 100
+            logger.info(f"Excel cache HIT for {rid} ({duration_ms:.2f}ms) - Hit rate: {hit_rate:.1f}%")
+
+            return jsonify(cached_data)
+
+        # Cache miss - parse Excel file
+        cache_stats['misses'] += 1
+        logger.info(f"Excel cache MISS for {rid} - Parsing file...")
+
         excel_data = _parse_excel_file(file_path, sheet_name, max_rows, offset)
 
         # Add metadata
@@ -67,10 +118,15 @@ def get_excel_data(rid):
         excel_data['title'] = snippet_data.get('title', file_path.name)
         excel_data['metadata'] = snippet_data.get('metadata', {})
 
+        # Store in cache
+        excel_cache[cache_key] = excel_data
+
         # Calculate performance
         duration_ms = (datetime.now() - start_time).total_seconds() * 1000
         if duration_ms > 500:
             logger.warning(f"Excel parsing exceeded target: {duration_ms:.2f}ms for {rid}")
+        else:
+            logger.info(f"Excel parsed successfully: {duration_ms:.2f}ms for {rid}")
 
         return jsonify(excel_data)
 
@@ -119,6 +175,28 @@ def get_excel_sheets(rid):
     except Exception as e:
         logger.error(f"Error getting Excel sheets for {rid}: {str(e)}")
         return jsonify({"error": str(e)}), 500
+
+@excel_viewer_bp.route('/api/excel/cache-stats', methods=['GET'])
+def get_cache_stats():
+    """
+    Get Excel cache statistics for performance monitoring.
+    Returns hit rate, total requests, and cache size.
+    """
+    global cache_stats
+
+    hit_rate = 0
+    if cache_stats['total_requests'] > 0:
+        hit_rate = (cache_stats['hits'] / cache_stats['total_requests']) * 100
+
+    return jsonify({
+        'hits': cache_stats['hits'],
+        'misses': cache_stats['misses'],
+        'total_requests': cache_stats['total_requests'],
+        'hit_rate_percent': round(hit_rate, 2),
+        'cache_size': len(excel_cache),
+        'cache_max_size': excel_cache.maxsize,
+        'cache_ttl_seconds': excel_cache.ttl
+    })
 
 def _resolve_file_path(source_file: str) -> Path:
     """Resolve file path from source file reference."""
