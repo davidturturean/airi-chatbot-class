@@ -138,17 +138,26 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
                   <div className="px-4 py-2 border-b border-gray-100 bg-white">
                     <div className="flex flex-wrap gap-1.5">
                       {preview.metadata.domain && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-700">
+                        <span
+                          className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-700 cursor-help"
+                          title="AI Risk Domain"
+                        >
                           {preview.metadata.domain}
                         </span>
                       )}
                       {preview.metadata.entity && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700">
+                        <span
+                          className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700 cursor-help"
+                          title="Entity affected by this risk"
+                        >
                           {preview.metadata.entity}
                         </span>
                       )}
                       {preview.metadata.risk_category && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-700">
+                        <span
+                          className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-700 cursor-help"
+                          title="Risk category"
+                        >
                           {preview.metadata.risk_category}
                         </span>
                       )}
