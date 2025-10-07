@@ -15,6 +15,10 @@ from .routes.language import language_bp, init_language_routes
 from .routes.features import features_bp, init_features_routes
 from .routes.metrics import metrics_bp
 from .routes.session import session_bp
+from .routes.document_preview import document_preview_bp, init_preview_routes
+from .routes.excel_viewer import excel_viewer_bp, init_excel_routes
+from .routes.word_viewer import word_viewer_bp, init_word_routes
+from .routes.gallery import gallery_bp
 from ..core.services.chat_service import ChatService
 from ..core.models.gemini import GeminiModel
 from ..core.storage.vector_store import VectorStore
@@ -64,8 +68,11 @@ def create_app(config=None):
     init_health_routes(chat_service)
     init_snippet_routes(chat_service)
     init_language_routes(chat_service)
+    init_preview_routes(chat_service)
+    init_excel_routes(chat_service)
+    init_word_routes(chat_service)
     init_features_routes()  # Features don't need chat_service
-    
+
     # Register blueprints
     app.register_blueprint(chat_bp)
     app.register_blueprint(health_bp)
@@ -75,6 +82,10 @@ def create_app(config=None):
     app.register_blueprint(features_bp)
     app.register_blueprint(metrics_bp)
     app.register_blueprint(session_bp)
+    app.register_blueprint(document_preview_bp)
+    app.register_blueprint(excel_viewer_bp)
+    app.register_blueprint(word_viewer_bp)
+    app.register_blueprint(gallery_bp)
     
     # Add frontend routes
     _add_frontend_routes(app, logger)

@@ -3,6 +3,8 @@ import { useScrollToBottom } from './use-scroll-to-bottom';
 import { useState } from "react";
 import { message } from "../interfaces/interfaces";
 import ReactMarkdown from "react-markdown";
+import { CitationLink } from "./preview/CitationLink";
+import { useChat } from "@/context/ChatContext";
 
 interface ChatProps {
   previousMessages: message[];
@@ -14,6 +16,7 @@ interface ChatProps {
 export function Chat({ previousMessages, currentMessage, handleSubmit, isLoading }: ChatProps) {
   const [messagesContainerRef, messagesEndRef] = useScrollToBottom<HTMLDivElement>();
   const [question, setQuestion] = useState<string>("");
+  const { sessionId } = useChat();
 
   
   return (
@@ -39,21 +42,13 @@ export function Chat({ previousMessages, currentMessage, handleSubmit, isLoading
                   p: ({ children }) => <p className="mb-3">{children}</p>,
                   a: ({ node, ...props }) => {
                     const href = props.href || '';
-                    // Handle RID links to trigger modal instead of opening new tabs
+                    // Handle RID links with interactive preview
                     if (href.startsWith('/snippet/')) {
                       const rid = href.substring('/snippet/'.length);
                       return (
-                        <a 
-                          {...props} 
-                          href="#" 
-                          onClick={(e) => {
-                            e.preventDefault();
-                            // Trigger the modal by calling the parent's handleFileClick
-                            // This needs to be passed down as a prop
-                            window.dispatchEvent(new CustomEvent('openSnippetModal', { detail: { rid } }));
-                          }}
-                          className="text-blue-600 underline cursor-pointer" 
-                        />
+                        <CitationLink rid={rid} sessionId={sessionId}>
+                          {props.children}
+                        </CitationLink>
                       );
                     }
                     if (href.startsWith('/api/snippet/')) {

@@ -5,6 +5,8 @@ import { SessionPopup } from '../../components/session-popup';
 import { InfoTooltip } from '../../components/info-tooltip';
 import { LanguageSelector } from '../../components/language-selector';
 import { FeatureTogglePanel } from '../../components/feature-toggle-panel';
+import { EnhancedSlideoutPanel } from '../../components/preview/EnhancedSlideoutPanel';
+import { usePanel } from '../../context/PanelContext';
 import { useSidebar } from '@/context/SidebarContext';
 import { useChat } from '@/context/ChatContext';
 import { useFeatures } from '@/context/FeatureContext';
@@ -16,6 +18,7 @@ export function FullChat() {
   const { previousMessages, currentMessage, handleSubmit, isLoading, sessionId, clearSession, sessionLanguage, setSessionLanguage } = useChat();
   const { domain, setDomain, relatedDocuments, suggestedUseCases, handleDomainSubmit } = useSidebar();
   const { features, isSidebarEnabled: isSidebarEnabledFromBackend } = useFeatures();
+  const panel = usePanel();
 
   // Modal state for snippet display
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -292,6 +295,16 @@ export function FullChat() {
           onClose={() => setIsFeaturePanelOpen(false)}
         />
       )}
+
+      {/* Enhanced Slideout Panel for Interactive References */}
+      <EnhancedSlideoutPanel
+        isOpen={panel.isOpen}
+        isPinned={panel.isPinned}
+        rid={panel.currentRid}
+        sessionId={sessionId}
+        onClose={panel.closePanel}
+        onPin={panel.togglePin}
+      />
     </div>
   );
 }
