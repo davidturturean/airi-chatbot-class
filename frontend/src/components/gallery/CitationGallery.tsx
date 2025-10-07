@@ -105,15 +105,15 @@ export const CitationGallery: React.FC<CitationGalleryProps> = ({
     return groups;
   }, [filteredItems, groupBy]);
 
-  // Get unique filter values
-  const _filterOptions = useMemo(() => {
-    return {
-      domains: [...new Set(galleryItems.map(i => i.metadata.domain).filter(Boolean))],
-      fileTypes: [...new Set(galleryItems.map(i => i.preview_type))],
-      entities: [...new Set(galleryItems.map(i => i.metadata.entity).filter(Boolean))],
-      riskCategories: [...new Set(galleryItems.map(i => i.metadata.risk_category).filter(Boolean))]
-    };
-  }, [galleryItems]);
+  // Get unique filter values (reserved for future filtering UI)
+  // const filterOptions = useMemo(() => {
+  //   return {
+  //     domains: [...new Set(galleryItems.map(i => i.metadata.domain).filter(Boolean))],
+  //     fileTypes: [...new Set(galleryItems.map(i => i.preview_type))],
+  //     entities: [...new Set(galleryItems.map(i => i.metadata.entity).filter(Boolean))],
+  //     riskCategories: [...new Set(galleryItems.map(i => i.metadata.risk_category).filter(Boolean))]
+  //   };
+  // }, [galleryItems]);
 
   const handleFilterChange = (filterType: string, value: string) => {
     setActiveFilters(prev => ({

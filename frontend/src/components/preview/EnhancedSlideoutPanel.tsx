@@ -6,8 +6,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { SlideoutPanel } from './SlideoutPanel';
-import { ExcelViewer } from '../viewers/ExcelViewer';
-import { WordViewer } from '../viewers/WordViewer';
 import { previewCache } from '../../utils/preview-cache';
 import type { ExcelDocumentData, WordDocumentData } from '../../types/document-preview';
 
@@ -23,10 +21,11 @@ interface EnhancedSlideoutPanelProps {
 
 export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (props) => {
   const [documentType, setDocumentType] = useState<'text' | 'excel' | 'word' | 'pdf' | 'image' | null>(null);
-  const [excelData, setExcelData] = useState<ExcelDocumentData | null>(null);
-  const [wordData, setWordData] = useState<WordDocumentData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  // Reserved for future specialized viewer implementations
+  const [_excelData, setExcelData] = useState<ExcelDocumentData | null>(null);
+  const [_wordData, setWordData] = useState<WordDocumentData | null>(null);
+  const [_loading, setLoading] = useState(false);
+  const [_error, setError] = useState<string | null>(null);
 
   // Determine document type when RID changes
   useEffect(() => {
@@ -121,53 +120,6 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
     }
   };
 
-  // Render appropriate viewer based on document type
-  const _renderContent = () => {
-    if (loading) {
-      return (
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-        </div>
-      );
-    }
-
-    if (error) {
-      return (
-        <div className="p-6">
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
-            Error loading document: {error}
-          </div>
-        </div>
-      );
-    }
-
-    switch (documentType) {
-      case 'excel':
-        return excelData ? (
-          <ExcelViewer
-            data={excelData}
-            onSheetChange={(sheetName) => {
-              console.log('Sheet changed:', sheetName);
-            }}
-          />
-        ) : null;
-
-      case 'word':
-        return wordData ? (
-          <WordViewer
-            data={wordData}
-            onTocItemClick={(itemId) => {
-              console.log('TOC item clicked:', itemId);
-            }}
-          />
-        ) : null;
-
-      case 'text':
-      default:
-        // Use default SlideoutPanel for text content
-        return null;
-    }
-  };
 
   // If we have a specialized viewer, render it in the panel
   if (documentType === 'excel' || documentType === 'word') {
