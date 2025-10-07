@@ -172,29 +172,17 @@ def _parse_excel_file(file_path: Path, sheet_name: str = None, max_rows: int = 1
             # Clean column names
             df.columns = [str(col).strip() for col in df.columns]
 
-            # Convert to records (handle NaN values and numpy types)
-            # Replace NaN with None for proper JSON serialization
-            df_clean = df.where(pd.notnull(df), None)
+            # Convert DataFrame to records with proper type handling
+            # This is the CORRECT way: pandas handles all type conversions
+            import json
 
-            # Convert to records with Python native types
-            records = []
-            for idx in range(len(df_clean)):
-                record = {'__row_id__': offset + idx}
-                for col in df_clean.columns:
-                    val = df_clean[col].iloc[idx]
-                    # Convert pandas/numpy types to Python native types
-                    if val is None:
-                        record[col] = None
-                    elif pd.api.types.is_integer_dtype(df[col].dtype):
-                        record[col] = int(val) if val is not None else None
-                    elif pd.api.types.is_float_dtype(df[col].dtype):
-                        record[col] = float(val) if val is not None else None
-                    elif pd.api.types.is_bool_dtype(df[col].dtype):
-                        record[col] = bool(val) if val is not None else None
-                    else:
-                        # String, datetime, or other types
-                        record[col] = str(val) if val not in [None, ''] else ''
-                records.append(record)
+            # Convert to JSON string then parse back - this handles ALL numpy types automatically
+            records_json = df.to_json(orient='records', date_format='iso')
+            records = json.loads(records_json)
+
+            # Add row IDs for DataGrid (do this AFTER type conversion)
+            for idx, record in enumerate(records):
+                record['__row_id__'] = offset + idx
 
             # Generate column definitions
             columns = [
@@ -276,11 +264,12 @@ def _estimate_column_width(column_name: str, series: pd.Series, max_width: int =
     if len(valid_values) > 0:
         # Convert to string and calculate lengths safely
         lengths = valid_values.astype(str).str.len()
-        max_content_length = lengths.max()
+        max_content_length = int(lengths.max())  # Convert numpy int64 to Python int
         content_width = min(max_content_length * 8 + 20, max_width)
     else:
         # Column is all None/NaN - use minimal width
         content_width = 100
 
     # Return the larger of name width and content width, with minimum of 100px
-    return max(name_width, content_width, 100)
+    # Ensure return value is Python int, not numpy int64
+    return int(max(name_width, content_width, 100))
