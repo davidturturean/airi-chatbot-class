@@ -205,6 +205,9 @@ def _parse_excel_file(file_path: Path, sheet_name: str = None, max_rows: int = 1
                     'filterable': True
                 })
 
+            # Ensure total_rows is valid (handle None from failed row count)
+            total_rows = total_rows or len(records)
+
             sheets_data.append({
                 'sheet_name': current_sheet,
                 'columns': columns,
@@ -216,6 +219,12 @@ def _parse_excel_file(file_path: Path, sheet_name: str = None, max_rows: int = 1
         except Exception as e:
             logger.error(f"Error parsing sheet {current_sheet}: {str(e)}")
             continue
+
+    # Check if any sheets were successfully parsed
+    if not sheets_data or all(len(sheet.get('rows', [])) == 0 for sheet in sheets_data):
+        error_msg = "Failed to parse Excel file. The file may contain unsupported formatting or be corrupted."
+        logger.error(f"All sheets failed to parse or contain no data. Sheets attempted: {sheet_names}")
+        raise Exception(error_msg)
 
     return {
         'sheets': sheets_data,
@@ -234,16 +243,27 @@ def _get_sheet_row_count(file_path: Path, sheet_name: str) -> int:
         return 0
 
 def _estimate_column_width(column_name: str, series: pd.Series, max_width: int = 300) -> int:
-    """Estimate appropriate column width based on content."""
+    """
+    Estimate appropriate column width based on content.
+    Safely handles None/NaN values to prevent comparison errors.
+    """
     # Base width on column name
     name_width = len(column_name) * 8 + 20
 
-    # Sample first 100 rows for content width
-    sample = series.head(100).astype(str)
-    if len(sample) > 0:
-        max_content_length = sample.str.len().max()
+    # Sample first 100 rows for content width, filtering out None/NaN values
+    sample = series.head(100)
+
+    # Filter out None/NaN values before calculating lengths
+    valid_values = sample[pd.notna(sample)]
+
+    if len(valid_values) > 0:
+        # Convert to string and calculate lengths safely
+        lengths = valid_values.astype(str).str.len()
+        max_content_length = lengths.max()
         content_width = min(max_content_length * 8 + 20, max_width)
     else:
+        # Column is all None/NaN - use minimal width
         content_width = 100
 
+    # Return the larger of name width and content width, with minimum of 100px
     return max(name_width, content_width, 100)

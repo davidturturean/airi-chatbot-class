@@ -36,6 +36,18 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
     }
   }, [props.rid, props.isOpen]);
 
+  // Clean up state when panel closes to prevent stale data on next open
+  useEffect(() => {
+    if (!props.isOpen) {
+      // Panel is closing - clear all state for clean slate
+      setDocumentType(null);
+      setExcelData(null);
+      setWordData(null);
+      setLoading(false);
+      setError(null);
+    }
+  }, [props.isOpen]);
+
   const determineDocumentType = async (rid: string) => {
     try {
       // Check preview cache first
