@@ -33,6 +33,7 @@ export interface CellFormatting {
   fontColor?: string;
   bold?: boolean;
   italic?: boolean;
+  underline?: boolean;
   fontSize?: number;
   borderColor?: string;
 }
@@ -130,6 +131,7 @@ export interface HoverPreviewProps {
   delay?: number;
   onOpen?: () => void;
   onClose?: () => void;
+  onOpenFull?: () => void;
 }
 
 export interface SlideoutPanelProps {

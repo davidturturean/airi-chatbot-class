@@ -29,6 +29,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
   const [zoom, setZoom] = useState(100);
   const [highlightedCell, setHighlightedCell] = useState<string | null>(null);
   const [searchMatches, setSearchMatches] = useState<Set<string>>(new Set());
+  const [hasAutoNavigated, setHasAutoNavigated] = useState(false);
 
   const gridRef = useRef<any>(null);
 
@@ -38,12 +39,15 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
 
   // Navigation to source location when component mounts or sourceLocation changes
   useEffect(() => {
-    if (sourceLocation && currentSheetData) {
+    if (sourceLocation && currentSheetData && !hasAutoNavigated) {
       // Auto-select correct sheet if different
       if (sourceLocation.sheet !== activeSheet) {
         setActiveSheet(sourceLocation.sheet);
         return; // Will trigger again when activeSheet changes
       }
+
+      // Mark that we've completed auto-navigation
+      setHasAutoNavigated(true);
 
       // Scroll to the row and highlight the cell
       const targetRow = sourceLocation.row;
@@ -67,7 +71,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         }
       }, 100);
     }
-  }, [sourceLocation, activeSheet, currentSheetData]);
+  }, [sourceLocation, activeSheet, currentSheetData, hasAutoNavigated]);
 
   // Search functionality - finds matches but doesn't filter
   useEffect(() => {
@@ -109,16 +113,34 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
 
     const formatting = currentSheetData.formatting || {};
 
+    // Debug: Log formatting object on sheet change
+    if (Object.keys(formatting).length > 0) {
+      console.log(`[ExcelViewer] Loaded ${Object.keys(formatting).length} formatted cells for sheet "${currentSheetData.sheet_name}"`);
+      console.log('[ExcelViewer] Sample formatting keys:', Object.keys(formatting).slice(0, 5));
+      console.log('[ExcelViewer] Sample formatting values:', Object.values(formatting).slice(0, 3));
+    }
+
     // Custom cell renderer that applies formatting
     const FormattedCell = (props: RenderCellProps<any>) => {
       const { row, column, rowIdx } = props;
       const value = row[column.key];
 
       // Determine cell key for formatting lookup
-      // Need to map column.key to column index
-      const colIdx = currentSheetData.columns.findIndex(c => c.key === column.key);
-      const cellKey = `${rowIdx}_${colIdx}`;
+      // Backend formatting uses 1-indexed Excel column numbers
+      // Frontend columns array includes __row_id__ as first column
+      // So we need to find the Excel column index by excluding __row_id__ from the count
+      const dataColumns = currentSheetData.columns.filter(c => c.key !== '__row_id__');
+      const excelColIdx = dataColumns.findIndex(c => c.key === column.key) + 1; // +1 for 1-indexed Excel columns
+
+      // Backend key format: "dataGridRowIdx_excelColIdx"
+      // rowIdx from DataGrid is already 0-indexed and matches what backend generates (row_idx - offset)
+      const cellKey = `${rowIdx}_${excelColIdx}`;
       const fmt: CellFormatting | undefined = formatting[cellKey];
+
+      // Debug logging (can be removed after verification)
+      if (fmt && rowIdx < 5 && excelColIdx <= 3) {
+        console.log(`Cell ${cellKey}: Found formatting`, fmt);
+      }
 
       // Check if this cell should be highlighted (citation target or search match)
       const isCitationHighlight = highlightedCell === `${rowIdx}_citation`;
@@ -138,6 +160,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         if (fmt.fontColor) style.color = fmt.fontColor;
         if (fmt.bold) style.fontWeight = 'bold';
         if (fmt.italic) style.fontStyle = 'italic';
+        if (fmt.underline) style.textDecoration = 'underline';
         if (fmt.fontSize) style.fontSize = `${fmt.fontSize}px`;
       }
 
@@ -209,6 +232,8 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
     setSortColumns([]);
     setHighlightedCell(null);
     setSearchMatches(new Set());
+    // Don't re-trigger auto-navigation when user manually changes sheets
+    // hasAutoNavigated remains true to prevent re-highlighting
   };
 
   const handleExport = () => {
@@ -226,11 +251,11 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
   };
 
   const handleZoomIn = () => {
-    setZoom(prev => Math.min(prev + 25, 150));
+    setZoom(prev => Math.min(prev + 25, 300));
   };
 
   const handleZoomOut = () => {
-    setZoom(prev => Math.max(prev - 25, 75));
+    setZoom(prev => Math.max(prev - 25, 10));
   };
 
   const handleZoomReset = () => {
@@ -248,7 +273,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
             <div className="flex items-center space-x-1 border border-gray-300 rounded-md bg-white">
               <button
                 onClick={handleZoomOut}
-                disabled={zoom <= 75}
+                disabled={zoom <= 10}
                 className="p-1.5 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Zoom out"
               >
@@ -259,7 +284,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
               </span>
               <button
                 onClick={handleZoomIn}
-                disabled={zoom >= 150}
+                disabled={zoom >= 300}
                 className="p-1.5 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Zoom in"
               >

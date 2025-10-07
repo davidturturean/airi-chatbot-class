@@ -27,7 +27,7 @@ export const CitationLink: React.FC<CitationLinkProps> = ({
   };
 
   return (
-    <HoverPreview rid={rid} sessionId={sessionId}>
+    <HoverPreview rid={rid} sessionId={sessionId} onOpenFull={() => openPanel(rid)}>
       <a
         href={`#${rid}`}
         onClick={handleClick}

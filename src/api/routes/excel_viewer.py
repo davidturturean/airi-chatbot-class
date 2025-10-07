@@ -295,7 +295,9 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
         formatting = {}
 
         # Account for offset and limit rows
-        start_row = offset + 1  # Excel rows are 1-indexed
+        # Excel rows are 1-indexed, but we skip offset rows
+        # We need to read Excel rows [offset+1, offset+max_rows] (inclusive)
+        start_row = offset + 1  # First Excel row to read (1-indexed)
         end_row = min(start_row + max_rows, sheet.max_row + 1)
 
         for row_idx in range(start_row, end_row):
@@ -330,14 +332,25 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                             fmt['bold'] = True
                         if cell.font.italic:
                             fmt['italic'] = True
+                        if cell.font.underline:
+                            fmt['underline'] = True
                         if cell.font.size:
                             fmt['fontSize'] = cell.font.size
 
                     # Only add to formatting dict if we found any formatting
                     if fmt:
-                        # Key format: "row_col" (accounting for offset in row)
-                        cell_key = f"{row_idx - offset}_{col_idx}"
+                        # Key format: "dataGridRowIdx_excelColIdx"
+                        # row_idx is Excel row (1-indexed), offset is rows skipped
+                        # DataGrid row index = row_idx - offset - 1 (because we started at offset+1)
+                        # Simplified: row_idx - (offset + 1) = row_idx - offset - 1
+                        # But since we start at offset+1, the first row is (offset+1) - offset - 1 = 0 ✓
+                        datagrid_row_idx = row_idx - offset - 1
+                        cell_key = f"{datagrid_row_idx}_{col_idx}"
                         formatting[cell_key] = fmt
+
+                        # Debug logging for first few formatted cells
+                        if len(formatting) <= 5:
+                            logger.info(f"Cell formatting: Excel({row_idx},{col_idx}) -> DataGrid({datagrid_row_idx},{col_idx}) -> Key({cell_key}) -> {fmt}")
 
                 except Exception as cell_error:
                     # Skip cells that cause errors

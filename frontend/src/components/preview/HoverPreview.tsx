@@ -15,7 +15,8 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
   children,
   delay = 300,
   onOpen,
-  onClose
+  onClose,
+  onOpenFull
 }) => {
   const [preview, setPreview] = useState<DocumentPreview | null>(null);
   const [loading, setLoading] = useState(false);
@@ -202,7 +203,19 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
                 {/* Footer Actions */}
                 <div className="px-4 py-2 border-t border-gray-100 bg-gray-50">
                   <div className="flex items-center justify-between text-xs text-gray-500">
-                    <span>Click to open full view</span>
+                    {onOpenFull ? (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          onOpenFull();
+                        }}
+                        className="text-indigo-600 hover:text-indigo-800 font-medium cursor-pointer hover:underline"
+                      >
+                        Click to open full view
+                      </button>
+                    ) : (
+                      <span>Click to open full view</span>
+                    )}
                     <span className="font-medium">⌘K to search</span>
                   </div>
                 </div>
