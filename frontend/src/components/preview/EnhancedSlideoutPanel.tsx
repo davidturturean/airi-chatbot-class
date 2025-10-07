@@ -98,12 +98,28 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
     setError(null);
 
     try {
-      const response = await fetch(`/api/document/${rid}/excel?session_id=${props.sessionId}`);
+      const fetchStart = performance.now();
+
+      // Add timeout to prevent infinite waiting
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
+      const response = await fetch(`/api/document/${rid}/excel?session_id=${props.sessionId}`, {
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      const fetchTime = performance.now() - fetchStart;
+      console.log(`Excel fetch completed in ${fetchTime.toFixed(2)}ms, status: ${response.status}`);
+
       if (!response.ok) {
-        throw new Error('Failed to load Excel data');
+        throw new Error(`Failed to load Excel data: ${response.status} ${response.statusText}`);
       }
 
+      const parseStart = performance.now();
       const data = await response.json();
+      const parseTime = performance.now() - parseStart;
+      console.log(`Excel JSON parsing completed in ${parseTime.toFixed(2)}ms, data size: ${JSON.stringify(data).length} bytes`);
 
       // Enhance with source_location from preview cache if available
       const preview = previewCache.getPreview(rid);
@@ -117,7 +133,14 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
       const totalTime = performance.now() - startTime;
       console.log(`✅ Excel data loaded and ready to render in ${totalTime.toFixed(2)}ms`);
     } catch (err) {
-      setError((err as Error).message);
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      if (errorMessage.includes('aborted')) {
+        console.error(`❌ Excel fetch timeout after 30 seconds for ${rid}`);
+        setError('Excel file too large or server timeout. Please try a smaller file or contact support.');
+      } else {
+        console.error(`❌ Excel fetch error for ${rid}:`, errorMessage);
+        setError(errorMessage);
+      }
     } finally {
       setLoading(false);
     }
