@@ -415,6 +415,18 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
           50% { opacity: 0.7; }
         }
 
+        /* Remove cell borders to allow color-coded cells to visually merge */
+        /* This is critical for databases where adjacent cells with same color form visual blocks */
+        .rdg-cell {
+          border-right: none !important;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+        }
+
+        /* Remove white borders from formatted cells */
+        .excel-viewer .rdg {
+          --rdg-border-color: transparent !important;
+        }
+
         /* Citation highlight - MUST use !important to override DataGrid CSS */
         .citation-highlighted-cell {
           background-color: #FFD700 !important;
