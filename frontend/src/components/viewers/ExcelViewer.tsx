@@ -153,7 +153,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         height: '100%',
         display: 'flex',
         alignItems: 'center',
-        padding: '0 8px',
+        padding: '2px 8px',  // Minimal padding to match CSS
         margin: 0,
         border: 'none',
         boxSizing: 'border-box',
@@ -418,40 +418,51 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
           50% { opacity: 0.7; }
         }
 
-        /* AGGRESSIVE border removal - critical for color-coded database readability */
-        /* Adjacent cells with same color MUST merge visually into continuous blocks */
+        /* Google Drive Excel visualization: very thin, light gray gridlines */
+        /* Cells with same background color should touch without gaps */
 
-        /* Remove ALL cell borders */
-        .rdg-cell {
-          border: none !important;
-          border-right: none !important;
+        .excel-viewer .rdg {
+          --rdg-border-color: #d0d0d0;
+          --rdg-row-hover-background-color: transparent;
+          border: 1px solid #d0d0d0;
+        }
+
+        /* Thin gridlines like Google Drive - 1px light gray */
+        .excel-viewer .rdg-cell {
+          border-right: 1px solid #e0e0e0 !important;
+          border-bottom: 1px solid #e0e0e0 !important;
           border-left: none !important;
           border-top: none !important;
-          border-bottom: none !important;
+          padding: 0 !important;
           outline: none !important;
           box-shadow: none !important;
         }
 
-        /* Remove grid lines */
-        .excel-viewer .rdg {
-          --rdg-border-color: transparent !important;
-          border: none !important;
-        }
-
-        /* Remove borders from all DataGrid elements */
-        .excel-viewer .rdg-row {
-          border: none !important;
-          border-bottom: none !important;
-        }
-
-        .excel-viewer .rdg-header-row {
-          border-bottom: 1px solid #e5e7eb !important;
-        }
-
-        /* Ensure cell content divs also have no borders */
+        /* Remove all padding/margin that creates gaps */
         .excel-viewer .rdg-cell > div {
+          margin: 0 !important;
+          padding: 2px 8px !important;
           border: none !important;
           outline: none !important;
+          box-sizing: border-box !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+
+        /* Row styling */
+        .excel-viewer .rdg-row {
+          border: none !important;
+        }
+
+        /* Header row */
+        .excel-viewer .rdg-header-row {
+          border-bottom: 2px solid #d0d0d0 !important;
+          background-color: #f8f9fa !important;
+        }
+
+        .excel-viewer .rdg-header-row .rdg-cell {
+          font-weight: 600 !important;
+          border-right: 1px solid #e0e0e0 !important;
         }
 
         /* Citation highlight - MUST use !important to override DataGrid CSS */
