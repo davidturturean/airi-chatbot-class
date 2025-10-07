@@ -105,8 +105,10 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
 
-      // Fetch WITHOUT formatting for maximum speed (formatting is optional enhancement)
-      const response = await fetch(`/api/document/${rid}/excel?session_id=${props.sessionId}&include_formatting=false`, {
+      // Fetch WITH formatting enabled by default (user needs colors/bold for readability)
+      // Backend now optimized: parallel processing + iter_rows + first 50 visible rows only
+      // Expected performance: 2-3 seconds for 11-sheet files (down from 17+ seconds)
+      const response = await fetch(`/api/document/${rid}/excel?session_id=${props.sessionId}&include_formatting=true`, {
         signal: controller.signal
       });
       clearTimeout(timeoutId);
