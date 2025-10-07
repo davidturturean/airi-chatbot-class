@@ -154,6 +154,9 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         display: 'flex',
         alignItems: 'center',
         padding: '0 8px',
+        margin: 0,
+        border: 'none',
+        boxSizing: 'border-box',
       };
 
       // Apply cell formatting from Excel FIRST (so citation highlight can override)
@@ -415,16 +418,40 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
           50% { opacity: 0.7; }
         }
 
-        /* Remove cell borders to allow color-coded cells to visually merge */
-        /* This is critical for databases where adjacent cells with same color form visual blocks */
+        /* AGGRESSIVE border removal - critical for color-coded database readability */
+        /* Adjacent cells with same color MUST merge visually into continuous blocks */
+
+        /* Remove ALL cell borders */
         .rdg-cell {
+          border: none !important;
           border-right: none !important;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+          border-left: none !important;
+          border-top: none !important;
+          border-bottom: none !important;
+          outline: none !important;
+          box-shadow: none !important;
         }
 
-        /* Remove white borders from formatted cells */
+        /* Remove grid lines */
         .excel-viewer .rdg {
           --rdg-border-color: transparent !important;
+          border: none !important;
+        }
+
+        /* Remove borders from all DataGrid elements */
+        .excel-viewer .rdg-row {
+          border: none !important;
+          border-bottom: none !important;
+        }
+
+        .excel-viewer .rdg-header-row {
+          border-bottom: 1px solid #e5e7eb !important;
+        }
+
+        /* Ensure cell content divs also have no borders */
+        .excel-viewer .rdg-cell > div {
+          border: none !important;
+          outline: none !important;
         }
 
         /* Citation highlight - MUST use !important to override DataGrid CSS */
