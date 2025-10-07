@@ -376,10 +376,15 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
         # Excel rows are 1-indexed, but we skip offset rows
         # We need to read Excel rows [offset+1, offset+max_rows] (inclusive)
         start_row = offset + 1  # First Excel row to read (1-indexed)
-        end_row = min(start_row + max_rows, sheet.max_row + 1)
+
+        # Handle None values from sheet.max_row and sheet.max_column
+        max_row = sheet.max_row if sheet.max_row is not None else 1000
+        max_col = sheet.max_column if sheet.max_column is not None else 100
+
+        end_row = min(start_row + max_rows, max_row + 1)
 
         for row_idx in range(start_row, end_row):
-            for col_idx in range(1, min(sheet.max_column + 1, 100)):  # Limit to 100 columns for performance
+            for col_idx in range(1, min(max_col + 1, 100)):  # Limit to 100 columns for performance
                 try:
                     cell = sheet.cell(row_idx, col_idx)
 
@@ -437,7 +442,9 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
         workbook.close()
 
         if formatting:
-            logger.info(f"Extracted formatting for {len(formatting)} cells in sheet '{sheet_name}'")
+            logger.info(f"✅ Extracted formatting for {len(formatting)} cells in sheet '{sheet_name}'")
+        else:
+            logger.warning(f"⚠️ No formatted cells found in sheet '{sheet_name}' (max_row={max_row}, max_col={max_col})")
 
         return formatting
 
