@@ -126,7 +126,33 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
                       <p className="text-xs text-gray-500 mt-0.5">{preview.rid}</p>
                     </div>
                     <div className="ml-3 flex-shrink-0">
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                      <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                        preview.preview_type === 'excel' ? 'bg-green-100 text-green-800' :
+                        preview.preview_type === 'word' ? 'bg-blue-100 text-blue-800' :
+                        preview.preview_type === 'pdf' ? 'bg-red-100 text-red-800' :
+                        preview.preview_type === 'image' ? 'bg-purple-100 text-purple-800' :
+                        'bg-gray-100 text-gray-800'
+                      }`}>
+                        {preview.preview_type === 'excel' && (
+                          <svg className="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                          </svg>
+                        )}
+                        {preview.preview_type === 'word' && (
+                          <svg className="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                        {preview.preview_type === 'pdf' && (
+                          <svg className="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                        {preview.preview_type === 'image' && (
+                          <svg className="h-3 w-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                          </svg>
+                        )}
                         {preview.preview_type}
                       </span>
                     </div>

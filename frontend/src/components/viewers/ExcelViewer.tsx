@@ -177,7 +177,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
             onCellClick={handleCellClick}
             className="rdg-light h-full"
             style={{ height: '100%' }}
-            rowKeyGetter={(row) => row.id || JSON.stringify(row)}
+            rowKeyGetter={(row) => row.__row_id__ !== undefined ? row.__row_id__ : row.id || JSON.stringify(row)}
           />
         )}
 
