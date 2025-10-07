@@ -157,7 +157,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
 
       // Debug logging for citation highlighting
       if (isCitationHighlight && column.key !== '__row_id__') {
-        console.log(`🟡 Rendering gold highlight for row ${rowIdx}, column ${column.key}`);
+        console.log(`🟡 Rendering gold highlight for row ${rowIdx}, column ${column.key}, className will be: 'citation-highlighted-cell'`);
       }
 
       const style: React.CSSProperties = {
@@ -180,12 +180,15 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
 
       // Apply highlight for citation target (OVERRIDES cell formatting background)
       // This makes the entire row GOLD for maximum visibility
+      // Using !important doesn't work in inline styles, so we add a className
+      let cellClassName = '';
       if (isCitationHighlight) {
-        style.backgroundColor = '#FFD700';  // Bright gold
-        style.border = '2px solid #FFA500';  // Orange border for extra visibility
-        style.fontWeight = 'bold';  // Make text bold
-        style.animation = 'pulse 1.5s ease-in-out 3';  // Pulse animation
-        style.boxShadow = '0 0 10px rgba(255, 215, 0, 0.5)';  // Glow effect
+        cellClassName = 'citation-highlighted-cell';
+        // Still apply inline styles as fallback
+        style.backgroundColor = '#FFD700';
+        style.border = '2px solid #FFA500';
+        style.fontWeight = 'bold';
+        style.boxShadow = '0 0 10px rgba(255, 215, 0, 0.5)';
       }
 
       // Apply highlight for search matches (yellow background)
@@ -193,7 +196,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         style.backgroundColor = '#ffeb3b';
       }
 
-      return <div style={style}>{value !== null && value !== undefined ? String(value) : ''}</div>;
+      return <div style={style} className={cellClassName}>{value !== null && value !== undefined ? String(value) : ''}</div>;
     };
 
     return currentSheetData.columns.map(col => ({
@@ -409,11 +412,22 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         </div>
       )}
 
-      {/* Add pulse animation for citation highlight */}
+      {/* Add pulse animation and citation highlight styles */}
       <style>{`
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.7; }
+        }
+
+        /* Citation highlight - MUST use !important to override DataGrid CSS */
+        .citation-highlighted-cell {
+          background-color: #FFD700 !important;
+          border: 2px solid #FFA500 !important;
+          font-weight: bold !important;
+          box-shadow: 0 0 10px rgba(255, 215, 0, 0.5) !important;
+          animation: pulse 1.5s ease-in-out 3 !important;
+          z-index: 100 !important;
+          position: relative !important;
         }
       `}</style>
     </div>
