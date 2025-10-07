@@ -21,6 +21,22 @@ export interface DocumentMetadata {
   page_count?: number;
 }
 
+export interface ExcelSourceLocation {
+  sheet: string;
+  row: number;
+  column?: string;
+  cell?: string;
+}
+
+export interface CellFormatting {
+  bgColor?: string;
+  fontColor?: string;
+  bold?: boolean;
+  italic?: boolean;
+  fontSize?: number;
+  borderColor?: string;
+}
+
 export interface DocumentPreview {
   rid: string;
   title: string;
@@ -30,6 +46,7 @@ export interface DocumentPreview {
   created_at: string;
   preview_type: 'text' | 'excel' | 'word' | 'pdf' | 'image';
   thumbnail?: string;
+  source_location?: ExcelSourceLocation;
 }
 
 export interface ExcelSheetData {
@@ -38,6 +55,7 @@ export interface ExcelSheetData {
   rows: Record<string, any>[];
   total_rows: number;
   has_more: boolean;
+  formatting?: Record<string, CellFormatting>;
 }
 
 export interface ExcelColumn {
@@ -55,6 +73,7 @@ export interface ExcelDocumentData {
   sheets: ExcelSheetData[];
   active_sheet: string;
   metadata: DocumentMetadata;
+  source_location?: ExcelSourceLocation;
 }
 
 export interface WordDocumentData {
@@ -128,6 +147,7 @@ export interface ExcelViewerProps {
   onSheetChange?: (sheetName: string) => void;
   onCellSelect?: (row: number, column: string) => void;
   onExport?: (sheetName: string, filteredData: any[]) => void;
+  sourceLocation?: ExcelSourceLocation;
 }
 
 export interface WordViewerProps {

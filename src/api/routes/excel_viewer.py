@@ -146,7 +146,7 @@ def _resolve_file_path(source_file: str) -> Path:
 def _parse_excel_file(file_path: Path, sheet_name: str = None, max_rows: int = 1000, offset: int = 0):
     """
     Parse Excel file and return structured data for the viewer.
-    Supports multiple sheets, pagination, and type inference.
+    Supports multiple sheets, pagination, type inference, and cell formatting.
     """
     # Read Excel file
     excel_file = pd.ExcelFile(str(file_path))
@@ -210,16 +210,25 @@ def _parse_excel_file(file_path: Path, sheet_name: str = None, max_rows: int = 1
                     'filterable': True
                 })
 
+            # Extract cell formatting
+            formatting = _extract_cell_formatting(file_path, current_sheet, offset, max_rows)
+
             # Ensure total_rows is valid (handle None from failed row count)
             total_rows = total_rows or len(records)
 
-            sheets_data.append({
+            sheet_data = {
                 'sheet_name': current_sheet,
                 'columns': columns,
                 'rows': records,
                 'total_rows': total_rows,
                 'has_more': offset + len(records) < total_rows
-            })
+            }
+
+            # Add formatting if available
+            if formatting:
+                sheet_data['formatting'] = formatting
+
+            sheets_data.append(sheet_data)
 
         except Exception as e:
             logger.error(f"Error parsing sheet {current_sheet}: {str(e)}")
@@ -273,3 +282,74 @@ def _estimate_column_width(column_name: str, series: pd.Series, max_width: int =
     # Return the larger of name width and content width, with minimum of 100px
     # Ensure return value is Python int, not numpy int64
     return int(max(name_width, content_width, 100))
+
+def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, max_rows: int = 1000):
+    """
+    Extract cell formatting information from Excel cells using openpyxl.
+    Returns dict mapping cell coordinates to formatting properties.
+    """
+    try:
+        workbook = openpyxl.load_workbook(str(file_path), data_only=False, read_only=True)
+        sheet = workbook[sheet_name]
+
+        formatting = {}
+
+        # Account for offset and limit rows
+        start_row = offset + 1  # Excel rows are 1-indexed
+        end_row = min(start_row + max_rows, sheet.max_row + 1)
+
+        for row_idx in range(start_row, end_row):
+            for col_idx in range(1, min(sheet.max_column + 1, 100)):  # Limit to 100 columns for performance
+                try:
+                    cell = sheet.cell(row_idx, col_idx)
+
+                    # Extract formatting if cell has any
+                    fmt = {}
+
+                    # Background color
+                    if cell.fill and cell.fill.start_color and cell.fill.start_color.rgb:
+                        rgb = cell.fill.start_color.rgb
+                        if isinstance(rgb, str) and len(rgb) >= 6:
+                            # Convert ARGB to RGB hex
+                            if len(rgb) == 8:  # ARGB format
+                                fmt['bgColor'] = f"#{rgb[2:]}"
+                            else:  # RGB format
+                                fmt['bgColor'] = f"#{rgb}" if not rgb.startswith('#') else rgb
+
+                    # Font formatting
+                    if cell.font:
+                        if cell.font.color and cell.font.color.rgb:
+                            rgb = cell.font.color.rgb
+                            if isinstance(rgb, str) and len(rgb) >= 6:
+                                if len(rgb) == 8:  # ARGB format
+                                    fmt['fontColor'] = f"#{rgb[2:]}"
+                                else:  # RGB format
+                                    fmt['fontColor'] = f"#{rgb}" if not rgb.startswith('#') else rgb
+
+                        if cell.font.bold:
+                            fmt['bold'] = True
+                        if cell.font.italic:
+                            fmt['italic'] = True
+                        if cell.font.size:
+                            fmt['fontSize'] = cell.font.size
+
+                    # Only add to formatting dict if we found any formatting
+                    if fmt:
+                        # Key format: "row_col" (accounting for offset in row)
+                        cell_key = f"{row_idx - offset}_{col_idx}"
+                        formatting[cell_key] = fmt
+
+                except Exception as cell_error:
+                    # Skip cells that cause errors
+                    continue
+
+        workbook.close()
+
+        if formatting:
+            logger.info(f"Extracted formatting for {len(formatting)} cells in sheet '{sheet_name}'")
+
+        return formatting
+
+    except Exception as e:
+        logger.warning(f"Could not extract cell formatting from {file_path}, sheet '{sheet_name}': {str(e)}")
+        return {}

@@ -98,6 +98,13 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
       }
 
       const data = await response.json();
+
+      // Enhance with source_location from preview cache if available
+      const preview = previewCache.getPreview(rid);
+      if (preview && preview.source_location) {
+        data.source_location = preview.source_location;
+      }
+
       setExcelData(data);
       previewCache.setExcelData(rid, data);
     } catch (err) {
@@ -243,6 +250,7 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
           <div className="flex-1 overflow-hidden">
             <ExcelViewer
               data={excelData}
+              sourceLocation={excelData.source_location}
               onSheetChange={(sheetName) => console.log('Sheet changed:', sheetName)}
               onCellSelect={(row, col) => console.log('Cell selected:', row, col)}
               onExport={(sheetName, rows) => console.log('Export:', sheetName, rows)}

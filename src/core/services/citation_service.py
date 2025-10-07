@@ -387,36 +387,36 @@ class CitationService:
         try:
             metadata = doc.metadata or {}
             content = doc.page_content
-            
+
             # Replace literal \n with actual newlines in content
             if content and '\\n' in content:
                 content = content.replace('\\n', '\n')
-            
+
             # Parse title from metadata or content
             title = metadata.get('title', '')
-            
+
             # Clean up title - replace literal \n with space
             if title and '\\n' in title:
                 title = title.replace('\\n', ' ').strip()
-            
+
             # If no title in metadata, try to extract from content
             # Also fix if title is just the filename like "preprint_raw.txt"
             if not title or title == rid or 'preprint_raw.txt' in title:
                 lines = content.split('\n') if content else []
-                
+
                 # Look for "Title:" prefix first
                 for line in lines:
                     if line.startswith('Title:'):
                         title = line.replace('Title:', '').strip()
                         break
-                
+
                 # If no "Title:" found or still have preprint_raw.txt, try to extract from first meaningful line
                 if not title or title == rid or 'preprint_raw.txt' in title:
                     for line in lines:
                         # Skip metadata lines and empty lines
                         line = line.strip()
-                        if (line and 
-                            not line.startswith('Repository ID:') and 
+                        if (line and
+                            not line.startswith('Repository ID:') and
                             not line.startswith('Source:') and
                             not line.startswith('Domain:') and
                             not line.startswith('Sub-domain:') and
@@ -429,11 +429,14 @@ class CitationService:
                             title = line[:100]
                             if title:
                                 break
-            
+
             # Final fallback
             if not title:
                 title = f"Document {rid}"
-            
+
+            # Extract Excel source location if available
+            source_location = self._extract_excel_source_location(metadata)
+
             # Create JSON snippet
             snippet_data = {
                 "rid": rid,
@@ -448,12 +451,19 @@ class CitationService:
                     "timing": self._map_timing_value(metadata.get('timing', '')),
                     "description": metadata.get('description', ''),
                     "source_file": metadata.get('url', metadata.get('source_file', '')),
-                    "row_number": metadata.get('row', None)
+                    "row_number": metadata.get('row', None),
+                    "sheet": metadata.get('sheet', None),
+                    "file_type": metadata.get('file_type', '')
                 },
                 "highlights": metadata.get('search_terms', []),
                 "created_at": datetime.now().isoformat()
             }
-            
+
+            # Add source_location to top-level if Excel file
+            if source_location:
+                snippet_data["source_location"] = source_location
+                logger.info(f"Added Excel source location for {rid}: {source_location}")
+
             # Save to database
             success = snippet_db.save_snippet(session_id, rid, snippet_data)
             if success:
@@ -462,7 +472,7 @@ class CitationService:
                 logger.error(f"Failed to save snippet {rid} to database")
                 # Fall back to file system
                 self._save_rid_snippet(doc, rid)
-            
+
         except Exception as e:
             logger.error(f"Error saving snippet to database for {rid}: {str(e)}")
             # Fall back to file system
@@ -492,6 +502,39 @@ class CitationService:
             '2': 'Post-deployment'
         }
         return timing_map.get(str(timing), timing)
+
+    def _extract_excel_source_location(self, metadata: dict) -> dict:
+        """
+        Extract Excel source location from metadata.
+
+        Returns:
+            Dictionary with sheet, row, column information or None
+        """
+        source_file = metadata.get('url', metadata.get('source_file', ''))
+
+        # Only process Excel files
+        if not source_file or not (source_file.endswith('.xlsx') or source_file.endswith('.xls')):
+            return None
+
+        sheet = metadata.get('sheet')
+        row = metadata.get('row')
+
+        # Need at least sheet and row for navigation
+        if not sheet or row is None:
+            return None
+
+        location = {
+            'sheet': sheet,
+            'row': int(row)
+        }
+
+        # Try to determine column if possible
+        # For now, we'll set it in future enhancements when we track specific columns
+        # column = metadata.get('column')
+        # if column:
+        #     location['column'] = column
+
+        return location
     
     def get_snippet_by_rid(self, rid: str, include_metadata: bool = False) -> str:
         """Get snippet content by RID."""

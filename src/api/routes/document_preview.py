@@ -119,7 +119,7 @@ def _convert_snippet_to_preview(snippet_data):
     # Determine preview type from file type or content
     preview_type = _determine_preview_type(metadata, snippet_data.get('content', ''))
 
-    return {
+    preview = {
         "rid": snippet_data.get('rid', ''),
         "title": snippet_data.get('title', 'Untitled'),
         "content": snippet_data.get('content', ''),
@@ -129,6 +129,12 @@ def _convert_snippet_to_preview(snippet_data):
         "preview_type": preview_type,
         "thumbnail": None  # TODO: Generate thumbnails for images/PDFs
     }
+
+    # Add source_location if available (for Excel files)
+    if 'source_location' in snippet_data:
+        preview['source_location'] = snippet_data['source_location']
+
+    return preview
 
 def _create_preview_from_snippet(rid, snippet):
     """Create preview data from citation service snippet."""
