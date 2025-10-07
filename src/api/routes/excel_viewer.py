@@ -172,12 +172,29 @@ def _parse_excel_file(file_path: Path, sheet_name: str = None, max_rows: int = 1
             # Clean column names
             df.columns = [str(col).strip() for col in df.columns]
 
-            # Convert to records (handle NaN values)
-            records = df.fillna('').to_dict('records')
+            # Convert to records (handle NaN values and numpy types)
+            # Replace NaN with None for proper JSON serialization
+            df_clean = df.where(pd.notnull(df), None)
 
-            # Add row IDs for DataGrid
-            for idx, record in enumerate(records):
-                record['__row_id__'] = offset + idx
+            # Convert to records with Python native types
+            records = []
+            for idx in range(len(df_clean)):
+                record = {'__row_id__': offset + idx}
+                for col in df_clean.columns:
+                    val = df_clean[col].iloc[idx]
+                    # Convert pandas/numpy types to Python native types
+                    if val is None:
+                        record[col] = None
+                    elif pd.api.types.is_integer_dtype(df[col].dtype):
+                        record[col] = int(val) if val is not None else None
+                    elif pd.api.types.is_float_dtype(df[col].dtype):
+                        record[col] = float(val) if val is not None else None
+                    elif pd.api.types.is_bool_dtype(df[col].dtype):
+                        record[col] = bool(val) if val is not None else None
+                    else:
+                        # String, datetime, or other types
+                        record[col] = str(val) if val not in [None, ''] else ''
+                records.append(record)
 
             # Generate column definitions
             columns = [
