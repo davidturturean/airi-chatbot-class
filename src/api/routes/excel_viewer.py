@@ -74,6 +74,7 @@ def get_excel_data(rid):
         sheet_name = request.args.get('sheet')
         max_rows = int(request.args.get('max_rows', 1000))
         offset = int(request.args.get('offset', 0))
+        include_formatting = request.args.get('include_formatting', 'false').lower() == 'true'
 
         # Get document metadata
         snippet_data = snippet_db.get_snippet(session_id, rid)
@@ -109,9 +110,9 @@ def get_excel_data(rid):
 
         # Cache miss - parse Excel file
         cache_stats['misses'] += 1
-        logger.info(f"Excel cache MISS for {rid} - Parsing file...")
+        logger.info(f"Excel cache MISS for {rid} - Parsing file... (include_formatting={include_formatting})")
 
-        excel_data = _parse_excel_file(file_path, sheet_name, max_rows, offset)
+        excel_data = _parse_excel_file(file_path, sheet_name, max_rows, offset, include_formatting)
 
         # Add metadata
         excel_data['rid'] = rid
@@ -221,10 +222,17 @@ def _resolve_file_path(source_file: str) -> Path:
 
     return None
 
-def _parse_excel_file(file_path: Path, sheet_name: str = None, max_rows: int = 1000, offset: int = 0):
+def _parse_excel_file(file_path: Path, sheet_name: str = None, max_rows: int = 1000, offset: int = 0, include_formatting: bool = False):
     """
     Parse Excel file and return structured data for the viewer.
     Supports multiple sheets, pagination, type inference, and cell formatting.
+
+    Args:
+        file_path: Path to Excel file
+        sheet_name: Optional specific sheet to parse (None = all sheets)
+        max_rows: Maximum rows to return per sheet
+        offset: Row offset for pagination
+        include_formatting: Whether to extract cell formatting (slow for large files)
     """
     # Read Excel file
     excel_file = pd.ExcelFile(str(file_path))
@@ -288,9 +296,6 @@ def _parse_excel_file(file_path: Path, sheet_name: str = None, max_rows: int = 1
                     'filterable': True
                 })
 
-            # Extract cell formatting
-            formatting = _extract_cell_formatting(file_path, current_sheet, offset, max_rows)
-
             # Ensure total_rows is valid (handle None from failed row count)
             total_rows = total_rows or len(records)
 
@@ -302,9 +307,15 @@ def _parse_excel_file(file_path: Path, sheet_name: str = None, max_rows: int = 1
                 'has_more': offset + len(records) < total_rows
             }
 
-            # Add formatting if available
-            if formatting:
-                sheet_data['formatting'] = formatting
+            # Extract cell formatting ONLY if requested (this is the slow part!)
+            if include_formatting:
+                formatting_start = datetime.now()
+                formatting = _extract_cell_formatting(file_path, current_sheet, offset, max_rows)
+                formatting_time = (datetime.now() - formatting_start).total_seconds() * 1000
+                logger.info(f"Cell formatting extraction took {formatting_time:.2f}ms for sheet '{current_sheet}'")
+
+                if formatting:
+                    sheet_data['formatting'] = formatting
 
             sheets_data.append(sheet_data)
 

@@ -101,10 +101,12 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
       const fetchStart = performance.now();
 
       // Add timeout to prevent infinite waiting
+      // Increased from 30s to 60s to handle large Excel files with multiple sheets
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
 
-      const response = await fetch(`/api/document/${rid}/excel?session_id=${props.sessionId}`, {
+      // Fetch WITHOUT formatting for maximum speed (formatting is optional enhancement)
+      const response = await fetch(`/api/document/${rid}/excel?session_id=${props.sessionId}&include_formatting=false`, {
         signal: controller.signal
       });
       clearTimeout(timeoutId);
@@ -135,7 +137,7 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       if (errorMessage.includes('aborted')) {
-        console.error(`❌ Excel fetch timeout after 30 seconds for ${rid}`);
+        console.error(`❌ Excel fetch timeout after 60 seconds for ${rid}`);
         setError('Excel file too large or server timeout. Please try a smaller file or contact support.');
       } else {
         console.error(`❌ Excel fetch error for ${rid}:`, errorMessage);

@@ -112,7 +112,8 @@ class PreviewCacheManager {
 
     const fetchPromise = (async () => {
       try {
-        const response = await fetch(`/api/document/${rid}/excel?session_id=${this.sessionId}`);
+        // Prefetch WITHOUT formatting for maximum speed (formatting is optional enhancement)
+        const response = await fetch(`/api/document/${rid}/excel?session_id=${this.sessionId}&include_formatting=false`);
 
         if (!response.ok) {
           throw new Error(`Failed to prefetch Excel data: ${response.statusText}`);
