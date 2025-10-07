@@ -6,7 +6,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
-import { Search, Filter, Grid, List as ListIcon, FileText, FileSpreadsheet, FileImage, File } from 'lucide-react';
+import { Search, Grid, List as ListIcon, FileText, FileSpreadsheet, FileImage, File } from 'lucide-react';
 import type { CitationGalleryProps, CitationGalleryItem } from '../../types/document-preview';
 
 type ViewMode = 'grid' | 'list';
@@ -106,7 +106,7 @@ export const CitationGallery: React.FC<CitationGalleryProps> = ({
   }, [filteredItems, groupBy]);
 
   // Get unique filter values
-  const filterOptions = useMemo(() => {
+  const _filterOptions = useMemo(() => {
     return {
       domains: [...new Set(galleryItems.map(i => i.metadata.domain).filter(Boolean))],
       fileTypes: [...new Set(galleryItems.map(i => i.preview_type))],

@@ -168,7 +168,7 @@ function parseMessageWithCitations(text: string, sessionId: string): React.React
  */
 export function AIRIChatWithInteractiveReferences() {
   const [sessionId] = useState(() => `session-${Date.now()}`);
-  const [messages, setMessages] = useState([
+  const [messages] = useState([
     {
       role: 'assistant',
       content: 'Based on your question about AI governance, I found relevant information in our knowledge base [RID-00001] and [RID-00002].'

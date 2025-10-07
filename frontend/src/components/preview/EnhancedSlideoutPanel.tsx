@@ -4,12 +4,12 @@
  * Supports: text, Excel, Word, PDF, image
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SlideoutPanel } from './SlideoutPanel';
 import { ExcelViewer } from '../viewers/ExcelViewer';
 import { WordViewer } from '../viewers/WordViewer';
 import { previewCache } from '../../utils/preview-cache';
-import type { DocumentPreview, ExcelDocumentData, WordDocumentData } from '../../types/document-preview';
+import type { ExcelDocumentData, WordDocumentData } from '../../types/document-preview';
 
 interface EnhancedSlideoutPanelProps {
   isOpen: boolean;
@@ -122,7 +122,7 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
   };
 
   // Render appropriate viewer based on document type
-  const renderContent = () => {
+  const _renderContent = () => {
     if (loading) {
       return (
         <div className="flex items-center justify-center h-64">

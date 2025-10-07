@@ -4,10 +4,10 @@
  * Includes table of contents and in-document search
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import DOMPurify from 'dompurify';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
-import { Search, List, ChevronDown, ChevronRight } from 'lucide-react';
+import { Search, List, ChevronDown, ChevronRight, ChevronLeft } from 'lucide-react';
 import type { WordViewerProps, TableOfContentsItem } from '../../types/document-preview';
 
 export const WordViewer: React.FC<WordViewerProps> = ({

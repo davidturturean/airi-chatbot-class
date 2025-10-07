@@ -5,7 +5,7 @@
  * Features: Pin, navigation history, keyboard shortcuts
  */
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -22,7 +22,7 @@ export const SlideoutPanel: React.FC<SlideoutPanelProps> = ({
   onPin,
   onNavigate
 }) => {
-  const [document, setDocument] = useState<DocumentPreview | null>(null);
+  const [previewData, setPreviewData] = useState<DocumentPreview | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [history, setHistory] = useState<string[]>([]);
@@ -55,7 +55,7 @@ export const SlideoutPanel: React.FC<SlideoutPanelProps> = ({
     // Check cache first
     const cached = previewCache.getPreview(documentRid);
     if (cached) {
-      setDocument(cached);
+      setPreviewData(cached);
       setError(null);
       return;
     }
@@ -79,7 +79,7 @@ export const SlideoutPanel: React.FC<SlideoutPanelProps> = ({
         console.warn(`Panel load time exceeded target: ${loadTime.toFixed(2)}ms`);
       }
 
-      setDocument(data);
+      setPreviewData(data);
       previewCache.setPreview(documentRid, data);
     } catch (err) {
       setError((err as Error).message);
@@ -123,30 +123,30 @@ export const SlideoutPanel: React.FC<SlideoutPanelProps> = ({
       }
 
       // Cmd/Ctrl + C to copy content
-      if ((e.metaKey || e.ctrlKey) && e.key === 'c' && document) {
-        navigator.clipboard.writeText(document.content);
+      if ((e.metaKey || e.ctrlKey) && e.key === 'c' && previewData) {
+        navigator.clipboard.writeText(previewData.content);
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, isPinned, historyIndex, history, document, onClose, onPin, onNavigate]);
+    window.document.addEventListener('keydown', handleKeyDown);
+    return () => window.document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, isPinned, historyIndex, history, previewData, onClose, onPin, onNavigate]);
 
   const handleCopyContent = () => {
-    if (document) {
-      navigator.clipboard.writeText(document.content);
+    if (previewData) {
+      navigator.clipboard.writeText(previewData.content);
       // TODO: Add toast notification
     }
   };
 
   const handleDownload = () => {
-    if (!document) return;
+    if (!previewData) return;
 
-    const blob = new Blob([document.content], { type: 'text/plain' });
+    const blob = new Blob([previewData.content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = window.document.createElement('a');
     a.href = url;
-    a.download = `${document.rid}.txt`;
+    a.download = `${previewData.rid}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -188,11 +188,11 @@ export const SlideoutPanel: React.FC<SlideoutPanelProps> = ({
                   <div className="flex items-start justify-between">
                     <div className="flex-1 min-w-0">
                       <Dialog.Title className="text-lg font-semibold text-gray-900 truncate">
-                        {loading ? 'Loading...' : (document?.title || 'Document')}
+                        {loading ? 'Loading...' : (previewData?.title || 'Document')}
                       </Dialog.Title>
-                      {document && (
+                      {previewData && (
                         <Dialog.Description className="mt-1 text-sm text-gray-500">
-                          {document.rid}
+                          {previewData.rid}
                         </Dialog.Description>
                       )}
                     </div>
@@ -258,25 +258,25 @@ export const SlideoutPanel: React.FC<SlideoutPanelProps> = ({
                   </div>
 
                   {/* Metadata tags */}
-                  {document && (document.metadata.domain || document.metadata.entity || document.metadata.risk_category) && (
+                  {previewData && (previewData.metadata.domain || previewData.metadata.entity || previewData.metadata.risk_category) && (
                     <div className="mt-3 flex flex-wrap gap-2">
-                      {document.metadata.domain && (
+                      {previewData.metadata.domain && (
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-700">
-                          {document.metadata.domain}
+                          {previewData.metadata.domain}
                         </span>
                       )}
-                      {document.metadata.entity && (
+                      {previewData.metadata.entity && (
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
-                          {document.metadata.entity}
+                          {previewData.metadata.entity}
                         </span>
                       )}
-                      {document.metadata.risk_category && (
+                      {previewData.metadata.risk_category && (
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
-                          {document.metadata.risk_category}
+                          {previewData.metadata.risk_category}
                         </span>
                       )}
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
-                        {document.preview_type}
+                        {previewData.preview_type}
                       </span>
                     </div>
                   )}
@@ -298,13 +298,13 @@ export const SlideoutPanel: React.FC<SlideoutPanelProps> = ({
                         </div>
                       )}
 
-                      {document && !loading && !error && (
+                      {previewData && !loading && !error && (
                         <>
                           {/* Description */}
-                          {document.metadata.description && (
+                          {previewData.metadata.description && (
                             <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
                               <h3 className="text-sm font-semibold text-blue-900 mb-2">Description</h3>
-                              <p className="text-sm text-blue-800">{document.metadata.description}</p>
+                              <p className="text-sm text-blue-800">{previewData.metadata.description}</p>
                             </div>
                           )}
 
@@ -312,26 +312,26 @@ export const SlideoutPanel: React.FC<SlideoutPanelProps> = ({
                           <div className="prose prose-sm max-w-none">
                             <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                               <pre className="whitespace-pre-wrap font-sans text-sm text-gray-700">
-                                {document.content}
+                                {previewData.content}
                               </pre>
                             </div>
                           </div>
 
                           {/* Footer metadata */}
                           <div className="mt-6 pt-4 border-t border-gray-200 text-sm text-gray-500 space-y-1">
-                            {document.metadata.source_file && (
+                            {previewData.metadata.source_file && (
                               <p>
-                                <span className="font-medium">Source:</span> {document.metadata.source_file}
+                                <span className="font-medium">Source:</span> {previewData.metadata.source_file}
                               </p>
                             )}
-                            {document.metadata.row_number && (
+                            {previewData.metadata.row_number && (
                               <p>
-                                <span className="font-medium">Row:</span> {document.metadata.row_number}
+                                <span className="font-medium">Row:</span> {previewData.metadata.row_number}
                               </p>
                             )}
                             <p>
                               <span className="font-medium">Retrieved:</span>{' '}
-                              {new Date(document.created_at).toLocaleString()}
+                              {new Date(previewData.created_at).toLocaleString()}
                             </p>
                           </div>
                         </>

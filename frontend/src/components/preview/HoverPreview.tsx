@@ -20,7 +20,7 @@ export const HoverPreview: React.FC<HoverPreviewProps> = ({
   const [preview, setPreview] = useState<DocumentPreview | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [, setIsOpen] = useState(false);
 
   // Set session ID in cache
   useEffect(() => {

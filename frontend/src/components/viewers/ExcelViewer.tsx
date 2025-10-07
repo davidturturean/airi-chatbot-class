@@ -4,11 +4,11 @@
  * Performance target: <500ms Excel render time
  */
 
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo } from 'react';
 import DataGrid, { Column, SortColumn } from 'react-data-grid';
 import * as Tabs from '@radix-ui/react-tabs';
-import { Search, Download, Filter } from 'lucide-react';
-import type { ExcelViewerProps, ExcelSheetData } from '../../types/document-preview';
+import { Search, Download } from 'lucide-react';
+import type { ExcelViewerProps } from '../../types/document-preview';
 import 'react-data-grid/lib/styles.css';
 
 export const ExcelViewer: React.FC<ExcelViewerProps> = ({
