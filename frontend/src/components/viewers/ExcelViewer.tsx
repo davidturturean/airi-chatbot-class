@@ -213,7 +213,34 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         style.backgroundColor = '#ffeb3b';
       }
 
-      return <div style={style} className={cellClassName}>{value !== null && value !== undefined ? String(value) : ''}</div>;
+      // Render cell content
+      let content: React.ReactNode = value !== null && value !== undefined ? String(value) : '';
+
+      // If cell has hyperlink, render as clickable link
+      if (fmt?.hyperlink) {
+        content = (
+          <a
+            href={fmt.hyperlink}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: style.color || '#0066cc',
+              textDecoration: 'underline',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {content}
+          </a>
+        );
+      }
+
+      // If this is a merged cell (not anchor), show empty content
+      // The anchor cell will display the content spanning visually
+      if (fmt?.isMerged && fmt?.mergeAnchor) {
+        content = '';
+      }
+
+      return <div style={style} className={cellClassName}>{content}</div>;
     };
 
     return currentSheetData.columns.map(col => ({

@@ -449,12 +449,48 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
     - Uses iter_rows() batch access (3-5x faster than individual cell() calls)
     - Limits to first 50 visible rows by default (95% faster for large sheets)
     - Smart column detection to skip empty columns
+
+    FEATURES:
+    - Extracts merged cell ranges and propagates formatting
+    - Extracts hyperlinks from cells
     """
     try:
-        workbook = openpyxl.load_workbook(str(file_path), data_only=False, read_only=True)
+        # Open in non-read-only mode to access merged_cells and hyperlinks
+        workbook = openpyxl.load_workbook(str(file_path), data_only=False, read_only=False)
         sheet = workbook[sheet_name]
 
         formatting = {}
+
+        # Extract merged cell ranges
+        # merged_cells returns ranges like "A1:C1", "D5:F10", etc.
+        merged_ranges = {}
+        for merged_range in sheet.merged_cells.ranges:
+            # Get the anchor cell (top-left) coordinates
+            min_col = merged_range.min_col
+            min_row = merged_range.min_row
+            max_col = merged_range.max_col
+            max_row = merged_range.max_row
+
+            # Store all cells in this merged range
+            for row in range(min_row, max_row + 1):
+                for col in range(min_col, max_col + 1):
+                    merged_ranges[(row, col)] = (min_row, min_col)
+
+        logger.info(f"Found {len(sheet.merged_cells.ranges)} merged cell ranges")
+
+        # Extract hyperlinks
+        hyperlinks = {}
+        if hasattr(sheet, '_hyperlinks') and sheet._hyperlinks:
+            for hyperlink in sheet._hyperlinks:
+                if hyperlink.ref and hyperlink.target:
+                    # hyperlink.ref is like "A5"
+                    try:
+                        cell_coord = openpyxl.utils.cell.coordinate_to_tuple(hyperlink.ref)
+                        hyperlinks[cell_coord] = hyperlink.target
+                    except:
+                        continue
+
+        logger.info(f"Found {len(hyperlinks)} hyperlinks")
 
         # OPTIMIZATION 2: Only format first 50 VISIBLE rows
         # Users only see first ~20 rows on screen initially
@@ -605,6 +641,49 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
 
                         if borders:
                             fmt['borders'] = borders
+
+                    # Check if this cell has a hyperlink
+                    excel_row = start_row + row_idx
+                    excel_col = col_idx
+                    if (excel_row, excel_col) in hyperlinks:
+                        fmt['hyperlink'] = hyperlinks[(excel_row, excel_col)]
+
+                    # Check if this cell is part of a merged range
+                    if (excel_row, excel_col) in merged_ranges:
+                        anchor_row, anchor_col = merged_ranges[(excel_row, excel_col)]
+
+                        # If this is NOT the anchor cell, copy formatting from anchor
+                        if (excel_row, excel_col) != (anchor_row, anchor_col):
+                            # Calculate anchor's DataGrid coordinates
+                            anchor_datagrid_row = anchor_row - start_row
+                            anchor_key = f"{anchor_datagrid_row}_{anchor_col}"
+
+                            # If we've already processed the anchor, copy its formatting
+                            if anchor_key in formatting:
+                                fmt = formatting[anchor_key].copy()
+                            else:
+                                # Get formatting from anchor cell directly
+                                anchor_cell = sheet.cell(row=anchor_row, column=anchor_col)
+                                # Extract formatting from anchor (same logic as above)
+                                # For now, just copy background color if available
+                                if anchor_cell.fill and anchor_cell.fill.fill_type == 'solid':
+                                    start_color = anchor_cell.fill.start_color
+                                    if start_color and hasattr(start_color, 'rgb') and start_color.rgb:
+                                        rgb = start_color.rgb
+                                        if isinstance(rgb, str) and len(rgb) >= 6:
+                                            rgb_upper = rgb.upper()
+                                            skip_colors = {'00000000', 'FFFFFFFF', 'FFFFFF'}
+                                            if rgb_upper not in skip_colors:
+                                                if len(rgb) == 8:
+                                                    alpha = rgb[:2].upper()
+                                                    if alpha not in ('00', '01', '02', '03', '04', '05'):
+                                                        fmt['bgColor'] = f"#{rgb[2:]}"
+                                                else:
+                                                    fmt['bgColor'] = f"#{rgb}" if not rgb.startswith('#') else rgb
+
+                            # Mark as merged cell (so frontend can hide content or handle differently)
+                            fmt['isMerged'] = True
+                            fmt['mergeAnchor'] = f"{anchor_datagrid_row}_{anchor_col}"
 
                     # Only add to formatting dict if we found any formatting
                     if fmt:
