@@ -492,11 +492,12 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
 
         logger.info(f"Found {len(hyperlinks)} hyperlinks")
 
-        # OPTIMIZATION 2: Only format first 50 VISIBLE rows
+        # OPTIMIZATION 2: Extract formatting for visible rows
         # Users only see first ~20 rows on screen initially
         # Formatting extraction is the slowest operation - limit to what's immediately visible
+        # However, we increase to 100 rows to capture more header/merged cells
         # Future enhancement: lazy-load formatting for additional rows on scroll
-        visible_rows = min(max_rows, 50)
+        visible_rows = min(max_rows, 100)
 
         # Account for offset
         start_row = offset + 1  # First Excel row to read (1-indexed)
@@ -662,10 +663,11 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                             if anchor_key in formatting:
                                 fmt = formatting[anchor_key].copy()
                             else:
-                                # Get formatting from anchor cell directly
+                                # Anchor cell hasn't been processed yet (might be outside visible range or before current row)
+                                # Extract ALL formatting from anchor cell directly
                                 anchor_cell = sheet.cell(row=anchor_row, column=anchor_col)
-                                # Extract formatting from anchor (same logic as above)
-                                # For now, just copy background color if available
+
+                                # Background color
                                 if anchor_cell.fill and anchor_cell.fill.fill_type == 'solid':
                                     start_color = anchor_cell.fill.start_color
                                     if start_color and hasattr(start_color, 'rgb') and start_color.rgb:
@@ -680,6 +682,30 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                                                         fmt['bgColor'] = f"#{rgb[2:]}"
                                                 else:
                                                     fmt['bgColor'] = f"#{rgb}" if not rgb.startswith('#') else rgb
+
+                                # Font formatting
+                                if anchor_cell.font:
+                                    if anchor_cell.font.color and hasattr(anchor_cell.font.color, 'rgb') and anchor_cell.font.color.rgb:
+                                        rgb = anchor_cell.font.color.rgb
+                                        if isinstance(rgb, str) and len(rgb) >= 6:
+                                            rgb_upper = rgb.upper()
+                                            skip_font_colors = {'00000000'}
+                                            if rgb_upper not in skip_font_colors:
+                                                if len(rgb) == 8:
+                                                    alpha = rgb[:2].upper()
+                                                    if alpha not in ('00', '01', '02', '03', '04', '05'):
+                                                        fmt['fontColor'] = f"#{rgb[2:]}"
+                                                else:
+                                                    fmt['fontColor'] = f"#{rgb}" if not rgb.startswith('#') else rgb
+
+                                    if anchor_cell.font.bold:
+                                        fmt['bold'] = True
+                                    if anchor_cell.font.italic:
+                                        fmt['italic'] = True
+                                    if anchor_cell.font.underline:
+                                        fmt['underline'] = True
+                                    if anchor_cell.font.size:
+                                        fmt['fontSize'] = anchor_cell.font.size
 
                             # Mark as merged cell (so frontend can hide content or handle differently)
                             fmt['isMerged'] = True
