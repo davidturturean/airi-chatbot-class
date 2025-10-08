@@ -471,11 +471,11 @@ def _parse_single_sheet(excel_file, current_sheet: str, file_path: Path, offset:
         }
     ]
 
-    # Extract actual column widths from Excel
-    excel_column_widths = _extract_column_widths(file_path, current_sheet)
-
-    # Extract actual row heights from Excel
-    excel_row_heights = _extract_row_heights(file_path, current_sheet, offset)
+    # Extract actual column widths and row heights from Excel in a SINGLE workbook open
+    # PERFORMANCE OPTIMIZATION: This reduces file I/O by 50% (was 2 opens, now 1 open)
+    excel_column_widths, excel_row_heights = _extract_excel_dimensions(
+        file_path, current_sheet, offset, include_row_heights=True
+    )
 
     for col_idx, col in enumerate(df.columns):
         # Infer column type for better rendering
@@ -574,27 +574,42 @@ def _get_sheet_row_count(file_path: Path, sheet_name: str) -> int:
     except:
         return 0
 
-def _extract_column_widths(file_path: Path, sheet_name: str) -> dict:
+def _extract_excel_dimensions(file_path: Path, sheet_name: str, offset: int = 0, include_row_heights: bool = True) -> tuple:
     """
-    Extract actual column widths from Excel file.
-    Returns dict mapping column index (1-indexed) to width in Excel units.
+    Extract both column widths AND row heights in a single workbook open.
+    This is a critical performance optimization that reduces file I/O by 50%.
 
-    Excel column width units:
-    - Stored as "character units" (width of '0' in default font, typically Calibri 11pt)
-    - Default column width is ~8.43 character units (~64 pixels)
-    - Values are stored to 1/256th precision in OOXML format
+    PERFORMANCE OPTIMIZATION:
+    - Opens workbook ONCE instead of twice (column widths + row heights)
+    - Uses read_only=False only when needed (for row_dimensions access)
+    - For files without custom row heights, could use read_only=True for faster loading
+
+    Returns: (column_widths_dict, row_heights_dict)
+
+    Args:
+        file_path: Path to Excel file
+        sheet_name: Name of sheet to extract from
+        offset: Row offset for pagination (affects row height mapping)
+        include_row_heights: Whether to extract row heights (can disable for faster loads)
+
+    Returns:
+        tuple: (column_widths, row_heights)
+            - column_widths: dict mapping column index (1-indexed) to width in Excel units
+            - row_heights: dict mapping DataGrid row index (0-indexed) to height in pixels
     """
+    dimension_start = datetime.now()
+
     try:
-        # NOTE: Using read_only=False for consistency with row height extraction
-        # (both column_dimensions and row_dimensions need non-read-only mode)
+        # Open workbook ONCE with read_only=False (needed for row_dimensions)
+        # NOTE: read_only=False is significantly slower but required for dimension access
         workbook = openpyxl.load_workbook(str(file_path), read_only=False, data_only=True)
         sheet = workbook[sheet_name]
 
+        # ===== EXTRACT COLUMN WIDTHS =====
         column_widths = {}
         total_columns = 0
         columns_with_custom_width = 0
 
-        # Extract column dimensions
         # sheet.column_dimensions is a dict with keys like 'A', 'B', 'C', etc.
         for col_letter, dimension in sheet.column_dimensions.items():
             total_columns += 1
@@ -604,12 +619,51 @@ def _extract_column_widths(file_path: Path, sheet_name: str) -> dict:
                 column_widths[col_idx] = dimension.width
                 columns_with_custom_width += 1
 
+        # ===== EXTRACT ROW HEIGHTS (if enabled) =====
+        row_heights = {}
+        rows_with_custom_height = 0
+
+        if include_row_heights:
+            # Excel rows are 1-indexed
+            # Row 1 is consumed as header by pandas (not in DataFrame)
+            # Row 2 onwards become DataGrid rows 0, 1, 2, ...
+            # With offset, we skip 'offset' rows at the top, then use next row as header
+            # So: DataGrid row 0 = Excel row (offset + 2)
+
+            start_excel_row = offset + 2
+            max_row = sheet.max_row if sheet.max_row is not None else 1000
+
+            for excel_row_num in range(start_excel_row, max_row + 1):
+                dim = sheet.row_dimensions.get(excel_row_num)
+                if dim and dim.height:
+                    # Convert from points to pixels
+                    # 1 point = 1/72 inch, 96 DPI screen: pixels = points * 96/72
+                    height_points = dim.height
+                    height_pixels = int(height_points * 96 / 72)
+
+                    # Map Excel row to DataGrid row index
+                    datagrid_row = excel_row_num - start_excel_row
+                    row_heights[datagrid_row] = height_pixels
+                    rows_with_custom_height += 1
+
         workbook.close()
 
+        # Calculate extraction time
+        dimension_time = (datetime.now() - dimension_start).total_seconds() * 1000
+
+        # Performance warning if dimension extraction is slow
+        if dimension_time > 1000:
+            logger.warning(
+                f"⚠️ Dimension extraction slow ({dimension_time:.0f}ms) for sheet '{sheet_name}'. "
+                f"Consider disabling row heights for faster loads."
+            )
+
+        # Log results
         if column_widths:
             logger.info(
                 f"📏 Extracted {len(column_widths)} custom column widths from sheet '{sheet_name}' "
-                f"({columns_with_custom_width}/{total_columns} columns have explicit widths)"
+                f"({columns_with_custom_width}/{total_columns} columns have explicit widths) "
+                f"in {dimension_time:.0f}ms"
             )
             # Log first few widths as examples
             sample_widths = list(column_widths.items())[:3]
@@ -618,81 +672,25 @@ def _extract_column_widths(file_path: Path, sheet_name: str) -> dict:
         else:
             logger.info(f"📏 No custom column widths found in sheet '{sheet_name}' (using default/estimated widths)")
 
-        return column_widths
+        if include_row_heights:
+            if row_heights:
+                logger.info(
+                    f"📐 Extracted {len(row_heights)} custom row heights from sheet '{sheet_name}' "
+                    f"({rows_with_custom_height} rows have explicit heights, offset={offset})"
+                )
+                # Log first few heights as examples
+                sample_heights = list(row_heights.items())[:5]
+                for row_idx, height in sample_heights:
+                    excel_row = row_idx + start_excel_row
+                    logger.info(f"   Excel row {excel_row} → DataGrid row {row_idx}: {height}px")
+            else:
+                logger.info(f"📐 No custom row heights found in sheet '{sheet_name}' (using default height)")
+
+        return (column_widths, row_heights)
 
     except Exception as e:
-        logger.warning(f"Could not extract column widths from {file_path}, sheet '{sheet_name}': {str(e)}")
-        return {}
-
-def _extract_row_heights(file_path: Path, sheet_name: str, offset: int = 0) -> dict:
-    """
-    Extract actual row heights from Excel file.
-    Returns dict mapping DataGrid row index (0-indexed) to height in pixels.
-
-    Excel row height units:
-    - Stored in "points" (pt) where 1 point = 1/72 inch
-    - Default row height is typically 15 points (~20 pixels at 96 DPI)
-    - Conversion formula: pixels = points * 96 / 72 = points * 1.333...
-
-    Critical mapping:
-    - Excel row 1 → Used as pandas header (not in DataGrid)
-    - Excel row 2 → DataGrid row 0 (when offset=0)
-    - Excel row 3 → DataGrid row 1 (when offset=0)
-    - Formula: datagrid_row = excel_row - (offset + 2)
-    """
-    try:
-        # NOTE: Must use read_only=False to access row_dimensions
-        # ReadOnlyWorksheet doesn't support row_dimensions attribute
-        workbook = openpyxl.load_workbook(str(file_path), read_only=False, data_only=True)
-        sheet = workbook[sheet_name]
-
-        row_heights = {}
-        rows_with_custom_height = 0
-
-        # Excel rows are 1-indexed
-        # Row 1 is consumed as header by pandas (not in DataFrame)
-        # Row 2 onwards become DataGrid rows 0, 1, 2, ...
-        # With offset, we skip 'offset' rows at the top, then use next row as header
-        # So: DataGrid row 0 = Excel row (offset + 2)
-
-        # Extract row heights for rows that will appear in DataGrid
-        # Start from Excel row (offset + 2) which is the first data row after header
-        start_excel_row = offset + 2
-        max_row = sheet.max_row if sheet.max_row is not None else 1000
-
-        for excel_row_num in range(start_excel_row, max_row + 1):
-            dim = sheet.row_dimensions.get(excel_row_num)
-            if dim and dim.height:
-                # Convert from points to pixels
-                # 1 point = 1/72 inch, 96 DPI screen: pixels = points * 96/72 = points * 1.333...
-                height_points = dim.height
-                height_pixels = int(height_points * 96 / 72)  # More precise than 1.333
-
-                # Map Excel row to DataGrid row index
-                datagrid_row = excel_row_num - start_excel_row
-                row_heights[datagrid_row] = height_pixels
-                rows_with_custom_height += 1
-
-        workbook.close()
-
-        if row_heights:
-            logger.info(
-                f"📐 Extracted {len(row_heights)} custom row heights from sheet '{sheet_name}' "
-                f"({rows_with_custom_height} rows have explicit heights, offset={offset})"
-            )
-            # Log first few heights as examples
-            sample_heights = list(row_heights.items())[:5]
-            for row_idx, height in sample_heights:
-                excel_row = row_idx + start_excel_row
-                logger.info(f"   Excel row {excel_row} → DataGrid row {row_idx}: {height}px")
-        else:
-            logger.info(f"📐 No custom row heights found in sheet '{sheet_name}' (using default height)")
-
-        return row_heights
-
-    except Exception as e:
-        logger.warning(f"Could not extract row heights from {file_path}, sheet '{sheet_name}': {str(e)}")
-        return {}
+        logger.warning(f"Could not extract dimensions from {file_path}, sheet '{sheet_name}': {str(e)}")
+        return ({}, {})
 
 def _estimate_column_width(column_name: str, series: pd.Series, max_width: int = 300) -> int:
     """
