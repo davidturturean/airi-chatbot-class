@@ -28,6 +28,18 @@ export interface ExcelSourceLocation {
   cell?: string;
 }
 
+export interface BorderInfo {
+  style: string;  // 'thin', 'medium', 'thick', 'dashed', 'dotted', etc.
+  color?: string;  // Hex color code
+}
+
+export interface CellBorders {
+  top?: BorderInfo;
+  bottom?: BorderInfo;
+  left?: BorderInfo;
+  right?: BorderInfo;
+}
+
 export interface CellFormatting {
   bgColor?: string;
   fontColor?: string;
@@ -35,7 +47,7 @@ export interface CellFormatting {
   italic?: boolean;
   underline?: boolean;
   fontSize?: number;
-  borderColor?: string;
+  borders?: CellBorders;
 }
 
 export interface DocumentPreview {

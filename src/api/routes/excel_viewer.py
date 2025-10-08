@@ -530,6 +530,47 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                         if cell.font.size:
                             fmt['fontSize'] = cell.font.size
 
+                    # Border formatting - extract actual Excel borders
+                    if cell.border:
+                        borders = {}
+
+                        # Helper to extract border info
+                        def get_border_info(border_side):
+                            if border_side and border_side.style:
+                                info = {'style': border_side.style}
+                                if border_side.color and border_side.color.rgb:
+                                    rgb = border_side.color.rgb
+                                    if isinstance(rgb, str) and len(rgb) >= 6:
+                                        if len(rgb) == 8:  # ARGB
+                                            info['color'] = f"#{rgb[2:]}"
+                                        else:  # RGB
+                                            info['color'] = f"#{rgb}" if not rgb.startswith('#') else rgb
+                                return info
+                            return None
+
+                        if cell.border.top:
+                            top_info = get_border_info(cell.border.top)
+                            if top_info:
+                                borders['top'] = top_info
+
+                        if cell.border.bottom:
+                            bottom_info = get_border_info(cell.border.bottom)
+                            if bottom_info:
+                                borders['bottom'] = bottom_info
+
+                        if cell.border.left:
+                            left_info = get_border_info(cell.border.left)
+                            if left_info:
+                                borders['left'] = left_info
+
+                        if cell.border.right:
+                            right_info = get_border_info(cell.border.right)
+                            if right_info:
+                                borders['right'] = right_info
+
+                        if borders:
+                            fmt['borders'] = borders
+
                     # Only add to formatting dict if we found any formatting
                     if fmt:
                         # Key format: "dataGridRowIdx_excelColIdx"

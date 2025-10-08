@@ -167,6 +167,32 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         if (fmt.italic) style.fontStyle = 'italic';
         if (fmt.underline) style.textDecoration = 'underline';
         if (fmt.fontSize) style.fontSize = `${fmt.fontSize}px`;
+
+        // Apply actual Excel borders
+        if (fmt.borders) {
+          // Map Excel border styles to CSS
+          const getBorderStyle = (borderInfo: any) => {
+            const width = borderInfo.style === 'thick' ? '2px' :
+                         borderInfo.style === 'medium' ? '1.5px' : '1px';
+            const color = borderInfo.color || '#000000';
+            const lineStyle = borderInfo.style === 'dashed' ? 'dashed' :
+                             borderInfo.style === 'dotted' ? 'dotted' : 'solid';
+            return `${width} ${lineStyle} ${color}`;
+          };
+
+          if (fmt.borders.top) {
+            style.borderTop = getBorderStyle(fmt.borders.top);
+          }
+          if (fmt.borders.bottom) {
+            style.borderBottom = getBorderStyle(fmt.borders.bottom);
+          }
+          if (fmt.borders.left) {
+            style.borderLeft = getBorderStyle(fmt.borders.left);
+          }
+          if (fmt.borders.right) {
+            style.borderRight = getBorderStyle(fmt.borders.right);
+          }
+        }
       }
 
       // Apply highlight for citation target (OVERRIDES cell formatting background)
@@ -418,31 +444,28 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
           50% { opacity: 0.7; }
         }
 
-        /* Google Drive Excel visualization: very thin, light gray gridlines */
-        /* Cells with same background color should touch without gaps */
+        /* Use Excel's actual border formatting - no default borders */
+        /* This ensures cells render EXACTLY as they appear in Excel/Google Drive */
 
         .excel-viewer .rdg {
-          --rdg-border-color: #d0d0d0;
+          --rdg-border-color: transparent;
           --rdg-row-hover-background-color: transparent;
           border: 1px solid #d0d0d0;
         }
 
-        /* Thin gridlines like Google Drive - 1px light gray */
+        /* Remove all default cell borders - Excel borders applied via inline styles */
         .excel-viewer .rdg-cell {
-          border-right: 1px solid #e0e0e0 !important;
-          border-bottom: 1px solid #e0e0e0 !important;
-          border-left: none !important;
-          border-top: none !important;
+          border: none !important;
           padding: 0 !important;
           outline: none !important;
           box-shadow: none !important;
         }
 
         /* Remove all padding/margin that creates gaps */
+        /* Borders are applied directly to the content div from Excel data */
         .excel-viewer .rdg-cell > div {
           margin: 0 !important;
           padding: 2px 8px !important;
-          border: none !important;
           outline: none !important;
           box-sizing: border-box !important;
           width: 100% !important;
@@ -462,7 +485,6 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
 
         .excel-viewer .rdg-header-row .rdg-cell {
           font-weight: 600 !important;
-          border-right: 1px solid #e0e0e0 !important;
         }
 
         /* Citation highlight - MUST use !important to override DataGrid CSS */
