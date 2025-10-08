@@ -297,6 +297,7 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
           <div className="flex-1 overflow-hidden">
             <ExcelViewer
               data={excelData}
+              sessionId={props.sessionId}
               sourceLocation={excelData.source_location}
               navigationTrigger={navigationCounter}
               onSheetChange={(sheetName) => console.log('Sheet changed:', sheetName)}

@@ -8,15 +8,111 @@
  * Performance target: <500ms Excel render time
  */
 
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import DataGrid, { Column, SortColumn, RenderCellProps } from 'react-data-grid';
 import * as Tabs from '@radix-ui/react-tabs';
 import { Search, Download, ZoomIn, ZoomOut } from 'lucide-react';
 import type { ExcelViewerProps, CellFormatting } from '../../types/document-preview';
 import 'react-data-grid/lib/styles.css';
 
+/**
+ * Hook for loading Excel formatting chunks in the background.
+ * Implements progressive enhancement: first 100 rows load immediately,
+ * additional formatting loads in background without blocking UI.
+ */
+const useFormattingChunks = (
+  rid: string,
+  sessionId: string,
+  activeSheet: string,
+  totalRows: number,
+  initialFormatting: Record<string, CellFormatting>
+) => {
+  const [formatting, setFormatting] = useState(initialFormatting);
+  const [loadedChunks, setLoadedChunks] = useState<Set<number>>(new Set([0])); // Chunk 0 already loaded
+  const [isLoadingChunk, setIsLoadingChunk] = useState(false);
+  const CHUNK_SIZE = 100;
+
+  // Reset when sheet changes
+  useEffect(() => {
+    setFormatting(initialFormatting);
+    setLoadedChunks(new Set([0]));
+  }, [activeSheet, initialFormatting]);
+
+  const loadChunk = useCallback(async (chunkIndex: number) => {
+    if (loadedChunks.has(chunkIndex) || isLoadingChunk) {
+      return; // Already loaded or loading
+    }
+
+    setIsLoadingChunk(true);
+    const startRow = chunkIndex * CHUNK_SIZE;
+    const endRow = Math.min(startRow + CHUNK_SIZE, totalRows);
+
+    try {
+      const response = await fetch(
+        `/api/document/${rid}/excel/formatting-chunk?` +
+        `session_id=${sessionId}&sheet=${encodeURIComponent(activeSheet)}&start_row=${startRow}&end_row=${endRow}`,
+        { signal: AbortSignal.timeout(10000) } // 10s timeout
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Merge new formatting into existing formatting
+      setFormatting(prev => ({
+        ...prev,
+        ...data.formatting
+      }));
+
+      setLoadedChunks(prev => new Set(prev).add(chunkIndex));
+      console.log(
+        `✅ Loaded formatting chunk ${chunkIndex} (rows ${startRow}-${endRow}): ` +
+        `${data.chunk_size} cells in ${data.extraction_time_ms}ms`
+      );
+
+    } catch (error) {
+      console.error(`❌ Failed to load chunk ${chunkIndex}:`, error);
+    } finally {
+      setIsLoadingChunk(false);
+    }
+  }, [rid, sessionId, activeSheet, totalRows, loadedChunks, isLoadingChunk]);
+
+  // Auto-load chunks in background
+  useEffect(() => {
+    if (totalRows <= CHUNK_SIZE) {
+      // Small file, all formatting already loaded
+      return;
+    }
+
+    const totalChunks = Math.ceil(totalRows / CHUNK_SIZE);
+    let currentChunk = 1; // Start from chunk 1 (0 already loaded with initial data)
+
+    const loadNextChunk = () => {
+      if (currentChunk < totalChunks && !loadedChunks.has(currentChunk)) {
+        loadChunk(currentChunk);
+        currentChunk++;
+        setTimeout(loadNextChunk, 200); // Throttle: 5 chunks/sec
+      }
+    };
+
+    // Start loading after 500ms (let initial render complete)
+    const timer = setTimeout(loadNextChunk, 500);
+    return () => clearTimeout(timer);
+  }, [totalRows, loadChunk, loadedChunks, CHUNK_SIZE]);
+
+  return {
+    formatting,
+    loadedChunks: loadedChunks.size,
+    totalChunks: Math.ceil(totalRows / CHUNK_SIZE),
+    loadChunk
+  };
+};
+
 export const ExcelViewer: React.FC<ExcelViewerProps> = ({
   data,
+  sessionId,
   onSheetChange,
   onCellSelect,
   onExport,
@@ -39,6 +135,19 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
   const currentSheetData = useMemo(() => {
     return data.sheets.find(sheet => sheet.sheet_name === activeSheet);
   }, [data.sheets, activeSheet]);
+
+  // Use formatting chunks hook for progressive loading
+  const {
+    formatting,
+    loadedChunks,
+    totalChunks
+  } = useFormattingChunks(
+    data.rid,
+    sessionId,
+    activeSheet,
+    currentSheetData?.total_rows || 0,
+    currentSheetData?.formatting || {}
+  );
 
   // Navigation to source location - triggers ONLY when navigationTrigger changes
   // This allows re-navigation when user clicks citation, but NOT when manually changing sheets
@@ -122,8 +231,6 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
   // Convert sheet data to DataGrid format with custom cell renderer
   const columns: readonly Column<any>[] = useMemo(() => {
     if (!currentSheetData) return [];
-
-    const formatting = currentSheetData.formatting || {};
 
     // Debug: Log formatting summary on sheet change (not per-cell)
     if (Object.keys(formatting).length > 0) {
@@ -262,7 +369,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
       filterable: col.filterable !== false,
       renderCell: col.key === '__row_id__' ? undefined : FormattedCell
     }));
-  }, [currentSheetData, highlightedCell, searchMatches]);
+  }, [currentSheetData, highlightedCell, searchMatches, formatting]);
 
   // Filter and sort rows (but NOT by search - search only highlights)
   const processedRows = useMemo(() => {
@@ -344,6 +451,9 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
     setZoom(100);
   };
 
+  // Show loading indicator when chunks are still loading
+  const showLoadingIndicator = loadedChunks < totalChunks;
+
   return (
     <div className="excel-viewer flex flex-col h-full">
       {/* Toolbar */}
@@ -415,6 +525,17 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
           )}
         </div>
       </div>
+
+      {/* Loading indicator for background formatting chunks */}
+      {showLoadingIndicator && (
+        <div className="px-4 py-2 bg-blue-50 border-b border-blue-200 text-xs text-blue-800 flex items-center space-x-2">
+          <svg className="animate-spin h-3 w-3 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Loading formatting: {loadedChunks} / {totalChunks} chunks loaded</span>
+        </div>
+      )}
 
       {/* Sheet tabs */}
       {data.sheets.length > 1 && (

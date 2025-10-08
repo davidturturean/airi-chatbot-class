@@ -11,10 +11,12 @@ class PreviewCacheManager {
   private excelData = new Map<string, CacheEntry<ExcelDocumentData>>();
   private wordData = new Map<string, CacheEntry<WordDocumentData>>();
   private gallery = new Map<string, CacheEntry<CitationGalleryData>>();
+  private formattingChunks = new Map<string, CacheEntry<Record<string, any>>>();
 
   // Track in-flight requests to prevent duplicate prefetches
   private inFlightExcelRequests = new Map<string, Promise<ExcelDocumentData | null>>();
   private inFlightWordRequests = new Map<string, Promise<WordDocumentData | null>>();
+  private inFlightFormattingRequests = new Map<string, Promise<Record<string, any> | null>>();
 
   private sessionId: string | null = null;
   private readonly defaultExpiry = 30 * 60 * 1000; // 30 minutes
@@ -260,6 +262,37 @@ class PreviewCacheManager {
     });
   }
 
+  // Formatting Chunk Cache
+  getFormattingChunk(rid: string, sheet: string, startRow: number, endRow: number): Record<string, any> | null {
+    const key = `${this.getCacheKey(rid)}:${sheet}:${startRow}:${endRow}`;
+    const entry = this.formattingChunks.get(key);
+
+    if (!entry) return null;
+
+    if (Date.now() > entry.expiry) {
+      this.formattingChunks.delete(key);
+      return null;
+    }
+
+    return entry.data;
+  }
+
+  setFormattingChunk(
+    rid: string,
+    sheet: string,
+    startRow: number,
+    endRow: number,
+    formatting: Record<string, any>,
+    expiry?: number
+  ): void {
+    const key = `${this.getCacheKey(rid)}:${sheet}:${startRow}:${endRow}`;
+    this.formattingChunks.set(key, {
+      data: formatting,
+      timestamp: Date.now(),
+      expiry: Date.now() + (expiry || this.defaultExpiry)
+    });
+  }
+
   // Cache Management
   clearPreview(rid: string): void {
     const key = this.getCacheKey(rid);
@@ -271,8 +304,10 @@ class PreviewCacheManager {
     this.excelData.clear();
     this.wordData.clear();
     this.gallery.clear();
+    this.formattingChunks.clear();
     this.inFlightExcelRequests.clear();
     this.inFlightWordRequests.clear();
+    this.inFlightFormattingRequests.clear();
   }
 
   // Performance Metrics
@@ -282,7 +317,8 @@ class PreviewCacheManager {
       excelCount: this.excelData.size,
       wordCount: this.wordData.size,
       galleryCount: this.gallery.size,
-      totalSize: this.previews.size + this.excelData.size + this.wordData.size + this.gallery.size
+      formattingChunkCount: this.formattingChunks.size,
+      totalSize: this.previews.size + this.excelData.size + this.wordData.size + this.gallery.size + this.formattingChunks.size
     };
   }
 
@@ -311,6 +347,12 @@ class PreviewCacheManager {
     for (const [key, entry] of this.gallery.entries()) {
       if (now > entry.expiry) {
         this.gallery.delete(key);
+      }
+    }
+
+    for (const [key, entry] of this.formattingChunks.entries()) {
+      if (now > entry.expiry) {
+        this.formattingChunks.delete(key);
       }
     }
   }

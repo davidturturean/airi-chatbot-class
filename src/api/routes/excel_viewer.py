@@ -178,6 +178,100 @@ def get_excel_sheets(rid):
         logger.error(f"Error getting Excel sheets for {rid}: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
+@excel_viewer_bp.route('/api/document/<rid>/excel/formatting-chunk', methods=['GET'])
+def get_formatting_chunk(rid):
+    """
+    Get formatting for a specific row range (for lazy loading).
+    This endpoint enables progressive formatting loading without impacting initial load time.
+    Performance target: <200ms per chunk
+
+    Query params:
+      - session_id: Session identifier (required)
+      - sheet: Sheet name (required)
+      - start_row: Starting row, 0-indexed (default: 0)
+      - end_row: Ending row, exclusive (default: 100)
+
+    Returns:
+      {
+        "rid": "RID-07595",
+        "sheet": "Sheet1",
+        "start_row": 100,
+        "end_row": 200,
+        "formatting": {"100_1": {bgColor: "#fff"}, ...},
+        "chunk_size": 50,
+        "extraction_time_ms": 15.3
+      }
+    """
+    start_time = datetime.now()
+
+    try:
+        # Validate required parameters
+        session_id = request.args.get('session_id') or request.headers.get('X-Session-ID')
+        sheet_name = request.args.get('sheet')
+
+        if not session_id:
+            return jsonify({"error": "Session ID required"}), 400
+        if not sheet_name:
+            return jsonify({"error": "Sheet name required"}), 400
+
+        # Parse row range parameters
+        try:
+            start_row = int(request.args.get('start_row', 0))
+            end_row = int(request.args.get('end_row', 100))
+        except ValueError:
+            return jsonify({"error": "start_row and end_row must be integers"}), 400
+
+        # Validate row range
+        if end_row <= start_row:
+            return jsonify({"error": "end_row must be greater than start_row"}), 400
+
+        if start_row < 0:
+            return jsonify({"error": "start_row must be non-negative"}), 400
+
+        # Get document metadata
+        snippet_data = snippet_db.get_snippet(session_id, rid)
+        if not snippet_data:
+            return jsonify({"error": "Document not found"}), 404
+
+        # Get file path
+        source_file = snippet_data.get('metadata', {}).get('source_file', '')
+        if not source_file:
+            return jsonify({"error": "No source file specified"}), 404
+
+        file_path = _resolve_file_path(source_file)
+        if not file_path or not file_path.exists():
+            return jsonify({"error": f"File not found: {source_file}"}), 404
+
+        # Extract formatting for this chunk
+        # _extract_cell_formatting already supports offset and max_rows parameters
+        formatting = _extract_cell_formatting(
+            file_path,
+            sheet_name,
+            offset=start_row,
+            max_rows=end_row - start_row
+        )
+
+        extraction_time = (datetime.now() - start_time).total_seconds() * 1000
+
+        logger.info(
+            f"Formatting chunk for {rid}, sheet '{sheet_name}', rows {start_row}-{end_row}: "
+            f"{len(formatting)} cells in {extraction_time:.2f}ms"
+        )
+
+        return jsonify({
+            'rid': rid,
+            'sheet': sheet_name,
+            'start_row': start_row,
+            'end_row': end_row,
+            'formatting': formatting,
+            'chunk_size': len(formatting),
+            'extraction_time_ms': round(extraction_time, 2)
+        })
+
+    except Exception as e:
+        logger.error(f"Error getting formatting chunk for {rid}: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
 @excel_viewer_bp.route('/api/excel/cache-stats', methods=['GET'])
 def get_cache_stats():
     """
@@ -497,7 +591,8 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
         # Users only see first ~20 rows on screen initially
         # Formatting extraction is the slowest operation - limit to what's immediately visible
         # However, we increase to 100 rows to capture more header/merged cells
-        # Future enhancement: lazy-load formatting for additional rows on scroll
+        # IMPLEMENTED: Lazy-load formatting via /api/document/<rid>/excel/formatting-chunk endpoint
+        # Initial load limited to 100 rows, additional chunks loaded in background by frontend
         visible_rows = min(max_rows, 100)
 
         # Account for offset

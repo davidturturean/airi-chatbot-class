@@ -161,6 +161,7 @@ export interface SlideoutPanelProps {
 
 export interface ExcelViewerProps {
   data: ExcelDocumentData;
+  sessionId: string;  // Required for lazy loading formatting chunks
   onSheetChange?: (sheetName: string) => void;
   onCellSelect?: (row: number, column: string) => void;
   onExport?: (sheetName: string, filteredData: any[]) => void;
