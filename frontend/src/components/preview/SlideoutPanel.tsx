@@ -9,7 +9,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Pin, PinOff, ChevronLeft, ChevronRight, Download, Copy } from 'lucide-react';
+import { X, Pin, ChevronLeft, ChevronRight, Download, Copy } from 'lucide-react';
 import { previewCache } from '../../utils/preview-cache';
 import type { DocumentPreview, SlideoutPanelProps } from '../../types/document-preview';
 
@@ -334,7 +334,11 @@ ${previewData.metadata.source_file ? `\nSource: ${previewData.metadata.source_fi
                         aria-label={isPinned ? 'Unpin panel' : 'Pin panel'}
                         title={isPinned ? 'Pinned - Panel stays open (⌘P to unpin)' : 'Pin to keep panel open (⌘P)'}
                       >
-                        {isPinned ? <Pin className="h-5 w-5 fill-current" /> : <PinOff className="h-5 w-5" />}
+                        {isPinned ? (
+                          <Pin className="h-5 w-5 fill-current" />
+                        ) : (
+                          <Pin className="h-5 w-5" style={{ transform: 'rotate(45deg)' }} />
+                        )}
                       </button>
 
                       {/* Close button */}
