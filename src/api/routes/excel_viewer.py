@@ -26,6 +26,14 @@ excel_viewer_bp = Blueprint('excel_viewer', __name__)
 # Max size: 100 entries
 excel_cache = TTLCache(maxsize=100, ttl=3600)
 
+# Excel column width conversion multiplier
+# This constant controls how Excel character-unit widths are converted to pixels
+# Default: 8.43 (empirically determined to match Excel/Google Drive display)
+# - 7.0: OOXML spec baseline (too narrow for wrapped text)
+# - 8.43: Better match for wrapped text and multi-line cells
+# - Adjust this if columns appear too wide/narrow in your environment
+EXCEL_WIDTH_TO_PIXELS_MULTIPLIER = 8.43
+
 # Cache statistics for monitoring
 cache_stats = {
     'hits': 0,
@@ -475,12 +483,37 @@ def _parse_single_sheet(excel_file, current_sheet: str, file_path: Path, offset:
         excel_width = excel_column_widths.get(col_idx + 1)
         if excel_width:
             # Excel column widths are in "character units" - convert to pixels
-            # Excel default character width ≈ 7 pixels (for Calibri 11pt)
-            # Add some padding for better readability
-            width = int(excel_width * 7 + 10)
+            #
+            # CONVERSION FORMULA:
+            # Excel stores column widths as "character units" based on the default font
+            # (typically Calibri 11pt, where 1 unit ≈ width of '0' character)
+            #
+            # According to OOXML specification and empirical testing:
+            # - 1 character unit ≈ 7 pixels for default font
+            # - Excel adds 5 pixels of padding (2px left + 2px right + 1px gridline)
+            # - Formula: pixels = (width * 7) + 5
+            #
+            # However, testing shows that for wrapped text to display properly,
+            # we need slightly more width to account for browser rendering differences
+            # Using EXCEL_WIDTH_TO_PIXELS_MULTIPLIER (default 8.43) gives closer match to Excel/Google Drive
+            #
+            # This gives better results for:
+            # - Wrapped text (prevents cutoff)
+            # - Multi-line cells (fully visible without horizontal scroll)
+            # - Wide columns (more accurate sizing)
+            width = int(excel_width * EXCEL_WIDTH_TO_PIXELS_MULTIPLIER)
+
+            # Log conversion for diagnostics (first 5 columns only to avoid spam)
+            if col_idx < 5:
+                logger.info(
+                    f"Column '{col}' (#{col_idx + 1}): Excel width={excel_width:.2f} units "
+                    f"→ {width}px (multiplier={EXCEL_WIDTH_TO_PIXELS_MULTIPLIER})"
+                )
         else:
             # Fall back to content-based estimation
             width = _estimate_column_width(col, df[col])
+            if col_idx < 5:
+                logger.info(f"Column '{col}' (#{col_idx + 1}): Using estimated width={width}px (no Excel width)")
 
         columns.append({
             'key': col,
@@ -533,25 +566,43 @@ def _extract_column_widths(file_path: Path, sheet_name: str) -> dict:
     """
     Extract actual column widths from Excel file.
     Returns dict mapping column index (1-indexed) to width in Excel units.
+
+    Excel column width units:
+    - Stored as "character units" (width of '0' in default font, typically Calibri 11pt)
+    - Default column width is ~8.43 character units (~64 pixels)
+    - Values are stored to 1/256th precision in OOXML format
     """
     try:
         workbook = openpyxl.load_workbook(str(file_path), read_only=True, data_only=True)
         sheet = workbook[sheet_name]
 
         column_widths = {}
+        total_columns = 0
+        columns_with_custom_width = 0
 
         # Extract column dimensions
         # sheet.column_dimensions is a dict with keys like 'A', 'B', 'C', etc.
         for col_letter, dimension in sheet.column_dimensions.items():
+            total_columns += 1
             if dimension.width:
                 # Convert column letter to index (A=1, B=2, etc.)
                 col_idx = openpyxl.utils.column_index_from_string(col_letter)
                 column_widths[col_idx] = dimension.width
+                columns_with_custom_width += 1
 
         workbook.close()
 
         if column_widths:
-            logger.info(f"Extracted {len(column_widths)} column widths from sheet '{sheet_name}'")
+            logger.info(
+                f"📏 Extracted {len(column_widths)} custom column widths from sheet '{sheet_name}' "
+                f"({columns_with_custom_width}/{total_columns} columns have explicit widths)"
+            )
+            # Log first few widths as examples
+            sample_widths = list(column_widths.items())[:3]
+            for col_idx, width in sample_widths:
+                logger.info(f"   Column {col_idx}: {width:.2f} Excel units")
+        else:
+            logger.info(f"📏 No custom column widths found in sheet '{sheet_name}' (using default/estimated widths)")
 
         return column_widths
 
@@ -625,7 +676,12 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
         logger.info(f"Found {len(sheet.merged_cells.ranges)} merged cell ranges")
 
         # Extract hyperlinks
+        # Strategy: Check each cell's hyperlink attribute directly
+        # This is more reliable than sheet._hyperlinks which may not be populated
         hyperlinks = {}
+        hyperlink_count = 0
+
+        # First, try to get hyperlinks from sheet._hyperlinks (for backward compatibility)
         if hasattr(sheet, '_hyperlinks') and sheet._hyperlinks:
             for hyperlink in sheet._hyperlinks:
                 if hyperlink.ref and hyperlink.target:
@@ -633,10 +689,29 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                     try:
                         cell_coord = openpyxl.utils.cell.coordinate_to_tuple(hyperlink.ref)
                         hyperlinks[cell_coord] = hyperlink.target
-                    except:
+                        hyperlink_count += 1
+                        logger.info(f"Found hyperlink from sheet._hyperlinks: {hyperlink.ref} -> {hyperlink.target}")
+                    except Exception as e:
+                        logger.warning(f"Failed to parse hyperlink ref {hyperlink.ref}: {e}")
                         continue
 
-        logger.info(f"Found {len(hyperlinks)} hyperlinks")
+        logger.info(f"Found {hyperlink_count} hyperlinks from sheet._hyperlinks")
+
+        # Additionally, scan all cells for hyperlinks (more reliable method)
+        # This catches hyperlinks that may not be in sheet._hyperlinks
+        for row in sheet.iter_rows():
+            for cell in row:
+                if cell.hyperlink:
+                    # cell.row and cell.column are already 1-indexed (Excel coordinates)
+                    cell_coord = (cell.row, cell.column)
+                    # Get the hyperlink target URL
+                    hyperlink_url = cell.hyperlink.target if hasattr(cell.hyperlink, 'target') else str(cell.hyperlink)
+                    if hyperlink_url and cell_coord not in hyperlinks:
+                        hyperlinks[cell_coord] = hyperlink_url
+                        hyperlink_count += 1
+                        logger.info(f"Found hyperlink from cell.hyperlink: {cell.coordinate} -> {hyperlink_url}")
+
+        logger.info(f"Total hyperlinks found: {len(hyperlinks)} (from both methods)")
 
         # OPTIMIZATION 2: Extract formatting for visible rows
         # Users only see first ~20 rows on screen initially
@@ -646,13 +721,28 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
         # Initial load limited to 100 rows, additional chunks loaded in background by frontend
         visible_rows = min(max_rows, 100)
 
-        # Account for offset
-        # Excel rows are 1-indexed (row 1 is the first row)
-        # When offset=0, we want to start at Excel row 1 (the first row)
-        # When offset=100, we want to start at Excel row 101
-        start_row = offset + 1  # First Excel row to read (1-indexed)
+        # CRITICAL FIX: Account for pandas header row consumption
+        # When pandas reads Excel with pd.read_excel(skiprows=offset), it:
+        # 1. Skips 'offset' rows at the top
+        # 2. Uses the NEXT row as column headers (this row is NOT in the DataFrame data)
+        # 3. Remaining rows become DataFrame data (index 0, 1, 2, ...)
+        #
+        # Example with offset=0:
+        #   Excel Row 1 → Used as column headers (not in DataFrame)
+        #   Excel Row 2 → DataFrame index 0, DataGrid __row_id__ = 0
+        #   Excel Row 3 → DataFrame index 1, DataGrid __row_id__ = 1
+        #
+        # Therefore, when extracting formatting:
+        # - start_row should be offset + 2 (skip offset rows + header row)
+        # - Excel Row (offset + 2) maps to DataGrid row 0
+        # - Excel Row (offset + 3) maps to DataGrid row 1
+        #
+        # The key formula: DataGrid row = Excel row - (offset + 2)
+        #
+        start_row = offset + 2  # First Excel DATA row (skip offset + header row)
 
         logger.info(f"Extracting formatting from Excel rows {start_row} to {start_row + visible_rows - 1} (offset={offset}, visible_rows={visible_rows})")
+        logger.info(f"  Mapping: Excel row {start_row} → DataGrid row 0, Excel row {start_row + 1} → DataGrid row 1, ...")
 
         # Handle None values from sheet.max_row and sheet.max_column
         max_row = sheet.max_row if sheet.max_row is not None else 1000
@@ -803,16 +893,21 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                     excel_row = start_row + row_idx
                     excel_col = col_idx
 
-                    # Check for hyperlinks from sheet._hyperlinks (external/standard hyperlinks)
+                    # Check for hyperlinks from extracted hyperlinks dict
+                    # (which includes both sheet._hyperlinks and cell.hyperlink sources)
                     if (excel_row, excel_col) in hyperlinks:
-                        fmt['hyperlink'] = hyperlinks[(excel_row, excel_col)]
-                    # Check for HYPERLINK formula (formula-based hyperlinks)
+                        hyperlink_url = hyperlinks[(excel_row, excel_col)]
+                        fmt['hyperlink'] = hyperlink_url
+                        logger.info(f"Adding hyperlink to cell {excel_row},{excel_col}: {hyperlink_url}")
+                    # Also check for HYPERLINK formula (formula-based hyperlinks)
                     elif cell.value and isinstance(cell.value, str) and cell.value.startswith('=HYPERLINK'):
                         # Parse HYPERLINK formula: =HYPERLINK("url", "display text")
                         # Use regex to extract URL from the formula
                         match = re.search(r'=HYPERLINK\s*\(\s*"([^"]+)"', cell.value)
                         if match:
-                            fmt['hyperlink'] = match.group(1)
+                            hyperlink_url = match.group(1)
+                            fmt['hyperlink'] = hyperlink_url
+                            logger.info(f"Adding HYPERLINK formula to cell {excel_row},{excel_col}: {hyperlink_url}")
 
                     # Check if this cell is part of a merged range
                     if (excel_row, excel_col) in merged_ranges:
@@ -881,15 +976,25 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                     # Only add to formatting dict if we found any formatting
                     if fmt:
                         # Key format: "dataGridRowIdx_excelColIdx"
-                        # row_idx from enumerate is 0-indexed relative to the chunk
-                        # We need to add offset to get the actual DataGrid row index
+                        # row_idx from enumerate is 0-indexed relative to the chunk being processed
+                        # Excel row = start_row + row_idx
+                        # DataGrid row = offset + row_idx (matches __row_id__ in DataFrame)
+                        #
+                        # Example: offset=0, start_row=2 (first DATA row after header)
+                        #   row_idx=0: Excel row 2 → DataGrid row 0
+                        #   row_idx=1: Excel row 3 → DataGrid row 1
+                        #
                         actual_datagrid_row = offset + row_idx
+                        excel_row = start_row + row_idx
                         cell_key = f"{actual_datagrid_row}_{col_idx}"
                         formatting[cell_key] = fmt
 
-                        # Debug logging for FIRST 5 cells to confirm extraction is working and show color values
-                        if len(formatting) <= 5:
-                            logger.info(f"✅ Cell formatting extracted: DataGrid({actual_datagrid_row},{col_idx}) Excel({start_row + row_idx},{col_idx}) -> {fmt}")
+                        # Debug logging for FIRST 10 formatted cells to verify correct mapping
+                        if len(formatting) <= 10:
+                            logger.info(
+                                f"✅ Cell formatting: Excel({excel_row},{col_idx}) → "
+                                f"DataGrid({actual_datagrid_row},{col_idx}) → Key='{cell_key}' → {fmt}"
+                            )
 
                 except Exception as cell_error:
                     # Skip cells that cause errors

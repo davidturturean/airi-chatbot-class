@@ -391,6 +391,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
 
       // If cell has hyperlink, render as clickable link
       if (fmt?.hyperlink) {
+        console.log(`[ExcelViewer] Rendering hyperlink in cell ${rowIdx},${column.key}: ${fmt.hyperlink}`);
         content = (
           <a
             href={fmt.hyperlink}
@@ -399,8 +400,20 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
             style={{
               color: style.color || '#0066cc',
               textDecoration: 'underline',
+              cursor: 'pointer',
+              position: 'relative',
+              zIndex: 10,
             }}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => {
+              e.stopPropagation();
+              console.log(`[ExcelViewer] Hyperlink clicked: ${fmt.hyperlink}`);
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.color = '#003d7a';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.color = style.color || '#0066cc';
+            }}
           >
             {content}
           </a>
@@ -411,6 +424,12 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
       // The anchor cell will display the content spanning visually
       if (fmt?.isMerged && fmt?.mergeAnchor) {
         content = '';
+      }
+
+      // Add pointer cursor to parent div if cell has hyperlink
+      if (fmt?.hyperlink) {
+        style.cursor = 'pointer';
+        style.position = 'relative';
       }
 
       return <div style={style} className={cellClassName}>{content}</div>;
