@@ -9,7 +9,7 @@ import openpyxl
 from datetime import datetime
 from pathlib import Path
 from cachetools import TTLCache
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor
 from ...core.storage.snippet_database import snippet_db
 from ...config.logging import get_logger
 from ...config.settings import settings
@@ -258,7 +258,8 @@ def _parse_excel_file(file_path: Path, sheet_name: str = None, max_rows: int = 1
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             # Submit all sheet parsing tasks
-            future_to_sheet = {
+            # Use list to preserve order (not dict with as_completed which returns in completion order)
+            futures = [
                 executor.submit(
                     _parse_single_sheet,
                     excel_file,
@@ -267,13 +268,13 @@ def _parse_excel_file(file_path: Path, sheet_name: str = None, max_rows: int = 1
                     offset,
                     max_rows,
                     include_formatting
-                ): name
+                )
                 for name in sheet_names
-            }
+            ]
 
-            # Collect results as they complete
-            for future in as_completed(future_to_sheet):
-                sheet_name = future_to_sheet[future]
+            # Collect results in ORIGINAL ORDER (not completion order)
+            for idx, future in enumerate(futures):
+                sheet_name = sheet_names[idx]
                 try:
                     sheet_data = future.result()
                     sheets_data.append(sheet_data)
