@@ -501,41 +501,60 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                     # Extract formatting if cell has any
                     fmt = {}
 
-                    # Background color - only extract if fill is solid and has actual color
+                    # Background color - extract only if it's a solid fill with valid RGB
+                    # openpyxl tries to resolve theme/indexed colors to RGB
+                    # We filter out defaults and unresolved references
                     if cell.fill and cell.fill.fill_type == 'solid':
-                        if cell.fill.start_color and cell.fill.start_color.rgb:
-                            rgb = cell.fill.start_color.rgb
+                        start_color = cell.fill.start_color
+
+                        # Check if we have a valid RGB value (not theme/index reference)
+                        if start_color and hasattr(start_color, 'rgb') and start_color.rgb:
+                            rgb = start_color.rgb
+
+                            # Verify it's a string RGB value (openpyxl resolved it)
                             if isinstance(rgb, str) and len(rgb) >= 6:
-                                # Skip "no fill" / white / transparent colors
-                                # Common Excel "no fill" values: 00000000, FFFFFFFF, indexed colors
                                 rgb_upper = rgb.upper()
 
-                                # Filter out transparent, white, and default "no fill" values
+                                # Skip Excel default "no fill" values
                                 skip_colors = {
                                     '00000000',  # Transparent
-                                    'FFFFFFFF',  # White (theme)
+                                    'FFFFFFFF',  # White (theme background)
                                     'FFFFFF',    # White
                                 }
 
                                 if rgb_upper not in skip_colors:
                                     # Convert ARGB to RGB hex
                                     if len(rgb) == 8:  # ARGB format
-                                        # Also check if alpha channel is 00 (fully transparent)
-                                        alpha = rgb[:2]
-                                        if alpha.upper() != '00':
+                                        alpha = rgb[:2].upper()
+                                        # Skip transparent colors (alpha < 6)
+                                        if alpha not in ('00', '01', '02', '03', '04', '05'):
                                             fmt['bgColor'] = f"#{rgb[2:]}"
                                     else:  # RGB format
                                         fmt['bgColor'] = f"#{rgb}" if not rgb.startswith('#') else rgb
 
                     # Font formatting
                     if cell.font:
-                        if cell.font.color and cell.font.color.rgb:
+                        # Font color - extract only if RGB is available
+                        if cell.font.color and hasattr(cell.font.color, 'rgb') and cell.font.color.rgb:
                             rgb = cell.font.color.rgb
                             if isinstance(rgb, str) and len(rgb) >= 6:
-                                if len(rgb) == 8:  # ARGB format
-                                    fmt['fontColor'] = f"#{rgb[2:]}"
-                                else:  # RGB format
-                                    fmt['fontColor'] = f"#{rgb}" if not rgb.startswith('#') else rgb
+                                rgb_upper = rgb.upper()
+
+                                # Skip "auto" or default text colors
+                                # Note: We do NOT skip 000000 (black) if explicitly set
+                                # Only skip if it's the "auto" color indicator
+                                skip_font_colors = {
+                                    '00000000',  # Transparent
+                                    # Don't skip black - users might explicitly want black text
+                                }
+
+                                if rgb_upper not in skip_font_colors:
+                                    if len(rgb) == 8:  # ARGB format
+                                        alpha = rgb[:2].upper()
+                                        if alpha not in ('00', '01', '02', '03', '04', '05'):
+                                            fmt['fontColor'] = f"#{rgb[2:]}"
+                                    else:  # RGB format
+                                        fmt['fontColor'] = f"#{rgb}" if not rgb.startswith('#') else rgb
 
                         if cell.font.bold:
                             fmt['bold'] = True
