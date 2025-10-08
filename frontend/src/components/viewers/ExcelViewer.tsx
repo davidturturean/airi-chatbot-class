@@ -480,11 +480,42 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
     return rows;
   }, [currentSheetData, filters, sortColumns]);
 
+  // Row height function - returns custom height for each row or default
+  const getRowHeight = useCallback((row: any) => {
+    if (!currentSheetData?.row_heights) {
+      return 35; // Default row height
+    }
+
+    const rowIdx = row.__row_id__;
+    const height = currentSheetData.row_heights[rowIdx];
+
+    if (height) {
+      // Apply min/max constraints
+      const MIN_HEIGHT = 20;
+      const MAX_HEIGHT = 500;
+      return Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, height));
+    }
+
+    return 35; // Default height if no custom height
+  }, [currentSheetData]);
+
   // Track render completion (moved here after processedRows is defined)
   useEffect(() => {
     if (currentSheetData && processedRows.length > 0) {
       // Simple completion log - render tracking removed to avoid complexity
       console.log(`✅ Excel viewer displaying ${processedRows.length} rows, ${columns.length} columns`);
+
+      // Log row height info
+      const rowHeights = currentSheetData.row_heights || {};
+      const customHeightCount = Object.keys(rowHeights).length;
+      if (customHeightCount > 0) {
+        console.log(`📐 ${customHeightCount} rows have custom heights`);
+        // Log sample heights
+        const sampleHeights = Object.entries(rowHeights).slice(0, 5);
+        sampleHeights.forEach(([rowIdx, height]) => {
+          console.log(`   Row ${rowIdx}: ${height}px`);
+        });
+      }
     }
   }, [processedRows.length, columns.length, currentSheetData]);
 
@@ -650,6 +681,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
               className="rdg-light"
               style={{ height: '100%', minHeight: '600px' }}
               rowKeyGetter={(row) => row.__row_id__ !== undefined ? row.__row_id__ : row.id || JSON.stringify(row)}
+              rowHeight={getRowHeight}
             />
           </div>
         )}

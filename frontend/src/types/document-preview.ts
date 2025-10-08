@@ -73,6 +73,7 @@ export interface ExcelSheetData {
   total_rows: number;
   has_more: boolean;
   formatting?: Record<string, CellFormatting>;
+  row_heights?: Record<number, number>;  // Maps DataGrid row index to height in pixels
 }
 
 export interface ExcelColumn {
