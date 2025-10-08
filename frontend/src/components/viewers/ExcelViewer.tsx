@@ -33,16 +33,24 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
 
   const gridRef = useRef<any>(null);
 
-  // Track the last navigated source to detect when user clicks a new citation
-  const lastSourceRef = useRef<string | null>(null);
+  // Track the last navigation trigger value to detect actual navigation requests
+  const lastNavigationTriggerRef = useRef<number | undefined>(navigationTrigger);
 
   const currentSheetData = useMemo(() => {
     return data.sheets.find(sheet => sheet.sheet_name === activeSheet);
   }, [data.sheets, activeSheet]);
 
-  // Navigation to source location - triggers whenever sourceLocation changes OR when data changes
-  // This allows re-navigation when user clicks the same or different citation
+  // Navigation to source location - triggers ONLY when navigationTrigger changes
+  // This allows re-navigation when user clicks citation, but NOT when manually changing sheets
   useEffect(() => {
+    // Only navigate if navigationTrigger has actually changed (user clicked citation)
+    if (navigationTrigger === lastNavigationTriggerRef.current) {
+      return; // No new navigation request
+    }
+
+    // Update the ref to the new trigger value
+    lastNavigationTriggerRef.current = navigationTrigger;
+
     if (!sourceLocation || !currentSheetData) {
       return;
     }
@@ -53,21 +61,13 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
       return; // Will trigger again when activeSheet changes
     }
 
-    // Create a unique key for this source location
-    const sourceKey = `${sourceLocation.sheet}_${sourceLocation.row}_${sourceLocation.column || ''}`;
-
     // Scroll to the row and highlight the cell
     const targetRow = sourceLocation.row;
 
     // Highlight the ROW for 5 seconds
     const cellKey = `${targetRow}_citation`;
     setHighlightedCell(cellKey);
-
-    // Only log if this is a new navigation (avoid spam on re-renders)
-    if (lastSourceRef.current !== sourceKey) {
-      console.log(`🎯 Navigating to row ${targetRow} in sheet "${sourceLocation.sheet}" - gold highlight for 5 seconds`);
-      lastSourceRef.current = sourceKey;
-    }
+    console.log(`🎯 Navigating to row ${targetRow} in sheet "${sourceLocation.sheet}" - gold highlight for 5 seconds`);
 
     setTimeout(() => {
       setHighlightedCell(null);
@@ -83,7 +83,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         gridRef.current.scrollToCell({ rowIdx: scrollToIdx, colIdx: 0 });
       }
     }, 100);
-  }, [sourceLocation, activeSheet, currentSheetData, navigationTrigger]);
+  }, [navigationTrigger, sourceLocation, activeSheet, currentSheetData]);
 
   // Search functionality - finds matches but doesn't filter
   useEffect(() => {
