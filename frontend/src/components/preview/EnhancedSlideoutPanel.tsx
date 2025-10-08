@@ -10,6 +10,7 @@ import { SlideoutPanel } from './SlideoutPanel';
 import { ExcelViewer } from '../viewers/ExcelViewer';
 import { WordViewer } from '../viewers/WordViewer';
 import { previewCache } from '../../utils/preview-cache';
+import { usePanel } from '../../context/PanelContext';
 import type { ExcelDocumentData, WordDocumentData } from '../../types/document-preview';
 
 interface EnhancedSlideoutPanelProps {
@@ -23,6 +24,7 @@ interface EnhancedSlideoutPanelProps {
 }
 
 export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (props) => {
+  const { navigationCounter } = usePanel();
   const [documentType, setDocumentType] = useState<'text' | 'excel' | 'word' | 'pdf' | 'image' | null>(null);
   const [excelData, setExcelData] = useState<ExcelDocumentData | null>(null);
   const [wordData, setWordData] = useState<WordDocumentData | null>(null);
@@ -296,6 +298,7 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
             <ExcelViewer
               data={excelData}
               sourceLocation={excelData.source_location}
+              navigationTrigger={navigationCounter}
               onSheetChange={(sheetName) => console.log('Sheet changed:', sheetName)}
               onCellSelect={(row, col) => console.log('Cell selected:', row, col)}
               onExport={(sheetName, rows) => console.log('Export:', sheetName, rows)}

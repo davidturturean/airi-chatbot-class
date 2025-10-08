@@ -15,6 +15,7 @@ interface PanelContextValue extends PanelState {
   goForward: () => void;
   canGoBack: boolean;
   canGoForward: boolean;
+  navigationCounter: number;  // Increments on every openPanel call to trigger re-navigation
 }
 
 const PanelContext = createContext<PanelContextValue | undefined>(undefined);
@@ -32,6 +33,9 @@ export const PanelProvider: React.FC<PanelProviderProps> = ({ children }) => {
     history: [],
     historyIndex: -1
   });
+
+  // Navigation counter to force re-navigation even when clicking the same RID
+  const [navigationCounter, setNavigationCounter] = useState(0);
 
   const openPanel = useCallback((rid: string, documentType: 'text' | 'excel' | 'word' | 'pdf' | 'image' = 'text') => {
     setState(prev => {
@@ -53,6 +57,10 @@ export const PanelProvider: React.FC<PanelProviderProps> = ({ children }) => {
         historyIndex: newIndex
       };
     });
+
+    // Increment navigation counter to trigger re-navigation in Excel viewer
+    // This allows scrolling back to source even when clicking same RID
+    setNavigationCounter(prev => prev + 1);
   }, []);
 
   const closePanel = useCallback(() => {
@@ -117,7 +125,8 @@ export const PanelProvider: React.FC<PanelProviderProps> = ({ children }) => {
     goBack,
     goForward,
     canGoBack: state.historyIndex > 0,
-    canGoForward: state.historyIndex < state.history.length - 1
+    canGoForward: state.historyIndex < state.history.length - 1,
+    navigationCounter
   };
 
   return (

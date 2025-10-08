@@ -20,7 +20,8 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
   onSheetChange,
   onCellSelect,
   onExport,
-  sourceLocation
+  sourceLocation,
+  navigationTrigger
 }) => {
   const [activeSheet, setActiveSheet] = useState(data.active_sheet || data.sheets[0]?.sheet_name);
   const [searchQuery, setSearchQuery] = useState('');
@@ -29,51 +30,60 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
   const [zoom, setZoom] = useState(100);
   const [highlightedCell, setHighlightedCell] = useState<string | null>(null);
   const [searchMatches, setSearchMatches] = useState<Set<string>>(new Set());
-  const [hasAutoNavigated, setHasAutoNavigated] = useState(false);
 
   const gridRef = useRef<any>(null);
+
+  // Track the last navigated source to detect when user clicks a new citation
+  const lastSourceRef = useRef<string | null>(null);
 
   const currentSheetData = useMemo(() => {
     return data.sheets.find(sheet => sheet.sheet_name === activeSheet);
   }, [data.sheets, activeSheet]);
 
-  // Navigation to source location when component mounts or sourceLocation changes
+  // Navigation to source location - triggers whenever sourceLocation changes OR when data changes
+  // This allows re-navigation when user clicks the same or different citation
   useEffect(() => {
-    if (sourceLocation && currentSheetData && !hasAutoNavigated) {
-      // Auto-select correct sheet if different
-      if (sourceLocation.sheet !== activeSheet) {
-        setActiveSheet(sourceLocation.sheet);
-        return; // Will trigger again when activeSheet changes
-      }
-
-      // Mark that we've completed auto-navigation
-      setHasAutoNavigated(true);
-
-      // Scroll to the row and highlight the cell
-      const targetRow = sourceLocation.row;
-
-      // Highlight the ROW for 5 seconds (more visible, longer duration)
-      const cellKey = `${targetRow}_citation`;
-      setHighlightedCell(cellKey);
-      console.log(`🎯 Highlighting row ${targetRow} with gold background for 5 seconds`);
-
-      setTimeout(() => {
-        setHighlightedCell(null);
-        console.log('✓ Gold highlight removed');
-      }, 5000);  // Increased from 3 to 5 seconds
-
-      // Scroll to row (DataGrid uses 0-indexed row positions)
-      // We want to show context, so scroll to a bit before the target
-      const scrollToIdx = Math.max(0, targetRow - 5);
-
-      // Use DataGrid's scrollToRow if available
-      setTimeout(() => {
-        if (gridRef.current && gridRef.current.scrollToCell) {
-          gridRef.current.scrollToCell({ rowIdx: scrollToIdx, colIdx: 0 });
-        }
-      }, 100);
+    if (!sourceLocation || !currentSheetData) {
+      return;
     }
-  }, [sourceLocation, activeSheet, currentSheetData, hasAutoNavigated]);
+
+    // Auto-select correct sheet if different
+    if (sourceLocation.sheet !== activeSheet) {
+      setActiveSheet(sourceLocation.sheet);
+      return; // Will trigger again when activeSheet changes
+    }
+
+    // Create a unique key for this source location
+    const sourceKey = `${sourceLocation.sheet}_${sourceLocation.row}_${sourceLocation.column || ''}`;
+
+    // Scroll to the row and highlight the cell
+    const targetRow = sourceLocation.row;
+
+    // Highlight the ROW for 5 seconds
+    const cellKey = `${targetRow}_citation`;
+    setHighlightedCell(cellKey);
+
+    // Only log if this is a new navigation (avoid spam on re-renders)
+    if (lastSourceRef.current !== sourceKey) {
+      console.log(`🎯 Navigating to row ${targetRow} in sheet "${sourceLocation.sheet}" - gold highlight for 5 seconds`);
+      lastSourceRef.current = sourceKey;
+    }
+
+    setTimeout(() => {
+      setHighlightedCell(null);
+    }, 5000);
+
+    // Scroll to row (DataGrid uses 0-indexed row positions)
+    // We want to show context, so scroll to a bit before the target
+    const scrollToIdx = Math.max(0, targetRow - 5);
+
+    // Use DataGrid's scrollToRow if available
+    setTimeout(() => {
+      if (gridRef.current && gridRef.current.scrollToCell) {
+        gridRef.current.scrollToCell({ rowIdx: scrollToIdx, colIdx: 0 });
+      }
+    }, 100);
+  }, [sourceLocation, activeSheet, currentSheetData, navigationTrigger]);
 
   // Search functionality - finds matches but doesn't filter
   useEffect(() => {
@@ -305,8 +315,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
     setSortColumns([]);
     setHighlightedCell(null);
     setSearchMatches(new Set());
-    // Don't re-trigger auto-navigation when user manually changes sheets
-    // hasAutoNavigated remains true to prevent re-highlighting
+    // Note: lastSourceRef is NOT reset - allows re-navigation if user clicks citation again
   };
 
   const handleExport = () => {

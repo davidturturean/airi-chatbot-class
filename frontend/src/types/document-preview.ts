@@ -165,6 +165,7 @@ export interface ExcelViewerProps {
   onCellSelect?: (row: number, column: string) => void;
   onExport?: (sheetName: string, filteredData: any[]) => void;
   sourceLocation?: ExcelSourceLocation;
+  navigationTrigger?: number;  // Increments to force re-navigation even for same source
 }
 
 export interface WordViewerProps {
