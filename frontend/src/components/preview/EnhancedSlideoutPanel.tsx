@@ -50,6 +50,19 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
     }
   }, [props.isOpen]);
 
+  // Debug: Log when Excel data is set
+  useEffect(() => {
+    if (excelData) {
+      console.log('[EnhancedSlideoutPanel] Excel data set:', {
+        rid: excelData.rid,
+        sheets: excelData.sheets?.length,
+        hasSourceLocation: !!excelData.source_location,
+        sourceLocation: excelData.source_location,
+        navigationCounter
+      });
+    }
+  }, [excelData, navigationCounter]);
+
   const determineDocumentType = async (rid: string) => {
     try {
       // Check preview cache first
@@ -127,10 +140,25 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
       const parseTime = performance.now() - parseStart;
       console.log(`Excel JSON parsing completed in ${parseTime.toFixed(2)}ms, data size: ${JSON.stringify(data).length} bytes`);
 
+      // DEBUG: Log formatting received
+      if (data.sheets) {
+        for (const sheet of data.sheets) {
+          const formattingCount = sheet.formatting ? Object.keys(sheet.formatting).length : 0;
+          console.log(`📥 Received sheet '${sheet.sheet_name}': ${formattingCount} formatting entries, ${sheet.rows?.length || 0} rows`);
+          if (formattingCount > 0) {
+            const firstKey = Object.keys(sheet.formatting)[0];
+            console.log(`   Sample: ${firstKey} =`, sheet.formatting[firstKey]);
+          }
+        }
+      }
+
       // Enhance with source_location from preview cache if available
       const preview = previewCache.getPreview(rid);
       if (preview && preview.source_location) {
         data.source_location = preview.source_location;
+        console.log(`[EnhancedSlideoutPanel] ✅ Added source_location from preview cache:`, preview.source_location);
+      } else {
+        console.log(`[EnhancedSlideoutPanel] ⚠️ No source_location in preview cache for ${rid}`);
       }
 
       setExcelData(data);
@@ -300,9 +328,15 @@ export const EnhancedSlideoutPanel: React.FC<EnhancedSlideoutPanelProps> = (prop
               sessionId={props.sessionId}
               sourceLocation={excelData.source_location}
               navigationTrigger={navigationCounter}
-              onSheetChange={(sheetName) => console.log('Sheet changed:', sheetName)}
-              onCellSelect={(row, col) => console.log('Cell selected:', row, col)}
-              onExport={(sheetName, rows) => console.log('Export:', sheetName, rows)}
+              onSheetChange={(sheetName) => {
+                console.log('[EnhancedSlideoutPanel] Sheet changed:', sheetName);
+              }}
+              onCellSelect={(row, col) => {
+                console.log('[EnhancedSlideoutPanel] Cell selected:', row, col);
+              }}
+              onExport={(sheetName, rows) => {
+                console.log('[EnhancedSlideoutPanel] Export:', sheetName, rows);
+              }}
             />
           </div>
         </div>

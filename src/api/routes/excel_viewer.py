@@ -131,6 +131,11 @@ def get_excel_data(rid):
         else:
             logger.info(f"Excel parsed successfully: {duration_ms:.2f}ms for {rid}")
 
+        # DEBUG: Log formatting counts being returned
+        for sheet in excel_data.get('sheets', []):
+            formatting_count = len(sheet.get('formatting', {}))
+            logger.info(f"📤 Returning sheet '{sheet['sheet_name']}': {formatting_count} formatting entries, {len(sheet.get('rows', []))} rows")
+
         return jsonify(excel_data)
 
     except Exception as e:
@@ -504,8 +509,9 @@ def _parse_single_sheet(excel_file, current_sheet: str, file_path: Path, offset:
         formatting_time = (datetime.now() - formatting_start).total_seconds() * 1000
         logger.info(f"Cell formatting extraction took {formatting_time:.2f}ms for sheet '{current_sheet}'")
 
-        if formatting:
-            sheet_data['formatting'] = formatting
+        # ALWAYS add formatting key, even if empty, so frontend knows formatting was attempted
+        sheet_data['formatting'] = formatting
+        logger.info(f"Sheet '{current_sheet}' has {len(formatting)} formatted cells (offset={offset}, max_rows={max_rows})")
 
     sheet_time = (datetime.now() - sheet_start).total_seconds() * 1000
     logger.info(f"Sheet '{current_sheet}' parsed in {sheet_time:.2f}ms ({len(records)} rows)")

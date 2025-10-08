@@ -162,6 +162,22 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
     currentSheetData?.formatting || {}
   );
 
+  // Debug: Log initial formatting data
+  useEffect(() => {
+    if (currentSheetData) {
+      const initialFormatting = currentSheetData.formatting || {};
+      const initialFormattingCount = Object.keys(initialFormatting).length;
+      console.log(
+        `[ExcelViewer] Initial data for sheet "${currentSheetData.sheet_name}": ` +
+        `${initialFormattingCount} formatting keys, ${currentSheetData.rows.length} rows`
+      );
+      if (initialFormattingCount > 0) {
+        const firstKey = Object.keys(initialFormatting)[0];
+        console.log(`[ExcelViewer] Sample formatting key: ${firstKey} = `, initialFormatting[firstKey]);
+      }
+    }
+  }, [currentSheetData]);
+
   // Navigation to source location - triggers ONLY when navigationTrigger changes
   // This allows re-navigation when user clicks citation, but NOT when manually changing sheets
   useEffect(() => {
@@ -170,15 +186,27 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
       return; // No new navigation request
     }
 
+    console.log(`[ExcelViewer] Navigation trigger changed: ${lastNavigationTriggerRef.current} -> ${navigationTrigger}`);
+
     // Update the ref to the new trigger value
     lastNavigationTriggerRef.current = navigationTrigger;
 
-    if (!sourceLocation || !currentSheetData) {
+    if (!sourceLocation) {
+      console.log(`[ExcelViewer] ⚠️ No source location provided for navigation`);
       return;
     }
 
+    if (!currentSheetData) {
+      console.log(`[ExcelViewer] ⚠️ No current sheet data available for navigation`);
+      return;
+    }
+
+    console.log(`[ExcelViewer] Navigating to:`, sourceLocation);
+    console.log(`[ExcelViewer] Current sheet: "${activeSheet}"`);
+
     // Auto-select correct sheet if different
     if (sourceLocation.sheet !== activeSheet) {
+      console.log(`[ExcelViewer] Switching to sheet "${sourceLocation.sheet}"`);
       setActiveSheet(sourceLocation.sheet);
       return; // Will trigger again when activeSheet changes
     }
@@ -189,7 +217,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
     // Highlight the ROW for 5 seconds
     const cellKey = `${targetRow}_citation`;
     setHighlightedCell(cellKey);
-    console.log(`🎯 Navigating to row ${targetRow} in sheet "${sourceLocation.sheet}" - gold highlight for 5 seconds`);
+    console.log(`[ExcelViewer] 🎯 Highlighting row ${targetRow} in sheet "${sourceLocation.sheet}" (gold highlight for 5 seconds)`);
 
     setTimeout(() => {
       setHighlightedCell(null);
@@ -202,7 +230,10 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
     // Use DataGrid's scrollToRow if available
     setTimeout(() => {
       if (gridRef.current && gridRef.current.scrollToCell) {
+        console.log(`[ExcelViewer] Scrolling to row index ${scrollToIdx}`);
         gridRef.current.scrollToCell({ rowIdx: scrollToIdx, colIdx: 0 });
+      } else {
+        console.log(`[ExcelViewer] ⚠️ DataGrid scrollToCell not available`);
       }
     }, 100);
   }, [navigationTrigger, sourceLocation, activeSheet, currentSheetData]);
@@ -247,9 +278,12 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
 
     // Debug: Log formatting summary on sheet change (not per-cell)
     if (Object.keys(formatting).length > 0) {
-      console.log(`[ExcelViewer] ✅ Loaded ${Object.keys(formatting).length} formatted cells for sheet "${currentSheetData.sheet_name}"`);
+      console.log(`[ExcelViewer] ✅ ${Object.keys(formatting).length} formatted cells for sheet "${currentSheetData.sheet_name}"`);
+      // Log a sample of formatting keys to verify format
+      const sampleKeys = Object.keys(formatting).slice(0, 3);
+      console.log(`[ExcelViewer] Sample formatting keys:`, sampleKeys);
     } else {
-      console.log(`[ExcelViewer] No cell formatting found for sheet "${currentSheetData.sheet_name}"`);
+      console.log(`[ExcelViewer] ⚠️ No formatted cells in sheet "${currentSheetData.sheet_name}" (this is normal for sheets with no colors/bold/borders)`);
     }
 
     // Custom cell renderer that applies formatting
