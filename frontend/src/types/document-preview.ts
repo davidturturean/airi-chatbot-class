@@ -51,6 +51,7 @@ export interface CellFormatting {
   hyperlink?: string;  // URL if cell contains a hyperlink
   isMerged?: boolean;  // True if this cell is part of a merged range (but not the anchor)
   mergeAnchor?: string;  // DataGrid coordinates of the anchor cell (e.g., "5_2")
+  wrapText?: boolean;  // True if cell has text wrapping enabled
 }
 
 export interface DocumentPreview {

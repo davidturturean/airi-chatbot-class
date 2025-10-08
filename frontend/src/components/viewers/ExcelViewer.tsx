@@ -60,11 +60,24 @@ const useFormattingChunks = (
 
       const data = await response.json();
 
+      // Debug: Log what's in the incoming chunk
+      console.log(
+        `📦 Chunk ${chunkIndex} received: ${Object.keys(data.formatting || {}).length} formatting keys`
+      );
+
       // Merge new formatting into existing formatting
-      setFormatting(prev => ({
-        ...prev,
-        ...data.formatting
-      }));
+      setFormatting(prev => {
+        const prevCount = Object.keys(prev).length;
+        const newFormatting = { ...prev, ...data.formatting };
+        const afterCount = Object.keys(newFormatting).length;
+
+        console.log(
+          `🔀 Merging chunk ${chunkIndex}: ` +
+          `${prevCount} existing + ${Object.keys(data.formatting || {}).length} new = ${afterCount} total`
+        );
+
+        return newFormatting;
+      });
 
       setLoadedChunks(prev => new Set(prev).add(chunkIndex));
       console.log(
@@ -274,6 +287,8 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         margin: 0,
         border: 'none',
         boxSizing: 'border-box',
+        overflow: 'visible',  // Allow text to overflow into adjacent cells
+        textOverflow: 'clip',  // Don't truncate with ellipsis
       };
 
       // Apply cell formatting from Excel FIRST (so citation highlight can override)
@@ -284,6 +299,13 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         if (fmt.italic) style.fontStyle = 'italic';
         if (fmt.underline) style.textDecoration = 'underline';
         if (fmt.fontSize) style.fontSize = `${fmt.fontSize}px`;
+
+        // Apply text wrapping
+        if (fmt.wrapText) {
+          style.whiteSpace = 'pre-wrap';
+          style.wordWrap = 'break-word';
+          style.overflowWrap = 'break-word';
+        }
 
         // Apply actual Excel borders
         if (fmt.borders) {

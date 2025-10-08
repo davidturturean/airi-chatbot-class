@@ -6,6 +6,7 @@ Performance target: <500ms for typical Excel files
 from flask import Blueprint, jsonify, request
 import pandas as pd
 import openpyxl
+import re
 from datetime import datetime
 from pathlib import Path
 from cachetools import TTLCache
@@ -457,10 +458,24 @@ def _parse_single_sheet(excel_file, current_sheet: str, file_path: Path, offset:
         }
     ]
 
-    for col in df.columns:
+    # Extract actual column widths from Excel
+    excel_column_widths = _extract_column_widths(file_path, current_sheet)
+
+    for col_idx, col in enumerate(df.columns):
         # Infer column type for better rendering
         dtype = df[col].dtype
-        width = _estimate_column_width(col, df[col])
+
+        # Try to get actual Excel column width first, fall back to estimated width
+        # col_idx + 1 because Excel columns are 1-indexed, and we skip the __row_id__ column
+        excel_width = excel_column_widths.get(col_idx + 1)
+        if excel_width:
+            # Excel column widths are in "character units" - convert to pixels
+            # Excel default character width ≈ 7 pixels (for Calibri 11pt)
+            # Add some padding for better readability
+            width = int(excel_width * 7 + 10)
+        else:
+            # Fall back to content-based estimation
+            width = _estimate_column_width(col, df[col])
 
         columns.append({
             'key': col,
@@ -507,6 +522,36 @@ def _get_sheet_row_count(file_path: Path, sheet_name: str) -> int:
         return row_count
     except:
         return 0
+
+def _extract_column_widths(file_path: Path, sheet_name: str) -> dict:
+    """
+    Extract actual column widths from Excel file.
+    Returns dict mapping column index (1-indexed) to width in Excel units.
+    """
+    try:
+        workbook = openpyxl.load_workbook(str(file_path), read_only=True, data_only=True)
+        sheet = workbook[sheet_name]
+
+        column_widths = {}
+
+        # Extract column dimensions
+        # sheet.column_dimensions is a dict with keys like 'A', 'B', 'C', etc.
+        for col_letter, dimension in sheet.column_dimensions.items():
+            if dimension.width:
+                # Convert column letter to index (A=1, B=2, etc.)
+                col_idx = openpyxl.utils.column_index_from_string(col_letter)
+                column_widths[col_idx] = dimension.width
+
+        workbook.close()
+
+        if column_widths:
+            logger.info(f"Extracted {len(column_widths)} column widths from sheet '{sheet_name}'")
+
+        return column_widths
+
+    except Exception as e:
+        logger.warning(f"Could not extract column widths from {file_path}, sheet '{sheet_name}': {str(e)}")
+        return {}
 
 def _estimate_column_width(column_name: str, series: pd.Series, max_width: int = 300) -> int:
     """
@@ -596,7 +641,12 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
         visible_rows = min(max_rows, 100)
 
         # Account for offset
+        # Excel rows are 1-indexed (row 1 is the first row)
+        # When offset=0, we want to start at Excel row 1 (the first row)
+        # When offset=100, we want to start at Excel row 101
         start_row = offset + 1  # First Excel row to read (1-indexed)
+
+        logger.info(f"Extracting formatting from Excel rows {start_row} to {start_row + visible_rows - 1} (offset={offset}, visible_rows={visible_rows})")
 
         # Handle None values from sheet.max_row and sheet.max_column
         max_row = sheet.max_row if sheet.max_row is not None else 1000
@@ -739,11 +789,24 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                         if borders:
                             fmt['borders'] = borders
 
+                    # Text wrapping - extract wrap_text property
+                    if cell.alignment and cell.alignment.wrap_text:
+                        fmt['wrapText'] = True
+
                     # Check if this cell has a hyperlink
                     excel_row = start_row + row_idx
                     excel_col = col_idx
+
+                    # Check for hyperlinks from sheet._hyperlinks (external/standard hyperlinks)
                     if (excel_row, excel_col) in hyperlinks:
                         fmt['hyperlink'] = hyperlinks[(excel_row, excel_col)]
+                    # Check for HYPERLINK formula (formula-based hyperlinks)
+                    elif cell.value and isinstance(cell.value, str) and cell.value.startswith('=HYPERLINK'):
+                        # Parse HYPERLINK formula: =HYPERLINK("url", "display text")
+                        # Use regex to extract URL from the formula
+                        match = re.search(r'=HYPERLINK\s*\(\s*"([^"]+)"', cell.value)
+                        if match:
+                            fmt['hyperlink'] = match.group(1)
 
                     # Check if this cell is part of a merged range
                     if (excel_row, excel_col) in merged_ranges:
@@ -752,7 +815,9 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                         # If this is NOT the anchor cell, copy formatting from anchor
                         if (excel_row, excel_col) != (anchor_row, anchor_col):
                             # Calculate anchor's DataGrid coordinates
-                            anchor_datagrid_row = anchor_row - start_row
+                            # anchor_row is 1-indexed Excel row, start_row is 1-indexed Excel row
+                            # We need to convert to 0-indexed DataGrid row by subtracting start_row and adding offset
+                            anchor_datagrid_row = (anchor_row - start_row) + offset
                             anchor_key = f"{anchor_datagrid_row}_{anchor_col}"
 
                             # If we've already processed the anchor, copy its formatting
@@ -810,13 +875,15 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                     # Only add to formatting dict if we found any formatting
                     if fmt:
                         # Key format: "dataGridRowIdx_excelColIdx"
-                        # row_idx from enumerate is 0-indexed and represents DataGrid row index
-                        cell_key = f"{row_idx}_{col_idx}"
+                        # row_idx from enumerate is 0-indexed relative to the chunk
+                        # We need to add offset to get the actual DataGrid row index
+                        actual_datagrid_row = offset + row_idx
+                        cell_key = f"{actual_datagrid_row}_{col_idx}"
                         formatting[cell_key] = fmt
 
                         # Debug logging for FIRST 5 cells to confirm extraction is working and show color values
                         if len(formatting) <= 5:
-                            logger.info(f"✅ Cell formatting extracted: DataGrid({row_idx},{col_idx}) -> {fmt}")
+                            logger.info(f"✅ Cell formatting extracted: DataGrid({actual_datagrid_row},{col_idx}) Excel({start_row + row_idx},{col_idx}) -> {fmt}")
 
                 except Exception as cell_error:
                     # Skip cells that cause errors

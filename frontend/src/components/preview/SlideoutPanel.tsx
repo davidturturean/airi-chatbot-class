@@ -9,7 +9,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Pin, ChevronLeft, ChevronRight, Download, Copy } from 'lucide-react';
+import { X, Lock, Unlock, ChevronLeft, ChevronRight, Download, Copy } from 'lucide-react';
 import { previewCache } from '../../utils/preview-cache';
 import type { DocumentPreview, SlideoutPanelProps } from '../../types/document-preview';
 
@@ -335,9 +335,9 @@ ${previewData.metadata.source_file ? `\nSource: ${previewData.metadata.source_fi
                         title={isPinned ? 'Pinned - Panel stays open (⌘P to unpin)' : 'Pin to keep panel open (⌘P)'}
                       >
                         {isPinned ? (
-                          <Pin className="h-5 w-5 fill-current" />
+                          <Lock className="h-5 w-5" />
                         ) : (
-                          <Pin className="h-5 w-5" style={{ transform: 'rotate(45deg)' }} />
+                          <Unlock className="h-5 w-5" />
                         )}
                       </button>
 
