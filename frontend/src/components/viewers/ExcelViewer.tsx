@@ -11,7 +11,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import DataGrid, { Column, SortColumn, RenderCellProps } from 'react-data-grid';
 import * as Tabs from '@radix-ui/react-tabs';
-import { Search, Download, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
+import { Search, Download, ZoomIn, ZoomOut } from 'lucide-react';
 import type { ExcelViewerProps, CellFormatting } from '../../types/document-preview';
 import 'react-data-grid/lib/styles.css';
 
@@ -374,10 +374,10 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
               </button>
               <button
                 onClick={handleZoomReset}
-                className="p-1.5 hover:bg-gray-100 border-l border-gray-300"
-                title="Reset zoom"
+                className="px-2 py-1.5 hover:bg-gray-100 border-l border-gray-300 text-xs font-medium text-gray-600"
+                title="Reset zoom to 100%"
               >
-                <RotateCcw className="h-3.5 w-3.5 text-gray-600" />
+                100%
               </button>
             </div>
 
