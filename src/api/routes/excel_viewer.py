@@ -501,15 +501,31 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                     # Extract formatting if cell has any
                     fmt = {}
 
-                    # Background color
-                    if cell.fill and cell.fill.start_color and cell.fill.start_color.rgb:
-                        rgb = cell.fill.start_color.rgb
-                        if isinstance(rgb, str) and len(rgb) >= 6:
-                            # Convert ARGB to RGB hex
-                            if len(rgb) == 8:  # ARGB format
-                                fmt['bgColor'] = f"#{rgb[2:]}"
-                            else:  # RGB format
-                                fmt['bgColor'] = f"#{rgb}" if not rgb.startswith('#') else rgb
+                    # Background color - only extract if fill is solid and has actual color
+                    if cell.fill and cell.fill.fill_type == 'solid':
+                        if cell.fill.start_color and cell.fill.start_color.rgb:
+                            rgb = cell.fill.start_color.rgb
+                            if isinstance(rgb, str) and len(rgb) >= 6:
+                                # Skip "no fill" / white / transparent colors
+                                # Common Excel "no fill" values: 00000000, FFFFFFFF, indexed colors
+                                rgb_upper = rgb.upper()
+
+                                # Filter out transparent, white, and default "no fill" values
+                                skip_colors = {
+                                    '00000000',  # Transparent
+                                    'FFFFFFFF',  # White (theme)
+                                    'FFFFFF',    # White
+                                }
+
+                                if rgb_upper not in skip_colors:
+                                    # Convert ARGB to RGB hex
+                                    if len(rgb) == 8:  # ARGB format
+                                        # Also check if alpha channel is 00 (fully transparent)
+                                        alpha = rgb[:2]
+                                        if alpha.upper() != '00':
+                                            fmt['bgColor'] = f"#{rgb[2:]}"
+                                    else:  # RGB format
+                                        fmt['bgColor'] = f"#{rgb}" if not rgb.startswith('#') else rgb
 
                     # Font formatting
                     if cell.font:
@@ -578,9 +594,9 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                         cell_key = f"{row_idx}_{col_idx}"
                         formatting[cell_key] = fmt
 
-                        # Debug logging for FIRST cell only to confirm extraction is working
-                        if len(formatting) == 1:
-                            logger.info(f"✅ Cell formatting extraction working. First cell: DataGrid({row_idx},{col_idx}) -> {fmt}")
+                        # Debug logging for FIRST 5 cells to confirm extraction is working and show color values
+                        if len(formatting) <= 5:
+                            logger.info(f"✅ Cell formatting extracted: DataGrid({row_idx},{col_idx}) -> {fmt}")
 
                 except Exception as cell_error:
                     # Skip cells that cause errors
