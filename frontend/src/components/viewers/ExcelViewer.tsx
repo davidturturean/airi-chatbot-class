@@ -312,6 +312,60 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         console.log(`🟡 Rendering gold highlight for row ${rowIdx}, column ${column.key}`);
       }
 
+      // Check if this cell is an anchor for merged cells (backend marks with isAnchor: true)
+      const isAnchorCell = fmt?.isAnchor === true;
+
+      // Calculate span width for anchor cells in merged ranges
+      let spanWidth: number | undefined;
+      if (isAnchorCell) {
+        // Find all cells that reference this anchor via mergeAnchor
+        const mergedCellsReferencingThis = Object.keys(formatting).filter(
+          key => formatting[key].mergeAnchor === cellKey && key !== cellKey
+        );
+
+        if (mergedCellsReferencingThis.length > 0) {
+          // Extract column indices and row indices from merged cells
+          const mergedColIndices = new Set<number>();
+          const mergedRowIndices = new Set<number>();
+
+          mergedCellsReferencingThis.forEach(key => {
+            const [rowStr, colStr] = key.split('_');
+            const colIdx = parseInt(colStr);
+            const rowIndexNum = parseInt(rowStr);
+            if (!isNaN(colIdx)) mergedColIndices.add(colIdx);
+            if (!isNaN(rowIndexNum)) mergedRowIndices.add(rowIndexNum);
+          });
+
+          // Remove the anchor column from the set (we'll add it separately)
+          mergedColIndices.delete(excelColIdx);
+
+          // Start with this column's width
+          const currentColumn = currentSheetData.columns.find(c => c.key === column.key);
+          let totalWidth = currentColumn?.width || 150;
+
+          // Add widths of all merged columns
+          Array.from(mergedColIndices).forEach(colIdx => {
+            // Find the column in dataColumns (adjust for __row_id__)
+            const dataCol = dataColumns[colIdx - 1]; // -1 because dataColumns is 0-indexed
+            if (dataCol) {
+              const gridCol = currentSheetData.columns.find(c => c.key === dataCol.key);
+              totalWidth += gridCol?.width || 150;
+            }
+          });
+
+          // Only set spanWidth if there are actually merged columns (not just merged rows)
+          if (mergedColIndices.size > 0) {
+            spanWidth = totalWidth;
+
+            // Debug log for merged cell spans
+            console.log(
+              `📊 Merged cell anchor at ${cellKey}: spanning ${mergedColIndices.size + 1} columns × ${mergedRowIndices.size + 1} rows, ` +
+              `width=${spanWidth}px (base=${currentColumn?.width || 150}px + merged cols=${Array.from(mergedColIndices).join(',')})`
+            );
+          }
+        }
+      }
+
       const style: React.CSSProperties = {
         width: '100%',
         height: '100%',
@@ -324,6 +378,14 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         overflow: 'visible',  // Allow text to overflow into adjacent cells
         textOverflow: 'clip',  // Don't truncate with ellipsis
       };
+
+      // Apply merged cell spanning for anchor cells
+      if (spanWidth) {
+        style.minWidth = `${spanWidth}px`;
+        style.position = 'relative';
+        style.zIndex = 5;
+        style.whiteSpace = fmt?.wrapText ? 'pre-wrap' : 'nowrap';
+      }
 
       // Apply cell formatting from Excel FIRST (so citation highlight can override)
       if (fmt) {
@@ -723,6 +785,7 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
           padding: 0 !important;
           outline: none !important;
           box-shadow: none !important;
+          overflow: visible !important;  /* Allow merged cells to overflow */
         }
 
         /* Remove all padding/margin that creates gaps */

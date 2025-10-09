@@ -1054,6 +1054,13 @@ def _extract_cell_formatting(file_path: Path, sheet_name: str, offset: int = 0, 
                             # Mark as merged cell (so frontend can hide content or handle differently)
                             fmt['isMerged'] = True
                             fmt['mergeAnchor'] = f"{anchor_datagrid_row}_{anchor_col}"
+                        else:
+                            # This IS the anchor cell - mark it explicitly so frontend can identify it
+                            # Even if it has no other formatting, we need to mark it as an anchor
+                            # so the frontend can calculate the span width
+                            if not fmt:
+                                fmt = {}
+                            fmt['isAnchor'] = True
 
                     # Only add to formatting dict if we found any formatting
                     if fmt:
