@@ -8,11 +8,36 @@
  * The first registration wins, subsequent attempts fail silently.
  * This is expected behavior and does not affect functionality.
  */
+
+// Intercept thrown errors (window.onerror)
+window.addEventListener('error', (event) => {
+  const message = event.message || event.error?.message || '';
+
+  if (message.includes('custom element') && message.includes('already been defined')) {
+    console.warn(
+      '⚠️  Webflow Integration: External custom element already defined (expected behavior)',
+      '\n   This is harmless - the chatbot iframe shares web components with the parent page.',
+      '\n   The first registration wins. Functionality is not affected.'
+    );
+    event.preventDefault(); // Prevent the error from showing in console
+    return;
+  }
+
+  if (message.includes('mce-autosize-textarea')) {
+    console.warn(
+      '⚠️  Webflow Integration: TinyMCE component already defined by external script',
+      '\n   This is expected when embedded in Webflow pages.'
+    );
+    event.preventDefault(); // Prevent the error from showing in console
+    return;
+  }
+});
+
+// Also intercept console.error calls (for good measure)
 const originalError = console.error;
 console.error = function(...args: any[]) {
   const message = args[0]?.toString() || '';
 
-  // Ignore custom element redefinition errors from external scripts (Webflow/TinyMCE)
   if (message.includes('custom element') && message.includes('already been defined')) {
     console.warn(
       '⚠️  Webflow Integration: External custom element already defined (expected behavior)',
@@ -23,7 +48,6 @@ console.error = function(...args: any[]) {
     return;
   }
 
-  // Ignore specific TinyMCE component redefinition (common in Webflow)
   if (message.includes('mce-autosize-textarea')) {
     console.warn(
       '⚠️  Webflow Integration: TinyMCE component already defined by external script',
@@ -33,7 +57,6 @@ console.error = function(...args: any[]) {
     return;
   }
 
-  // Pass through all other errors unchanged
   originalError.apply(console, args);
 };
 
