@@ -573,13 +573,15 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         return fmt?.wrapText === true;
       });
 
-      // For rows with wrapped text, ensure minimum height to prevent overlap
+      // For rows with wrapped text, ensure adequate height for all content
       if (hasWrappedText) {
-        const minHeight = 60; // Minimum height for wrapped text rows
-        const finalHeight = Math.max(height, minHeight);
+        // Multiply backend height by 1.5x since browser rendering needs more space than Excel
+        const adjustedHeight = height * 1.5;
+        const minHeight = 80; // Minimum height for wrapped text rows
+        const finalHeight = Math.max(adjustedHeight, minHeight);
         const MIN_HEIGHT = 20;
-        const MAX_HEIGHT = 500;
-        return Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, finalHeight));
+        // No max height constraint for wrapped text - let it expand as needed
+        return Math.max(MIN_HEIGHT, finalHeight);
       }
 
       // Apply min/max constraints for non-wrapped rows
