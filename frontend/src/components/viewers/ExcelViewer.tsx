@@ -387,6 +387,14 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
         style.whiteSpace = fmt?.wrapText ? 'pre-wrap' : 'nowrap';
       }
 
+      // For non-wrapped cells: enable overflow into adjacent cells
+      // This mimics Excel/Google Drive behavior where text flows right if next cell is empty
+      if (!fmt?.wrapText && !spanWidth) {
+        style.whiteSpace = 'nowrap';
+        style.position = 'relative';
+        style.zIndex = 2; // Above adjacent cells to allow visible overflow
+      }
+
       // Apply cell formatting from Excel FIRST (so citation highlight can override)
       if (fmt) {
         if (fmt.bgColor) style.backgroundColor = fmt.bgColor;
@@ -401,6 +409,10 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
           style.whiteSpace = 'pre-wrap';
           style.wordWrap = 'break-word';
           style.overflowWrap = 'break-word';
+          style.alignItems = 'flex-start'; // Top-align to prevent text overlap
+          style.overflow = 'hidden'; // Don't overflow for wrapped text
+          style.height = 'auto'; // Allow height to expand
+          style.minHeight = '100%'; // At least fill the row
         }
 
         // Apply actual Excel borders
@@ -552,14 +564,32 @@ export const ExcelViewer: React.FC<ExcelViewerProps> = ({
     const height = currentSheetData.row_heights[rowIdx];
 
     if (height) {
-      // Apply min/max constraints
+      // Check if this row has any wrapped text cells
+      const dataColumns = currentSheetData.columns.filter(c => c.key !== '__row_id__');
+      const hasWrappedText = dataColumns.some((_col, colIdx) => {
+        const excelColIdx = colIdx + 1; // 1-indexed Excel column
+        const cellKey = `${rowIdx}_${excelColIdx}`;
+        const fmt = formatting[cellKey];
+        return fmt?.wrapText === true;
+      });
+
+      // For rows with wrapped text, ensure minimum height to prevent overlap
+      if (hasWrappedText) {
+        const minHeight = 60; // Minimum height for wrapped text rows
+        const finalHeight = Math.max(height, minHeight);
+        const MIN_HEIGHT = 20;
+        const MAX_HEIGHT = 500;
+        return Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, finalHeight));
+      }
+
+      // Apply min/max constraints for non-wrapped rows
       const MIN_HEIGHT = 20;
       const MAX_HEIGHT = 500;
       return Math.max(MIN_HEIGHT, Math.min(MAX_HEIGHT, height));
     }
 
     return 35; // Default height if no custom height
-  }, [currentSheetData]);
+  }, [currentSheetData, formatting]);
 
   // Track render completion (moved here after processedRows is defined)
   useEffect(() => {
